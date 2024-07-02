@@ -24,8 +24,17 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-# local env files
+# Environments
 .env*.local
+.env
+.env_local
+/home/.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
 
 # vercel
 .vercel
@@ -33,3 +42,8 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# macOs DS_Store for folder settings
+.DS_Store
+
+_OLD/

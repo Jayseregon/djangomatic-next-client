@@ -1,8 +1,13 @@
-# Next.js & NextUI Template
+# Next.js & NextUI Application for Djangomatic
 
-This is a template for creating applications using Next.js 14 (app directory) and NextUI (v2).
+## Table of Contents
 
-[Try it on CodeSandbox](https://githubbox.com/nextui-org/next-app-template)
+1. [Technologies Used](#technologies-used)
+2. [How to Use](#how-to-use)
+    - [Prerequisites](#prerequisites)
+    - [Local Development](#local-development)
+3. [License](#license)
+4. [Contact](#contact)
 
 ## Technologies Used
 
@@ -16,38 +21,31 @@ This is a template for creating applications using Next.js 14 (app directory) an
 
 ## How to Use
 
-### Use the template with create-next-app
+### Prerequisites
 
-To create a new project based on this template using `create-next-app`, run the following command:
+- Docker installed on your machine.
+- Docker Compose installed for local development (optional).
 
-```bash
-npx create-next-app -e https://github.com/nextui-org/next-app-template
-```
+### Local Development
 
-### Install dependencies
+**Build and run the container using Docker Compose:**
 
-You can use one of them `npm`, `yarn`, `pnpm`, `bun`, Example using `npm`:
+This will use the `Dockerfile` for building the image and `docker-compose.yml` for running the container with the necessary settings for local development.
 
-```bash
-npm install
-```
-
-### Run the development server
-
-```bash
-npm run dev
-```
-
-### Setup pnpm (optional)
-
-If you are using `pnpm`, you need to add the following code to your `.npmrc` file:
-
-```bash
-public-hoist-pattern[]=*@nextui-org/*
-```
-
-After modifying the `.npmrc` file, you need to run `pnpm install` again to ensure that the dependencies are installed correctly.
+    ```bash
+    docker-compose up -d --build
+    ```
 
 ## License
 
-Licensed under the [MIT license](https://github.com/nextui-org/next-app-template/blob/main/LICENSE).
+This project is licensed under the GNU Affero General Public License. See the `LICENSE` file for details.
+
+Please note that while this project uses an open-source license, it is not open to public contributions.
+
+## Contact
+
+If you have any questions or need further clarification, feel free to reach out to the head developer of this project:
+
+>  `Jeremie Bitsch`
+
+Contact can be done via Teams or email. Please use the appropriate channel based on the nature of your query.

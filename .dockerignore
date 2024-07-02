@@ -1,0 +1,6 @@
+.venv
+.git
+.gitignore
+.env_local
+_dev*/
+quiz.ipynb

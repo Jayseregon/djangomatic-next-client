@@ -21,6 +21,7 @@ import { Avatar, AvatarGroup, AvatarIcon } from "@nextui-org/avatar";
 import { Kbd } from "@nextui-org/kbd";
 import { Link } from "@nextui-org/link";
 import { Input } from "@nextui-org/input";
+// import LocaleSwitcher from "./LocaleSwitcher";
 
 // NextJS components
 import { useState, useRef, useEffect } from "react";
@@ -91,6 +92,10 @@ export const Navbar = () => {
                 <NavbarItem className="hidden md:flex">
                     <SearchInput />
                 </NavbarItem>
+
+                {/* <NavbarItem>
+                    <LocaleSwitcher />
+                </NavbarItem> */}
 
                 <NavbarItem>
                     <ThemeSwitch />

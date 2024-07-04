@@ -1,6 +1,13 @@
 {
-    "Index": {
-        "title": "Bienvenue sur la page d'accueil",
-        "message": "Ceci est la page d'accueil"
-    }
+  "Index": {
+    "title": "Bienvenue sur la page d'accueil",
+    "message": "Ceci est la page d'accueil"
+  },
+  "Home": {
+    "code": "Actuellement en développement"
+  },
+  "LocaleSwitcher": {
+    "label": "Changer de langue",
+    "locale": "{locale, select, fr {🇫🇷 Français} en {🇬🇧 English} other {Inconnu}}"
+  }
 }

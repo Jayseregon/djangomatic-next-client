@@ -1,6 +1,13 @@
 {
-    "Index": {
-        "title": "Welcome to the index page",
-        "message": "This is the index page"
-    }
+  "Index": {
+    "title": "Welcome to the index page",
+    "message": "This is the index page"
+  },
+  "Home": {
+    "code": "Currently in development"
+  },
+  "LocaleSwitcher": {
+    "label": "Change language",
+    "locale": "{locale, select, fr {🇫🇷 Français} en {🇬🇧 English} other {Unknown}}"
+  }
 }

@@ -1,54 +1,58 @@
-// // import {useLocale, useTranslations} from 'next-intl';
-// // import LocaleSwitcherSelect from './LocaleSwitcherSelect';
-// // import {locales} from '@/config';
+"use client";
 
-// // export default function LocaleSwitcher() {
-// //   const t = useTranslations('LocaleSwitcher');
-// //   const locale = useLocale();
+import { useLocale, useTranslations } from "next-intl";
+import {
+  Dropdown,
+  DropdownTrigger,
+  DropdownMenu,
+  DropdownItem,
+} from "@nextui-org/react";
+import clsx from "clsx";
+import { useParams } from "next/navigation";
+import { ChangeEvent, Key, ReactNode, useTransition } from "react";
+import { useRouter, usePathname } from "@/navigation";
+import { locales } from "@/config";
 
-// //   return (
-// //     <LocaleSwitcherSelect defaultValue={locale} label={t('label')}>
-// //       {locales.map((cur) => (
-// //         <option key={cur} value={cur}>
-// //           {t('locale', {locale: cur})}
-// //         </option>
-// //       ))}
-// //     </LocaleSwitcherSelect>
-// //   );
-// // }
+export default function LocaleSwitcher() {
+  const t = useTranslations("LocaleSwitcher");
+  const locale = useLocale();
+  const router = useRouter();
+  const preferredLocale = localStorage.getItem("preferredLocale");
 
-// 'use client';
+  const [isPending, startTransition] = useTransition();
+  const pathname = usePathname();
+  const params = useParams();
 
-// import { useRouter } from 'next/router';
-// import React, { useEffect, useState } from 'react';
+  function onSelectChange(locale: Key) {
+    localStorage.setItem("preferredLocale", locale.toString());
+    document.cookie = `NEXT_LOCALE=${locale}; path=/; max-age=31536000; SameSite=Lax`;
 
-// const locales = ['en', 'fr']; // Define your available locales here
+    startTransition(() => {
+      router.replace(
+        // @ts-expect-error -- TypeScript will validate that only known `params`
+        // are used in combination with a given `pathname`. Since the two will
+        // always match for the current route, we can skip runtime checks.
+        { pathname, params },
+        { locale: locale }
+      );
+    });
+  }
 
-// export default function LocaleSwitcher() {
-//   const router = useRouter();
-//   const [currentLocale, setCurrentLocale] = useState(router.locale);
-
-//   useEffect(() => {
-//     // This code runs only on the client side
-//     setCurrentLocale(router.locale);
-//   }, [router.locale]);
-
-//   const handleLocaleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-//     const newLocale = event.target.value;
-//     const { pathname, query, asPath } = router;
-//     const newPath = asPath.replace(/^\/[a-z]{2}/, `/${newLocale}`); // Assuming locale prefix is always two characters
-
-//     router.push({ pathname, query }, newPath);
-//   };
-
-//   // Render method remains the same
-//   return (
-//     <select defaultValue={currentLocale} onChange={handleLocaleChange}>
-//       {locales.map((locale) => (
-//         <option key={locale} value={locale}>
-//           {locale.toUpperCase()}
-//         </option>
-//       ))}
-//     </select>
-//   );
-// };
+  return (
+    <Dropdown>
+      <DropdownTrigger>{t("locale", { locale })}</DropdownTrigger>
+      <DropdownMenu
+        aria-label={t("label")}
+        selectedKeys={[locale]}
+        onAction={onSelectChange}>
+        {locales.map((curLocale) => (
+          <DropdownItem
+            key={curLocale}
+            textValue={curLocale}>
+            {t("locale", { locale: curLocale })}
+          </DropdownItem>
+        ))}
+      </DropdownMenu>
+    </Dropdown>
+  );
+}

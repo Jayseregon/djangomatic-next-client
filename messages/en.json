@@ -9,5 +9,21 @@
   "LocaleSwitcher": {
     "label": "Change language",
     "locale": "{locale, select, fr {🇫🇷 Français} en {🇬🇧 English} other {Unknown}}"
+  },
+  "Saas": {
+    "h1_title": "Saas",
+    "subtitle": "Automation Tools access page"
+  },
+  "Boards": {
+    "h1_title": "Boards",
+    "subtitle": "Tables & trackings access page"
+  },
+  "Docs": {
+    "h1_title": "Docs",
+    "subtitle": "Tutorial & documentations access page"
+  },
+  "RnD": {
+    "h1_title": "R&D",
+    "subtitle": "Research & Development Team access page"
   }
 }

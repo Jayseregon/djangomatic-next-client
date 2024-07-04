@@ -8,4 +8,4 @@ export const pathnames: Pathnames<typeof locales> = {
   //   '/': '/',
 };
 
-export const localePrefix: LocalePrefix<typeof locales> = "as-needed"; // 'always';
+export const localePrefix: LocalePrefix<typeof locales> = "always"; // 'always';

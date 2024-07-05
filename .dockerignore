@@ -3,7 +3,7 @@
 .gitignore
 .env_local
 _dev*/
-node_modules
 npm-debug.log
 Dockerfile
 .dockerignore
+README.md

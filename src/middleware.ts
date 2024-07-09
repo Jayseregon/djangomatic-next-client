@@ -12,8 +12,8 @@ const intlMiddleware = createMiddleware({
   localeDetection: false,
 });
 
-// Extend the middleware to handle locale changes
-export default function middleware(req: NextRequest) {
+// Refactored locale middleware function
+function localeMiddleware(req: NextRequest) {
   // Use the existing intl middleware to handle initial locale setup
   const response = intlMiddleware(req);
 
@@ -31,16 +31,46 @@ export default function middleware(req: NextRequest) {
     const url = req.nextUrl.clone();
 
     // Ensure we do not add the locale multiple times
-    const segments = req.nextUrl.pathname.split('/');
+    const segments = req.nextUrl.pathname.split("/");
     if (segments[1] === nextLocale) {
       // Locale is already present in the path
       return response;
     }
-
     url.pathname = `/${nextLocale}${req.nextUrl.pathname}`;
     return NextResponse.redirect(url);
   }
+  return response;
+}
 
+// New CSP middleware function
+function cspMiddleware(response: NextResponse) {
+  const nonce = Buffer.from(crypto.randomUUID()).toString('base64');
+  const cspHeader = `
+    default-src 'self';
+    script-src 'self' 'nonce-${nonce}' 'strict-dynamic';
+    style-src 'self' 'nonce-${nonce}';
+    img-src 'self' blob: data:;
+    font-src 'self';
+    object-src 'none';
+    base-uri 'self';
+    form-action 'self';
+    frame-ancestors 'none';
+    upgrade-insecure-requests;
+  `.replace(/\s{2,}/g, ' ').trim();
+
+  response.headers.set('Content-Security-Policy', cspHeader);
+  response.headers.set('x-nonce', nonce);
+  return response;
+}
+
+// Combined middleware function
+export function middleware(req: NextRequest) {
+  const isDev = process.env.NODE_ENV === 'development';
+
+  let response = localeMiddleware(req); 
+  if (!isDev) {
+    response = cspMiddleware(response); 
+  }
   return response;
 }
 
@@ -48,13 +78,16 @@ export const config = {
   matcher: [
     // Enable a redirect to a matching locale at the root
     "/",
-
-    // Set a cookie to remember the previous locale for
-    // all requests that have a locale prefix
+    // Set a cookie to remember the previous locale
     "/(fr|en)/:path*",
-
     // Enable redirects that add missing locales
-    // (e.g. `/pathnames` -> `/en/pathnames`)
     "/((?!_next|_vercel|.*\\..*).*)",
+    {
+      source: '/((?!api|_next/static|_next/image|favicon.ico).*)',
+      missing: [
+        { type: 'header', key: 'next-router-prefetch' },
+        { type: 'header', key: 'purpose', value: 'prefetch' },
+      ],
+    },
   ],
 };

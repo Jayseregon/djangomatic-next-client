@@ -10,7 +10,7 @@ import { ColorCard, ColorCardScale } from "@/components/ColorCard";
 import { useTranslations } from "next-intl";
 
 export default function Home() {
-  const t = useTranslations("Home");
+  const t = useTranslations("HomePage");
 
   return (
     <section className="flex flex-col items-center justify-center gap-4 py-8 md:py-10">
@@ -19,10 +19,8 @@ export default function Home() {
           {siteConfig.name}
         </h1>
         <br />
-        <h1 className={title()}>{siteConfig.hero_descr}</h1>
-        <h2 className={subtitle({ class: "mt-4" })}>
-          {siteConfig.description}
-        </h2>
+        <h1 className={title()}>{t("HeroTitle")}</h1>
+        <h2 className={subtitle({ class: "mt-4" })}>{t("HeroSubtitle")}</h2>
       </div>
 
       <div className="mt-8">
@@ -34,7 +32,7 @@ export default function Home() {
         </Snippet>
       </div>
 
-      <div className="grid grid-cols-6 gap-2">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-2">
         <ColorCard />
         <ColorCardScale target_color="primary" />
         <ColorCardScale target_color="secondary" />

@@ -11,9 +11,19 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        sans: ["var(--font-sans)"],
-        mono: ["var(--font-geist-mono)"],
+        sans: ['var(--font-sans)', 'system-ui', 'sans-serif'],
+        mono: ['var(--font-mono)', 'monospace'],
       },
+      fontWeight: {
+        normal: 400,
+        bold: 700,
+      },
+    },
+  },
+  variants: {
+    extend: {
+      fontStyle: ['responsive', 'hover', 'focus', 'active'],
+      fontWeight: ['responsive', 'hover', 'focus', 'active'],
     },
   },
   darkMode: "class",
@@ -41,7 +51,7 @@ module.exports = {
               700: "#003C7D",
               800: "#00244E",
               900: "#000D20",
-              foreground: "#FFFFFF", 
+              foreground: "#FFFFFF",
               DEFAULT: "#51A0F9",
             },
             secondary: {
@@ -55,8 +65,8 @@ module.exports = {
               700: "#00807B",
               800: "#004D4A",
               900: "#001C1A",
-              foreground: "#FFFFFF", 
-              DEFAULT: "#52FFF8", 
+              foreground: "#FFFFFF",
+              DEFAULT: "#52FFF8",
             },
             success: {
               50: "#F1FEE0",
@@ -69,8 +79,8 @@ module.exports = {
               700: "#45700B",
               800: "#284303",
               900: "#0A1700",
-              foreground: "#FFFFFF", 
-              DEFAULT: "#AEE961", 
+              foreground: "#FFFFFF",
+              DEFAULT: "#AEE961",
             },
             warning: {
               50: "#FFFEDA",
@@ -83,8 +93,8 @@ module.exports = {
               700: "#807700",
               800: "#4D4700",
               900: "#1B1800",
-              foreground: "#FFFFFF", 
-              DEFAULT: "#FFF34B", 
+              foreground: "#FFFFFF",
+              DEFAULT: "#FFF34B",
             },
             danger: {
               50: "#FFECDC",
@@ -97,15 +107,15 @@ module.exports = {
               700: "#812700",
               800: "#4F1600",
               900: "#210400",
-              foreground: "#FFFFFF", 
-              DEFAULT: "#FF854C", 
+              foreground: "#FFFFFF",
+              DEFAULT: "#FF854C",
             },
           },
         },
         dark: {
           colors: {
             background: "#021F26",
-            foreground: "#AEDFFA", 
+            foreground: "#AEDFFA",
             primary: {
               50: "#002244",
               100: "#003C7D",
@@ -117,7 +127,7 @@ module.exports = {
               700: "#B0D6FF",
               800: "#DEF2FF",
               900: "#EFF8FF",
-              foreground: "#021F26", 
+              foreground: "#021F26",
               DEFAULT: "#096BDD",
             },
             secondary: {
@@ -131,7 +141,7 @@ module.exports = {
               700: "#80FFFA",
               800: "#AFFFFD",
               900: "#DAFFFF",
-              foreground: "#021F26", 
+              foreground: "#021F26",
               DEFAULT: "#11B3AC",
             },
             success: {
@@ -145,7 +155,7 @@ module.exports = {
               700: "#C5EF8D",
               800: "#DBF7B7",
               900: "#F1FEE0",
-              foreground: "#021F26", 
+              foreground: "#021F26",
               DEFAULT: "#619D13",
             },
             warning: {
@@ -159,7 +169,7 @@ module.exports = {
               700: "#FFF67D",
               800: "#FFFAAD",
               900: "#FFFEDA",
-              foreground: "#021F26", 
+              foreground: "#021F26",
               DEFAULT: "#B3A600",
             },
             danger: {
@@ -173,7 +183,7 @@ module.exports = {
               700: "#FFA77E",
               800: "#FFCAAF",
               900: "#FFECDC",
-              foreground: "#021F26", 
+              foreground: "#021F26",
               DEFAULT: "#B43800",
             },
           },

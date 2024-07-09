@@ -6,4 +6,5 @@ export type IconSvgProps = SVGProps<SVGSVGElement> & {
 
 export type IconIcoProps = ImgHTMLAttributes<HTMLImageElement> & {
   size?: number;
+  nonce?: string;
 };

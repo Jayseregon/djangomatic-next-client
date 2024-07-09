@@ -1,79 +1,50 @@
-"use client";
-
-import { FC } from "react";
-import { VisuallyHidden } from "@react-aria/visually-hidden";
-import { SwitchProps, useSwitch } from "@nextui-org/switch";
+import React, { useEffect, useState } from "react";
+import { Button } from "@nextui-org/react";
 import { useTheme } from "next-themes";
-import { useIsSSR } from "@react-aria/ssr";
-import clsx from "clsx";
+import {
+  SunThemeIcon,
+  MoonThemeIcon,
+} from "@/components/icons";
 
-import { SunThemeIcon, MoonThemeIcon } from "@/components/icons";
-
-export interface ThemeSwitchProps {
+interface ThemeSwitchProps {
   className?: string;
-  classNames?: SwitchProps["classNames"];
+  nonce?: string;
 }
 
-export const ThemeSwitch: FC<ThemeSwitchProps> = ({
+export const ThemeSwitch: React.FC<ThemeSwitchProps> = ({
   className,
-  classNames,
+  nonce,
 }) => {
   const { theme, setTheme } = useTheme();
-  const isSSR = useIsSSR();
+  const [mounted, setMounted] = useState(false);
 
-  const onChange = () => {
-    theme === "light" ? setTheme("dark") : setTheme("light");
+  useEffect(() => {
+    // Component is now mounted, and we can safely perform client-side operations
+    setMounted(true);
+  }, []);
+
+  const toggleTheme = () => {
+    setTheme(theme === "dark" ? "light" : "dark");
   };
 
-  const {
-    Component,
-    slots,
-    isSelected,
-    getBaseProps,
-    getInputProps,
-    getWrapperProps,
-  } = useSwitch({
-    isSelected: theme === "light" || isSSR,
-    "aria-label": `Switch to ${theme === "light" || isSSR ? "dark" : "light"} mode`,
-    onChange,
-  });
+  // Only render the button after the component has mounted
+  if (!mounted) {
+    return null;
+  }
 
   return (
-    <Component
-      {...getBaseProps({
-        className: clsx(
-          "px-px transition-opacity hover:opacity-80 cursor-pointer",
-          className,
-          classNames?.base
-        ),
-      })}>
-      <VisuallyHidden>
-        <input {...getInputProps()} />
-      </VisuallyHidden>
-      <div
-        {...getWrapperProps()}
-        className={slots.wrapper({
-          class: clsx(
-            [
-              "w-auto h-auto",
-              "bg-transparent",
-              "rounded-lg",
-              "flex items-center justify-center",
-              "group-data-[selected=true]:bg-transparent",
-              "!text-default-500",
-              "pt-px",
-              "px-0",
-              "mx-0",
-            ],
-            classNames?.wrapper
-          ),
-        })}>
-        {!isSelected || isSSR ? (
-          <SunThemeIcon size={22} />
-        ) : (
-          <MoonThemeIcon size={22} />
-        )}
-      </div>
-    </Component>
+    <div>
+      <Button
+        isIconOnly={true}
+        color={undefined}
+        aria-label="Toggle theme"
+        size="sm"
+        onPress={toggleTheme}
+        className={className}
+        variant={undefined}
+        nonce={nonce}>
+        {theme === "dark" ? <SunThemeIcon /> : <MoonThemeIcon />}
+      </Button>
+    </div>
   );
 };

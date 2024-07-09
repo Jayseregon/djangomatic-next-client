@@ -3,9 +3,11 @@ import type { Metadata, Viewport } from "next";
 import clsx from "clsx";
 import { Providers } from "./providers";
 import { ReactNode } from "react";
+import { HeartFooterIcon } from "@/components/icons";
 import { siteConfig } from "@/config/site";
-import { fontSans } from "@/config/fonts";
-import { locales } from "@/config";
+import { fontSans, fontMono } from "@/config/fonts";
+import { Navbar } from "@/components/navbar";
+import { headers } from "next/headers";
 
 type Props = {
   children: ReactNode;
@@ -35,17 +37,24 @@ export const viewport: Viewport = {
 };
 
 export default function RootLayout({ children }: Props) {
+  const nonce = headers().get("x-nonce");
+
   return (
     <html
       suppressHydrationWarning
-      lang="en">
-      <head />
+      lang="en"
+      nonce={nonce || undefined}>
+      <head nonce={nonce || undefined} />
       <body
         className={clsx(
           "min-h-screen bg-background font-sans antialiased",
-          fontSans.variable
-        )}>
-        <Providers themeProps={{ attribute: "class", defaultTheme: "dark" }}>
+          fontSans.variable,
+          fontMono.variable
+        )}
+        nonce={nonce || undefined}>
+        <Providers
+          themeProps={{ attribute: "class", defaultTheme: "dark" }}
+          nonce={nonce || undefined}>
           {children}
         </Providers>
       </body>

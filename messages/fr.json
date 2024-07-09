@@ -3,12 +3,15 @@
     "title": "Bienvenue sur la page d'accueil",
     "message": "Ceci est la page d'accueil"
   },
-  "Home": {
+"HomePage": {
+    "HeroTitle": "Simplifier vos tâches quotidiennes",
+    "HeroSubtitle": "Automatisation des processus sur le Cloud",
     "code": "Actuellement en développement"
   },
   "LocaleSwitcher": {
     "label": "Changer de langue",
-    "locale": "{locale, select, fr {🇫🇷 Français} en {🇬🇧 English} other {Inconnu}}"
+    "locale": "{locale, select, fr {🇫🇷 French} en {🇬🇧 English} other {🚫 Inconnu}}",
+    "localeFlag": "{locale, select, fr {🇫🇷} en {🇬🇧} other {🚫}}"
   },
   "Saas": {
       "h1_title": "Saas",

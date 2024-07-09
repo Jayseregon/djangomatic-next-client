@@ -1,6 +1,5 @@
 "use client";
 
-// NextUI components
 import {
   Navbar as NextUINavbar,
   NavbarContent,
@@ -14,26 +13,22 @@ import {
   Dropdown,
   DropdownTrigger,
   DropdownMenu,
-  DropdownSection,
   DropdownItem,
 } from "@nextui-org/dropdown";
-import { Avatar, AvatarGroup, AvatarIcon } from "@nextui-org/avatar";
-import { Kbd } from "@nextui-org/kbd";
+import { Avatar } from "@nextui-org/avatar";
 import { Link } from "@nextui-org/link";
-import { Input } from "@nextui-org/input";
 import LocaleSwitcher from "./LocaleSwitcher";
-
-// NextJS components
-import { useState, useRef, useEffect } from "react";
-import clsx from "clsx";
-
-// Custom components
+import { useState } from "react";
 import { siteConfig } from "@/config/site";
 import { ThemeSwitch } from "@/components/theme-switch";
 import { Logo } from "@/components/icons";
 import { SearchInput } from "@/components/SearchInput";
 
-export const Navbar = () => {
+interface NavbarProps {
+  nonce?: string;
+}
+
+export const Navbar: React.FC<NavbarProps> = ({ nonce }) => {
   // Navbar state
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
@@ -44,37 +39,46 @@ export const Navbar = () => {
       position="sticky"
       isMenuOpen={isMenuOpen}
       onMenuOpenChange={setIsMenuOpen}
-      isBordered>
-      <NavbarContent>
+      isBordered
+      nonce={nonce}>
+      <NavbarContent nonce={nonce}>
         <NavbarBrand
           as="li"
-          className="gap-3 max-w-fit">
+          className="gap-3 max-w-fit"
+          nonce={nonce}>
           <Link
             className="flex justify-start items-center gap-4"
             color="foreground"
-            href="/">
-            <Logo />
+            href="/"
+            nonce={nonce}>
+            <Logo nonce={nonce} />
             <p className="font-bold text-inherit">Djangomatic</p>
           </Link>
         </NavbarBrand>
       </NavbarContent>
 
       {/* navbar menu  */}
-      <NavbarContent justify="center">
+      <NavbarContent
+        justify="center"
+        nonce={nonce}>
         {/* toggle menu */}
         <NavbarMenuToggle
           aria-label={isMenuOpen ? "Close Menu" : "Open Menu"}
           className="md:hidden"
+          nonce={nonce}
         />
 
         {/* or list items menu */}
         <ul className="hidden md:flex items-start justify-start gap-16">
           {siteConfig.navItems.map((item) => (
-            <NavbarItem key={item.href}>
+            <NavbarItem
+              key={item.href}
+              nonce={nonce}>
               <Link
                 color="foreground"
                 underline="hover"
-                href={item.href}>
+                href={item.href}
+                nonce={nonce}>
                 {item.label}
               </Link>
             </NavbarItem>
@@ -83,21 +87,30 @@ export const Navbar = () => {
       </NavbarContent>
 
       {/* avatar menu with theme switch and search */}
-      <NavbarContent justify="end">
-        <NavbarItem className="hidden md:flex">
+      <NavbarContent
+        justify="end"
+        nonce={nonce}>
+        <NavbarItem
+          className="hidden md:flex"
+          nonce={nonce}>
           <SearchInput />
         </NavbarItem>
 
-        <NavbarItem>
-          <ThemeSwitch />
+        <NavbarItem nonce={nonce}>
+          <ThemeSwitch
+            nonce={nonce}
+            className="text-foreground bg-transparent hover:bg-primary-100"
+          />
         </NavbarItem>
 
-        <NavbarItem>
-          <LocaleSwitcher />
+        <NavbarItem nonce={nonce}>
+          <LocaleSwitcher nonce={nonce} />
         </NavbarItem>
 
-        <Dropdown placement="bottom-end">
-          <DropdownTrigger>
+        <Dropdown
+          placement="bottom-end"
+          nonce={nonce}>
+          <DropdownTrigger nonce={nonce}>
             <Avatar
               isBordered
               as="button"
@@ -105,22 +118,33 @@ export const Navbar = () => {
               color="secondary"
               name="Demo User"
               size="sm"
+              nonce={nonce}
               // src="https://i.pravatar.cc/150?img=27"
             />
           </DropdownTrigger>
           <DropdownMenu
             aria-label="Profile Actions"
-            variant="flat">
+            variant="flat"
+            nonce={nonce}>
             <DropdownItem
               key="profile"
-              className="h-14 gap-2">
+              className="h-14 gap-2"
+              textValue="Signed In profile name"
+              nonce={nonce}>
               <p className="font-semibold">Signed in as</p>
               <p className="font-semibold">Demo User</p>
             </DropdownItem>
-            <DropdownItem key="settings">My Settings</DropdownItem>
+            <DropdownItem
+              key="settings"
+              textValue="My Settings"
+              nonce={nonce}>
+              My Settings
+            </DropdownItem>
             <DropdownItem
               key="logout"
-              color="danger">
+              color="danger"
+              textValue="Log Out"
+              nonce={nonce}>
               Log Out
             </DropdownItem>
           </DropdownMenu>
@@ -128,13 +152,16 @@ export const Navbar = () => {
       </NavbarContent>
 
       {/* menu definition when toggled */}
-      <NavbarMenu>
+      <NavbarMenu nonce={nonce}>
         <SearchInput alwaysExpanded={true} />
         <div className="mx-4 mt-2 flex flex-col gap-3">
           {siteConfig.navMenuToggleItems.map((item, index) => (
-            <NavbarMenuItem key={`${item}-${index}`}>
+            <NavbarMenuItem
+              key={`${item}-${index}`}
+              nonce={nonce}>
               <Link
                 color="foreground"
+                nonce={nonce}
                 className="w-full"
                 href={item.href}
                 size="lg"

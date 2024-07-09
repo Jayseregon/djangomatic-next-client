@@ -4,7 +4,7 @@ export const siteConfig = {
   name: "Djangomatic",
   hero_descr: "Simplifying your Daily Tasks.",
   description: "Process Automation on the Cloud.",
-  icon: "/favicon_td.ico",
+  icon: "/favicon.ico",
   navItems: [
     {
       label: "Saas",

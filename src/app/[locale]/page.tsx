@@ -1,13 +1,9 @@
-import { Link } from "@nextui-org/link";
 import { Snippet } from "@nextui-org/snippet";
-import { Code } from "@nextui-org/code";
-import { button as buttonStyles } from "@nextui-org/theme";
+import { useTranslations } from "next-intl";
 
 import { siteConfig } from "@/config/site";
 import { title, subtitle } from "@/components/primitives";
 import { ColorCard, ColorCardScale } from "@/components/ColorCard";
-
-import { useTranslations } from "next-intl";
 
 export default function Home() {
   const t = useTranslations("HomePage");
@@ -24,10 +20,7 @@ export default function Home() {
       </div>
 
       <div className="mt-8">
-        <Snippet
-          hideCopyButton
-          hideSymbol
-          variant="flat">
+        <Snippet hideCopyButton hideSymbol variant="flat">
           <span>{t("code")}</span>
         </Snippet>
       </div>

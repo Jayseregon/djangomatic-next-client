@@ -1,13 +1,14 @@
 import "@/styles/globals.css";
 import type { Metadata, Viewport } from "next";
+
 import clsx from "clsx";
-import { Providers } from "./providers";
 import { ReactNode } from "react";
-import { HeartFooterIcon } from "@/components/icons";
+import { headers } from "next/headers";
+
 import { siteConfig } from "@/config/site";
 import { fontSans, fontMono } from "@/config/fonts";
-import { Navbar } from "@/components/navbar";
-import { headers } from "next/headers";
+
+import { Providers } from "./providers";
 
 type Props = {
   children: ReactNode;
@@ -40,21 +41,20 @@ export default function RootLayout({ children }: Props) {
   const nonce = headers().get("x-nonce");
 
   return (
-    <html
-      suppressHydrationWarning
-      lang="en"
-      nonce={nonce || undefined}>
+    <html suppressHydrationWarning lang="en" nonce={nonce || undefined}>
       <head nonce={nonce || undefined} />
       <body
         className={clsx(
           "min-h-max bg-background font-sans antialiased",
           fontSans.variable,
-          fontMono.variable
+          fontMono.variable,
         )}
-        nonce={nonce || undefined}>
+        nonce={nonce || undefined}
+      >
         <Providers
+          nonce={nonce || undefined}
           themeProps={{ attribute: "class", defaultTheme: "dark" }}
-          nonce={nonce || undefined}>
+        >
           {children}
         </Providers>
       </body>

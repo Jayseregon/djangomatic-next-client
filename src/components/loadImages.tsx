@@ -19,11 +19,11 @@ export const LoadDynamicImage: React.FC<LoadImageProps> = ({
   return (
     <span className="flex flex-col items-center">
       <Image
-        src={imgSrc}
         alt={imageName}
-        width={width}
-        height={height}
         className="shadow-xl shadow-slate-600/80 dark:shadow-teal-900/80"
+        height={height}
+        src={imgSrc}
+        width={width}
       />
     </span>
   );

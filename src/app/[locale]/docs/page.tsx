@@ -1,20 +1,15 @@
-import { title, subtitle } from "@/components/primitives";
-import { useTranslations } from "next-intl";
-import { posts } from "#site/content";
-import MDXContent from "@/src/components/MDXRenderer";
-import Callout from "@/src/components/callout";
+// import { useTranslations } from "next-intl";
+
+import { title } from "@/components/primitives";
 
 export default function DocsPage() {
-  const t = useTranslations("Docs");
-  const post = posts.find((post) => post.title === "Hello world") ?? {
-    code: "Post not found",
-  };
+  // const t = useTranslations("Docs");
 
   return (
     <div className="text-center max-w-screen-md mx-auto">
       <h1 className={title()}>Usage Guidelines</h1>
 
-      <div className="py-3"></div>
+      <div className="py-3" />
 
       <div className="text-justify">
         <p>
@@ -29,8 +24,8 @@ export default function DocsPage() {
           </h2>
           <p>
             Our documentation is designed to be user-friendly, providing you
-            with all the information needed to use our tools efficiently. Here’s
-            how to get started:
+            with all the information needed to use our tools efficiently.
+            Here&apos;s how to get started:
           </p>
           <ul className="list-disc pl-5">
             <li>
@@ -45,7 +40,7 @@ export default function DocsPage() {
             </li>
             <li>
               <strong>Examples and Tutorials:</strong> Look for examples and
-              tutorials within each tool's documentation to see the tool in
+              tutorials within each tool&apos;s documentation to see the tool in
               action.
             </li>
           </ul>
@@ -61,7 +56,7 @@ export default function DocsPage() {
           </p>
           <ul className="list-disc pl-5">
             <li>
-              <strong>Start with the Basics:</strong> If you’re new to
+              <strong>Start with the Basics:</strong> If you are new to
               automation, begin with our introductory guides to understand the
               fundamentals.
             </li>
@@ -82,8 +77,8 @@ export default function DocsPage() {
           <p>
             Your feedback is invaluable to us. If you have suggestions on how we
             can improve our documentation or tools, please let us know.
-            Additionally, if you’ve created workflows or solutions that could
-            benefit others, consider sharing them with our community.
+            Additionally, if you&apos;ve created workflows or solutions that
+            could benefit others, consider sharing them with our community.
           </p>
         </section>
       </div>

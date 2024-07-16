@@ -17,9 +17,7 @@ export function Providers({ children, themeProps, nonce }: ProvidersProps) {
 
   return (
     <NextUIProvider navigate={router.push}>
-      <NextThemesProvider
-        {...themeProps}
-        nonce={nonce}>
+      <NextThemesProvider {...themeProps} nonce={nonce}>
         {children}
       </NextThemesProvider>
     </NextUIProvider>

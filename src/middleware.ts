@@ -1,6 +1,8 @@
+import type { NextRequest } from "next/server";
+
 import createMiddleware from "next-intl/middleware";
 import { NextResponse } from "next/server";
-import type { NextRequest } from "next/server";
+
 import { localePrefix, defaultLocale, locales, pathnames } from "./config";
 
 // Existing middleware configuration
@@ -32,19 +34,22 @@ function localeMiddleware(req: NextRequest) {
 
     // Ensure we do not add the locale multiple times
     const segments = req.nextUrl.pathname.split("/");
+
     if (segments[1] === nextLocale) {
       // Locale is already present in the path
       return response;
     }
     url.pathname = `/${nextLocale}${req.nextUrl.pathname}`;
+
     return NextResponse.redirect(url);
   }
+
   return response;
 }
 
 // New CSP middleware function
 function cspMiddleware(response: NextResponse) {
-  const nonce = Buffer.from(crypto.randomUUID()).toString('base64');
+  const nonce = Buffer.from(crypto.randomUUID()).toString("base64");
   const cspHeader = `
     default-src 'self';
     script-src 'self' 'nonce-${nonce}' 'strict-dynamic';
@@ -56,21 +61,26 @@ function cspMiddleware(response: NextResponse) {
     form-action 'self';
     frame-ancestors 'none';
     upgrade-insecure-requests;
-  `.replace(/\s{2,}/g, ' ').trim();
+  `
+    .replace(/\s{2,}/g, " ")
+    .trim();
 
-  response.headers.set('Content-Security-Policy', cspHeader);
-  response.headers.set('x-nonce', nonce);
+  response.headers.set("Content-Security-Policy", cspHeader);
+  response.headers.set("x-nonce", nonce);
+
   return response;
 }
 
 // Combined middleware function
 export function middleware(req: NextRequest) {
-  const isDev = process.env.NODE_ENV === 'development';
+  const isDev = process.env.NODE_ENV === "development";
 
-  let response = localeMiddleware(req); 
+  let response = localeMiddleware(req);
+
   if (!isDev) {
-    response = cspMiddleware(response); 
+    response = cspMiddleware(response);
   }
+
   return response;
 }
 
@@ -79,6 +89,6 @@ export const config = {
     "/", // Redirect to a matching locale at the root
     "/(fr|en)/:path*", // Set a cookie to remember the previous locale
     "/((?!_next|_vercel|.*\\..*).*)", // Exclude image paths and /docs/auto-loops from locale prefixing
-    "/((?!api|_next/static|_next/image|static|docs|favicon.ico).*)" // Match all paths except API, static files, and favicon
+    "/((?!api|_next/static|_next/image|static|docs|favicon.ico).*)", // Match all paths except API, static files, and favicon
   ],
 };

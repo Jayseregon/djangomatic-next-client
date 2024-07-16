@@ -1,5 +1,6 @@
-import { SidebarDocs } from "@/src/components/sidebars";
 import { headers } from "next/headers";
+
+import { SidebarDocs } from "@/src/components/sidebars";
 import SearchInput from "@/src/components/SearchInput";
 
 export default function DocsLayout({
@@ -18,9 +19,7 @@ export default function DocsLayout({
         <SidebarDocs nonce={nonce || undefined} />
       </div>
       <section className="flex-grow ml-64 flex flex-col items-center overflow-y-auto">
-        <div className="inline-block max-w-full text-center">
-          {children}
-        </div>
+        <div className="inline-block max-w-full text-center">{children}</div>
       </section>
     </div>
   );

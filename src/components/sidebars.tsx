@@ -1,12 +1,13 @@
 "use client";
 
 import { Link } from "@nextui-org/link";
+import React from "react";
+import { useTranslations } from "next-intl";
+import { usePathname } from "next/navigation";
+
 import { siteConfig } from "@/config/site";
 import { saasData } from "@/config/saasData";
 import { docsData } from "@/config/docsData";
-import React from "react";
-import { useTranslations } from "next-intl";
-import { usePathname, useRouter } from "next/navigation";
 
 // define the types for the Sidebar component
 interface SidebarProps {
@@ -54,11 +55,13 @@ const SidebarSection: React.FC<SidebarSectionProps> = ({
             {appCategory.data.map((item, index) => (
               <li
                 key={`${index}-${item.label}`}
-                className={`py-1 ${liTagStyling(currentPath, item.href)}`}>
+                className={`py-1 ${liTagStyling(currentPath, item.href)}`}
+              >
                 <Link
+                  className={linkTagStyling(currentPath, item.href)}
                   href={item.href || "#"}
                   nonce={nonce}
-                  className={linkTagStyling(currentPath, item.href)}>
+                >
                   {item.label}
                 </Link>
               </li>
@@ -74,7 +77,7 @@ export const SidebarSaas: React.FC<SidebarProps> = ({ nonce }) => {
   const t = useTranslations("SaasSidebar");
   const currentPath = usePathname();
   const saasPath = siteConfig.navItems.filter(
-    (item) => item.label === "Saas"
+    (item) => item.label === "Saas",
   )[0].href;
 
   const extractAppDataTds = (type: string) =>
@@ -135,9 +138,10 @@ export const SidebarSaas: React.FC<SidebarProps> = ({ nonce }) => {
           </h2>
 
           <Link
+            className={`${liTagStyling(currentPath, saasPath)} ${linkTagStyling(currentPath, saasPath)}`}
             href={saasPath}
             nonce={nonce}
-            className={`${liTagStyling(currentPath, saasPath)} ${linkTagStyling(currentPath, saasPath)}`}>
+          >
             {t("link_title")}
           </Link>
 
@@ -157,10 +161,7 @@ export const SidebarSaas: React.FC<SidebarProps> = ({ nonce }) => {
             COGECO
           </h2>
 
-          <SidebarSection
-            categories={[cogecoApps]}
-            nonce={nonce}
-          />
+          <SidebarSection categories={[cogecoApps]} nonce={nonce} />
 
           <h2 className="text-xl font-black text-foreground indent-2 mt-3 mb-1">
             Vistabeam
@@ -180,10 +181,11 @@ export const SidebarDocs: React.FC<SidebarProps> = ({ nonce }) => {
   const t = useTranslations("SaasSidebar");
   const currentPath = usePathname();
   const docsPath = siteConfig.navItems.filter(
-    (item) => item.label === "Docs"
+    (item) => item.label === "Docs",
   )[0].href;
 
-  const extractDocsDataTds = (isQGIS: boolean) => docsData.tds_docs.filter(item => item.is_qgis_doc === isQGIS);
+  const extractDocsDataTds = (isQGIS: boolean) =>
+    docsData.tds_docs.filter((item) => item.is_qgis_doc === isQGIS);
 
   const webTools: AppCategory = {
     title: "Web Tools",
@@ -204,20 +206,14 @@ export const SidebarDocs: React.FC<SidebarProps> = ({ nonce }) => {
           </h2>
 
           <Link
+            className={`${liTagStyling(currentPath, docsPath)} ${linkTagStyling(currentPath, docsPath)}`}
             href={docsPath}
             nonce={nonce}
-            className={`${liTagStyling(currentPath, docsPath)} ${linkTagStyling(currentPath, docsPath)}`}>
+          >
             {t("link_title")}
           </Link>
 
-          <SidebarSection
-            categories={[
-              webTools,
-              qgisTools,
-            ]}
-            nonce={nonce}
-          />
-
+          <SidebarSection categories={[webTools, qgisTools]} nonce={nonce} />
         </ul>
       </div>
     </div>

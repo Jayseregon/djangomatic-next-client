@@ -15,20 +15,20 @@ const docs = defineCollection({
   schema: s
     .object({
       title: s.string().max(99),
-      slug: s.slug('global', ['admin', 'login']),
-      body: s.mdx()
+      slug: s.slug("global", ["admin", "login"]),
+      body: s.mdx(),
     })
-    .transform(data => ({ ...data, permalink: `/${data.slug}` }))
-})
+    .transform((data) => ({ ...data, permalink: `/${data.slug}` })),
+});
 
 export default defineConfig({
-  root: 'content',
+  root: "content",
   output: {
-    data: '.velite',
-    assets: 'public/static',
-    base: '/static/',
-    name: '[name]-[hash:6].[ext]',
-    clean: true
+    data: ".velite",
+    assets: "public/static",
+    base: "/static/",
+    name: "[name]-[hash:6].[ext]",
+    clean: true,
   },
   collections: { posts, docs },
 });

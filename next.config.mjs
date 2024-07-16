@@ -49,7 +49,7 @@ if (!process.env.VELITE_STARTED && (isDev || isBuild)) {
  * @type {import('next').NextConfig}
  */
 const nextConfig = {
-  output: "standalone",
+  // output: "standalone",
   pageExtensions: ['js', 'jsx', 'md', 'mdx', 'ts', 'tsx'],
   async headers() {
     return isLocalDev ? [] : [

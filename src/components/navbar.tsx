@@ -17,13 +17,15 @@ import {
 } from "@nextui-org/dropdown";
 import { Avatar } from "@nextui-org/avatar";
 import { Link } from "@nextui-org/link";
-import LocaleSwitcher from "./LocaleSwitcher";
 import { useState } from "react";
+import { useTranslations } from "next-intl";
+
 import { siteConfig } from "@/config/site";
 import { ThemeSwitch } from "@/components/theme-switch";
 import { Logo } from "@/components/icons";
+
 // import { SearchInput } from "@/components/SearchInput";
-import { useTranslations } from "next-intl";
+import LocaleSwitcher from "./LocaleSwitcher";
 
 interface NavbarProps {
   nonce?: string;
@@ -37,22 +39,21 @@ export const Navbar: React.FC<NavbarProps> = ({ nonce }) => {
   return (
     // brand definition
     <NextUINavbar
-      maxWidth="2xl"
-      position="sticky"
-      isMenuOpen={isMenuOpen}
-      onMenuOpenChange={setIsMenuOpen}
       className="border-b border-slate-300 dark:border-slate-700 fixed"
-      nonce={nonce}>
+      isMenuOpen={isMenuOpen}
+      maxWidth="2xl"
+      nonce={nonce}
+      position="sticky"
+      onMenuOpenChange={setIsMenuOpen}
+    >
       <NavbarContent nonce={nonce}>
-        <NavbarBrand
-          as="li"
-          className="gap-3 max-w-fit"
-          nonce={nonce}>
+        <NavbarBrand as="li" className="gap-3 max-w-fit" nonce={nonce}>
           <Link
             className="flex justify-start items-center gap-4"
             color="foreground"
             href="/"
-            nonce={nonce}>
+            nonce={nonce}
+          >
             <Logo nonce={nonce} />
             <p className="font-bold text-inherit">{siteConfig.name}</p>
           </Link>
@@ -60,9 +61,7 @@ export const Navbar: React.FC<NavbarProps> = ({ nonce }) => {
       </NavbarContent>
 
       {/* navbar menu  */}
-      <NavbarContent
-        justify="center"
-        nonce={nonce}>
+      <NavbarContent justify="center" nonce={nonce}>
         {/* toggle menu */}
         <NavbarMenuToggle
           aria-label={isMenuOpen ? "Close Menu" : "Open Menu"}
@@ -73,14 +72,13 @@ export const Navbar: React.FC<NavbarProps> = ({ nonce }) => {
         {/* or list items menu */}
         <ul className="hidden md:flex items-start justify-start gap-16">
           {siteConfig.navItems.map((item, index) => (
-            <NavbarItem
-              key={`${item}-${index}-navbar`}
-              nonce={nonce}>
+            <NavbarItem key={`${item}-${index}-navbar`} nonce={nonce}>
               <Link
                 color="foreground"
-                underline="hover"
                 href={item.href}
-                nonce={nonce}>
+                nonce={nonce}
+                underline="hover"
+              >
                 {item.label}
               </Link>
             </NavbarItem>
@@ -89,9 +87,7 @@ export const Navbar: React.FC<NavbarProps> = ({ nonce }) => {
       </NavbarContent>
 
       {/* avatar menu with theme switch and search */}
-      <NavbarContent
-        justify="end"
-        nonce={nonce}>
+      <NavbarContent justify="end" nonce={nonce}>
         {/* <NavbarItem
           className="hidden md:flex"
           nonce={nonce}>
@@ -100,8 +96,8 @@ export const Navbar: React.FC<NavbarProps> = ({ nonce }) => {
 
         <NavbarItem nonce={nonce}>
           <ThemeSwitch
-            nonce={nonce}
             className="text-foreground bg-transparent hover:bg-primary-100"
+            nonce={nonce}
           />
         </NavbarItem>
 
@@ -109,9 +105,7 @@ export const Navbar: React.FC<NavbarProps> = ({ nonce }) => {
           <LocaleSwitcher nonce={nonce} />
         </NavbarItem>
 
-        <Dropdown
-          placement="bottom-end"
-          nonce={nonce}>
+        <Dropdown nonce={nonce} placement="bottom-end">
           <DropdownTrigger nonce={nonce}>
             <Avatar
               isBordered
@@ -126,27 +120,27 @@ export const Navbar: React.FC<NavbarProps> = ({ nonce }) => {
           </DropdownTrigger>
           <DropdownMenu
             aria-label="Profile Actions"
+            nonce={nonce}
             variant="flat"
-            nonce={nonce}>
+          >
             <DropdownItem
               key="profile"
               className="h-14 gap-2"
+              nonce={nonce}
               textValue="Signed In profile name"
-              nonce={nonce}>
+            >
               <p className="font-semibold">{t("dItemSignedInTitle")}</p>
               <p className="font-semibold">{t("dItemUserName")}</p>
             </DropdownItem>
-            <DropdownItem
-              key="settings"
-              textValue="My Settings"
-              nonce={nonce}>
+            <DropdownItem key="settings" nonce={nonce} textValue="My Settings">
               {t("dItemSettings")}
             </DropdownItem>
             <DropdownItem
               key="logout"
               color="danger"
+              nonce={nonce}
               textValue="Log Out"
-              nonce={nonce}>
+            >
               {t("dItemLogOut")}
             </DropdownItem>
           </DropdownMenu>
@@ -158,18 +152,17 @@ export const Navbar: React.FC<NavbarProps> = ({ nonce }) => {
         {/* <SearchInput alwaysExpanded={true} /> */}
         <div className="mx-4 mt-2 flex flex-col gap-3">
           {siteConfig.navItems.map((item, index) => (
-            <NavbarMenuItem
-              key={`${item}-${index}-dropdown`}
-              nonce={nonce}>
+            <NavbarMenuItem key={`${item}-${index}-dropdown`} nonce={nonce}>
               <Link
-                color="foreground"
-                nonce={nonce}
                 className="w-full"
+                color="foreground"
                 href={item.href}
+                nonce={nonce}
                 size="lg"
                 onPress={() => {
                   setIsMenuOpen((prev) => !prev);
-                }}>
+                }}
+              >
                 {item.label}
               </Link>
             </NavbarMenuItem>

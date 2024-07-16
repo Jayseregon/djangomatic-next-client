@@ -1,5 +1,6 @@
-import { title, subtitle } from "@/components/primitives";
 import { useTranslations } from "next-intl";
+
+import { title, subtitle } from "@/components/primitives";
 
 export default function RnDPage() {
   const t = useTranslations("RnD");

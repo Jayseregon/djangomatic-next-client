@@ -1,13 +1,14 @@
 import Image from "next/image";
 import * as runtime from "react/jsx-runtime";
+
 import Callout from "./callout";
-import { cn } from "@/lib/utils";
 import Snippet from "./snippet";
 import { LoadDynamicImage } from "./loadImages";
 import Quote from "./quote";
 
 const useMDXComponent = (code: string) => {
   const fn = new Function(code);
+
   return fn({ ...runtime }).default;
 };
 
@@ -27,10 +28,8 @@ interface MdxProps {
 
 export default function MDXContent({ code, components, ...props }: MdxProps) {
   const Component = useMDXComponent(code);
+
   return (
-    <Component
-      components={{ ...sharedComponents, ...components }}
-      {...props}
-    />
+    <Component components={{ ...sharedComponents, ...components }} {...props} />
   );
 }

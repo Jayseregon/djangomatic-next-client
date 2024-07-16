@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Button } from "@nextui-org/react";
 import { useTheme } from "next-themes";
-import {
-  SunThemeIcon,
-  MoonThemeIcon,
-} from "@/components/icons";
+
+import { SunThemeIcon, MoonThemeIcon } from "@/components/icons";
 
 interface ThemeSwitchProps {
   className?: string;
@@ -35,14 +33,15 @@ export const ThemeSwitch: React.FC<ThemeSwitchProps> = ({
   return (
     <div>
       <Button
-        isIconOnly={true}
-        color={undefined}
         aria-label="Toggle theme"
-        size="sm"
-        onPress={toggleTheme}
         className={className}
+        color={undefined}
+        isIconOnly={true}
+        nonce={nonce}
+        size="sm"
         variant={undefined}
-        nonce={nonce}>
+        onPress={toggleTheme}
+      >
         {theme === "dark" ? <SunThemeIcon /> : <MoonThemeIcon />}
       </Button>
     </div>

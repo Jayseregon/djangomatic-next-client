@@ -1,3 +1,5 @@
+"use client";
+
 import { useState, useRef, useEffect } from "react";
 import { Input, Kbd } from "@nextui-org/react";
 import { SearchIcon } from "@/components/icons";

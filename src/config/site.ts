@@ -23,23 +23,4 @@ export const siteConfig = {
       href: "/rnd",
     },
   ],
-  navMenuToggleItems: [
-    {
-      label: "Saas",
-      href: "/saas",
-    },
-    {
-      label: "Docs",
-      href: "/docs",
-    },
-    {
-      label: "Boards",
-      href: "/boards",
-    },
-    {
-      label: "R&D",
-      href: "/rnd",
-    },
-  ],
-  links: {},
 };

@@ -76,18 +76,9 @@ export function middleware(req: NextRequest) {
 
 export const config = {
   matcher: [
-    // Enable a redirect to a matching locale at the root
-    "/",
-    // Set a cookie to remember the previous locale
-    "/(fr|en)/:path*",
-    // Enable redirects that add missing locales
-    "/((?!_next|_vercel|.*\\..*).*)",
-    {
-      source: '/((?!api|_next/static|_next/image|favicon.ico).*)',
-      missing: [
-        { type: 'header', key: 'next-router-prefetch' },
-        { type: 'header', key: 'purpose', value: 'prefetch' },
-      ],
-    },
+    "/", // Redirect to a matching locale at the root
+    "/(fr|en)/:path*", // Set a cookie to remember the previous locale
+    "/((?!_next|_vercel|.*\\..*).*)", // Exclude image paths and /docs/auto-loops from locale prefixing
+    "/((?!api|_next/static|_next/image|static|docs|favicon.ico).*)" // Match all paths except API, static files, and favicon
   ],
 };

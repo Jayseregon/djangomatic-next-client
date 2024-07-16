@@ -47,7 +47,7 @@ export default function RootLayout({ children }: Props) {
       <head nonce={nonce || undefined} />
       <body
         className={clsx(
-          "min-h-screen bg-background font-sans antialiased",
+          "min-h-max bg-background font-sans antialiased",
           fontSans.variable,
           fontMono.variable
         )}

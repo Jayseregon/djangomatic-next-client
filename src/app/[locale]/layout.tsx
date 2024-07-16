@@ -20,13 +20,13 @@ export default async function LocaleLayout({
         <Navbar nonce={nonce || undefined} />
 
         <main
-          className="container mx-auto max-w-7xl pt-16 px-6 flex-grow"
+          className="container mx-auto max-w-full pt-24 px-6 flex-grow"
           nonce={nonce || undefined}>
           {children}
         </main>
 
         <footer
-          className="w-full flex items-center justify-center py-3 text-default-300 space-x-1"
+          className="w-full flex items-center justify-center py-3 text-slate-300 dark:text-slate-700 space-x-1"
           nonce={nonce || undefined}>
           <span>Made with</span>
           <HeartFooterIcon size={20} />

@@ -22,7 +22,8 @@ import { useState } from "react";
 import { siteConfig } from "@/config/site";
 import { ThemeSwitch } from "@/components/theme-switch";
 import { Logo } from "@/components/icons";
-import { SearchInput } from "@/components/SearchInput";
+// import { SearchInput } from "@/components/SearchInput";
+import { useTranslations } from "next-intl";
 
 interface NavbarProps {
   nonce?: string;
@@ -31,6 +32,7 @@ interface NavbarProps {
 export const Navbar: React.FC<NavbarProps> = ({ nonce }) => {
   // Navbar state
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const t = useTranslations("UserProfile");
 
   return (
     // brand definition
@@ -39,7 +41,7 @@ export const Navbar: React.FC<NavbarProps> = ({ nonce }) => {
       position="sticky"
       isMenuOpen={isMenuOpen}
       onMenuOpenChange={setIsMenuOpen}
-      isBordered
+      className="border-b border-slate-300 dark:border-slate-700 fixed"
       nonce={nonce}>
       <NavbarContent nonce={nonce}>
         <NavbarBrand
@@ -52,7 +54,7 @@ export const Navbar: React.FC<NavbarProps> = ({ nonce }) => {
             href="/"
             nonce={nonce}>
             <Logo nonce={nonce} />
-            <p className="font-bold text-inherit">Djangomatic</p>
+            <p className="font-bold text-inherit">{siteConfig.name}</p>
           </Link>
         </NavbarBrand>
       </NavbarContent>
@@ -70,9 +72,9 @@ export const Navbar: React.FC<NavbarProps> = ({ nonce }) => {
 
         {/* or list items menu */}
         <ul className="hidden md:flex items-start justify-start gap-16">
-          {siteConfig.navItems.map((item) => (
+          {siteConfig.navItems.map((item, index) => (
             <NavbarItem
-              key={item.href}
+              key={`${item}-${index}-navbar`}
               nonce={nonce}>
               <Link
                 color="foreground"
@@ -90,11 +92,11 @@ export const Navbar: React.FC<NavbarProps> = ({ nonce }) => {
       <NavbarContent
         justify="end"
         nonce={nonce}>
-        <NavbarItem
+        {/* <NavbarItem
           className="hidden md:flex"
           nonce={nonce}>
           <SearchInput />
-        </NavbarItem>
+        </NavbarItem> */}
 
         <NavbarItem nonce={nonce}>
           <ThemeSwitch
@@ -131,21 +133,21 @@ export const Navbar: React.FC<NavbarProps> = ({ nonce }) => {
               className="h-14 gap-2"
               textValue="Signed In profile name"
               nonce={nonce}>
-              <p className="font-semibold">Signed in as</p>
-              <p className="font-semibold">Demo User</p>
+              <p className="font-semibold">{t("dItemSignedInTitle")}</p>
+              <p className="font-semibold">{t("dItemUserName")}</p>
             </DropdownItem>
             <DropdownItem
               key="settings"
               textValue="My Settings"
               nonce={nonce}>
-              My Settings
+              {t("dItemSettings")}
             </DropdownItem>
             <DropdownItem
               key="logout"
               color="danger"
               textValue="Log Out"
               nonce={nonce}>
-              Log Out
+              {t("dItemLogOut")}
             </DropdownItem>
           </DropdownMenu>
         </Dropdown>
@@ -153,11 +155,11 @@ export const Navbar: React.FC<NavbarProps> = ({ nonce }) => {
 
       {/* menu definition when toggled */}
       <NavbarMenu nonce={nonce}>
-        <SearchInput alwaysExpanded={true} />
+        {/* <SearchInput alwaysExpanded={true} /> */}
         <div className="mx-4 mt-2 flex flex-col gap-3">
-          {siteConfig.navMenuToggleItems.map((item, index) => (
+          {siteConfig.navItems.map((item, index) => (
             <NavbarMenuItem
-              key={`${item}-${index}`}
+              key={`${item}-${index}-dropdown`}
               nonce={nonce}>
               <Link
                 color="foreground"

@@ -1,8 +1,4 @@
 {
-  "Index": {
-    "title": "Bienvenue sur la page d'accueil",
-    "message": "Ceci est la page d'accueil"
-  },
 "HomePage": {
     "HeroTitle": "Simplifier vos tâches quotidiennes",
     "HeroSubtitle": "Automatisation des processus sur le Cloud",
@@ -12,6 +8,12 @@
     "label": "Changer de langue",
     "locale": "{locale, select, fr {🇫🇷 French} en {🇬🇧 English} other {🚫 Inconnu}}",
     "localeFlag": "{locale, select, fr {🇫🇷} en {🇬🇧} other {🚫}}"
+  },
+  "UserProfile": {
+    "dItemSignedInTitle": "Connecté en tant que",
+    "dItemUserName": "John Doe",
+    "dItemSettings": "Mes paramètres",
+    "dItemLogOut": "Se déconnecter"
   },
   "Saas": {
       "h1_title": "Saas",
@@ -28,5 +30,24 @@
     "RnD": {
       "h1_title": "R&D",
       "subtitle": "Page d'accès pour l'équipe de recherche & développement"
-    }
+    },
+    "SaasDemo1": {
+      "h1_title": "Démo App 1",
+      "subtitle": "Bienvenue dans la première application de démo"
+    },
+    "SaasDemo2": {
+      "h1_title": "Démo App 2",
+      "subtitle": "Bienvenue dans la deuxième application de démo"
+    },
+    "SaasDemo3": {
+      "h1_title": "Démo App 3",
+      "subtitle": "Bienvenue dans la troisième application de démo"
+    },
+    "SaasDemo4": {
+      "h1_title": "Démo App 4",
+      "subtitle": "Bienvenue dans la quatrième application de démo"
+    }, 
+    "SaasSidebar": {
+      "link_title": "Guide d'utilisation"
+    }    
 }

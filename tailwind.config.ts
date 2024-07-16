@@ -1,39 +1,116 @@
-import { nextui } from "@nextui-org/theme"
+import { nextui } from "@nextui-org/theme";
+import type { Config } from "tailwindcss";
 
 /** @type {import("tailwindcss").Config} */
-module.exports = {
+const config = {
   content: [
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/**/*.{js,ts,jsx,tsx,mdx,css}",
-    "./node_modules/@nextui-org/theme/dist/**/*.{js,ts,jsx,tsx}"
+    "./node_modules/@nextui-org/theme/dist/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
     extend: {
       fontFamily: {
-        sans: ['var(--font-sans)', 'system-ui', 'sans-serif'],
-        mono: ['var(--font-mono)', 'monospace'],
+        sans: ["var(--font-sans)", "system-ui", "sans-serif"],
+        mono: ["var(--font-mono)", "monospace"],
       },
       fontWeight: {
-        normal: 400,
-        bold: 700,
+        normal: "400",
+        bold: "700",
       },
+      typography: ({ theme }: { theme: any }) => ({
+        lightTheme: {
+          css: {
+            "--tw-prose-body": "#003C7D",
+            "--tw-prose-headings": "#003C7D",
+            "--tw-prose-lead": "#096BDD",
+            "--tw-prose-links": "#096BDD",
+            "--tw-prose-bold": "#003C7D",
+            "--tw-prose-counters": "#0053AD",
+            "--tw-prose-bullets": "#2285F6",
+            "--tw-prose-hr": "#51A0F9",
+            "--tw-prose-quotes": "#003C7D",
+            "--tw-prose-quote-borders": "#51A0F9",
+            "--tw-prose-captions": "#096BDD",
+            "--tw-prose-code": "#003C7D",
+            "--tw-prose-pre-code": "#DEF2FF",
+            "--tw-prose-pre-bg": "#096BDD",
+            "--tw-prose-th-borders": "#51A0F9",
+            "--tw-prose-td-borders": "#B0D6FF",
+            "--tw-prose-invert-body": "#EDE9F6",
+            "--tw-prose-invert-headings": "#EDE9F6",
+            "--tw-prose-invert-lead": "#AB79F8",
+            "--tw-prose-invert-links": "#AB79F8",
+            "--tw-prose-invert-bold": "#EDE9F6",
+            "--tw-prose-invert-counters": "#D19CFF",
+            "--tw-prose-invert-bullets": "#E4AEFF",
+            "--tw-prose-invert-hr": "#6D4AAA",
+            "--tw-prose-invert-quotes": "#EDE9F6",
+            "--tw-prose-invert-quote-borders": "#6D4AAA",
+            "--tw-prose-invert-captions": "#AB79F8",
+            "--tw-prose-invert-code": "#EDE9F6",
+            "--tw-prose-invert-pre-code": "#2E1D4A",
+            "--tw-prose-invert-pre-bg": "rgb(0 0 0 / 50%)",
+            "--tw-prose-invert-th-borders": "#6D4AAA",
+            "--tw-prose-invert-td-borders": "#432C6A",
+          },
+        },
+        darkTheme: {
+          css: {
+            "--tw-prose-body": "#AEDFFA",
+            "--tw-prose-headings": "#AEDFFA",
+            "--tw-prose-lead": "#31FEF6",
+            "--tw-prose-links": "#31FEF6",
+            "--tw-prose-bold": "#AEDFFA",
+            "--tw-prose-counters": "#23E5DD",
+            "--tw-prose-bullets": "#52FFF8",
+            "--tw-prose-hr": "#096BDD",
+            "--tw-prose-quotes": "#AEDFFA",
+            "--tw-prose-quote-borders": "#096BDD",
+            "--tw-prose-captions": "#31FEF6",
+            "--tw-prose-code": "#AEDFFA",
+            "--tw-prose-pre-code": "#002244",
+            "--tw-prose-pre-bg": "#31FEF6",
+            "--tw-prose-th-borders": "#096BDD",
+            "--tw-prose-td-borders": "#0053AD",
+            "--tw-prose-invert-body": "#003C7D",
+            "--tw-prose-invert-headings": "#003C7D",
+            "--tw-prose-invert-lead": "#096BDD",
+            "--tw-prose-invert-links": "#096BDD",
+            "--tw-prose-invert-bold": "#003C7D",
+            "--tw-prose-invert-counters": "#0053AD",
+            "--tw-prose-invert-bullets": "#2285F6",
+            "--tw-prose-invert-hr": "#51A0F9",
+            "--tw-prose-invert-quotes": "#003C7D",
+            "--tw-prose-invert-quote-borders": "#51A0F9",
+            "--tw-prose-invert-captions": "#096BDD",
+            "--tw-prose-invert-code": "#003C7D",
+            "--tw-prose-invert-pre-code": "#DEF2FF",
+            "--tw-prose-invert-pre-bg": "rgb(0 0 0 / 50%)",
+            "--tw-prose-invert-th-borders": "#51A0F9",
+            "--tw-prose-invert-td-borders": "#B0D6FF",
+          },
+        },
+      }),
     },
   },
   variants: {
     extend: {
-      fontStyle: ['responsive', 'hover', 'focus', 'active'],
-      fontWeight: ['responsive', 'hover', 'focus', 'active'],
+      fontStyle: ["responsive", "hover", "focus", "active"],
+      fontWeight: ["responsive", "hover", "focus", "active"],
     },
   },
   darkMode: "class",
   safelist: [
     {
-      pattern: /bg-(primary|secondary|success|warning|danger)-[5|1|2|3|4|6|7|8|9]00/,
-      variants: ['hover', 'focus', 'active'],
+      pattern:
+        /bg-(primary|secondary|success|warning|danger)-[5|1|2|3|4|6|7|8|9]00/,
+      variants: ["hover", "focus", "active"],
     },
   ],
   plugins: [
+    require("@tailwindcss/typography"),
     nextui({
       themes: {
         light: {
@@ -191,6 +268,6 @@ module.exports = {
       },
     }),
   ],
-}
+} satisfies Config;
 
-
+export default config;

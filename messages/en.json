@@ -1,8 +1,4 @@
 {
-  "Index": {
-    "title": "Welcome to the index page",
-    "message": "This is the index page"
-  },
   "HomePage": {
     "HeroTitle": "Simplifying your Daily Tasks",
     "HeroSubtitle": "Process Automation on the Cloud",
@@ -12,6 +8,12 @@
     "label": "Change language",
     "locale": "{locale, select, fr {🇫🇷 French} en {🇬🇧 English} other {🚫 Unknown}}",
     "localeFlag": "{locale, select, fr {🇫🇷} en {🇬🇧} other {🚫}}"
+  },
+  "UserProfile": {
+    "dItemSignedInTitle": "Signed in as",
+    "dItemUserName": "John Doe",
+    "dItemSettings": "My Settings",
+    "dItemLogOut": "Log Out"
   },
   "Saas": {
     "h1_title": "Saas",
@@ -23,10 +25,29 @@
   },
   "Docs": {
     "h1_title": "Docs",
-    "subtitle": "Tutorial & documentations access page"
+    "subtitle": "Tutorials & documentations access page"
   },
   "RnD": {
     "h1_title": "R&D",
     "subtitle": "Research & Development Team access page"
+  },
+  "SaasDemo1": {
+    "h1_title": "Demo App 1",
+    "subtitle": "Welcome to the first demo app"
+  },
+  "SaasDemo2": {
+    "h1_title": "Demo App 2",
+    "subtitle": "Welcome to the second demo app"
+  },
+  "SaasDemo3": {
+    "h1_title": "Demo App 3",
+    "subtitle": "Welcome to the third demo app"
+  },
+  "SaasDemo4": {
+    "h1_title": "Demo App 4",
+    "subtitle": "Welcome to the fourth demo app"
+  }, 
+  "SaasSidebar": {
+    "link_title": "Usage Guidelines"
   }
 }

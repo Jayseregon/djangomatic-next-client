@@ -1,5 +1,6 @@
 // import { useTranslations } from "next-intl";
 import type { Metadata } from "next";
+import { unstable_setRequestLocale } from "next-intl/server";
 
 // import { headers } from "next/headers";
 
@@ -17,17 +18,22 @@ function getPageBySlug(slug: string) {
   return docs.find((doc) => doc.slug === slug);
 }
 
-export default function MdPage({ params }: Props) {
+export default function MdPage({
+  params: { locale, slug },
+}: {
+  params: { locale: string; slug: string };
+}) {
+  unstable_setRequestLocale(locale);
   // const t = useTranslations("About");
   // const nonce = headers().get("x-nonce");
-  const doc = getPageBySlug(params.slug);
+  const doc = getPageBySlug(slug);
 
   if (!doc) {
     return (
       <div>
         <h1 className={title()}>Future doc for </h1>
         <div className="py-3" />
-        <h2 className="font-light text-4xl italic">{params.slug}</h2>
+        <h2 className="font-light text-4xl italic">{slug}</h2>
       </div>
     );
   }

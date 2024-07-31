@@ -19,7 +19,7 @@ export default function SaasLayout({
         <SidebarSaas nonce={nonce || undefined} />
       </div>
       <section className="flex-grow ml-64 flex flex-col items-center overflow-y-auto">
-        <div className="inline-block max-w-fit text-center justify-center">
+        <div className="inline-block max-w-full text-center justify-center">
           {children}
         </div>
       </section>

@@ -49,5 +49,19 @@
     }, 
     "SaasSidebar": {
       "link_title": "Guide d'utilisation"
-    }    
+    }, 
+    "HP_by_Splits1": {
+      "h1_title": "HP by Splits1",
+      "subtitle": "Compiler HP par splitter L1, dans un nœud.", 
+      "code": "Actuellement en développement"
+    }, 
+    "ServerDropdowns": {
+      "dbMenu_label": "Sélectionner une base de données", 
+      "schMenu_label": "Selectionner un schéma", 
+      "schMenu_loading": "Chargement des schémas...", 
+      "tblMenu_label": "Selectionner une table", 
+      "tblMenu_loading": "Chargement des tables...", 
+      "menuNoData": "Pas de données disponibles"
+
+    }
 }

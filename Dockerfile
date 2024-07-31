@@ -1,4 +1,3 @@
-# Use an official Node.js runtime as a parent image
 FROM node:20-alpine3.20 AS base
 
 # Install dependencies only when needed

@@ -26,10 +26,7 @@ export default function Home({
       </div>
 
       <div className="mt-8">
-        <Snippet
-          hideCopyButton
-          hideSymbol
-          variant="flat">
+        <Snippet hideCopyButton hideSymbol variant="flat">
           <span>{t("code")}</span>
         </Snippet>
       </div>

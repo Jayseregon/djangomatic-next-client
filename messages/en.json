@@ -49,5 +49,18 @@
   }, 
   "SaasSidebar": {
     "link_title": "Usage Guidelines"
+  }, 
+  "HP_by_Splits1": {
+    "h1_title": "HP by Splits1",
+    "subtitle": "Compile HP by L1 splitters, inside a node.", 
+    "code": "Currently in development"
+  }, 
+  "ServerDropdowns": {
+    "dbMenu_label": "Select a database", 
+    "schMenu_label": "Select a schema", 
+    "schMenu_loading": "Loading schemas...", 
+    "tblMenu_label": "Select a table", 
+    "tblMenu_loading": "Loading tables...", 
+    "menuNoData": "No data available"
   }
 }

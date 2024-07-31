@@ -12,6 +12,7 @@ export default function DocsLayout({
   params: { locale: string };
 }) {
   const nonce = headers().get("x-nonce");
+
   unstable_setRequestLocale(locale);
 
   return (

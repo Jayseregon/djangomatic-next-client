@@ -2,6 +2,7 @@ import type { NextRequest } from "next/server";
 
 import createMiddleware from "next-intl/middleware";
 import { NextResponse } from "next/server";
+// import { withIronSessionApiRoute } from 'iron-session/next';
 
 import { localePrefix, defaultLocale, locales, pathnames } from "./config";
 
@@ -16,6 +17,11 @@ const intlMiddleware = createMiddleware({
 
 // Refactored locale middleware function
 function localeMiddleware(req: NextRequest) {
+  // Check if the request is for an API route and bypass the locale handling
+  if (req.nextUrl.pathname.startsWith("/api")) {
+    return NextResponse.next();
+  }
+
   // Use the existing intl middleware to handle initial locale setup
   const response = intlMiddleware(req);
 

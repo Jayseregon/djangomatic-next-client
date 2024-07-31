@@ -1,5 +1,6 @@
 // import { useTranslations } from "next-intl";
 import type { Metadata } from "next";
+
 import { unstable_setRequestLocale } from "next-intl/server";
 
 // import { headers } from "next/headers";

@@ -1,7 +1,8 @@
 // import { useTranslations } from "next-intl";
 
-import { title } from "@/components/primitives";
 import { unstable_setRequestLocale } from "next-intl/server";
+
+import { title } from "@/components/primitives";
 
 export default function DocsPage({
   params: { locale },

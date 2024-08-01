@@ -79,7 +79,6 @@ interface DropDownSelectorProps {
 }
 
 interface DefaultButtonSelectorProps {
-  t: ReturnType<typeof useTranslations>;
   label: string;
   isDisabled?: boolean;
   type?: "default" | "danger";
@@ -100,11 +99,11 @@ const availableDatabases: { [key: string]: { [key: string]: string } } = {
 
 // default button selector component
 export const DefaultButtonSelector = ({
-  t,
   label,
   isDisabled = false,
   type,
 }: DefaultButtonSelectorProps) => {
+  const t = useTranslations();
   return (
     <Button
       className={cn("border-primary bg-transparent min-w-96 h-10", {
@@ -304,13 +303,12 @@ export const SchemasDropdown = ({
             setSelectedKey={setSelectedKey}
           />
         ) : (
-          <DefaultButtonSelector label="menuNoData" t={t} type="danger" />
+          <DefaultButtonSelector label="ServerDropdowns.menuNoData" type="danger" />
         )
       ) : (
         <DefaultButtonSelector
           isDisabled={true}
-          label="schMenu_loading"
-          t={t}
+          label="ServerDropdowns.schMenu_loading"
         />
       )}
     </div>
@@ -379,13 +377,12 @@ export const TablesDropdown = ({
             setSelectedKey={setSelectedKey}
           />
         ) : (
-          <DefaultButtonSelector label="menuNoData" t={t} type="danger" />
+          <DefaultButtonSelector label="ServerDropdowns.menuNoData" type="danger" />
         )
       ) : (
         <DefaultButtonSelector
           isDisabled={true}
-          label="tblMenu_loading"
-          t={t}
+          label="ServerDropdowns.tblMenu_loading"
         />
       )}
     </div>

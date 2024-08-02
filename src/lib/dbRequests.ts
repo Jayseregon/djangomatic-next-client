@@ -86,7 +86,7 @@ export const makeServerLoginRequest = async () => {
   const password = process.env.NEXT_PUBLIC_USER_PASSWORD as string;
 
   try {
-    const response = await fetch("/api/auth", {
+    const response = await fetch("/api/django-auth", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

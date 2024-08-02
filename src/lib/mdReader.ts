@@ -7,9 +7,3 @@ export const getListOfFiles = (subDir: string = "") => {
 
   return files.filter((file) => file.endsWith(".md"));
 };
-
-// export const getMdContent = (slug: string) => {
-//     const filePath = path.join(process.cwd(), 'content', slug + '.md');
-//     const content = fs.readFileSync(filePath, 'utf8');
-//     return matter(content);
-// }

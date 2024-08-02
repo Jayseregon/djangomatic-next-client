@@ -2,21 +2,24 @@ import { cookies } from "next/headers";
 import { getIronSession } from "iron-session";
 import React from "react";
 
-import { sessionOptions, SessionData } from "@/src/lib/session";
+import { ironSessionOptions, IronSessionData } from "@/src/lib/session";
 
 export async function GetIronSessionData() {
-  const session = await getIronSession<SessionData>(cookies(), sessionOptions);
+  const ironSession = await getIronSession<IronSessionData>(
+    cookies(),
+    ironSessionOptions
+  );
 
-  return session;
+  return ironSession;
 }
 
 export async function RenderSessionData() {
-  const session = await GetIronSessionData();
+  const ironSession = await GetIronSessionData();
 
   return (
     <div>
-      <div>Auth Token: {session.authToken}</div>
-      <div>Refresh Token: {session.refreshToken}</div>
+      <div>Auth Token: {ironSession.authToken}</div>
+      <div>Refresh Token: {ironSession.refreshToken}</div>
     </div>
   );
 }

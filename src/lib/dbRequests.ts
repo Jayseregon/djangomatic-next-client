@@ -52,7 +52,7 @@ export const getServerCsrfToken = async () => {
     // get CSRF token from server
     if (!hasCookie("csrftoken")) {
       const csrfResponse = await axiosInstance.get(
-        "/saas/tds/ajax/get-csrf-token/",
+        "/saas/tds/ajax/get-csrf-token/"
       );
     }
     // retrieve token from cookies
@@ -108,7 +108,7 @@ export const makeServerLoginRequest = async () => {
 };
 
 const fetchTokens = async () => {
-  const response = await fetch("/api/session");
+  const response = await fetch("/api/iron-session");
 
   if (!response.ok) {
     throw new Error("Failed to fetch session tokens");
@@ -354,7 +354,7 @@ export const checkTaskStatus = async ({
             setTaskData,
             accessDownload,
           }),
-        waitTime,
+        waitTime
       );
     } else {
       // process the result once finished

@@ -20,8 +20,8 @@ export async function POST(request: Request) {
 
     const { access, refresh } = response.data;
 
-    ironSession.authToken = access;
-    ironSession.refreshToken = refresh;
+    ironSession.djAuthToken = access;
+    ironSession.djRefreshToken = refresh;
     await ironSession.save();
 
     if (response.status !== 200) {

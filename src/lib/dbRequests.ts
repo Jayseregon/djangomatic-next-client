@@ -108,10 +108,16 @@ export const makeServerLoginRequest = async () => {
 };
 
 const fetchTokens = async () => {
-  const response = await fetch("/api/iron-session");
+  const endpoint = "/api/iron-session";
+  let response = await fetch(endpoint);
+
+  if (response.status === 404) {
+    await makeServerLoginRequest();
+    response = await fetch(endpoint);
+  }
 
   if (!response.ok) {
-    throw new Error("Failed to fetch session tokens");
+    throw new Error("Failed to retrieve tokens");
   }
 
   return response.json();
@@ -146,14 +152,14 @@ export const getServerTokens = async () => {
   try {
     let tokens = await fetchTokens();
 
-    if (!validateTokens(tokens.authToken)) {
+    if (!validateTokens(tokens.djAuthToken)) {
       await makeServerLoginRequest();
       tokens = await fetchTokens();
     }
 
     return tokens;
   } catch (error: any) {
-    console.error("Error getting session tokens:", error);
+    console.error("Error getting ironSession tokens:", error);
 
     return null;
   }
@@ -162,7 +168,7 @@ export const getServerTokens = async () => {
 export const fetchDbSchemas = async ({ target_db }: fetchDbSchemasProps) => {
   const cacheKey = `${target_db}`;
   const cachedData = schemasCache.get(cacheKey);
-  const { authToken } = await getServerTokens();
+  const { djAuthToken } = await getServerTokens();
 
   if (cachedData) {
     return cachedData;
@@ -182,7 +188,7 @@ export const fetchDbSchemas = async ({ target_db }: fetchDbSchemasProps) => {
     };
     const headers = {
       "X-CSRFToken": csrfToken,
-      Authorization: `Bearer ${authToken}`,
+      Authorization: `Bearer ${djAuthToken}`,
     };
     // make request
     const response = await axiosInstance.post(endpoint, payload, { headers });
@@ -216,7 +222,7 @@ export const fetchSchemaTables = async ({
 }: fetchSchemaTablesProps) => {
   const cacheKey = `${target_db}-${schema_choice}-${user_pattern}`;
   const cachedData = tablesCache.get(cacheKey);
-  const { authToken } = await getServerTokens();
+  const { djAuthToken } = await getServerTokens();
 
   if (cachedData) {
     return cachedData;
@@ -239,7 +245,7 @@ export const fetchSchemaTables = async ({
     };
     const headers = {
       "X-CSRFToken": csrfToken,
-      Authorization: `Bearer ${authToken}`,
+      Authorization: `Bearer ${djAuthToken}`,
     };
     // make request
     const response = await axiosInstance.post(endpoint, payload, { headers });
@@ -271,7 +277,7 @@ export const startTask = async ({
   db_choice,
   schema_choice,
 }: startTaskProps) => {
-  const { authToken } = await getServerTokens();
+  const { djAuthToken } = await getServerTokens();
 
   try {
     // get the csrf token from server
@@ -289,7 +295,7 @@ export const startTask = async ({
     };
     const headers = {
       "X-CSRFToken": csrfToken,
-      Authorization: `Bearer ${authToken}`,
+      Authorization: `Bearer ${djAuthToken}`,
     };
     // make request
     const response = await axiosInstance.post(endpoint, payload, { headers });
@@ -314,7 +320,7 @@ export const checkTaskStatus = async ({
   setTaskData,
   accessDownload = false,
 }: checkTaskStatusProps) => {
-  const { authToken } = await getServerTokens();
+  const { djAuthToken } = await getServerTokens();
 
   try {
     // get the csrf token from server
@@ -331,7 +337,7 @@ export const checkTaskStatus = async ({
     };
     const headers = {
       "X-CSRFToken": csrfToken,
-      Authorization: `Bearer ${authToken}`,
+      Authorization: `Bearer ${djAuthToken}`,
     };
     // make request
     const response = await axiosInstance.post(endpoint, payload, { headers });

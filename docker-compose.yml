@@ -6,8 +6,6 @@ services:
     container_name: djangomatic-nextjs-client
     ports:
       - 3000:3000
-    depends_on:
-      - db
     env_file:
       - .env.local
     environment:
@@ -16,21 +14,3 @@ services:
       - .:/app
       - /app/node_modules
     command: npm run dev
-
-  db:
-    restart: always
-    image: postgres:13
-    container_name: postgres-nextjs-client
-    volumes:
-      - nextjs_client:/var/lib/postgresql/data/
-    environment:
-      - POSTGRES_USER=dev_docker_nextjs_user
-      - POSTGRES_PASSWORD=dev_docker_nextjs_pwd
-      - POSTGRES_DB=dev_docker_nextjs_db
-    env_file:
-      - .env.local
-    ports:
-      - 5432:5432
-
-volumes:
-  nextjs_client:

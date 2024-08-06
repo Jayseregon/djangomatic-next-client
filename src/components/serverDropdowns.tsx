@@ -549,15 +549,15 @@ export const ServerSchemaAndTableSelector = () => {
 };
 
 export const LoginButton = () => {
-  const [authToken, setAuthToken] = useState<string | null>(null);
-  const [refreshToken, setRefreshToken] = useState<string | null>(null);
+  const [djAuthToken, setdjAuthToken] = useState<string | null>(null);
+  const [djRefreshToken, setRefreshToken] = useState<string | null>(null);
 
   const handleLogin = async () => {
     try {
-      const { authToken, refreshToken } = await getServerTokens();
+      const { djAuthToken, djRefreshToken } = await getServerTokens();
 
-      setAuthToken(authToken);
-      setRefreshToken(refreshToken);
+      setdjAuthToken(djAuthToken);
+      setRefreshToken(djRefreshToken);
     } catch (error) {
       console.error("Login failed:", error);
     }
@@ -567,8 +567,8 @@ export const LoginButton = () => {
     <div>
       <button onClick={handleLogin}>Login</button>
       <div />
-      <div>Auth Token: {authToken}</div>
-      <div>Refresh Token: {refreshToken}</div>
+      <div>Auth Token: {djAuthToken}</div>
+      <div>Refresh Token: {djRefreshToken}</div>
     </div>
   );
 };

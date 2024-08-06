@@ -1,13 +1,15 @@
 import { SessionOptions } from "iron-session";
 
 export interface IronSessionData {
-  authToken?: string | null;
-  refreshToken?: string | null;
+  djAuthToken?: string | null;
+  djRefreshToken?: string | null;
+  clientAuthToken?: string | null;
 }
 
 export const defaultIronSession: IronSessionData = {
-  authToken: "",
-  refreshToken: "",
+  djAuthToken: "",
+  djRefreshToken: "",
+  clientAuthToken: "",
 };
 
 export const ironSessionOptions: SessionOptions = {

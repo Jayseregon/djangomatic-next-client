@@ -10,14 +10,14 @@ export async function GET() {
     ironSessionOptions
   );
 
-  if (ironSession.authToken || ironSession.refreshToken) {
+  if (ironSession.djAuthToken || ironSession.djRefreshToken) {
     return NextResponse.json({
-      authToken: ironSession.authToken,
-      refreshToken: ironSession.refreshToken,
+      djAuthToken: ironSession.djAuthToken,
+      djRefreshToken: ironSession.djRefreshToken,
     });
   } else {
     return NextResponse.json(
-      { authToken: null, refreshToken: null },
+      { djAuthToken: null, djRefreshToken: null },
       { status: 404 }
     );
   }

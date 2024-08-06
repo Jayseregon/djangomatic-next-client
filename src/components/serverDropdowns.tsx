@@ -5,8 +5,8 @@ import {
   DropdownTrigger,
   DropdownMenu,
   DropdownItem,
-} from "@nextui-org/dropdown";
-import { Button } from "@nextui-org/button";
+  Button,
+} from "@nextui-org/react";
 import { useTranslations } from "next-intl";
 import React, { useEffect, useState } from "react";
 
@@ -112,8 +112,7 @@ export const DefaultButtonSelector = ({
       })}
       isDisabled={isDisabled ? true : false}
       radius="full"
-      variant="bordered"
-    >
+      variant="bordered">
       {t(label)}
     </Button>
   );
@@ -133,8 +132,7 @@ export const DropDownSelector = ({
         <Button
           className="bg-primary text-white min-w-96 h-10"
           radius="full"
-          variant="solid"
-        >
+          variant="solid">
           {selectedLabel}
         </Button>
       </DropdownTrigger>
@@ -149,13 +147,11 @@ export const DropDownSelector = ({
           const selected = Array.from(keys)[0] as string;
 
           setSelectedKey(selected);
-        }}
-      >
+        }}>
         {(item) => (
           <DropdownItem
             key={item.value}
-            onClick={() => handleSelect(item.value)}
-          >
+            onClick={() => handleSelect(item.value)}>
             {item.label}
           </DropdownItem>
         )}
@@ -174,7 +170,7 @@ export const DatabaseDropdown = ({
   const t = useTranslations("ServerDropdowns");
 
   const [options, setOptions] = useState<{ value: string; label: string }[]>(
-    [],
+    []
   );
   const [selectedKey, setSelectedKey] = useState<string>("select_database");
   const [selectedLabel, setSelectedLabel] = useState<string>(t("dbMenu_label"));
@@ -259,7 +255,7 @@ export const SchemasDropdown = ({
   const [dbSchemas, setDbSchemas] = useState<SchemaDropdownData[] | null>(null);
   const [selectedKey, setSelectedKey] = useState<string>("select_schema");
   const [selectedLabel, setSelectedLabel] = useState<string>(
-    t("schMenu_label"),
+    t("schMenu_label")
   );
 
   useEffect(() => {
@@ -303,7 +299,10 @@ export const SchemasDropdown = ({
             setSelectedKey={setSelectedKey}
           />
         ) : (
-          <DefaultButtonSelector label="ServerDropdowns.menuNoData" type="danger" />
+          <DefaultButtonSelector
+            label="ServerDropdowns.menuNoData"
+            type="danger"
+          />
         )
       ) : (
         <DefaultButtonSelector
@@ -326,7 +325,7 @@ export const TablesDropdown = ({
   const [schTables, setSchTables] = useState<TableDropdownData[] | null>(null);
   const [selectedKey, setSelectedKey] = useState<string>("select_table");
   const [selectedLabel, setSelectedLabel] = useState<string>(
-    t("tblMenu_label"),
+    t("tblMenu_label")
   );
 
   useEffect(() => {
@@ -340,7 +339,7 @@ export const TablesDropdown = ({
         // Sort the tables array before setting it
         const sortedTables = tables.sort(
           (a: TableDropdownData, b: TableDropdownData) =>
-            a.label.localeCompare(b.label),
+            a.label.localeCompare(b.label)
         );
 
         setSchTables(sortedTables);
@@ -377,7 +376,10 @@ export const TablesDropdown = ({
             setSelectedKey={setSelectedKey}
           />
         ) : (
-          <DefaultButtonSelector label="ServerDropdowns.menuNoData" type="danger" />
+          <DefaultButtonSelector
+            label="ServerDropdowns.menuNoData"
+            type="danger"
+          />
         )
       ) : (
         <DefaultButtonSelector
@@ -428,8 +430,7 @@ export const DownloadButton = ({ downloadUrl }: DownloadButtonProps) => {
           className="bg-primary text-white min-w-96 h-10"
           radius="full"
           variant="solid"
-          onClick={handleDownload}
-        >
+          onClick={handleDownload}>
           Download
         </Button>
       ) : (
@@ -509,7 +510,10 @@ export const ServerSchemaAndTableSelector = () => {
             dbClass="db_class_spokane_valley"
             setInputData={setInputData}
           />
-          <SchemasDropdown inputData={inputData} setInputData={setInputData} />
+          <SchemasDropdown
+            inputData={inputData}
+            setInputData={setInputData}
+          />
           <TablesDropdown
             inputData={inputData}
             pattern="*"
@@ -527,8 +531,7 @@ export const ServerSchemaAndTableSelector = () => {
         className="bg-primary text-white min-w-96 h-10 my-3"
         radius="full"
         variant="solid"
-        onClick={handleTask}
-      >
+        onClick={handleTask}>
         Start Task
       </Button>
 

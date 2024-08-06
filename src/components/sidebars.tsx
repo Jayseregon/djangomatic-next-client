@@ -1,6 +1,6 @@
 "use client";
 
-import { Link } from "@nextui-org/link";
+import { Link } from "@nextui-org/react";
 import React from "react";
 import { useTranslations } from "next-intl";
 import { usePathname } from "next/navigation";

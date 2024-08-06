@@ -91,9 +91,9 @@ export function middleware(req: NextRequest) {
 
 export const config = {
   matcher: [
-    "/", // Redirect to a matching locale at the root
-    "/(fr|en)/:path*", // Set a cookie to remember the previous locale
-    "/((?!_next|_vercel|.*\\..*).*)", // Exclude image paths and /docs/auto-loops from locale prefixing
-    "/((?!api|_next/static|_next/image|static|docs|favicon.ico).*)", // Match all paths except API, static files, and favicon
+    "/", // Ensures that the middleware is applied to the homepage.
+    "/(fr|en)/:path*", // Ensures that the middleware is applied to URLs prefixed with the locale (fr for French, en for English).
+    "/((?!_next|_vercel|.*\\..*).*)", // Ensures that the middleware is applied to all other routes except for Next.js internal routes and static files.
+    "/((?!api|_next/static|_next/image|static|docs|favicon.ico).*)", // Ensures that the middleware is applied to all other routes except for API routes, Next.js static/image routes, static files, documentation, and the favicon.
   ],
 };

@@ -10,7 +10,7 @@
     "build:next": "next build",
     "dev": "concurrently \"npm:dev:*\"",
     "prebuild": "npm install --only=dev",
-    "build": "npm run build:content && npm run build:next",
+    "build": "npm run prebuild && npm run build:content && npm run build:next",
     "start": "next start",
     "lint": "next lint"
   },

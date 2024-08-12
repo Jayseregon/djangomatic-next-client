@@ -1,13 +1,16 @@
 import "@/styles/globals.css";
 import type { Metadata, Viewport } from "next";
-
+import { NextIntlClientProvider } from "next-intl";
 import clsx from "clsx";
 import { ReactNode } from "react";
-import { headers } from "next/headers";
-
+import { getLocale, getMessages } from "next-intl/server";
 import { siteConfig } from "@/config/site";
 import { fontSans, fontMono } from "@/config/fonts";
-
+import { headers } from "next/headers";
+import { unstable_setRequestLocale } from "next-intl/server";
+import { auth } from "@/auth";
+import { Navbar } from "@/components/navbar";
+import { Footer } from "@/src/components/footer";
 import { Providers } from "./providers";
 
 type Props = {
@@ -37,25 +40,54 @@ export const viewport: Viewport = {
   // userScalable: false,
 };
 
-export default function RootLayout({ children }: Props) {
+const locales = ["en", "fr"];
+
+export function generateStaticParams() {
+  return locales.map((locale) => ({ locale }));
+}
+
+export default async function RootLayout({ children }: Props) {
   const nonce = headers().get("x-nonce");
+  const locale = await getLocale();
+  const messages = await getMessages();
+  const session = await auth();
+
+  unstable_setRequestLocale(locale);
 
   return (
-    <html suppressHydrationWarning lang="en" nonce={nonce || undefined}>
+    <html
+      suppressHydrationWarning
+      lang={locale}
+      nonce={nonce || undefined}>
       <head nonce={nonce || undefined} />
       <body
         className={clsx(
           "min-h-max bg-background font-sans antialiased",
           fontSans.variable,
-          fontMono.variable,
+          fontMono.variable
         )}
-        nonce={nonce || undefined}
-      >
+        nonce={nonce || undefined}>
         <Providers
           nonce={nonce || undefined}
-          themeProps={{ attribute: "class", defaultTheme: "dark" }}
-        >
-          {children}
+          themeProps={{ attribute: "class", defaultTheme: "dark" }}>
+          <NextIntlClientProvider messages={messages}>
+            <div
+              className="relative flex flex-col h-screen"
+              nonce={nonce || undefined}>
+              <Navbar
+                nonce={nonce || undefined}
+                session={session}
+              />
+
+              <main
+                className="container mx-auto max-w-full pt-24 px-6 flex-grow"
+                nonce={nonce || undefined}>
+                {children}
+              </main>
+
+              <Footer nonce={nonce || undefined} />
+            </div>
+          </NextIntlClientProvider>
         </Providers>
       </body>
     </html>

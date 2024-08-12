@@ -7,7 +7,7 @@ import { ironSessionOptions, IronSessionData } from "@/src/lib/session";
 export async function GET() {
   const ironSession = await getIronSession<IronSessionData>(
     cookies(),
-    ironSessionOptions
+    ironSessionOptions,
   );
 
   if (ironSession.djAuthToken || ironSession.djRefreshToken) {
@@ -18,7 +18,7 @@ export async function GET() {
   } else {
     return NextResponse.json(
       { djAuthToken: null, djRefreshToken: null },
-      { status: 404 }
+      { status: 404 },
     );
   }
 }

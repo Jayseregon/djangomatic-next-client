@@ -3,8 +3,9 @@ import { getMessages } from "next-intl/server";
 import { headers } from "next/headers";
 import { unstable_setRequestLocale } from "next-intl/server";
 
+import { auth } from "@/auth";
 import { Navbar } from "@/components/navbar";
-import { HeartFooterIcon } from "@/components/icons";
+import { Footer } from "@/src/components/footer";
 
 // Can be imported from a shared config
 const locales = ["en", "fr"];
@@ -22,6 +23,7 @@ export default async function LocaleLayout({
 }) {
   const messages = await getMessages();
   const nonce = headers().get("x-nonce");
+  const session = await auth();
 
   unstable_setRequestLocale(locale);
 
@@ -31,7 +33,7 @@ export default async function LocaleLayout({
         className="relative flex flex-col h-screen"
         nonce={nonce || undefined}
       >
-        <Navbar nonce={nonce || undefined} />
+        <Navbar nonce={nonce || undefined} session={session} />
 
         <main
           className="container mx-auto max-w-full pt-24 px-6 flex-grow"
@@ -40,15 +42,7 @@ export default async function LocaleLayout({
           {children}
         </main>
 
-        <footer
-          className="w-full flex items-center justify-center py-3 text-slate-300 dark:text-slate-700 space-x-1"
-          nonce={nonce || undefined}
-        >
-          <span>Made with</span>
-          <HeartFooterIcon size={20} />
-          <span>in Canada</span>
-          <span>&copy; {new Date().getFullYear()} Telecon Design</span>
-        </footer>
+        <Footer nonce={nonce || undefined} />
       </div>
     </NextIntlClientProvider>
   );

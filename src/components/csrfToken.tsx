@@ -4,11 +4,6 @@ import React, { useEffect, useState } from "react";
 
 import { getMiddlewareCsrfToken } from "@/lib/dbRequests";
 
-interface SchemaDropdownData {
-  value: string;
-  label: string;
-}
-
 export const CsrfTokenPage = () => {
   const [csrfToken, setCsrfToken] = useState<string | null>(null);
 

@@ -22,14 +22,16 @@ import { siteConfig } from "@/config/site";
 import { ThemeSwitch } from "@/components/theme-switch";
 import { Logo } from "@/components/icons";
 
-// import { SearchInput } from "@/components/SearchInput";
+import { SignOut } from "./sign-in";
 import LocaleSwitcher from "./LocaleSwitcher";
+// import { SearchInput } from "@/components/SearchInput";
 
 interface NavbarProps {
   nonce?: string;
+  session?: any;
 }
 
-export const Navbar: React.FC<NavbarProps> = ({ nonce }) => {
+export const Navbar = ({ nonce, session }: NavbarProps) => {
   // Navbar state
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const t = useTranslations("UserProfile");
@@ -42,17 +44,16 @@ export const Navbar: React.FC<NavbarProps> = ({ nonce }) => {
       maxWidth="2xl"
       nonce={nonce}
       position="sticky"
-      onMenuOpenChange={setIsMenuOpen}>
+      onMenuOpenChange={setIsMenuOpen}
+    >
       <NavbarContent nonce={nonce}>
-        <NavbarBrand
-          as="li"
-          className="gap-3 max-w-fit"
-          nonce={nonce}>
+        <NavbarBrand as="li" className="gap-3 max-w-fit" nonce={nonce}>
           <Link
             className="flex justify-start items-center gap-4"
             color="foreground"
             href="/"
-            nonce={nonce}>
+            nonce={nonce}
+          >
             <Logo nonce={nonce} />
             <p className="font-bold text-inherit">{siteConfig.name}</p>
           </Link>
@@ -60,9 +61,7 @@ export const Navbar: React.FC<NavbarProps> = ({ nonce }) => {
       </NavbarContent>
 
       {/* navbar menu  */}
-      <NavbarContent
-        justify="center"
-        nonce={nonce}>
+      <NavbarContent justify="center" nonce={nonce}>
         {/* toggle menu */}
         <NavbarMenuToggle
           aria-label={isMenuOpen ? "Close Menu" : "Open Menu"}
@@ -73,14 +72,13 @@ export const Navbar: React.FC<NavbarProps> = ({ nonce }) => {
         {/* or list items menu */}
         <ul className="hidden md:flex items-start justify-start gap-16">
           {siteConfig.navItems.map((item, index) => (
-            <NavbarItem
-              key={`${item}-${index}-navbar`}
-              nonce={nonce}>
+            <NavbarItem key={`${item}-${index}-navbar`} nonce={nonce}>
               <Link
                 color="foreground"
                 href={item.href}
                 nonce={nonce}
-                underline="hover">
+                underline="hover"
+              >
                 {item.label}
               </Link>
             </NavbarItem>
@@ -89,9 +87,7 @@ export const Navbar: React.FC<NavbarProps> = ({ nonce }) => {
       </NavbarContent>
 
       {/* avatar menu with theme switch and search */}
-      <NavbarContent
-        justify="end"
-        nonce={nonce}>
+      <NavbarContent justify="end" nonce={nonce}>
         {/* <NavbarItem
           className="hidden md:flex"
           nonce={nonce}>
@@ -109,45 +105,51 @@ export const Navbar: React.FC<NavbarProps> = ({ nonce }) => {
           <LocaleSwitcher nonce={nonce} />
         </NavbarItem>
 
-        <Dropdown
-          nonce={nonce}
-          placement="bottom-end">
+        <Dropdown nonce={nonce} placement="bottom-end">
           <DropdownTrigger nonce={nonce}>
             <Avatar
-              isBordered
               as="button"
-              className="transition-transform"
-              color="secondary"
+              className="transition-transform bg-gradient-to-tr from-[#FF705B] to-[#b249f8]"
+              color={undefined}
               name="Demo User"
-              size="sm"
               nonce={nonce}
-              src="https://i.pravatar.cc/150?img=27" // deactivate if bug
+              size="md"
+              src={
+                session?.user
+                  ? session?.user?.image
+                  : "https://i.pravatar.cc/150?img=27"
+              } // deactivate if bug
             />
           </DropdownTrigger>
           <DropdownMenu
             aria-label="Profile Actions"
             nonce={nonce}
-            variant="flat">
+            variant="flat"
+          >
             <DropdownItem
               key="profile"
               className="h-14 gap-2"
               nonce={nonce}
-              textValue="Signed In profile name">
-              <p className="font-semibold">{t("dItemSignedInTitle")}</p>
-              <p className="font-semibold">{t("dItemUserName")}</p>
+              textValue="Signed In profile name"
+            >
+              <p className="font-semibold">
+                {t("dItemSignedInTitle")}
+                {session?.user ? session?.user?.name : t("dItemUserName")}
+              </p>
+              <p className="italic font-thin">
+                {session?.user ? session?.user?.email : t("dItemUserEmail")}
+              </p>
             </DropdownItem>
-            <DropdownItem
-              key="settings"
-              nonce={nonce}
-              textValue="My Settings">
+            <DropdownItem key="settings" nonce={nonce} textValue="My Settings">
               {t("dItemSettings")}
             </DropdownItem>
             <DropdownItem
               key="logout"
               color="danger"
               nonce={nonce}
-              textValue="Log Out">
-              {t("dItemLogOut")}
+              textValue="Log Out"
+            >
+              <SignOut buttonName={t("dItemLogOut")} />
             </DropdownItem>
           </DropdownMenu>
         </Dropdown>
@@ -158,9 +160,7 @@ export const Navbar: React.FC<NavbarProps> = ({ nonce }) => {
         {/* <SearchInput alwaysExpanded={true} /> */}
         <div className="mx-4 mt-2 flex flex-col gap-3">
           {siteConfig.navItems.map((item, index) => (
-            <NavbarMenuItem
-              key={`${item}-${index}-dropdown`}
-              nonce={nonce}>
+            <NavbarMenuItem key={`${item}-${index}-dropdown`} nonce={nonce}>
               <Link
                 className="w-full"
                 color="foreground"
@@ -169,7 +169,8 @@ export const Navbar: React.FC<NavbarProps> = ({ nonce }) => {
                 size="lg"
                 onPress={() => {
                   setIsMenuOpen((prev) => !prev);
-                }}>
+                }}
+              >
                 {item.label}
               </Link>
             </NavbarMenuItem>

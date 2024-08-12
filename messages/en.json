@@ -10,9 +10,11 @@
     "localeFlag": "{locale, select, fr {🇫🇷} en {🇬🇧} other {🚫}}"
   },
   "UserProfile": {
-    "dItemSignedInTitle": "Signed in as",
+    "dItemSignedInTitle": "Welcome, ",
     "dItemUserName": "John Doe",
+    "dItemUserEmail": "example@telecon.ca",
     "dItemSettings": "My Settings",
+    "dItemSignIn": "Sign In",
     "dItemLogOut": "Log Out"
   },
   "Saas": {

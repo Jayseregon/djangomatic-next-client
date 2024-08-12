@@ -3,6 +3,8 @@ import type { NextRequest } from "next/server";
 import createMiddleware from "next-intl/middleware";
 import { NextResponse } from "next/server";
 
+import { auth } from "@/auth";
+
 import { localePrefix, defaultLocale, locales, pathnames } from "./config";
 
 // Existing middleware configuration
@@ -17,7 +19,10 @@ const intlMiddleware = createMiddleware({
 // Refactored locale middleware function
 function localeMiddleware(req: NextRequest) {
   // Check if the request is for an API route and bypass the locale handling
-  if (req.nextUrl.pathname.startsWith("/api")) {
+  if (
+    req.nextUrl.pathname.startsWith("/api") ||
+    req.nextUrl.pathname.startsWith("/login")
+  ) {
     return NextResponse.next();
   }
 
@@ -56,17 +61,19 @@ function localeMiddleware(req: NextRequest) {
 function cspMiddleware(response: NextResponse) {
   const nonce = Buffer.from(crypto.randomUUID()).toString("base64");
   const cspHeader = `
-    default-src 'self';
-    script-src 'self' 'nonce-${nonce}' 'strict-dynamic';
-    style-src 'self' 'nonce-${nonce}';
-    img-src 'self' blob: data:;
-    font-src 'self';
-    object-src 'none';
-    base-uri 'self';
-    form-action 'self';
-    frame-ancestors 'none';
-    upgrade-insecure-requests;
-  `
+  default-src 'self';
+  script-src 'self' 'nonce-${nonce}' 'strict-dynamic' https://github.com;
+  style-src 'self' 'nonce-${nonce}';
+  img-src 'self' blob: data: https://i.pravatar.cc https://github.com https://avatars.githubusercontent.com https://*.githubusercontent.com;
+  font-src 'self';
+  object-src 'none';
+  base-uri 'self';
+  form-action 'self';
+  frame-ancestors 'none';
+  frame-src https://github.com;
+  connect-src 'self' https://github.com https://api.github.com;
+  upgrade-insecure-requests;
+`
     .replace(/\s{2,}/g, " ")
     .trim();
 
@@ -76,9 +83,21 @@ function cspMiddleware(response: NextResponse) {
   return response;
 }
 
-// Combined middleware function
-export function middleware(req: NextRequest) {
+export default auth((req) => {
   const isDev = process.env.NODE_ENV === "development";
+  const { nextUrl } = req;
+  const isLoggedIn = !!req.auth;
+
+  // Allow access to the sign-in page without authentication
+  if (nextUrl.pathname.startsWith("/api/auth/")) {
+    return NextResponse.next();
+  }
+
+  if (!isLoggedIn) {
+    return NextResponse.redirect(new URL("/api/auth/signin", req.url));
+    // return NextResponse.redirect(new URL('/api/auth/signin', nextUrl))
+    // return NextResponse.redirect(new URL("/signin", nextUrl));
+  }
 
   let response = localeMiddleware(req);
 
@@ -87,7 +106,7 @@ export function middleware(req: NextRequest) {
   }
 
   return response;
-}
+});
 
 export const config = {
   matcher: [

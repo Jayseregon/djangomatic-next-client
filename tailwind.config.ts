@@ -20,7 +20,8 @@ const config = {
         normal: "400",
         bold: "700",
       },
-      typography: ({ theme }: { theme: any }) => ({
+      typography: () => ({
+        // ({ theme }: { theme: any }) => ({
         lightTheme: {
           css: {
             "--tw-prose-body": "#003C7D",

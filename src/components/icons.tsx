@@ -1,10 +1,11 @@
 import * as React from "react";
+import Image from "next/image";
 
 import { IconSvgProps, IconIcoProps } from "@/types";
 import { siteConfig } from "@/config/site";
 
 export const Logo: React.FC<IconIcoProps> = ({ size = 36, nonce }) => (
-  <img
+  <Image
     alt="Logo"
     height={size}
     nonce={nonce}

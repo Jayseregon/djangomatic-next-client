@@ -51,9 +51,7 @@ export const getServerCsrfToken = async () => {
   try {
     // get CSRF token from server
     if (!hasCookie("csrftoken")) {
-      const csrfResponse = await axiosInstance.get(
-        "/saas/tds/ajax/get-csrf-token/"
-      );
+      await axiosInstance.get("/saas/tds/ajax/get-csrf-token/");
     }
     // retrieve token from cookies
     const csrfToken = getCookie("csrftoken");
@@ -69,7 +67,6 @@ export const getServerCsrfToken = async () => {
     return csrfToken;
   } catch (error) {
     console.error("Error getting CSRF token.");
-
     return null;
   }
 };
@@ -103,7 +100,6 @@ export const makeServerLoginRequest = async () => {
     return data;
   } catch (error) {
     console.error("Error during login request:", error);
-    throw error;
   }
 };
 
@@ -143,7 +139,6 @@ const isTokenExpired = (token: string) => {
     return expiryDate < new Date();
   } catch (error) {
     console.error("Error decoding token:", error);
-
     return true;
   }
 };
@@ -160,7 +155,6 @@ export const getServerTokens = async () => {
     return tokens;
   } catch (error: any) {
     console.error("Error getting ironSession tokens:", error);
-
     return null;
   }
 };
@@ -210,7 +204,6 @@ export const fetchDbSchemas = async ({ target_db }: fetchDbSchemasProps) => {
     return responseData.schema_dropdown_data;
   } catch (error: any) {
     console.error("Error sending POST request:", error);
-
     return [{ value: "no_data", label: "No Data Found" }];
   }
 };
@@ -268,7 +261,6 @@ export const fetchSchemaTables = async ({
     return responseData.table_dropdown_data;
   } catch (error: any) {
     console.error("Error sending POST request:", error);
-
     return [{ value: "no_data", label: "No Data Found" }];
   }
 };
@@ -360,7 +352,7 @@ export const checkTaskStatus = async ({
             setTaskData,
             accessDownload,
           }),
-        waitTime
+        waitTime,
       );
     } else {
       // process the result once finished

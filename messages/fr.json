@@ -12,7 +12,9 @@
   "UserProfile": {
     "dItemSignedInTitle": "Connecté en tant que",
     "dItemUserName": "John Doe",
+    "dItemUserEmail": "example@telecon.ca",
     "dItemSettings": "Mes paramètres",
+    "dItemSignIn": "Se connecter",
     "dItemLogOut": "Se déconnecter"
   },
   "Saas": {

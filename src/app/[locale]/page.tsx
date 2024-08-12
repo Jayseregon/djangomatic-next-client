@@ -5,14 +5,26 @@ import { unstable_setRequestLocale } from "next-intl/server";
 import { siteConfig } from "@/config/site";
 import { title, subtitle } from "@/components/primitives";
 import { ColorCard, ColorCardScale } from "@/components/ColorCard";
+import { UserData } from "@/src/components/UserData";
+import { UnAuthenticated } from "@/src/components/unauthenticated";
+import { auth } from "@/auth";
 
-export default function Home({
+export default async function Home({
   params: { locale },
 }: {
   params: { locale: string };
 }) {
+  const session = await auth();
+
   unstable_setRequestLocale(locale);
+
+  return <HomeContent session={session} />;
+}
+
+function HomeContent({ session }: { session: any }) {
   const t = useTranslations("HomePage");
+
+  if (!session) return <UnAuthenticated />;
 
   return (
     <section className="flex flex-col items-center justify-center gap-4 py-8 md:py-10">
@@ -26,13 +38,12 @@ export default function Home({
       </div>
 
       <div className="mt-8">
-        <Snippet
-          hideCopyButton
-          hideSymbol
-          variant="flat">
+        <Snippet hideCopyButton hideSymbol variant="flat">
           <span>{t("code")}</span>
         </Snippet>
       </div>
+
+      <UserData session={session}/>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-2">
         <ColorCard />

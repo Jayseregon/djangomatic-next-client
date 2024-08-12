@@ -41,23 +41,22 @@ export default function RootLayout({ children }: Props) {
   const nonce = headers().get("x-nonce");
 
   return (
-    <html
-      suppressHydrationWarning
-      lang="en"
-      nonce={nonce || undefined}>
+    <html suppressHydrationWarning lang="en" nonce={nonce || undefined}>
       <head nonce={nonce || undefined} />
       <body
         className={clsx(
           "min-h-max bg-background font-sans antialiased",
           fontSans.variable,
-          fontMono.variable
+          fontMono.variable,
         )}
-        nonce={nonce || undefined}>
-          <Providers
-            nonce={nonce || undefined}
-            themeProps={{ attribute: "class", defaultTheme: "dark" }}>
-            {children}
-          </Providers>
+        nonce={nonce || undefined}
+      >
+        <Providers
+          nonce={nonce || undefined}
+          themeProps={{ attribute: "class", defaultTheme: "dark" }}
+        >
+          {children}
+        </Providers>
       </body>
     </html>
   );

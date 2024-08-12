@@ -7,7 +7,7 @@ import { ironSessionOptions, IronSessionData } from "@/src/lib/session";
 export async function GetIronSessionData() {
   const ironSession = await getIronSession<IronSessionData>(
     cookies(),
-    ironSessionOptions
+    ironSessionOptions,
   );
 
   return ironSession;

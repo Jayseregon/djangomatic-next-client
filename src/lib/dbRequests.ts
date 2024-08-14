@@ -7,6 +7,8 @@ import { jwtDecode } from "jwt-decode";
 import { TaskDataProps } from "@/components/serverDropdowns";
 
 const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
+// const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
+// https://docker-djangomatic.azurewebsites.net
 
 // cache settings
 const tablesCache = new LRUCache<string, any>({
@@ -67,6 +69,7 @@ export const getServerCsrfToken = async () => {
     return csrfToken;
   } catch (error) {
     console.error("Error getting CSRF token.");
+
     return null;
   }
 };
@@ -139,6 +142,7 @@ const isTokenExpired = (token: string) => {
     return expiryDate < new Date();
   } catch (error) {
     console.error("Error decoding token:", error);
+
     return true;
   }
 };
@@ -155,6 +159,7 @@ export const getServerTokens = async () => {
     return tokens;
   } catch (error: any) {
     console.error("Error getting ironSession tokens:", error);
+
     return null;
   }
 };
@@ -204,6 +209,7 @@ export const fetchDbSchemas = async ({ target_db }: fetchDbSchemasProps) => {
     return responseData.schema_dropdown_data;
   } catch (error: any) {
     console.error("Error sending POST request:", error);
+
     return [{ value: "no_data", label: "No Data Found" }];
   }
 };
@@ -261,6 +267,7 @@ export const fetchSchemaTables = async ({
     return responseData.table_dropdown_data;
   } catch (error: any) {
     console.error("Error sending POST request:", error);
+
     return [{ value: "no_data", label: "No Data Found" }];
   }
 };

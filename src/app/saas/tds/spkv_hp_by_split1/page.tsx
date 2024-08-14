@@ -1,11 +1,13 @@
 import { useTranslations } from "next-intl";
 import { Snippet } from "@nextui-org/snippet";
+import { headers } from "next/headers";
 
 import { ServerSchemaAndTableSelector } from "@/components/serverDropdowns";
 import { title, subtitle } from "@/components/primitives";
 
 export default function SaasPage() {
   const t = useTranslations("HP_by_Splits1");
+  const nonce = headers().get("x-nonce");
 
   return (
     <div>
@@ -20,7 +22,7 @@ export default function SaasPage() {
 
       <div className="py-3" />
 
-      <ServerSchemaAndTableSelector />
+      <ServerSchemaAndTableSelector nonce={nonce || undefined} />
     </div>
   );
 }

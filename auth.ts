@@ -39,7 +39,7 @@ export const config = {
     async signIn({ user }) {
       // Check if the user's email is in the list of authorized members
       const isAuthorized = authorizedMembers.some(
-        (member) => member.email === user.email
+        (member) => member.email === user.email,
       );
 
       if (isAuthorized) {

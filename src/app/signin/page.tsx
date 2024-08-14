@@ -1,15 +1,14 @@
 import { redirect } from "next/navigation";
-import { headers } from "next/headers";
+// import { headers } from "next/headers";
 import { Button } from "@nextui-org/react";
 
 import { siteConfig } from "@/config/site";
 import { title } from "@/components/primitives";
 import { signIn, auth, providerMap } from "@/auth";
 import { Logo } from "@/src/components/icons";
-import { Footer } from "@/src/components/footer";
 
 export default async function SignInPage() {
-  const nonce = headers().get("x-nonce");
+  // const nonce = headers().get("x-nonce");
   const session = await auth();
 
   if (session) {

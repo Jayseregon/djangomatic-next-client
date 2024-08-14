@@ -13,9 +13,9 @@ export const LgPlaceholder = () => {
   );
 };
 
-export const TxtPlaceholder = () => {
+export const TxtPlaceholder = ({ nonce }: { nonce?: string }) => {
   return (
-    <div className="animate-pulse">
+    <div className="animate-pulse" nonce={nonce}>
       <div className="grid grid-cols-4 gap-1">
         <div className="h-2 bg-slate-700 rounded col-span-3" />
         <div className="h-2 bg-slate-700 rounded col-span-1" />

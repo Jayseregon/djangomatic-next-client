@@ -18,8 +18,10 @@ export async function RenderSessionData() {
 
   return (
     <div>
-      <div>Auth Token: {ironSession.djAuthToken}</div>
-      <div>Refresh Token: {ironSession.djRefreshToken}</div>
+      <div className="text-wrap">Auth Token: {ironSession.djAuthToken}</div>
+      <div className="text-wrap">
+        Refresh Token: {ironSession.djRefreshToken}
+      </div>
     </div>
   );
 }

@@ -64,10 +64,12 @@ interface TableDropdownData {
 
 interface DisplayFieldChoiceProps {
   fieldChoice: string | null;
+  nonce?: string;
 }
 
 interface DownloadButtonProps {
   downloadUrl: string | null;
+  nonce?: string;
 }
 
 interface DropDownSelectorProps {
@@ -399,16 +401,23 @@ export const TablesDropdown = ({
 // Components for displaying the selected field choice
 export const DisplayFieldChoice = ({
   fieldChoice,
+  nonce,
 }: DisplayFieldChoiceProps) => {
   return (
     <div>
       {fieldChoice ? (
-        <div className="border-2 border-primary rounded-3xl min-w-96 h-10 flex items-center justify-center">
+        <div
+          className="border-2 border-primary rounded-3xl min-w-96 h-10 flex items-center justify-center"
+          nonce={nonce}
+        >
           {fieldChoice}
         </div>
       ) : (
-        <div className="border-2 border-primary rounded-3xl p-2 max-w-96 h-10">
-          <TxtPlaceholder />
+        <div
+          className="border-2 border-primary rounded-3xl p-2 max-w-96 h-10"
+          nonce={nonce}
+        >
+          <TxtPlaceholder nonce={nonce} />
         </div>
       )}
     </div>
@@ -416,7 +425,7 @@ export const DisplayFieldChoice = ({
 };
 
 // Component for downloading the task result
-export const DownloadButton = ({ downloadUrl }: DownloadButtonProps) => {
+export const DownloadButton = ({ downloadUrl, nonce }: DownloadButtonProps) => {
   const handleDownload = () => {
     if (downloadUrl) {
       const link = document.createElement("a");
@@ -433,6 +442,7 @@ export const DownloadButton = ({ downloadUrl }: DownloadButtonProps) => {
       {downloadUrl ? (
         <Button
           className="bg-primary text-white min-w-96 h-10"
+          nonce={nonce}
           radius="full"
           variant="solid"
           onClick={handleDownload}
@@ -441,7 +451,7 @@ export const DownloadButton = ({ downloadUrl }: DownloadButtonProps) => {
         </Button>
       ) : (
         <div className="border-2 border-primary rounded-3xl p-2 max-w-96 h-10">
-          <TxtPlaceholder />
+          <TxtPlaceholder nonce={nonce} />
         </div>
       )}
     </div>
@@ -451,6 +461,7 @@ export const DownloadButton = ({ downloadUrl }: DownloadButtonProps) => {
 // Component for displaying the task result as sanitized html
 export const DisplayFieldChoiceHtml = ({
   fieldChoice,
+  nonce,
 }: DisplayFieldChoiceProps) => {
   return (
     <div>
@@ -458,10 +469,14 @@ export const DisplayFieldChoiceHtml = ({
         <div
           dangerouslySetInnerHTML={{ __html: fieldChoice }}
           className="border-2 border-primary rounded-3xl min-w-96 h-10 flex items-center justify-center"
+          nonce={nonce}
         />
       ) : (
-        <div className="border-2 border-primary rounded-3xl p-2 max-w-96 h-10">
-          <TxtPlaceholder />
+        <div
+          className="border-2 border-primary rounded-3xl p-2 max-w-96 h-10"
+          nonce={nonce}
+        >
+          <TxtPlaceholder nonce={nonce} />
         </div>
       )}
     </div>
@@ -469,7 +484,7 @@ export const DisplayFieldChoiceHtml = ({
 };
 
 // Component for selecting a database, schema, and table
-export const ServerSchemaAndTableSelector = () => {
+export const ServerSchemaAndTableSelector = ({ nonce }: { nonce?: string }) => {
   const [inputData, setInputData] = useState<InputDataProps>({
     dbChoice: null,
     schemaChoice: null,

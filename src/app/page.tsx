@@ -1,6 +1,7 @@
 import { Snippet } from "@nextui-org/snippet";
 import { useTranslations } from "next-intl";
 import { unstable_setRequestLocale } from "next-intl/server";
+
 import { siteConfig } from "@/config/site";
 import { title, subtitle } from "@/components/primitives";
 import { ColorCard, ColorCardScale } from "@/components/ColorCard";
@@ -37,10 +38,7 @@ function HomeContent({ session }: { session: any }) {
       </div>
 
       <div className="mt-8">
-        <Snippet
-          hideCopyButton
-          hideSymbol
-          variant="flat">
+        <Snippet hideCopyButton hideSymbol variant="flat">
           <span>{t("code")}</span>
         </Snippet>
       </div>

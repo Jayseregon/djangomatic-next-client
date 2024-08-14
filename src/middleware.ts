@@ -1,5 +1,7 @@
 import type { NextRequest } from "next/server";
+
 import { NextResponse } from "next/server";
+
 import { auth } from "@/auth";
 
 // New CSP middleware function
@@ -16,9 +18,9 @@ function cspMiddleware(req: NextRequest): NextResponse {
   form-action 'self';
   frame-ancestors 'none';
   frame-src https://github.com;
-  connect-src 'self' https://github.com https://api.github.com;
+  connect-src 'self' https://github.com https://api.github.com https://docker-djangomatic.azurewebsites.net;
   upgrade-insecure-requests;
-`
+  `
     .replace(/\s{2,}/g, " ")
     .trim();
 

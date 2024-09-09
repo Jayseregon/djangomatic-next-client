@@ -20,8 +20,14 @@ WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
+# Copy the Prisma schema
+COPY prisma ./prisma
+
 # Next.js collects completely anonymous telemetry data about general usage.
 ENV NEXT_TELEMETRY_DISABLED=1
+
+# Generate Prisma client
+RUN npx prisma generate
 
 RUN \
   if [ -f yarn.lock ]; then yarn run build; \
@@ -72,6 +78,9 @@ RUN chown -R nextjs:nodejs ./node_modules
 # Automatically leverage output traces to reduce image size
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
+
+# Copy the Prisma directory
+COPY --from=builder --chown=nextjs:nodejs /app/prisma ./prisma
 
 # Expose SSH and application ports
 EXPOSE 2222 8080

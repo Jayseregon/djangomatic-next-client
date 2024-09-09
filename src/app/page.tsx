@@ -4,10 +4,10 @@ import { unstable_setRequestLocale } from "next-intl/server";
 
 import { siteConfig } from "@/config/site";
 import { title, subtitle } from "@/components/primitives";
-import { ColorCard, ColorCardScale } from "@/components/ColorCard";
-import { UserData } from "@/src/components/UserData";
-import { UnAuthenticated } from "@/src/components/unauthenticated";
+import { UnAuthenticated } from "@/components/unAuthenticated";
 import { auth } from "@/auth";
+// import { ColorCard, ColorCardScale } from "@/components/ColorCard";
+// import { UserData } from "@/src/components/UserData";
 
 export default async function RootPage({
   params: { locale },
@@ -43,16 +43,16 @@ function HomeContent({ session }: { session: any }) {
         </Snippet>
       </div>
 
-      <UserData session={session} />
+      {/* <UserData session={session} /> */}
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-2">
+      {/* <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-2">
         <ColorCard />
         <ColorCardScale target_color="primary" />
         <ColorCardScale target_color="secondary" />
         <ColorCardScale target_color="success" />
         <ColorCardScale target_color="warning" />
         <ColorCardScale target_color="danger" />
-      </div>
+      </div> */}
     </section>
   );
 }

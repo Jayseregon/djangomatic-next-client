@@ -1,0 +1,7 @@
+-- AlterTable
+ALTER TABLE "User" ADD COLUMN     "canAccessApps" BOOLEAN NOT NULL DEFAULT false,
+ADD COLUMN     "canAccessBoards" BOOLEAN NOT NULL DEFAULT false,
+ADD COLUMN     "canAccessDocs" BOOLEAN NOT NULL DEFAULT false,
+ADD COLUMN     "canAccessRnd" BOOLEAN NOT NULL DEFAULT false,
+ADD COLUMN     "isAdmin" BOOLEAN NOT NULL DEFAULT false,
+ADD COLUMN     "isUser" BOOLEAN NOT NULL DEFAULT true;

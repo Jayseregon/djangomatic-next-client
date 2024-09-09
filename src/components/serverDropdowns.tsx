@@ -9,6 +9,7 @@ import {
 } from "@nextui-org/react";
 import { useTranslations } from "next-intl";
 import React, { useEffect, useState } from "react";
+import DOMPurify from "dompurify";
 
 import { cn } from "@/lib/utils";
 import {
@@ -463,19 +464,24 @@ export const DisplayFieldChoiceHtml = ({
   fieldChoice,
   nonce,
 }: DisplayFieldChoiceProps) => {
+  // Sanitize the HTML content and add the nonce to inline styles
+  const sanitizedHtml = DOMPurify.sanitize(fieldChoice || "", {
+    ADD_ATTR: ["nonce"],
+    ADD_TAGS: ["style"],
+    FORCE_BODY: true,
+    IN_PLACE: true,
+  });
+
   return (
     <div>
       {fieldChoice ? (
         <div
-          dangerouslySetInnerHTML={{ __html: fieldChoice }}
+          dangerouslySetInnerHTML={{ __html: sanitizedHtml }}
           className="border-2 border-primary rounded-3xl min-w-96 h-10 flex items-center justify-center"
           nonce={nonce}
         />
       ) : (
-        <div
-          className="border-2 border-primary rounded-3xl p-2 max-w-96 h-10"
-          nonce={nonce}
-        >
+        <div className="border-2 border-primary rounded-3xl p-2 max-w-96 h-10">
           <TxtPlaceholder nonce={nonce} />
         </div>
       )}
@@ -485,6 +491,7 @@ export const DisplayFieldChoiceHtml = ({
 
 // Component for selecting a database, schema, and table
 export const ServerSchemaAndTableSelector = ({ nonce }: { nonce?: string }) => {
+  // export const ServerSchemaAndTableSelector = () => {
   const [inputData, setInputData] = useState<InputDataProps>({
     dbChoice: null,
     schemaChoice: null,
@@ -562,7 +569,10 @@ export const ServerSchemaAndTableSelector = ({ nonce }: { nonce?: string }) => {
         </div>
         <div className="grid grid-rows-3 gap-3">
           <DisplayFieldChoice fieldChoice={taskData.taskStatus} />
-          <DisplayFieldChoiceHtml fieldChoice={taskData.taskResult} />
+          <DisplayFieldChoiceHtml
+            fieldChoice={taskData.taskResult}
+            nonce={nonce}
+          />
           <DownloadButton downloadUrl={taskData.downloadUrl} />
         </div>
       </div>

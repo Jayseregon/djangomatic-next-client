@@ -1,8 +1,12 @@
 {
-"HomePage": {
+  "HomePage": {
     "HeroTitle": "Simplifier vos tâches quotidiennes",
     "HeroSubtitle": "Automatisation des processus sur le Cloud",
     "code": "Actuellement en développement"
+  },
+  "UnAuthorized": {
+    "access": "Vous n'avez pas les permissions requises pour accéder à cette page.",
+    "interact": "Vous n'avez pas les permissions requises pour interagir avec cette application."
   },
   "LocaleSwitcher": {
     "label": "Changer de langue",
@@ -18,52 +22,35 @@
     "dItemLogOut": "Se déconnecter"
   },
   "Saas": {
-      "h1_title": "Saas",
-      "subtitle": "Page d'accès aux outils d'automatisation"
-    },
-    "Boards": {
-      "h1_title": "Boards",
-      "subtitle": "Page d'accès aux tableaux et suivis"
-    },
-    "Docs": {
-      "h1_title": "Docs",
-      "subtitle": "Page d'accès aux tutoriels et documentations"
-    },
-    "RnD": {
-      "h1_title": "R&D",
-      "subtitle": "Page d'accès pour l'équipe de recherche & développement"
-    },
-    "SaasDemo1": {
-      "h1_title": "Démo App 1",
-      "subtitle": "Bienvenue dans la première application de démo"
-    },
-    "SaasDemo2": {
-      "h1_title": "Démo App 2",
-      "subtitle": "Bienvenue dans la deuxième application de démo"
-    },
-    "SaasDemo3": {
-      "h1_title": "Démo App 3",
-      "subtitle": "Bienvenue dans la troisième application de démo"
-    },
-    "SaasDemo4": {
-      "h1_title": "Démo App 4",
-      "subtitle": "Bienvenue dans la quatrième application de démo"
-    }, 
-    "SaasSidebar": {
-      "link_title": "Guide d'utilisation"
-    }, 
-    "HP_by_Splits1": {
-      "h1_title": "HP by Splits1",
-      "subtitle": "Compiler HP par splitter L1, dans un nœud.", 
-      "code": "Actuellement en développement"
-    }, 
-    "ServerDropdowns": {
-      "dbMenu_label": "Sélectionner une base de données", 
-      "schMenu_label": "Selectionner un schéma", 
-      "schMenu_loading": "Chargement des schémas...", 
-      "tblMenu_label": "Selectionner une table", 
-      "tblMenu_loading": "Chargement des tables...", 
-      "menuNoData": "Pas de données disponibles"
-
-    }
+    "title": "Apps",
+    "subtitle": "Guide d'utilisation"
+  },
+  "Boards": {
+    "title": "Boards",
+    "subtitle": "Page d'accès aux tableaux et suivis"
+  },
+  "Docs": {
+    "title": "Docs",
+    "subtitle": "Guide d'utilisation"
+  },
+  "RnD": {
+    "title": "R&D",
+    "subtitle": "Page d'accès pour l'équipe de recherche & développement"
+  },
+  "SaasSidebar": {
+    "link_title": "Guide d'utilisation"
+  },
+  "HP_by_Splits1": {
+    "title": "HP by Splits1",
+    "subtitle": "Compiler HP par splitter L1, dans un nœud.",
+    "code": "Actuellement en développement"
+  },
+  "ServerDropdowns": {
+    "dbMenu_label": "Sélectionner une base de données",
+    "schMenu_label": "Selectionner un schéma",
+    "schMenu_loading": "Chargement des schémas...",
+    "tblMenu_label": "Selectionner une table",
+    "tblMenu_loading": "Chargement des tables...",
+    "menuNoData": "Pas de données disponibles"
+  }
 }

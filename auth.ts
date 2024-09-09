@@ -1,6 +1,7 @@
 import type { NextAuthConfig } from "next-auth";
 import type { Provider } from "next-auth/providers";
 
+import { PrismaClient } from "@prisma/client";
 import { type DefaultSession } from "next-auth";
 import NextAuth from "next-auth";
 import "next-auth/jwt";
@@ -27,6 +28,7 @@ const authorizedMembers = [
   // { name: "User1", email: "user2@example.com" },
 ];
 
+const prisma = new PrismaClient();
 const providers: Provider[] = [GitHub];
 
 export const config = {
@@ -43,6 +45,28 @@ export const config = {
       );
 
       if (isAuthorized) {
+        // check if user exists in the database
+        const existingUser = await prisma.user.findUnique({
+          where: { email: user.email! },
+        });
+        // console.log("Existing user:", existingUser);
+
+        // create user entry if not exists
+        if (!existingUser) {
+          await prisma.user.create({
+            data: {
+              name: user.name!,
+              email: user.email!,
+            },
+          });
+          // console.log("User created with:", user);
+        } else {
+          await prisma.user.update({
+            where: { email: user.email! },
+            data: { lastLogin: new Date() },
+          });
+        }
+
         return true; // Allow sign in
       } else {
         return false; // Block sign in
@@ -64,6 +88,11 @@ export const config = {
 
       return session;
     },
+  },
+  session: {
+    strategy: "jwt",
+    maxAge: 60 * 60, // 1 hours
+    updateAge: 60 * 60, // 1 hour
   },
   debug: process.env.NODE_ENV !== "production",
 } satisfies NextAuthConfig;

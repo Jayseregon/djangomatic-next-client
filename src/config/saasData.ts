@@ -6,7 +6,7 @@ export const saasData = {
     {
       label: "Address Breakdown",
       type: "hld",
-      href: "/saas/tds/spkv_adr_xls",
+      href: "/saas/tds/hld/spkv_adr_xls",
       desc: "Compile address breakdown as Excel file + Map screenshot.",
       version: "0.1.1",
       date_upd: "2024-03-26",
@@ -18,7 +18,7 @@ export const saasData = {
     {
       label: "DFN Boundaries",
       type: "hld",
-      href: "/saas/tds/spkv_dfn_lots",
+      href: "/saas/tds/hld/spkv_dfn_lots",
       desc: "Generate AGOL DFN boundaries layer in Postgres, for client import.",
       version: "0.1.1",
       date_upd: "2024-03-26",
@@ -30,7 +30,7 @@ export const saasData = {
     {
       label: "GPS to SHP",
       type: "hld",
-      href: "/saas/tds/spkv_gps_shp",
+      href: "/saas/tds/hld/spkv_gps_shp",
       desc: "Compile and sanitize ungraded GPS survey as SHP suitable for HLD.",
       version: "0.1.1",
       date_upd: "2024-03-26",
@@ -42,7 +42,7 @@ export const saasData = {
     {
       label: "GPS to Postgres",
       type: "hld",
-      href: "/saas/tds/spkv_gps_db",
+      href: "/saas/tds/hld/spkv_gps_db",
       desc: "Import new graded GPS survey, or append to existing tables.",
       version: "1.0.1",
       date_upd: "2024-03-26",
@@ -54,7 +54,7 @@ export const saasData = {
     {
       label: "GPS to Postgres",
       type: "override",
-      href: "/saas/tds/spkv_override_gps",
+      href: "/saas/tds/override/spkv_override_gps",
       desc: "Fresh GPS import, erasing old data.",
       version: "1.0.1",
       date_upd: "2024-03-26",
@@ -66,7 +66,7 @@ export const saasData = {
     {
       label: "HLD to KMZ",
       type: "hld",
-      href: "/saas/tds/spkv_hld_kmz",
+      href: "/saas/tds/hld/spkv_hld_kmz",
       desc: "Produce KMZ mapping for each DFN's HLD.",
       version: "0.1.1",
       date_upd: "2024-03-26",
@@ -78,7 +78,7 @@ export const saasData = {
     {
       label: "HLD to Postgres",
       type: "hld",
-      href: "/saas/tds/spkv_hld_db",
+      href: "/saas/tds/hld/spkv_hld_db",
       desc: "Import new HLD, or append to existing tables.",
       version: "1.0.1",
       date_upd: "2024-03-26",
@@ -90,7 +90,7 @@ export const saasData = {
     {
       label: "HLD to Postgres",
       type: "override",
-      href: "/saas/tds/spkv_override_hld_db",
+      href: "/saas/tds/override/spkv_override_hld_db",
       desc: "Fresh HLD import, erasing old data.",
       version: "1.0.1",
       date_upd: "2024-03-26",
@@ -102,7 +102,7 @@ export const saasData = {
     {
       label: "Node Quantities",
       type: "admin",
-      href: "/saas/tds/spkv_node_qty",
+      href: "/saas/tds/admin/spkv_node_qty",
       desc: "Extract node AER/UG length quantities (ft).",
       version: "1.0.0",
       date_upd: "2024-04-05",
@@ -114,7 +114,7 @@ export const saasData = {
     {
       label: "HP by Splits1",
       type: "admin",
-      href: "/saas/tds/spkv_hp_by_split1",
+      href: "/saas/tds/admin/spkv_hp_by_split1",
       desc: "Compile HP by L1 splitters, inside a node.",
       version: "1.0.2",
       date_upd: "2024-05-23",
@@ -126,7 +126,7 @@ export const saasData = {
     {
       label: "Poles Numbering",
       type: "lld",
-      href: "/saas/tds/poles_numbering",
+      href: "/saas/tds/lld/poles_numbering",
       desc: "Create pole ID field based on the leaflet order.",
       version: "1.1.5",
       date_upd: "2024-03-26",
@@ -138,7 +138,7 @@ export const saasData = {
     {
       label: "Midspan Calculation",
       type: "lld",
-      href: "/saas/tds/midspan_auto_calc",
+      href: "/saas/tds/lld/midspan_auto_calc",
       desc: "Recalculate a project midspans based on poles updates.",
       version: "1.3.4",
       date_upd: "2024-03-26",
@@ -150,7 +150,7 @@ export const saasData = {
     {
       label: "DFN Poles Calculations",
       type: "lld",
-      href: "/saas/tds/dfn_poles_calc",
+      href: "/saas/tds/lld/dfn_poles_calc",
       desc: "Poles attachment suggestions and table pre-fill, by DFN.",
       version: "1.3.3",
       date_upd: "2024-03-26",
@@ -162,7 +162,7 @@ export const saasData = {
     {
       label: "Node Poles Calculations",
       type: "hld",
-      href: "/saas/tds/node_poles_calc",
+      href: "/saas/tds/hld/node_poles_calc",
       desc: "Poles attachment suggestions and table pre-fill, by Node.",
       version: "1.3.2",
       date_upd: "2024-03-26",
@@ -174,7 +174,7 @@ export const saasData = {
     {
       label: "Pole Class-Length Estimator",
       type: "lld",
-      href: "/saas/tds/pole_class_length_est",
+      href: "/saas/tds/lld/pole_class_length_est",
       desc: "Pole estimator for missing classes en lengths, by DFN.",
       version: "1.1.5",
       date_upd: "2024-03-26",
@@ -186,7 +186,7 @@ export const saasData = {
     {
       label: "Extract Data DP",
       type: "lld",
-      href: "/saas/tds/extract_data_dp",
+      href: "/saas/tds/lld/extract_data_dp",
       desc: "Poles owners and HP data counts extractions, for DP.",
       version: "1.1.3",
       date_upd: "2024-03-26",
@@ -199,7 +199,7 @@ export const saasData = {
     {
       label: "Import to DB621",
       type: "arcgis",
-      href: "/saas/tds/arcgis_api_import_db621",
+      href: "/saas/tds/arcgis/arcgis_api_import_db621",
       desc: "Import DFN design to DB621 & Auto Snapshots",
       version: "1.0.1",
       date_upd: "2024-03-26",
@@ -211,7 +211,7 @@ export const saasData = {
     {
       label: "Update DB621",
       type: "arcgis",
-      href: "/saas/tds/arcgis_api_update_db621",
+      href: "/saas/tds/arcgis/arcgis_api_update_db621",
       desc: "Update DFN attributes to DB621.",
       version: "1.0.1",
       date_upd: "2024-03-26",
@@ -223,7 +223,7 @@ export const saasData = {
     {
       label: "Snapshots from DB621",
       type: "arcgis",
-      href: "/saas/tds/arcgis_api_snapshots_db621",
+      href: "/saas/tds/arcgis/arcgis_api_snapshots_db621",
       desc: "Snapshots only, from DB621.",
       version: "1.0.1",
       date_upd: "2024-03-26",
@@ -235,7 +235,7 @@ export const saasData = {
     {
       label: "DFN Bounds DB621",
       type: "arcgis",
-      href: "/saas/tds/arcgis_api_dfn_bounds_crud_db621",
+      href: "/saas/tds/arcgis/arcgis_api_dfn_bounds_crud_db621",
       desc: "Import, update or delete DFN boundaries.",
       version: "1.0.0",
       date_upd: "2024-04-22",
@@ -248,7 +248,7 @@ export const saasData = {
     {
       label: "Resolve Null Geom",
       type: "super",
-      href: "/saas/tds/super_resolve_null_geom",
+      href: "/saas/tds/super/resolve_null_geom",
       desc: "Postgres db <b>Main</b><br>Remove Null geometries.",
       version: "1.1.2",
       date_upd: "2024-03-26",
@@ -260,7 +260,7 @@ export const saasData = {
     {
       label: "Recover from Version",
       type: "super",
-      href: "/saas/tds/super_recover_version",
+      href: "/saas/tds/super/recover_version",
       desc: "Postgres db <b>Prod</b><br>Recover deleted data, from versioning.",
       version: "1.1.2",
       date_upd: "2024-03-26",
@@ -272,7 +272,7 @@ export const saasData = {
     {
       label: "Change Table Ownership UNIQ",
       type: "super",
-      href: "/saas/tds/super_uniq_change_tbl_own",
+      href: "/saas/tds/super/uniq_change_tbl_own",
       desc: "Postgres db <b>Prod</b><br><u>Change</u> table ownership and permissions from/to UNIQ.",
       version: "1.0.1",
       date_upd: "2024-03-26",
@@ -284,7 +284,7 @@ export const saasData = {
     {
       label: "Clean Table Ownership",
       type: "super",
-      href: "/saas/tds/super_clean_tbl_own",
+      href: "/saas/tds/super/clean_tbl_own",
       desc: "Postgres db <b>Prod</b><br><u>Clean</u> table ownership and permissions in entire schema.",
       version: "1.0.1",
       date_upd: "2024-03-26",
@@ -296,7 +296,7 @@ export const saasData = {
     {
       label: "Postgres Versioning",
       type: "super",
-      href: "/saas/tds/super_postgres_version",
+      href: "/saas/tds/super/postgres_version",
       desc: "Postgres versioning for untracked schemas and tables.",
       version: "1.0.1",
       date_upd: "2024-03-26",
@@ -309,8 +309,8 @@ export const saasData = {
     // Format SHP data for TQC
     {
       label: "TQC SHP Format",
-      type: "cogeco",
-      href: "/saas/cogeco/tqc_shp_format",
+      type: "hld",
+      href: "/saas/cogeco/hld/tqc_shp_format",
       desc_en: "Format SHP data extract from AutoCAD for TQC.",
       desc_fr: "Format fichiers SHP extraits d'AutoCAD pour TQC.",
       version: "1.1.3",
@@ -327,7 +327,7 @@ export const saasData = {
     {
       label: "GPS to SHP",
       type: "hld",
-      href: "/saas/vistabeam/gps_shp",
+      href: "/saas/vistabeam/hld/gps_shp",
       desc_en:
         "Compile and sanitize ungraded GPS survey as SHP suitable for HLD.",
       desc_fr:
@@ -343,7 +343,7 @@ export const saasData = {
     {
       label: "GPS to Postgres",
       type: "hld",
-      href: "/saas/vistabeam/gps_db",
+      href: "/saas/vistabeam/hld/gps_db",
       desc_en: "Import new graded GPS survey, or append to existing tables.",
       desc_fr: "Importe nouveau relevé GPS calibré, ou ajoute à existant.",
       version: "1.0.0",
@@ -357,7 +357,7 @@ export const saasData = {
     {
       label: "GPS to Postgres",
       type: "override",
-      href: "/saas/vistabeam/override_gps",
+      href: "/saas/vistabeam/override/gps_db",
       desc_en: "Fresh GPS import, erasing old data.",
       desc_fr: "Nouvel import GPS, effaçant anciennes données.",
       version: "1.0.0",
@@ -371,7 +371,7 @@ export const saasData = {
     {
       label: "Node Poles Calculations",
       type: "hld",
-      href: "/saas/vistabeam/node_poles_calc",
+      href: "/saas/vistabeam/hld/node_poles_calc",
       desc_en: "Poles attachment suggestions and table pre-fill, by Node.",
       desc_fr:
         "Suggestions hauteurs d'attaches poteaux, et pre-remplissage tableaux, par noeud.",
@@ -387,7 +387,7 @@ export const saasData = {
     {
       label: "Resolve Null Geom",
       type: "super",
-      href: "/saas/vistabeam/super_resolve_null_geom",
+      href: "/saas/vistabeam/super/resolve_null_geom",
       desc_en: "Postgres db remove Null geometries.",
       desc_fr: "Postgres db supprime les géometries Null.",
       version: "1.0.0",
@@ -401,13 +401,29 @@ export const saasData = {
     {
       label: "Recover from Version",
       type: "super",
-      href: "/saas/vistabeam/super_recover_version",
+      href: "/saas/vistabeam/super/recover_version",
       desc_en: "Postgres db recover deleted data, from versioning.",
       desc_fr: "Postgres db restaure data supprimées, depuis versioning.",
       version: "1.0.0",
       date_upd: "2024-01-23",
       desc_upd_en: "Vistabeam tools implementation.",
       desc_upd_fr: "Implémentation des outils Vistabeam.",
+      doc_href: "empty",
+      is_active: "Y",
+    },
+  ],
+  xplore_saas: [
+    // Extract BOM summary from zip input
+    {
+      label: "Extract BOM Summary",
+      type: "admin",
+      href: "/saas/xplore/admin/extract_bom_summary",
+      desc_en: "Extract BOM summary from zip input.",
+      desc_fr: "Extraire un résumé BOM à partir d'un zip.",
+      version: "1.0.0",
+      date_upd: "2024-08-01",
+      desc_upd_en: "First time release.",
+      desc_upd_fr: "Première publication.",
       doc_href: "empty",
       is_active: "Y",
     },

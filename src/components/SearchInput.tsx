@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { Input, Kbd } from "@nextui-org/react";
+import { Input } from "@nextui-org/react";
 
 import { SearchIcon } from "@/components/icons";
 
@@ -47,14 +47,9 @@ export const SearchInput = ({ alwaysExpanded = false }) => {
         <Input
           aria-label="Search"
           classNames={{
-            inputWrapper: "bg-default-100",
-            input: "text-sm",
+            input:
+              "text-sm border-none outline-none ring-0 focus:border-none focus:outline-none focus:ring-0",
           }}
-          endContent={
-            <Kbd className="hidden lg:inline-block" keys={["command"]}>
-              K
-            </Kbd>
-          }
           labelPlacement="outside"
           placeholder="Search..."
           startContent={

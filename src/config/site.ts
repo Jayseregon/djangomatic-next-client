@@ -7,7 +7,7 @@ export const siteConfig = {
   icon: "/favicon.ico",
   navItems: [
     {
-      label: "Saas",
+      label: "Apps",
       href: "/saas",
     },
     {
@@ -21,6 +21,10 @@ export const siteConfig = {
     {
       label: "R&D",
       href: "/rnd",
+    },
+    {
+      label: "Admin",
+      href: "/admin",
     },
   ],
 };

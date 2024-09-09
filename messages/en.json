@@ -4,6 +4,10 @@
     "HeroSubtitle": "Process Automation on the Cloud",
     "code": "Currently in development"
   },
+  "UnAuthorized": {
+    "access": "You do not have the required permissions to access this page.",
+    "interact": "You do not have the required permissions to interact with this app."
+  },
   "LocaleSwitcher": {
     "label": "Change language",
     "locale": "{locale, select, fr {🇫🇷 French} en {🇬🇧 English} other {🚫 Unknown}}",
@@ -18,51 +22,35 @@
     "dItemLogOut": "Log Out"
   },
   "Saas": {
-    "h1_title": "Saas",
-    "subtitle": "Automation Tools access page"
+    "title": "Apps",
+    "subtitle": "Usage Guidelines"
   },
   "Boards": {
-    "h1_title": "Boards",
+    "title": "Boards",
     "subtitle": "Tables & trackings access page"
   },
   "Docs": {
-    "h1_title": "Docs",
-    "subtitle": "Tutorials & documentations access page"
+    "title": "Docs",
+    "subtitle": "Usage Guidelines"
   },
   "RnD": {
-    "h1_title": "R&D",
+    "title": "R&D",
     "subtitle": "Research & Development Team access page"
   },
-  "SaasDemo1": {
-    "h1_title": "Demo App 1",
-    "subtitle": "Welcome to the first demo app"
-  },
-  "SaasDemo2": {
-    "h1_title": "Demo App 2",
-    "subtitle": "Welcome to the second demo app"
-  },
-  "SaasDemo3": {
-    "h1_title": "Demo App 3",
-    "subtitle": "Welcome to the third demo app"
-  },
-  "SaasDemo4": {
-    "h1_title": "Demo App 4",
-    "subtitle": "Welcome to the fourth demo app"
-  }, 
   "SaasSidebar": {
     "link_title": "Usage Guidelines"
-  }, 
+  },
   "HP_by_Splits1": {
-    "h1_title": "HP by Splits1",
-    "subtitle": "Compile HP by L1 splitters, inside a node.", 
+    "title": "HP by Splits1",
+    "subtitle": "Compile HP by L1 splitters, inside a node.",
     "code": "Currently in development"
-  }, 
+  },
   "ServerDropdowns": {
-    "dbMenu_label": "Select a database", 
-    "schMenu_label": "Select a schema", 
-    "schMenu_loading": "Loading schemas...", 
-    "tblMenu_label": "Select a table", 
-    "tblMenu_loading": "Loading tables...", 
+    "dbMenu_label": "Select a database",
+    "schMenu_label": "Select a schema",
+    "schMenu_loading": "Loading schemas...",
+    "tblMenu_label": "Select a table",
+    "tblMenu_loading": "Loading tables...",
     "menuNoData": "No data available"
   }
 }

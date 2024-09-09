@@ -113,6 +113,7 @@ const config = {
   ],
   plugins: [
     require("@tailwindcss/typography"),
+    require("@tailwindcss/forms"),
     nextui({
       themes: {
         light: {
@@ -131,7 +132,7 @@ const config = {
               800: "#00244E",
               900: "#000D20",
               foreground: "#FFFFFF",
-              DEFAULT: "#51A0F9",
+              DEFAULT: "#2285F6",
             },
             secondary: {
               50: "#DAFFFF",
@@ -145,7 +146,7 @@ const config = {
               800: "#004D4A",
               900: "#001C1A",
               foreground: "#FFFFFF",
-              DEFAULT: "#52FFF8",
+              DEFAULT: "#31FEF6",
             },
             success: {
               50: "#F1FEE0",
@@ -159,7 +160,7 @@ const config = {
               800: "#284303",
               900: "#0A1700",
               foreground: "#FFFFFF",
-              DEFAULT: "#AEE961",
+              DEFAULT: "#98E336",
             },
             warning: {
               50: "#FFFEDA",
@@ -173,7 +174,7 @@ const config = {
               800: "#4D4700",
               900: "#1B1800",
               foreground: "#FFFFFF",
-              DEFAULT: "#FFF34B",
+              DEFAULT: "#FFEF1A",
             },
             danger: {
               50: "#FFECDC",
@@ -187,7 +188,7 @@ const config = {
               800: "#4F1600",
               900: "#210400",
               foreground: "#FFFFFF",
-              DEFAULT: "#FF854C",
+              DEFAULT: "#FF621A",
             },
           },
         },
@@ -207,7 +208,7 @@ const config = {
               800: "#DEF2FF",
               900: "#EFF8FF",
               foreground: "#021F26",
-              DEFAULT: "#096BDD",
+              DEFAULT: "#2285F6",
             },
             secondary: {
               50: "#001C1A",
@@ -221,7 +222,7 @@ const config = {
               800: "#AFFFFD",
               900: "#DAFFFF",
               foreground: "#021F26",
-              DEFAULT: "#11B3AC",
+              DEFAULT: "#23E5DD",
             },
             success: {
               50: "#0A1700",
@@ -235,7 +236,7 @@ const config = {
               800: "#DBF7B7",
               900: "#F1FEE0",
               foreground: "#021F26",
-              DEFAULT: "#619D13",
+              DEFAULT: "#7FC91C",
             },
             warning: {
               50: "#1B1800",
@@ -249,7 +250,7 @@ const config = {
               800: "#FFFAAD",
               900: "#FFFEDA",
               foreground: "#021F26",
-              DEFAULT: "#B3A600",
+              DEFAULT: "#E6D600",
             },
             danger: {
               50: "#210400",
@@ -263,7 +264,7 @@ const config = {
               800: "#FFCAAF",
               900: "#FFECDC",
               foreground: "#021F26",
-              DEFAULT: "#B43800",
+              DEFAULT: "#E64900",
             },
           },
         },

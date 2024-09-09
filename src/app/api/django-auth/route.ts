@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { getIronSession } from "iron-session";
 import { cookies } from "next/headers";
+
 // import axios from "axios";
 import { axiosInstance } from "@/src/lib/dbRequests";
 import { ironSessionOptions, IronSessionData } from "@/src/lib/session";
@@ -55,4 +56,24 @@ export async function POST(request: Request) {
     // console.error("Error details:", error.response?.data || error.message);
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
+}
+
+export async function PATCH() {
+  return new NextResponse("Method Not Allowed", { status: 405 });
+}
+
+export async function GET() {
+  return new NextResponse("Method Not Allowed", { status: 405 });
+}
+
+export async function PUT() {
+  return new NextResponse("Method Not Allowed", { status: 405 });
+}
+
+export async function DELETE() {
+  return new NextResponse("Method Not Allowed", { status: 405 });
+}
+
+export async function OPTIONS() {
+  return new NextResponse("Method Not Allowed", { status: 405 });
 }

@@ -1,4 +1,5 @@
 import { Snippet } from "@nextui-org/snippet";
+
 import { siteConfig } from "@/config/site";
 import { title } from "@/components/primitives";
 
@@ -17,10 +18,7 @@ export const UnAuthenticated = (): JSX.Element => {
         </h1>
         <div className="mt-8">
           {/* Display a snippet indicating that the user is not authenticated */}
-          <Snippet
-            hideCopyButton
-            hideSymbol
-            variant="flat">
+          <Snippet hideCopyButton hideSymbol variant="flat">
             Not Authenticated
           </Snippet>
         </div>

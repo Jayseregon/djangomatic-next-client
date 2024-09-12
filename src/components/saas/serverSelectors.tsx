@@ -2,6 +2,7 @@
 
 import { Button } from "@nextui-org/react";
 import React, { useEffect, useState } from "react";
+
 import { startTask, checkTaskStatus } from "@/lib/dbRequests";
 
 import {
@@ -75,10 +76,7 @@ export const DatabaseSchemaTableSelector = ({
             dbClass="db_class_spokane_valley"
             setInputData={setInputData}
           />
-          <SchemasDropdown
-            inputData={inputData}
-            setInputData={setInputData}
-          />
+          <SchemasDropdown inputData={inputData} setInputData={setInputData} />
           <TablesDropdown
             inputData={inputData}
             pattern={pattern}
@@ -96,7 +94,8 @@ export const DatabaseSchemaTableSelector = ({
         className="bg-primary text-white min-w-96 h-10 my-3"
         radius="full"
         variant="solid"
-        onClick={handleTask}>
+        onClick={handleTask}
+      >
         Start Task
       </Button>
 

@@ -59,7 +59,8 @@ export const PermissionButton = ({
       radius="full"
       size="sm"
       variant="light"
-      onClick={() => handleToggle(user.id, fieldName, !user[fieldName])}>
+      onClick={() => handleToggle(user.id, fieldName, !user[fieldName])}
+    >
       {/* Render the appropriate icon based on the user's permission state */}
       {user[fieldName] ? <CheckIcon size={24} /> : <UncheckIcon size={24} />}
     </Button>
@@ -104,6 +105,7 @@ export const UserTable = (): JSX.Element => {
       try {
         const response = await fetch("/api/prisma-users");
         const data = await response.json();
+
         setUsers(data);
       } catch (error) {
         console.error("Failed to fetch users:", error);
@@ -135,8 +137,8 @@ export const UserTable = (): JSX.Element => {
       if (response.ok) {
         setUsers((prevUsers) =>
           prevUsers.map((user) =>
-            user.id === id ? { ...user, [field]: value } : user
-          )
+            user.id === id ? { ...user, [field]: value } : user,
+          ),
         );
       } else {
         console.error("Failed to update user");
@@ -159,7 +161,8 @@ export const UserTable = (): JSX.Element => {
           label="Default permissions"
           orientation="horizontal"
           value={selectedMenu}
-          onValueChange={setSelectedMenu}>
+          onValueChange={setSelectedMenu}
+        >
           <Radio value="default">Default</Radio>
           <Radio value="docs">Docs</Radio>
           <Radio value="videos">Videos</Radio>
@@ -170,7 +173,8 @@ export const UserTable = (): JSX.Element => {
           label="Apps permissions"
           orientation="horizontal"
           value={selectedMenu}
-          onValueChange={setSelectedMenu}>
+          onValueChange={setSelectedMenu}
+        >
           <Radio value="apps-tds">TDS</Radio>
           <Radio value="apps-cogeco">COGECO</Radio>
           <Radio value="apps-vistabeam">Vistabeam</Radio>
@@ -188,19 +192,13 @@ export const UserTable = (): JSX.Element => {
   const defaultHeader = (): JSX.Element => {
     return (
       <TableHeader>
-        <TableColumn
-          key="email"
-          className="w-56">
+        <TableColumn key="email" className="w-56">
           email
         </TableColumn>
-        <TableColumn
-          key="username"
-          className="w-56">
+        <TableColumn key="username" className="w-56">
           username
         </TableColumn>
-        <TableColumn
-          key="log"
-          className="w-56">
+        <TableColumn key="log" className="w-56">
           last login
         </TableColumn>
         <TableColumn key="admin">admin</TableColumn>
@@ -256,14 +254,10 @@ export const UserTable = (): JSX.Element => {
   const docsHeader = (): JSX.Element => {
     return (
       <TableHeader>
-        <TableColumn
-          key="email"
-          className="w-56">
+        <TableColumn key="email" className="w-56">
           email
         </TableColumn>
-        <TableColumn
-          key="username"
-          className="w-56">
+        <TableColumn key="username" className="w-56">
           username
         </TableColumn>
         <TableColumn key="docs1">tds</TableColumn>
@@ -326,14 +320,10 @@ export const UserTable = (): JSX.Element => {
   const videosHeader = (): JSX.Element => {
     return (
       <TableHeader>
-        <TableColumn
-          key="email"
-          className="w-56">
+        <TableColumn key="email" className="w-56">
           email
         </TableColumn>
-        <TableColumn
-          key="username"
-          className="w-56">
+        <TableColumn key="username" className="w-56">
           username
         </TableColumn>
         <TableColumn key="videos1">default</TableColumn>
@@ -388,14 +378,10 @@ export const UserTable = (): JSX.Element => {
   const appsTdsHeader = (): JSX.Element => {
     return (
       <TableHeader>
-        <TableColumn
-          key="email"
-          className="w-56">
+        <TableColumn key="email" className="w-56">
           email
         </TableColumn>
-        <TableColumn
-          key="username"
-          className="w-56">
+        <TableColumn key="username" className="w-56">
           username
         </TableColumn>
         <TableColumn key="tds1">hld</TableColumn>
@@ -474,14 +460,10 @@ export const UserTable = (): JSX.Element => {
   const appsCogecoHeader = (): JSX.Element => {
     return (
       <TableHeader>
-        <TableColumn
-          key="email"
-          className="w-56">
+        <TableColumn key="email" className="w-56">
           email
         </TableColumn>
-        <TableColumn
-          key="username"
-          className="w-56">
+        <TableColumn key="username" className="w-56">
           username
         </TableColumn>
         <TableColumn key="cog1">hld</TableColumn>
@@ -520,14 +502,10 @@ export const UserTable = (): JSX.Element => {
   const appsVistabeamHeader = (): JSX.Element => {
     return (
       <TableHeader>
-        <TableColumn
-          key="email"
-          className="w-56">
+        <TableColumn key="email" className="w-56">
           email
         </TableColumn>
-        <TableColumn
-          key="username"
-          className="w-56">
+        <TableColumn key="username" className="w-56">
           username
         </TableColumn>
         <TableColumn key="vista1">hld</TableColumn>
@@ -582,14 +560,10 @@ export const UserTable = (): JSX.Element => {
   const appsXploreHeader = (): JSX.Element => {
     return (
       <TableHeader>
-        <TableColumn
-          key="email"
-          className="w-56">
+        <TableColumn key="email" className="w-56">
           email
         </TableColumn>
-        <TableColumn
-          key="username"
-          className="w-56">
+        <TableColumn key="username" className="w-56">
           username
         </TableColumn>
         <TableColumn key="xplore1">admin</TableColumn>
@@ -633,7 +607,8 @@ export const UserTable = (): JSX.Element => {
           }}
           color="primary"
           selectionMode="single"
-          topContent={topContent()}>
+          topContent={topContent()}
+        >
           {/* Render the appropriate table header based on the selected menu */}
           {selectedMenu === "default"
             ? defaultHeader()
@@ -648,9 +623,7 @@ export const UserTable = (): JSX.Element => {
                     : selectedMenu === "apps-vistabeam"
                       ? appsVistabeamHeader()
                       : appsXploreHeader()}
-          <TableBody
-            emptyContent="No entries found"
-            items={users}>
+          <TableBody emptyContent="No entries found" items={users}>
             {(user) =>
               // Render the appropriate table body based on the selected menu
               selectedMenu === "default"

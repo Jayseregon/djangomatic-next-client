@@ -1,7 +1,9 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
+
 import { extractAzureFileData, titleCase } from "@/src/lib/utils";
+
 import { BlobProps } from "../admin/BlobStorage";
 
 interface VideosGridFilteredProps {
@@ -45,7 +47,7 @@ export const VideosGrid = (): JSX.Element => {
    */
   const handleKeyDown = (
     event: React.KeyboardEvent<HTMLDivElement>,
-    blob: BlobProps
+    blob: BlobProps,
   ) => {
     if (event.key === "Enter" || event.key === " ") {
       setSelectedBlob(blob);
@@ -64,17 +66,16 @@ export const VideosGrid = (): JSX.Element => {
             role="button"
             tabIndex={0}
             onClick={() => setSelectedBlob(blob)}
-            onKeyDown={(event) => handleKeyDown(event, blob)}>
+            onKeyDown={(event) => handleKeyDown(event, blob)}
+          >
             <video
               ref={videoRef}
               controls
               loop
               muted
-              className="w-full h-48 object-cover">
-              <source
-                src={blob.url}
-                type={blob.contentType}
-              />
+              className="w-full h-48 object-cover"
+            >
+              <source src={blob.url} type={blob.contentType} />
             </video>
             <p className="text-center text-center font-light pt-3">
               {titleCase(basename!)}
@@ -127,7 +128,7 @@ export const VideosGridFiltered = ({
    */
   const handleKeyDown = (
     event: React.KeyboardEvent<HTMLDivElement>,
-    blob: BlobProps
+    blob: BlobProps,
   ) => {
     if (event.key === "Enter" || event.key === " ") {
       setSelectedBlob(blob);
@@ -136,13 +137,14 @@ export const VideosGridFiltered = ({
 
   // Filter blobs based on selected category
   const filteredBlobs = blobs.filter(
-    (blob) => blob.tags.categoryName === selectedCategory
+    (blob) => blob.tags.categoryName === selectedCategory,
   );
 
   return (
     <div className="grid grid-cols-3 gap-4">
       {filteredBlobs.map((blob) => {
         const [basename] = extractAzureFileData(blob.name);
+
         return (
           <div
             key={blob.name}
@@ -150,17 +152,16 @@ export const VideosGridFiltered = ({
             role="button"
             tabIndex={0}
             onClick={() => setSelectedBlob(blob)}
-            onKeyDown={(event) => handleKeyDown(event, blob)}>
+            onKeyDown={(event) => handleKeyDown(event, blob)}
+          >
             <video
               ref={videoRef}
               controls
               loop
               muted
-              className="w-full h-48 object-cover">
-              <source
-                src={blob.url}
-                type={blob.contentType}
-              />
+              className="w-full h-48 object-cover"
+            >
+              <source src={blob.url} type={blob.contentType} />
             </video>
             <p className="text-center text-center font-light pt-3">
               {titleCase(basename!)}

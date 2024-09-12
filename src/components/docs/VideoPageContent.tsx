@@ -2,12 +2,15 @@
 
 import { Spinner } from "@nextui-org/react";
 import { useParams } from "next/navigation";
-import { VideosGridFiltered } from "./VideosGrids";
+import { useTranslations } from "next-intl";
+
 import { videosData } from "@/src/config/videosData";
-import { title } from "../primitives";
 import { WithPermissionOverlayDocs } from "@/src/components/auth/withPermissionOverlay";
 import { UserSchema } from "@/src/lib/getUserPermission";
-import { useTranslations } from "next-intl";
+
+import { title } from "../primitives";
+
+import { VideosGridFiltered } from "./VideosGrids";
 
 /**
  * VideoPageContent component renders the content of the video page.
@@ -30,7 +33,7 @@ export const VideoPageContent = ({
 
   // Find the category data based on the category mapping
   const categoryData = videosData.category_labels.find(
-    (item) => item.mapping.toLowerCase() === category
+    (item) => item.mapping.toLowerCase() === category,
   );
 
   // Extract permission, name mapping, and category key from the category data
@@ -42,11 +45,7 @@ export const VideoPageContent = ({
   if (!category) {
     return (
       <div className="flex flex-col items-center justify-center pt-16">
-        <Spinner
-          size="lg"
-          color="primary"
-          label={t("videoPage.loading")}
-        />
+        <Spinner color="primary" label={t("videoPage.loading")} size="lg" />
       </div>
     );
   }
@@ -54,7 +53,8 @@ export const VideoPageContent = ({
   return (
     <WithPermissionOverlayDocs
       email={session.user.email}
-      permission={permission as keyof UserSchema}>
+      permission={permission as keyof UserSchema}
+    >
       <div>
         {/* Render the page title and subtitle */}
         <h1 className="grid grid-cols-1 gap-2">

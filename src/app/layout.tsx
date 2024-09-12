@@ -58,33 +58,31 @@ export default async function RootLayout({ children }: Props) {
   unstable_setRequestLocale(locale);
 
   return (
-    <html
-      suppressHydrationWarning
-      lang={locale}
-      nonce={nonce || undefined}>
+    <html suppressHydrationWarning lang={locale} nonce={nonce || undefined}>
       <head nonce={nonce || undefined} />
       <body
         className={clsx(
           "min-h-max bg-background font-sans antialiased",
           fontSans.variable,
-          fontMono.variable
+          fontMono.variable,
         )}
-        nonce={nonce || undefined}>
+        nonce={nonce || undefined}
+      >
         <Providers
           nonce={nonce || undefined}
-          themeProps={{ attribute: "class", defaultTheme: "dark" }}>
+          themeProps={{ attribute: "class", defaultTheme: "dark" }}
+        >
           <NextIntlClientProvider messages={messages}>
             <div
               className="relative flex flex-col h-screen"
-              nonce={nonce || undefined}>
-              <Navbar
-                nonce={nonce || undefined}
-                session={session}
-              />
+              nonce={nonce || undefined}
+            >
+              <Navbar nonce={nonce || undefined} session={session} />
 
               <main
                 className="container mx-auto max-w-full pt-24 px-6 flex-grow"
-                nonce={nonce || undefined}>
+                nonce={nonce || undefined}
+              >
                 {children}
               </main>
 

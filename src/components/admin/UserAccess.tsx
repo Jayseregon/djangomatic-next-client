@@ -30,17 +30,14 @@ const AdminTabs = (): JSX.Element => {
             tab: "max-w-fit px-0 h-12 mx-auto",
             tabContent: "text-2xl font-bold mb-4",
           }}
-          variant="underlined">
+          variant="underlined"
+        >
           {/* User Permissions Tab */}
-          <Tab
-            key="perms"
-            title="User Permissions">
+          <Tab key="perms" title="User Permissions">
             <UserTable />
           </Tab>
           {/* Azure Blobs Storage Tab */}
-          <Tab
-            key="blobs"
-            title="Azure Blobs Storage">
+          <Tab key="blobs" title="Azure Blobs Storage">
             <BlobStorage />
           </Tab>
           {/* Uncomment the following tab to include Videos */}
@@ -72,6 +69,7 @@ export const UserAccessAdmin = ({ email }: { email: string }): JSX.Element => {
     async function fetchData() {
       try {
         const data = await fetchUser(email);
+
         setUser(data);
       } catch (error) {
         console.error("Failed to fetch user:", error);

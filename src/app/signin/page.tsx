@@ -51,11 +51,13 @@ export default async function SignInPage(): Promise<JSX.Element> {
               } catch (error) {
                 throw error;
               }
-            }}>
+            }}
+          >
             <Button
               className="bg-gradient-to-tr from-[#b249f8] to-[#01cfea] text-white shadow-lg"
               radius="full"
-              type="submit">
+              type="submit"
+            >
               <span>Sign in with {provider.name}</span>
             </Button>
           </form>

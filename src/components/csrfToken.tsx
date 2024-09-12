@@ -19,6 +19,7 @@ export const CsrfTokenPage = (): JSX.Element => {
      */
     const fetchCsrfToken = async () => {
       const token = await getMiddlewareCsrfToken();
+
       setCsrfToken(token);
     };
 

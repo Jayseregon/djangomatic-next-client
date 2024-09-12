@@ -23,16 +23,14 @@ function SaasPageContent({ session }: { session: any }) {
   return (
     <WithPermissionOverlay
       email={session.user.email}
-      permission="canAccessAppsTdsAdmin">
+      permission="canAccessAppsTdsAdmin"
+    >
       <div>
         <h1 className={title()}>{t("title")}</h1>
         <h2 className={subtitle({ class: "mt-4" })}>{t("subtitle")}</h2>
 
         <div className="py-3">
-          <Snippet
-            hideCopyButton
-            hideSymbol
-            variant="flat">
+          <Snippet hideCopyButton hideSymbol variant="flat">
             <span>{t("code")}</span>
           </Snippet>
         </div>
@@ -40,8 +38,8 @@ function SaasPageContent({ session }: { session: any }) {
         <div className="py-3" />
 
         <DatabaseSchemaTableSelector
-          nonce={nonce || undefined}
           appType="hld"
+          nonce={nonce || undefined}
           pattern="*"
         />
       </div>

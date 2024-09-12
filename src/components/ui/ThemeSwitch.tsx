@@ -52,7 +52,8 @@ export const ThemeSwitch = ({
         nonce={nonce}
         size="sm"
         variant={undefined}
-        onPress={toggleTheme}>
+        onPress={toggleTheme}
+      >
         {theme === "dark" ? <SunThemeIcon /> : <MoonThemeIcon />}
       </Button>
     </div>

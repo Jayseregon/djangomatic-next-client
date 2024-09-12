@@ -12,7 +12,7 @@ import { ironSessionOptions, IronSessionData } from "@/src/lib/session";
 export async function GetIronSessionData(): Promise<IronSessionData> {
   const ironSession = await getIronSession<IronSessionData>(
     cookies(),
-    ironSessionOptions
+    ironSessionOptions,
   );
 
   return ironSession;

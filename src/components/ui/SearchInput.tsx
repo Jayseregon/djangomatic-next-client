@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect } from "react";
 import { Input } from "@nextui-org/react";
+
 import { SearchIcon } from "@/components/icons";
 
 /**
@@ -77,10 +78,7 @@ export const SearchInput = ({
           type="search"
         />
       ) : (
-        <SearchIcon
-          className="cursor-pointer"
-          onClick={toggleSearch}
-        />
+        <SearchIcon className="cursor-pointer" onClick={toggleSearch} />
       )}
     </div>
   );

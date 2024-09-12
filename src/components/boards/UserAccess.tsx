@@ -1,7 +1,9 @@
 "use client";
 
 import { useEffect, useState } from "react";
+
 import { fetchUser, UserSchema } from "@/lib/getUserPermission";
+
 import { UnAuthorized } from "../auth/unAuthorized";
 
 /**
@@ -19,6 +21,7 @@ export const UserAccessBoards = ({ email }: { email: string }): JSX.Element => {
     async function fetchData() {
       try {
         const data = await fetchUser(email);
+
         setUser(data);
       } catch (error) {
         console.error("Failed to fetch user:", error);

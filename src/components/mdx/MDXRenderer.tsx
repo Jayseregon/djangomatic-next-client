@@ -49,9 +49,6 @@ export default function MDXContent({
   const Component = useMDXComponent(code);
 
   return (
-    <Component
-      components={{ ...sharedComponents, ...components }}
-      {...props}
-    />
+    <Component components={{ ...sharedComponents, ...components }} {...props} />
   );
 }

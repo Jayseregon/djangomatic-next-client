@@ -56,10 +56,7 @@ function HomeContent({ session }: { session: any }): JSX.Element {
       </div>
 
       <div className="mt-8">
-        <Snippet
-          hideCopyButton
-          hideSymbol
-          variant="flat">
+        <Snippet hideCopyButton hideSymbol variant="flat">
           <span>{t("code")}</span>
         </Snippet>
       </div>

@@ -36,6 +36,7 @@ export const WithPermissionOverlay = ({
     async function fetchData() {
       try {
         const data = await fetchUser(email);
+
         setUser(data);
       } catch (error) {
         console.error("Failed to fetch user:", error);
@@ -90,6 +91,7 @@ export const WithPermissionOverlayDocs = ({
     async function fetchData() {
       try {
         const data = await fetchUser(email);
+
         setUser(data);
       } catch (error) {
         console.error("Failed to fetch user:", error);

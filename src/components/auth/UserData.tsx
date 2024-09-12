@@ -10,10 +10,7 @@ import { Snippet } from "@nextui-org/snippet";
 export function UserData({ session }: { session: any }): JSX.Element {
   return (
     <div className="text-start">
-      <Snippet
-        hideCopyButton
-        hideSymbol
-        variant="flat">
+      <Snippet hideCopyButton hideSymbol variant="flat">
         <pre>{JSON.stringify(session, null, 2)}</pre>
       </Snippet>
     </div>

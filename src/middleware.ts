@@ -1,5 +1,7 @@
 import type { NextRequest } from "next/server";
+
 import { NextResponse } from "next/server";
+
 import { auth } from "@/auth";
 
 /**
@@ -33,6 +35,7 @@ function cspMiddleware(req: NextRequest): NextResponse {
 
   // Clone the request headers and set the nonce and CSP header
   const requestHeaders = new Headers(req.headers);
+
   requestHeaders.set("x-nonce", nonce);
   requestHeaders.set("Content-Security-Policy", cspHeader);
 

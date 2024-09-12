@@ -9,8 +9,9 @@ import { Accordion, AccordionItem } from "@nextui-org/react";
 import { siteConfig } from "@/config/site";
 import { saasData } from "@/config/saasData";
 import { docsData } from "@/config/docsData";
-import { BlobProps } from "../admin/BlobStorage";
 import { videosData } from "@/config/videosData";
+
+import { BlobProps } from "../admin/BlobStorage";
 
 // define the types for the Sidebar component
 interface SidebarProps {
@@ -78,14 +79,13 @@ const SidebarSection = ({
           </h3>
           <ul>
             {appCategory.data.map((item, index) => (
-              <li
-                key={`${index}-${item.label}`}
-                className="py-1">
+              <li key={`${index}-${item.label}`} className="py-1">
                 {/* Render the link for each item in the category */}
                 <Link
                   className={linkTagStyling(currentPath, item.href)}
                   href={item.href || "#"}
-                  nonce={nonce}>
+                  nonce={nonce}
+                >
                   {item.label}
                 </Link>
               </li>
@@ -126,8 +126,9 @@ const SidebarVideosSection = (): JSX.Element => {
    */
   const getCategories = (): Array<any> => {
     const categoriesInBlobs = blobs.map((blob) => blob.tags.categoryName);
+
     return category_labels.filter((category) =>
-      categoriesInBlobs.includes(category.key)
+      categoriesInBlobs.includes(category.key),
     );
   };
 
@@ -141,9 +142,10 @@ const SidebarVideosSection = (): JSX.Element => {
               <Link
                 className={linkTagStyling(
                   currentPath,
-                  `/docs/videos/${category.mapping.toLowerCase()}`
+                  `/docs/videos/${category.mapping.toLowerCase()}`,
                 )}
-                href={`/docs/videos/${category.mapping.toLowerCase()}`}>
+                href={`/docs/videos/${category.mapping.toLowerCase()}`}
+              >
                 {category.mapping}
               </Link>
             </li>
@@ -166,7 +168,7 @@ export const SidebarSaas: React.FC<SidebarProps> = ({ nonce }) => {
   const t = useTranslations("SaasSidebar");
   const currentPath = usePathname();
   const saasPath = siteConfig.navItems.filter(
-    (item) => item.label === "Apps"
+    (item) => item.label === "Apps",
   )[0].href;
 
   /**
@@ -226,9 +228,7 @@ export const SidebarSaas: React.FC<SidebarProps> = ({ nonce }) => {
   return (
     <div className="flex flex-col gap-2">
       <div className="section">
-        <Accordion
-          defaultExpandedKeys={["Guide"]}
-          variant="bordered">
+        <Accordion defaultExpandedKeys={["Guide"]} variant="bordered">
           {/* Guide Section */}
           <AccordionItem
             key="Guide"
@@ -237,11 +237,13 @@ export const SidebarSaas: React.FC<SidebarProps> = ({ nonce }) => {
               <h2 className="text-xl font-black text-foreground indent-2 mt-3 mb-1">
                 Guide
               </h2>
-            }>
+            }
+          >
             <Link
               className={`${linkTagStyling(currentPath, saasPath)}`}
               href={saasPath}
-              nonce={nonce}>
+              nonce={nonce}
+            >
               {t("link_title")}
             </Link>
           </AccordionItem>
@@ -254,11 +256,9 @@ export const SidebarSaas: React.FC<SidebarProps> = ({ nonce }) => {
               <h2 className="text-xl font-black text-foreground indent-2 mt-3 mb-1">
                 TDS
               </h2>
-            }>
-            <SidebarSection
-              categories={appCategoriesTDS}
-              nonce={nonce}
-            />
+            }
+          >
+            <SidebarSection categories={appCategoriesTDS} nonce={nonce} />
           </AccordionItem>
 
           {/* COGECO Section */}
@@ -269,11 +269,9 @@ export const SidebarSaas: React.FC<SidebarProps> = ({ nonce }) => {
               <h2 className="text-xl font-black text-foreground indent-2 mt-3 mb-1">
                 COGECO
               </h2>
-            }>
-            <SidebarSection
-              categories={appCategoriesCOGECO}
-              nonce={nonce}
-            />
+            }
+          >
+            <SidebarSection categories={appCategoriesCOGECO} nonce={nonce} />
           </AccordionItem>
 
           {/* Vistabeam Section */}
@@ -284,11 +282,9 @@ export const SidebarSaas: React.FC<SidebarProps> = ({ nonce }) => {
               <h2 className="text-xl font-black text-foreground indent-2 mt-3 mb-1">
                 Vistabeam
               </h2>
-            }>
-            <SidebarSection
-              categories={appCategoriesVistabeam}
-              nonce={nonce}
-            />
+            }
+          >
+            <SidebarSection categories={appCategoriesVistabeam} nonce={nonce} />
           </AccordionItem>
 
           {/* Xplore Section */}
@@ -299,11 +295,9 @@ export const SidebarSaas: React.FC<SidebarProps> = ({ nonce }) => {
               <h2 className="text-xl font-black text-foreground indent-2 mt-3 mb-1">
                 Xplore
               </h2>
-            }>
-            <SidebarSection
-              categories={appCategoriesXplore}
-              nonce={nonce}
-            />
+            }
+          >
+            <SidebarSection categories={appCategoriesXplore} nonce={nonce} />
           </AccordionItem>
         </Accordion>
       </div>
@@ -323,7 +317,7 @@ export const SidebarDocs: React.FC<SidebarProps> = ({ nonce }) => {
   const t = useTranslations("SaasSidebar");
   const currentPath = usePathname();
   const docsPath = siteConfig.navItems.filter(
-    (item) => item.label === "Docs"
+    (item) => item.label === "Docs",
   )[0].href;
 
   /**
@@ -361,9 +355,7 @@ export const SidebarDocs: React.FC<SidebarProps> = ({ nonce }) => {
   return (
     <div className="flex flex-col gap-2 ">
       <div className="section">
-        <Accordion
-          defaultExpandedKeys={["Guide"]}
-          variant="bordered">
+        <Accordion defaultExpandedKeys={["Guide"]} variant="bordered">
           {/* Guide Section */}
           <AccordionItem
             key="Guide"
@@ -372,11 +364,13 @@ export const SidebarDocs: React.FC<SidebarProps> = ({ nonce }) => {
               <h2 className="text-xl font-black text-foreground indent-2 mt-3 mb-1">
                 Guide
               </h2>
-            }>
+            }
+          >
             <Link
               className={`${linkTagStyling(currentPath, docsPath)}`}
               href={docsPath}
-              nonce={nonce}>
+              nonce={nonce}
+            >
               {t("link_title")}
             </Link>
           </AccordionItem>
@@ -389,7 +383,8 @@ export const SidebarDocs: React.FC<SidebarProps> = ({ nonce }) => {
               <h2 className="text-xl font-black text-foreground indent-2 mt-3 mb-1">
                 TDS
               </h2>
-            }>
+            }
+          >
             <SidebarSection
               categories={getDocsCategories({ docDataTarget: "tds_docs" })}
               nonce={nonce}
@@ -404,7 +399,8 @@ export const SidebarDocs: React.FC<SidebarProps> = ({ nonce }) => {
               <h2 className="text-xl font-black text-foreground indent-2 mt-3 mb-1">
                 COGECO
               </h2>
-            }>
+            }
+          >
             <SidebarSection
               categories={getDocsCategories({ docDataTarget: "cogeco_docs" })}
               nonce={nonce}
@@ -419,7 +415,8 @@ export const SidebarDocs: React.FC<SidebarProps> = ({ nonce }) => {
               <h2 className="text-xl font-black text-foreground indent-2 mt-3 mb-1">
                 Vistabeam
               </h2>
-            }>
+            }
+          >
             <SidebarSection
               categories={getDocsCategories({
                 docDataTarget: "vistabeam_docs",
@@ -436,7 +433,8 @@ export const SidebarDocs: React.FC<SidebarProps> = ({ nonce }) => {
               <h2 className="text-xl font-black text-foreground indent-2 mt-3 mb-1">
                 Xplore
               </h2>
-            }>
+            }
+          >
             <SidebarSection
               categories={getDocsCategories({ docDataTarget: "xplore_docs" })}
               nonce={nonce}
@@ -451,7 +449,8 @@ export const SidebarDocs: React.FC<SidebarProps> = ({ nonce }) => {
               <h2 className="text-xl font-black text-foreground indent-2 mt-3 mb-1">
                 Videos
               </h2>
-            }>
+            }
+          >
             <SidebarVideosSection />
           </AccordionItem>
         </Accordion>

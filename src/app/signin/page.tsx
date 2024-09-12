@@ -7,7 +7,14 @@ import { title } from "@/components/primitives";
 import { signIn, auth, providerMap } from "@/auth";
 import { Logo } from "@/src/components/icons";
 
-export default async function SignInPage() {
+/**
+ * SignInPage component renders the sign-in page.
+ * It checks if the user is already authenticated and redirects to the home page if they are.
+ * If not authenticated, it displays the sign-in options for various providers.
+ *
+ * @returns {JSX.Element} The rendered SignInPage component.
+ */
+export default async function SignInPage(): Promise<JSX.Element> {
   // const nonce = headers().get("x-nonce");
   const session = await auth();
 
@@ -44,13 +51,11 @@ export default async function SignInPage() {
               } catch (error) {
                 throw error;
               }
-            }}
-          >
+            }}>
             <Button
               className="bg-gradient-to-tr from-[#b249f8] to-[#01cfea] text-white shadow-lg"
               radius="full"
-              type="submit"
-            >
+              type="submit">
               <span>Sign in with {provider.name}</span>
             </Button>
           </form>

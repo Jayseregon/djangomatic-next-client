@@ -4,7 +4,7 @@ import { LRUCache } from "lru-cache";
 import DOMPurify from "isomorphic-dompurify";
 import { jwtDecode } from "jwt-decode";
 
-import { TaskDataProps } from "@/components/serverDropdowns";
+import { TaskDataProps } from "@/components/saas/serverDropdowns";
 
 const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
 // const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;

@@ -3,7 +3,17 @@ import { useTranslations } from "next-intl";
 import { ExclamationTriangleIcon } from "@/src/components/icons";
 import { title, subtitle } from "@/components/primitives";
 
-export default function SaasPage() {
+/**
+ * SaasPage component renders a guide to help users navigate and utilize web apps effectively.
+ * It includes sections on getting started, permissions and access, maximizing benefits, and feedback contributions.
+ *
+ * Route Page Content and Purpose:
+ * This route page provides a comprehensive guide to help users navigate and utilize the web apps effectively,
+ * covering topics such as getting started, permissions and access, maximizing benefits, and providing feedback.
+ *
+ * @returns {JSX.Element} The rendered SaasPage component.
+ */
+export default function SaasPage(): JSX.Element {
   const t = useTranslations("Saas");
 
   return (
@@ -32,14 +42,14 @@ export default function SaasPage() {
           <ul className="list-disc pl-5">
             <li>
               <strong>Navigation:</strong> Use the sidebar to navigate between
-              different apps. Each section represente a specific client, or
-              project, and is further organized by platform type and tool, for
+              different apps. Each section represents a specific client or
+              project and is further organized by platform type and tool for
               easy access.
             </li>
             <li>
               <strong>Examples and Tutorials:</strong> Look for examples and
-              tutorials within each apps. When available examples and video
-              tutorials would present the tool in action.
+              tutorials within each app. When available, examples and video
+              tutorials will present the tool in action.
             </li>
           </ul>
         </section>

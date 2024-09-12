@@ -3,10 +3,10 @@ import type { Metadata } from "next";
 // import { unstable_setRequestLocale } from "next-intl/server";
 import { title } from "@/src/components/primitives";
 import { docsXplore } from "#site/content";
-import MDXContent from "@/src/components/MDXRenderer";
-import { UnAuthenticated } from "@/components/unAuthenticated";
+import MDXContent from "@/src/components/mdx/MDXRenderer";
+import { UnAuthenticated } from "@/components/auth/unAuthenticated";
 import { auth } from "@/auth";
-import { WithPermissionOverlayDocs } from "@/src/components/withPermissionOverlay";
+import { WithPermissionOverlayDocs } from "@/src/components/auth/withPermissionOverlay";
 
 interface MdPageProps {
   params: {

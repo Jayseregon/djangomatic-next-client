@@ -2,11 +2,11 @@ import { useTranslations } from "next-intl";
 import { Snippet } from "@nextui-org/snippet";
 import { headers } from "next/headers";
 
-import { UnAuthenticated } from "@/components/unAuthenticated";
+import { UnAuthenticated } from "@/components/auth/unAuthenticated";
 import { auth } from "@/auth";
-import { ServerSchemaAndTableSelector } from "@/components/serverDropdowns";
+import { DatabaseSchemaTableSelector } from "@/src/components/saas/serverSelectors";
 import { title, subtitle } from "@/components/primitives";
-import { WithPermissionOverlay } from "@/src/components/withPermissionOverlay";
+import { WithPermissionOverlay } from "@/src/components/auth/withPermissionOverlay";
 
 export default async function SaasPage() {
   const session = await auth();
@@ -23,21 +23,27 @@ function SaasPageContent({ session }: { session: any }) {
   return (
     <WithPermissionOverlay
       email={session.user.email}
-      permission="canAccessAppsTdsAdmin"
-    >
+      permission="canAccessAppsTdsAdmin">
       <div>
         <h1 className={title()}>{t("title")}</h1>
         <h2 className={subtitle({ class: "mt-4" })}>{t("subtitle")}</h2>
 
         <div className="py-3">
-          <Snippet hideCopyButton hideSymbol variant="flat">
+          <Snippet
+            hideCopyButton
+            hideSymbol
+            variant="flat">
             <span>{t("code")}</span>
           </Snippet>
         </div>
 
         <div className="py-3" />
 
-        <ServerSchemaAndTableSelector nonce={nonce || undefined} />
+        <DatabaseSchemaTableSelector
+          nonce={nonce || undefined}
+          appType="hld"
+          pattern="*"
+        />
       </div>
     </WithPermissionOverlay>
   );

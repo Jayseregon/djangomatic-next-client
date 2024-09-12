@@ -10,19 +10,13 @@ import {
 import { useTranslations } from "next-intl";
 import React, { useEffect, useState } from "react";
 import DOMPurify from "dompurify";
-
+import { availableDatabases } from "@/src/config/saasDatabases";
 import { cn } from "@/lib/utils";
-import {
-  fetchDbSchemas,
-  fetchSchemaTables,
-  startTask,
-  checkTaskStatus,
-  getServerTokens,
-} from "@/lib/dbRequests";
+import { fetchDbSchemas, fetchSchemaTables } from "@/lib/dbRequests";
 
-import { TxtPlaceholder } from "./pulsePlaceholder";
+import { TxtPlaceholder } from "../pulsePlaceholder";
 
-interface InputDataProps {
+export interface InputDataProps {
   dbChoice: string | null;
   schemaChoice: string | null;
   tableChoice: string | null;
@@ -35,45 +29,45 @@ export interface TaskDataProps {
   downloadUrl: string | null;
 }
 
-interface DatabaseDropdownProps {
+export interface DatabaseDropdownProps {
   appType?: string;
   dbClass: string;
   appTypeIncludeKey?: string | null;
   setInputData: React.Dispatch<React.SetStateAction<InputDataProps>>;
 }
 
-interface SchemasDropdownProps {
+export interface SchemasDropdownProps {
   inputData: InputDataProps;
   setInputData: React.Dispatch<React.SetStateAction<InputDataProps>>;
 }
 
-interface SchemaDropdownData {
+export interface SchemaDropdownData {
   value: string;
   label: string;
 }
 
-interface TablesDropdownProps {
+export interface TablesDropdownProps {
   inputData: InputDataProps;
   setInputData: React.Dispatch<React.SetStateAction<InputDataProps>>;
   pattern: string;
 }
 
-interface TableDropdownData {
+export interface TableDropdownData {
   value: string;
   label: string;
 }
 
-interface DisplayFieldChoiceProps {
+export interface DisplayFieldChoiceProps {
   fieldChoice: string | null;
   nonce?: string;
 }
 
-interface DownloadButtonProps {
+export interface DownloadButtonProps {
   downloadUrl: string | null;
   nonce?: string;
 }
 
-interface DropDownSelectorProps {
+export interface DropDownSelectorProps {
   items: SchemaDropdownData[] | TableDropdownData[];
   selectedKey: string;
   setSelectedKey: React.Dispatch<React.SetStateAction<string>>;
@@ -81,24 +75,11 @@ interface DropDownSelectorProps {
   handleSelect: (key: string) => void;
 }
 
-interface DefaultButtonSelectorProps {
+export interface DefaultButtonSelectorProps {
   label: string;
   isDisabled?: boolean;
   type?: "default" | "danger";
 }
-
-const availableDatabases: { [key: string]: { [key: string]: string } } = {
-  db_class_spokane_valley: {
-    postgres_spkv_main: "Spokane Valley - Main",
-    postgres_spkv_prod: "Spokane Valley - Prod",
-  },
-  db_class_spkv_snapshot: {
-    postgres_spkv_snap: "Spokane Valley - Snapshots",
-  },
-  db_class_vistabeam: {
-    postgres_oshkosh_main: "Vistabeam Oshkosh - Main",
-  },
-};
 
 // default button selector component
 export const DefaultButtonSelector = ({
@@ -116,8 +97,7 @@ export const DefaultButtonSelector = ({
       })}
       isDisabled={isDisabled ? true : false}
       radius="full"
-      variant="bordered"
-    >
+      variant="bordered">
       {t(label)}
     </Button>
   );
@@ -137,8 +117,7 @@ export const DropDownSelector = ({
         <Button
           className="bg-primary text-white min-w-96 h-10"
           radius="full"
-          variant="solid"
-        >
+          variant="solid">
           {selectedLabel}
         </Button>
       </DropdownTrigger>
@@ -153,13 +132,11 @@ export const DropDownSelector = ({
           const selected = Array.from(keys)[0] as string;
 
           setSelectedKey(selected);
-        }}
-      >
+        }}>
         {(item) => (
           <DropdownItem
             key={item.value}
-            onClick={() => handleSelect(item.value)}
-          >
+            onClick={() => handleSelect(item.value)}>
             {item.label}
           </DropdownItem>
         )}
@@ -178,7 +155,7 @@ export const DatabaseDropdown = ({
   const t = useTranslations("ServerDropdowns");
 
   const [options, setOptions] = useState<{ value: string; label: string }[]>(
-    [],
+    []
   );
   const [selectedKey, setSelectedKey] = useState<string>("select_database");
   const [selectedLabel, setSelectedLabel] = useState<string>(t("dbMenu_label"));
@@ -263,7 +240,7 @@ export const SchemasDropdown = ({
   const [dbSchemas, setDbSchemas] = useState<SchemaDropdownData[] | null>(null);
   const [selectedKey, setSelectedKey] = useState<string>("select_schema");
   const [selectedLabel, setSelectedLabel] = useState<string>(
-    t("schMenu_label"),
+    t("schMenu_label")
   );
 
   useEffect(() => {
@@ -333,7 +310,7 @@ export const TablesDropdown = ({
   const [schTables, setSchTables] = useState<TableDropdownData[] | null>(null);
   const [selectedKey, setSelectedKey] = useState<string>("select_table");
   const [selectedLabel, setSelectedLabel] = useState<string>(
-    t("tblMenu_label"),
+    t("tblMenu_label")
   );
 
   useEffect(() => {
@@ -347,7 +324,7 @@ export const TablesDropdown = ({
         // Sort the tables array before setting it
         const sortedTables = tables.sort(
           (a: TableDropdownData, b: TableDropdownData) =>
-            a.label.localeCompare(b.label),
+            a.label.localeCompare(b.label)
         );
 
         setSchTables(sortedTables);
@@ -409,15 +386,13 @@ export const DisplayFieldChoice = ({
       {fieldChoice ? (
         <div
           className="border-2 border-primary rounded-3xl min-w-96 h-10 flex items-center justify-center"
-          nonce={nonce}
-        >
+          nonce={nonce}>
           {fieldChoice}
         </div>
       ) : (
         <div
           className="border-2 border-primary rounded-3xl p-2 max-w-96 h-10"
-          nonce={nonce}
-        >
+          nonce={nonce}>
           <TxtPlaceholder nonce={nonce} />
         </div>
       )}
@@ -446,8 +421,7 @@ export const DownloadButton = ({ downloadUrl, nonce }: DownloadButtonProps) => {
           nonce={nonce}
           radius="full"
           variant="solid"
-          onClick={handleDownload}
-        >
+          onClick={handleDownload}>
           Download
         </Button>
       ) : (
@@ -485,123 +459,6 @@ export const DisplayFieldChoiceHtml = ({
           <TxtPlaceholder nonce={nonce} />
         </div>
       )}
-    </div>
-  );
-};
-
-// Component for selecting a database, schema, and table
-export const ServerSchemaAndTableSelector = ({ nonce }: { nonce?: string }) => {
-  // export const ServerSchemaAndTableSelector = () => {
-  const [inputData, setInputData] = useState<InputDataProps>({
-    dbChoice: null,
-    schemaChoice: null,
-    tableChoice: null,
-  });
-  const [taskData, setTaskData] = useState<TaskDataProps>({
-    taskId: null,
-    taskStatus: null,
-    taskResult: null,
-    downloadUrl: null,
-  });
-
-  const handleTask = async () => {
-    if (inputData.dbChoice && inputData.schemaChoice) {
-      const task_id = await startTask({
-        db_choice: inputData.dbChoice,
-        schema_choice: inputData.schemaChoice,
-      });
-
-      setTaskData((prevTaskData: TaskDataProps) => ({
-        ...prevTaskData,
-        taskId: task_id,
-      }));
-    }
-  };
-
-  useEffect(() => {
-    if (taskData.taskId) {
-      checkTaskStatus({
-        task_id: taskData.taskId,
-        waitTime: 1000,
-        setTaskData: setTaskData,
-        accessDownload: true,
-      });
-    }
-  }, [taskData.taskId]);
-
-  return (
-    <div>
-      <div className="grid grid-cols-2 gap-8">
-        <div className="grid grid-rows-3 gap-3">
-          <DatabaseDropdown
-            // appType="hld"
-            dbClass="db_class_spokane_valley"
-            setInputData={setInputData}
-          />
-          <SchemasDropdown inputData={inputData} setInputData={setInputData} />
-          <TablesDropdown
-            inputData={inputData}
-            pattern="*"
-            setInputData={setInputData}
-          />
-        </div>
-        <div className="grid grid-rows-3 gap-3">
-          <DisplayFieldChoice fieldChoice={inputData.dbChoice} />
-          <DisplayFieldChoice fieldChoice={inputData.schemaChoice} />
-          <DisplayFieldChoice fieldChoice={inputData.tableChoice} />
-        </div>
-      </div>
-
-      <Button
-        className="bg-primary text-white min-w-96 h-10 my-3"
-        radius="full"
-        variant="solid"
-        onClick={handleTask}
-      >
-        Start Task
-      </Button>
-
-      <div className="grid grid-cols-2 gap-8">
-        <div className="grid grid-rows-3 gap-3">
-          <DisplayFieldChoice fieldChoice="Task Status" />
-          <DisplayFieldChoice fieldChoice="Task Result" />
-          <DisplayFieldChoice fieldChoice="Download Url" />
-        </div>
-        <div className="grid grid-rows-3 gap-3">
-          <DisplayFieldChoice fieldChoice={taskData.taskStatus} />
-          <DisplayFieldChoiceHtml
-            fieldChoice={taskData.taskResult}
-            nonce={nonce}
-          />
-          <DownloadButton downloadUrl={taskData.downloadUrl} />
-        </div>
-      </div>
-    </div>
-  );
-};
-
-export const LoginButton = () => {
-  const [djAuthToken, setdjAuthToken] = useState<string | null>(null);
-  const [djRefreshToken, setRefreshToken] = useState<string | null>(null);
-
-  const handleLogin = async () => {
-    try {
-      const { djAuthToken, djRefreshToken } = await getServerTokens();
-
-      setdjAuthToken(djAuthToken);
-      setRefreshToken(djRefreshToken);
-    } catch (error) {
-      // console.error("Login failed:", error);
-      throw error;
-    }
-  };
-
-  return (
-    <div>
-      <button onClick={handleLogin}>Login</button>
-      <div />
-      <div>Auth Token: {djAuthToken}</div>
-      <div>Refresh Token: {djRefreshToken}</div>
     </div>
   );
 };

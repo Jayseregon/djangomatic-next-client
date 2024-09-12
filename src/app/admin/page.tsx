@@ -1,7 +1,7 @@
 import { title } from "@/components/primitives";
 // import { useTranslations } from "next-intl";
 import { auth } from "@/auth";
-import { UnAuthenticated } from "@/components/unAuthenticated";
+import { UnAuthenticated } from "@/components/auth/unAuthenticated";
 import { UserAccessAdmin } from "@/src/components/admin/UserAccess";
 
 export default async function AdminPage() {

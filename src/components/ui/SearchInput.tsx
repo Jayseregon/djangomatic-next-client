@@ -2,10 +2,21 @@
 
 import { useState, useRef, useEffect } from "react";
 import { Input } from "@nextui-org/react";
-
 import { SearchIcon } from "@/components/icons";
 
-export const SearchInput = ({ alwaysExpanded = false }) => {
+/**
+ * SearchInput component renders a search input field that can be toggled between expanded and collapsed states.
+ * It uses a search icon to toggle the input field and handles click events outside the input to collapse it.
+ *
+ * @param {Object} props - The props for the SearchInput component.
+ * @param {boolean} [props.alwaysExpanded=false] - If true, the search input is always expanded.
+ * @returns {JSX.Element} The rendered SearchInput component.
+ */
+export const SearchInput = ({
+  alwaysExpanded = false,
+}: {
+  alwaysExpanded?: boolean;
+}): JSX.Element => {
   // Search state
   const searchInputRef = useRef<HTMLInputElement>(null);
   const [isSearchExpanded, setIsSearchExpanded] = useState(false);
@@ -17,6 +28,9 @@ export const SearchInput = ({ alwaysExpanded = false }) => {
     }
   }, [alwaysExpanded]);
 
+  /**
+   * Toggles the search input field between expanded and collapsed states.
+   */
   const toggleSearch = () => {
     if (!alwaysExpanded) {
       setIsSearchExpanded(!isSearchExpanded);
@@ -25,10 +39,15 @@ export const SearchInput = ({ alwaysExpanded = false }) => {
 
   // Close search input when not focused
   useEffect(() => {
-    const handleClickOutside = (event: { target: any }) => {
+    /**
+     * Handles click events outside the search input to collapse it.
+     *
+     * @param {MouseEvent} event - The mouse event.
+     */
+    const handleClickOutside = (event: MouseEvent) => {
       if (
         searchInputRef.current &&
-        !searchInputRef.current.contains(event.target)
+        !searchInputRef.current.contains(event.target as Node)
       ) {
         setIsSearchExpanded(false);
       }
@@ -58,10 +77,11 @@ export const SearchInput = ({ alwaysExpanded = false }) => {
           type="search"
         />
       ) : (
-        <SearchIcon className="cursor-pointer" onClick={toggleSearch} />
+        <SearchIcon
+          className="cursor-pointer"
+          onClick={toggleSearch}
+        />
       )}
     </div>
   );
 };
-
-export default SearchInput;

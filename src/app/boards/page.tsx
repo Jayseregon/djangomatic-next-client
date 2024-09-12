@@ -2,7 +2,7 @@ import { useTranslations } from "next-intl";
 
 import { title, subtitle } from "@/components/primitives";
 import { auth } from "@/auth";
-import { UnAuthenticated } from "@/components/unAuthenticated";
+import { UnAuthenticated } from "@/components/auth/unAuthenticated";
 import { UserAccessBoards } from "@/src/components/boards/UserAccess";
 
 export default async function BoardsPage() {

@@ -4,13 +4,23 @@ import { useTranslations } from "next-intl";
 import { title, subtitle } from "@/components/primitives";
 import { ExclamationTriangleIcon } from "@/src/components/icons";
 
+/**
+ * DocsPage component renders a guide to help users navigate and utilize the documentation effectively.
+ * It includes sections on understanding the documentation, permissions and access, maximizing benefits, and feedback contributions.
+ *
+ * Route Page Content and Purpose:
+ * This route page provides a comprehensive guide to help users navigate and utilize the documentation effectively,
+ * covering topics such as understanding the documentation, permissions and access, maximizing benefits, and providing feedback.
+ *
+ * @returns {JSX.Element} The rendered DocsPage component.
+ */
 // export default function DocsPage({
 //   params: { locale },
 // }: {
 //   params: { locale: string };
 // }) {
 // unstable_setRequestLocale(locale);
-export default function DocsPage() {
+export default function DocsPage(): JSX.Element {
   const t = useTranslations("Docs");
 
   return (
@@ -45,9 +55,9 @@ export default function DocsPage() {
             </li>
             <li>
               <strong>Navigation:</strong> Use the sidebar to navigate between
-              different sections of the documentation. Each section represente a
-              specific client, or project, and is further organized by platform
-              type and tool, for easy access.
+              different sections of the documentation. Each section represents a
+              specific client or project and is further organized by platform
+              type and tool for easy access.
             </li>
             <li>
               <strong>Examples and Tutorials:</strong> Look for examples and

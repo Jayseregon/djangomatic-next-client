@@ -1,7 +1,7 @@
 import { headers } from "next/headers";
 
-import { SidebarSaas } from "@/src/components/sidebars";
-import SearchInput from "@/src/components/SearchInput";
+import { SearchInput } from "@/src/components/ui/SearchInput";
+import { SidebarSaas } from "@/src/components/ui/sidebars";
 
 export default function SaasLayout({
   children,

@@ -6,7 +6,7 @@
   },
   "UnAuthorized": {
     "access": "Vous n'avez pas les permissions requises pour accéder à cette page.",
-    "interact": "Vous n'avez pas les permissions requises pour interagir avec cette application."
+    "interact": "Vous n'avez pas les permissions requises pour interagir avec cette page."
   },
   "LocaleSwitcher": {
     "label": "Changer de langue",
@@ -31,7 +31,11 @@
   },
   "Docs": {
     "title": "Docs",
-    "subtitle": "Guide d'utilisation"
+    "subtitle": "Guide d'utilisation",
+    "videoPage": {
+      "subtitle": "Tutoriels vidéo",
+      "loading": "Chargement vidéos..."
+    }
   },
   "RnD": {
     "title": "R&D",

@@ -5,13 +5,19 @@ import { Tabs, Tab } from "@nextui-org/react";
 
 import { fetchUser, UserSchema } from "@/lib/getUserPermission";
 
-import { UnAuthorized } from "../unAuthorized";
+import { UnAuthorized } from "../auth/unAuthorized";
 
 import { UserTable } from "./UserTable";
 import { BlobStorage } from "./BlobStorage";
-import { VideosGrid } from "./VideosGrid";
+// import { VideosGrid } from "./VideosGrid";
 
-const AdminTabs = () => {
+/**
+ * AdminTabs component renders a set of tabs for administrative tasks.
+ * It includes tabs for user permissions and Azure blobs storage.
+ *
+ * @returns {JSX.Element} The rendered AdminTabs component.
+ */
+const AdminTabs = (): JSX.Element => {
   return (
     <div>
       <div className="flex w-full flex-col">
@@ -24,31 +30,48 @@ const AdminTabs = () => {
             tab: "max-w-fit px-0 h-12 mx-auto",
             tabContent: "text-2xl font-bold mb-4",
           }}
-          variant="underlined"
-        >
-          <Tab key="perms" title="User Permissions">
+          variant="underlined">
+          {/* User Permissions Tab */}
+          <Tab
+            key="perms"
+            title="User Permissions">
             <UserTable />
           </Tab>
-          <Tab key="blobs" title="Azure Blobs Storage">
+          {/* Azure Blobs Storage Tab */}
+          <Tab
+            key="blobs"
+            title="Azure Blobs Storage">
             <BlobStorage />
           </Tab>
-          <Tab key="videos" title="Videos">
+          {/* Uncomment the following tab to include Videos */}
+          {/* <Tab key="videos" title="Videos">
             <VideosGrid />
-          </Tab>
+          </Tab> */}
         </Tabs>
       </div>
     </div>
   );
 };
 
-export const UserAccessAdmin = ({ email }: { email: string }) => {
+/**
+ * UserAccessAdmin component checks if a user has admin access and renders the appropriate content.
+ * If the user is not an admin, it displays an unauthorized message.
+ * If the user is an admin, it renders the AdminTabs component.
+ *
+ * @param {Object} props - The props for the UserAccessAdmin component.
+ * @param {string} props.email - The email of the user to check permissions for.
+ * @returns {JSX.Element} The rendered UserAccessAdmin component.
+ */
+export const UserAccessAdmin = ({ email }: { email: string }): JSX.Element => {
   const [user, setUser] = useState<UserSchema | null>(null);
 
   useEffect(() => {
+    /**
+     * Fetches user data based on the provided email.
+     */
     async function fetchData() {
       try {
         const data = await fetchUser(email);
-
         setUser(data);
       } catch (error) {
         console.error("Failed to fetch user:", error);
@@ -57,11 +80,13 @@ export const UserAccessAdmin = ({ email }: { email: string }) => {
     fetchData();
   }, [email]);
 
+  // Check if the user is not an admin
   if (user && !user.isAdmin) {
     return <UnAuthorized />;
   } else {
     return (
       <div>
+        {/* Render the AdminTabs component if the user is an admin */}
         <AdminTabs />
       </div>
     );

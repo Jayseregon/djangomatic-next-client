@@ -1,9 +1,9 @@
 // import { useTranslations } from "next-intl";
 // import { headers } from "next/headers";
 // import { title, subtitle } from "@/components/primitives";
-import { UnAuthenticated } from "@/components/unAuthenticated";
+import { UnAuthenticated } from "@/components/auth/unAuthenticated";
 import { auth } from "@/auth";
-import { WithPermissionOverlay } from "@/src/components/withPermissionOverlay";
+import { WithPermissionOverlay } from "@/src/components/auth/withPermissionOverlay";
 import PathInDev from "@/src/components/path-in-dev";
 
 export default async function SaasPage() {

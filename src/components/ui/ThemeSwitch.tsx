@@ -9,10 +9,19 @@ interface ThemeSwitchProps {
   nonce?: string;
 }
 
-export const ThemeSwitch: React.FC<ThemeSwitchProps> = ({
+/**
+ * ThemeSwitch component toggles between light and dark themes.
+ * It uses the next-themes library to manage theme state and updates.
+ *
+ * @param {Object} props - The props for the ThemeSwitch component.
+ * @param {string} [props.className] - Optional class name for the button.
+ * @param {string} [props.nonce] - Optional nonce for the button.
+ * @returns {JSX.Element | null} The rendered ThemeSwitch component or null if not mounted.
+ */
+export const ThemeSwitch = ({
   className,
   nonce,
-}) => {
+}: ThemeSwitchProps): JSX.Element | null => {
   const { theme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
 
@@ -21,6 +30,9 @@ export const ThemeSwitch: React.FC<ThemeSwitchProps> = ({
     setMounted(true);
   }, []);
 
+  /**
+   * Toggles the theme between light and dark.
+   */
   const toggleTheme = () => {
     setTheme(theme === "dark" ? "light" : "dark");
   };
@@ -40,8 +52,7 @@ export const ThemeSwitch: React.FC<ThemeSwitchProps> = ({
         nonce={nonce}
         size="sm"
         variant={undefined}
-        onPress={toggleTheme}
-      >
+        onPress={toggleTheme}>
         {theme === "dark" ? <SunThemeIcon /> : <MoonThemeIcon />}
       </Button>
     </div>

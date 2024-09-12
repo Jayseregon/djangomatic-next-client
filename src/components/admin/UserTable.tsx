@@ -36,61 +36,21 @@ interface PermissionSwitchProps {
   handleToggle: (id: string, field: string, value: boolean) => void;
 }
 
-// const checkbox = tv({
-//   slots: {
-//     base: "hover:bg-foreground",
-//     content: "text-red-800",
-//   },
-//   variants: {
-//     isSelected: {
-//       true: {
-//         base: "bg-success hover:bg-success-300",
-//         content: "text-green-800",
-//       },
-//     },
-//     isFocusVisible: {
-//       true: {
-//         base: "outline-none ring-2 ring-focus ring-offset-2 ring-offset-background",
-//       },
-//     },
-//   },
-// });
-
-// export const PermissionSwitch = ({
-//   user,
-//   fieldName,
-//   borderType,
-//   handleToggle,
-// }: PermissionSwitchProps) => {
-//   const { isSelected, isFocusVisible, getBaseProps, getInputProps } =
-//     useCheckbox({
-//       isSelected: user[fieldName],
-//       onChange: (e) => handleToggle(user.id, fieldName, e.target.checked),
-//     });
-
-//   const styles = checkbox({ isSelected, isFocusVisible });
-
-//   return (
-//     <td
-//       {...getBaseProps()}
-//       className={`ps-1 cursor-pointer border ${borderType} border-foreground ${styles.base()}`}
-//       onClick={() => handleToggle(user.id, fieldName, !isSelected)}
-//     >
-//       <VisuallyHidden>
-//         <input {...getInputProps()} />
-//       </VisuallyHidden>
-//       <div className={`flex justify-center items-center ${styles.content()}`}>
-//         {isSelected ? <CheckIcon /> : <UncheckIcon />}
-//       </div>
-//     </td>
-//   );
-// };
-
+/**
+ * PermissionButton component renders a button to toggle user permissions.
+ * The button's color and icon change based on the user's current permission state.
+ *
+ * @param {Object} props - The props for the PermissionButton component.
+ * @param {User} props.user - The user object containing permission data.
+ * @param {string} props.fieldName - The name of the permission field to toggle.
+ * @param {Function} props.handleToggle - The function to handle the toggle action.
+ * @returns {JSX.Element} The rendered PermissionButton component.
+ */
 export const PermissionButton = ({
   user,
   fieldName,
   handleToggle,
-}: PermissionSwitchProps) => {
+}: PermissionSwitchProps): JSX.Element => {
   return (
     <Button
       isIconOnly
@@ -99,16 +59,25 @@ export const PermissionButton = ({
       radius="full"
       size="sm"
       variant="light"
-      onClick={() => handleToggle(user.id, fieldName, !user[fieldName])}
-    >
+      onClick={() => handleToggle(user.id, fieldName, !user[fieldName])}>
+      {/* Render the appropriate icon based on the user's permission state */}
       {user[fieldName] ? <CheckIcon size={24} /> : <UncheckIcon size={24} />}
     </Button>
   );
 };
 
+/**
+ * VerticalText component renders a given text vertically.
+ * Each character of the text is displayed in a separate line.
+ *
+ * @param {Object} props - The props for the VerticalText component.
+ * @param {string} props.text - The text to be displayed vertically.
+ * @returns {JSX.Element} The rendered VerticalText component.
+ */
 export const VerticalText = ({ text }: { text: string }) => {
   return (
     <div className="flex flex-col items-center justify-center h-full px-2">
+      {/* Split the text into individual characters and render each character in a separate line */}
       {text.split("").map((char, index) => (
         <div key={index}>{char}</div>
       ))}
@@ -116,322 +85,25 @@ export const VerticalText = ({ text }: { text: string }) => {
   );
 };
 
-// export const OldUserTable = () => {
-//   const [users, setUsers] = useState<User[]>([]);
-
-//   useEffect(() => {
-//     async function fetchData() {
-//       try {
-//         const response = await fetch("/api/prisma-users");
-//         const data = await response.json();
-
-//         setUsers(data);
-//       } catch (error) {
-//         console.error("Failed to fetch users:", error);
-//       }
-//     }
-//     fetchData();
-//   }, []);
-
-//   const handleToggle = async (id: string, field: string, value: boolean) => {
-//     try {
-//       const response = await fetch("/api/prisma-user-update", {
-//         method: "PATCH",
-//         headers: {
-//           "Content-Type": "application/json",
-//         },
-//         body: JSON.stringify({
-//           id,
-//           [field]: value,
-//         }),
-//       });
-
-//       if (response.ok) {
-//         setUsers((prevUsers) =>
-//           prevUsers.map((user) =>
-//             user.id === id ? { ...user, [field]: value } : user,
-//           ),
-//         );
-//       } else {
-//         console.error("Failed to update user");
-//       }
-//     } catch (error) {
-//       console.error("Failed to update user:", error);
-//     }
-//   };
-
-//   return (
-//     <div className="mt-10 w-full">
-//       <div className="overflow-x-auto">
-//         <table className="min-w-screen border border-foreground">
-//           <thead>
-//             <tr className="border border-foreground uppercase">
-//               <th rowSpan={3}>email</th>
-//               <th rowSpan={3}>username</th>
-//               <th rowSpan={3}>log</th>
-//               <th className="border border-x-4 border-foreground" rowSpan={3}>
-//                 <VerticalText text="admin" />
-//               </th>
-//               <th
-//                 className="px-2 border border-x-4 border-foreground"
-//                 colSpan={11}
-//               >
-//                 Apps
-//               </th>
-//               <th
-//                 className="px-2 border border-x-4 border-foreground"
-//                 colSpan={4}
-//                 rowSpan={2}
-//               >
-//                 docs
-//               </th>
-//               <th
-//                 className="px-2 border border-x-4 border-foreground"
-//                 colSpan={3}
-//                 rowSpan={2}
-//               >
-//                 videos
-//               </th>
-//               <th className="border border-r-4 border-foreground" rowSpan={3}>
-//                 <VerticalText text="boards" />
-//               </th>
-//               <th className="border border-r-4 border-foreground" rowSpan={3}>
-//                 <VerticalText text="R&amp;D" />
-//               </th>
-//             </tr>
-//             <tr className="uppercase">
-//               <th
-//                 className="px-2 border border-x-4 border-foreground"
-//                 colSpan={6}
-//               >
-//                 TDS
-//               </th>
-//               <th
-//                 className="px-2 border border-x-4 border-foreground"
-//                 colSpan={1}
-//               >
-//                 COGECO
-//               </th>
-//               <th
-//                 className="px-2 border border-x-4 border-foreground"
-//                 colSpan={3}
-//               >
-//                 Vistabeam
-//               </th>
-//               <th
-//                 className="px-2 border border-x-4 border-foreground"
-//                 colSpan={1}
-//               >
-//                 Xplore
-//               </th>
-//             </tr>
-//             <tr className="uppercase">
-//               <th className="border border-foreground">
-//                 <VerticalText text="HLD" />
-//               </th>
-//               <th className="border border-foreground">
-//                 <VerticalText text="LLD" />
-//               </th>
-//               <th className="border border-foreground">
-//                 <VerticalText text="ArcGIS" />
-//               </th>
-//               <th className="border border-foreground">
-//                 <VerticalText text="Ovr" />
-//               </th>
-//               <th className="border border-foreground">
-//                 <VerticalText text="Admin" />
-//               </th>
-//               <th className="border border-foreground">
-//                 <VerticalText text="Super" />
-//               </th>
-//               <th className="border border-x-4 border-foreground">
-//                 <VerticalText text="HLD" />
-//               </th>
-//               <th className="border border-foreground">
-//                 <VerticalText text="HLD" />
-//               </th>
-//               <th className="border border-foreground">
-//                 <VerticalText text="Ovr" />
-//               </th>
-//               <th className="border border-foreground">
-//                 <VerticalText text="Super" />
-//               </th>
-//               <th className="border border-x-4 border-foreground">
-//                 <VerticalText text="Admin" />
-//               </th>
-//               <th className="border border-foreground">
-//                 <VerticalText text="TDS" />
-//               </th>
-//               <th className="border border-foreground">
-//                 <VerticalText text="Cogeco" />
-//               </th>
-//               <th className="border border-foreground">
-//                 <VerticalText text="Vistabeam" />
-//               </th>
-//               <th className="border border-r-4 border-foreground">
-//                 <VerticalText text="Xplore" />
-//               </th>
-//               <th className="border border-foreground">
-//                 <VerticalText text="default" />
-//               </th>
-//               <th className="border border-foreground">
-//                 <VerticalText text="qgis" />
-//               </th>
-//               <th className="border border-foreground">
-//                 <VerticalText text="sttar" />
-//               </th>
-//             </tr>
-//           </thead>
-//           <tbody>
-//             {users.length > 0 ? (
-//               users.map((user) => (
-//                 <tr key={user.id} className="border border-foreground">
-//                   <td className="p-2">{user.email}</td>
-//                   <td className="p-2">{user.name}</td>
-//                   <td className="p-2">
-//                     {/* {new Date(user.createdAt).toLocaleDateString()} | {new Date(user.lastLogin).toLocaleString()} */}
-//                     {new Date(user.lastLogin).toLocaleDateString()}
-//                   </td>
-//                   <PermissionSwitch
-//                     borderType="border-x-4"
-//                     fieldName="isAdmin"
-//                     handleToggle={handleToggle}
-//                     user={user}
-//                   />
-//                   <PermissionSwitch
-//                     fieldName="canAccessAppsTdsHLD"
-//                     handleToggle={handleToggle}
-//                     user={user}
-//                   />
-//                   <PermissionSwitch
-//                     fieldName="canAccessAppsTdsLLD"
-//                     handleToggle={handleToggle}
-//                     user={user}
-//                   />
-//                   <PermissionSwitch
-//                     fieldName="canAccessAppsTdsArcGIS"
-//                     handleToggle={handleToggle}
-//                     user={user}
-//                   />
-//                   <PermissionSwitch
-//                     fieldName="canAccessAppsTdsOverride"
-//                     handleToggle={handleToggle}
-//                     user={user}
-//                   />
-//                   <PermissionSwitch
-//                     fieldName="canAccessAppsTdsAdmin"
-//                     handleToggle={handleToggle}
-//                     user={user}
-//                   />
-//                   <PermissionSwitch
-//                     fieldName="canAccessAppsTdsSuper"
-//                     handleToggle={handleToggle}
-//                     user={user}
-//                   />
-//                   <PermissionSwitch
-//                     borderType="border-x-4"
-//                     fieldName="canAccessAppsCogecoHLD"
-//                     handleToggle={handleToggle}
-//                     user={user}
-//                   />
-//                   <PermissionSwitch
-//                     fieldName="canAccessAppsVistabeamHLD"
-//                     handleToggle={handleToggle}
-//                     user={user}
-//                   />
-//                   <PermissionSwitch
-//                     fieldName="canAccessAppsVistabeamOverride"
-//                     handleToggle={handleToggle}
-//                     user={user}
-//                   />
-//                   <PermissionSwitch
-//                     fieldName="canAccessAppsVistabeamSuper"
-//                     handleToggle={handleToggle}
-//                     user={user}
-//                   />
-//                   <PermissionSwitch
-//                     borderType="border-x-4"
-//                     fieldName="canAccessAppsXploreAdmin"
-//                     handleToggle={handleToggle}
-//                     user={user}
-//                   />
-//                   <PermissionSwitch
-//                     fieldName="canAccessDocsTDS"
-//                     handleToggle={handleToggle}
-//                     user={user}
-//                   />
-//                   <PermissionSwitch
-//                     fieldName="canAccessDocsCogeco"
-//                     handleToggle={handleToggle}
-//                     user={user}
-//                   />
-//                   <PermissionSwitch
-//                     fieldName="canAccessDocsVistabeam"
-//                     handleToggle={handleToggle}
-//                     user={user}
-//                   />
-//                   <PermissionSwitch
-//                     borderType="border-r-4"
-//                     fieldName="canAccessDocsXplore"
-//                     handleToggle={handleToggle}
-//                     user={user}
-//                   />
-//                   <PermissionSwitch
-//                     fieldName="canAccessVideoDefault"
-//                     handleToggle={handleToggle}
-//                     user={user}
-//                   />
-//                   <PermissionSwitch
-//                     fieldName="canAccessVideoQGIS"
-//                     handleToggle={handleToggle}
-//                     user={user}
-//                   />
-//                   <PermissionSwitch
-//                     fieldName="canAccessVideoSttar"
-//                     handleToggle={handleToggle}
-//                     user={user}
-//                   />
-//                   <PermissionSwitch
-//                     borderType="border-x-4"
-//                     fieldName="canAccessBoards"
-//                     handleToggle={handleToggle}
-//                     user={user}
-//                   />
-//                   <PermissionSwitch
-//                     borderType="border-r-4"
-//                     fieldName="canAccessRnd"
-//                     handleToggle={handleToggle}
-//                     user={user}
-//                   />
-//                 </tr>
-//               ))
-//             ) : (
-//               <tr>
-//                 <td
-//                   className="py-2 px-4 border border-foreground text-center min-w-screen"
-//                   colSpan={25}
-//                 >
-//                   No entries found
-//                 </td>
-//               </tr>
-//             )}
-//           </tbody>
-//         </table>
-//       </div>
-//     </div>
-//   );
-// };
-
-export const UserTable = () => {
+/**
+ * UserTable component renders a table of users with various permission settings.
+ * It allows toggling of user permissions and displays different headers and bodies
+ * based on the selected menu.
+ *
+ * @returns {JSX.Element} The rendered UserTable component.
+ */
+export const UserTable = (): JSX.Element => {
   const [users, setUsers] = useState<User[]>([]);
   const [selectedMenu, setSelectedMenu] = useState<string>("default");
 
   useEffect(() => {
+    /**
+     * Fetches user data from the API and sets the users state.
+     */
     async function fetchData() {
       try {
         const response = await fetch("/api/prisma-users");
         const data = await response.json();
-
         setUsers(data);
       } catch (error) {
         console.error("Failed to fetch users:", error);
@@ -440,6 +112,13 @@ export const UserTable = () => {
     fetchData();
   }, []);
 
+  /**
+   * Handles toggling of user permissions.
+   *
+   * @param {string} id - The ID of the user.
+   * @param {string} field - The permission field to toggle.
+   * @param {boolean} value - The new value of the permission field.
+   */
   const handleToggle = async (id: string, field: string, value: boolean) => {
     try {
       const response = await fetch("/api/prisma-user-update", {
@@ -456,8 +135,8 @@ export const UserTable = () => {
       if (response.ok) {
         setUsers((prevUsers) =>
           prevUsers.map((user) =>
-            user.id === id ? { ...user, [field]: value } : user,
-          ),
+            user.id === id ? { ...user, [field]: value } : user
+          )
         );
       } else {
         console.error("Failed to update user");
@@ -467,7 +146,12 @@ export const UserTable = () => {
     }
   };
 
-  const topContent = () => {
+  /**
+   * Renders the top content with radio groups for selecting the menu.
+   *
+   * @returns {JSX.Element} The rendered top content.
+   */
+  const topContent = (): JSX.Element => {
     return (
       <div className="flex inline-block uppercase text-center gap-4 divide-x divide-zinc-300 dark:divide-zinc-700">
         <RadioGroup
@@ -475,8 +159,7 @@ export const UserTable = () => {
           label="Default permissions"
           orientation="horizontal"
           value={selectedMenu}
-          onValueChange={setSelectedMenu}
-        >
+          onValueChange={setSelectedMenu}>
           <Radio value="default">Default</Radio>
           <Radio value="docs">Docs</Radio>
           <Radio value="videos">Videos</Radio>
@@ -487,8 +170,7 @@ export const UserTable = () => {
           label="Apps permissions"
           orientation="horizontal"
           value={selectedMenu}
-          onValueChange={setSelectedMenu}
-        >
+          onValueChange={setSelectedMenu}>
           <Radio value="apps-tds">TDS</Radio>
           <Radio value="apps-cogeco">COGECO</Radio>
           <Radio value="apps-vistabeam">Vistabeam</Radio>
@@ -498,16 +180,27 @@ export const UserTable = () => {
     );
   };
 
-  const defaultHeader = () => {
+  /**
+   * Renders the default table header.
+   *
+   * @returns {JSX.Element} The rendered default table header.
+   */
+  const defaultHeader = (): JSX.Element => {
     return (
       <TableHeader>
-        <TableColumn key="email" className="w-56">
+        <TableColumn
+          key="email"
+          className="w-56">
           email
         </TableColumn>
-        <TableColumn key="username" className="w-56">
+        <TableColumn
+          key="username"
+          className="w-56">
           username
         </TableColumn>
-        <TableColumn key="log" className="w-56">
+        <TableColumn
+          key="log"
+          className="w-56">
           last login
         </TableColumn>
         <TableColumn key="admin">admin</TableColumn>
@@ -517,7 +210,14 @@ export const UserTable = () => {
     );
   };
 
-  const defaultBody = ({ user }: { user: User }) => {
+  /**
+   * Renders the default table body.
+   *
+   * @param {Object} params - The parameters for the default table body.
+   * @param {User} params.user - The user object.
+   * @returns {JSX.Element} The rendered default table body.
+   */
+  const defaultBody = ({ user }: { user: User }): JSX.Element => {
     return (
       <TableRow key={user.id}>
         <TableCell>{user.email}</TableCell>
@@ -548,13 +248,22 @@ export const UserTable = () => {
     );
   };
 
-  const docsHeader = () => {
+  /**
+   * Renders the docs table header.
+   *
+   * @returns {JSX.Element} The rendered docs table header.
+   */
+  const docsHeader = (): JSX.Element => {
     return (
       <TableHeader>
-        <TableColumn key="email" className="w-56">
+        <TableColumn
+          key="email"
+          className="w-56">
           email
         </TableColumn>
-        <TableColumn key="username" className="w-56">
+        <TableColumn
+          key="username"
+          className="w-56">
           username
         </TableColumn>
         <TableColumn key="docs1">tds</TableColumn>
@@ -565,7 +274,14 @@ export const UserTable = () => {
     );
   };
 
-  const docsBody = ({ user }: { user: User }) => {
+  /**
+   * Renders the docs table body.
+   *
+   * @param {Object} params - The parameters for the docs table body.
+   * @param {User} params.user - The user object.
+   * @returns {JSX.Element} The rendered docs table body.
+   */
+  const docsBody = ({ user }: { user: User }): JSX.Element => {
     return (
       <TableRow key={user.id}>
         <TableCell>{user.email}</TableCell>
@@ -602,13 +318,22 @@ export const UserTable = () => {
     );
   };
 
-  const videosHeader = () => {
+  /**
+   * Renders the videos table header.
+   *
+   * @returns {JSX.Element} The rendered videos table header.
+   */
+  const videosHeader = (): JSX.Element => {
     return (
       <TableHeader>
-        <TableColumn key="email" className="w-56">
+        <TableColumn
+          key="email"
+          className="w-56">
           email
         </TableColumn>
-        <TableColumn key="username" className="w-56">
+        <TableColumn
+          key="username"
+          className="w-56">
           username
         </TableColumn>
         <TableColumn key="videos1">default</TableColumn>
@@ -618,7 +343,14 @@ export const UserTable = () => {
     );
   };
 
-  const videosBody = ({ user }: { user: User }) => {
+  /**
+   * Renders the videos table body.
+   *
+   * @param {Object} params - The parameters for the videos table body.
+   * @param {User} params.user - The user object.
+   * @returns {JSX.Element} The rendered videos table body.
+   */
+  const videosBody = ({ user }: { user: User }): JSX.Element => {
     return (
       <TableRow key={user.id}>
         <TableCell>{user.email}</TableCell>
@@ -648,13 +380,22 @@ export const UserTable = () => {
     );
   };
 
-  const appsTdsHeader = () => {
+  /**
+   * Renders the apps TDS table header.
+   *
+   * @returns {JSX.Element} The rendered apps TDS table header.
+   */
+  const appsTdsHeader = (): JSX.Element => {
     return (
       <TableHeader>
-        <TableColumn key="email" className="w-56">
+        <TableColumn
+          key="email"
+          className="w-56">
           email
         </TableColumn>
-        <TableColumn key="username" className="w-56">
+        <TableColumn
+          key="username"
+          className="w-56">
           username
         </TableColumn>
         <TableColumn key="tds1">hld</TableColumn>
@@ -667,7 +408,14 @@ export const UserTable = () => {
     );
   };
 
-  const appsTdsBody = ({ user }: { user: User }) => {
+  /**
+   * Renders the apps TDS table body.
+   *
+   * @param {Object} params - The parameters for the apps TDS table body.
+   * @param {User} params.user - The user object.
+   * @returns {JSX.Element} The rendered apps TDS table body.
+   */
+  const appsTdsBody = ({ user }: { user: User }): JSX.Element => {
     return (
       <TableRow key={user.id}>
         <TableCell>{user.email}</TableCell>
@@ -718,13 +466,22 @@ export const UserTable = () => {
     );
   };
 
-  const appsCogecoHeader = () => {
+  /**
+   * Renders the apps COGECO table header.
+   *
+   * @returns {JSX.Element} The rendered apps COGECO table header.
+   */
+  const appsCogecoHeader = (): JSX.Element => {
     return (
       <TableHeader>
-        <TableColumn key="email" className="w-56">
+        <TableColumn
+          key="email"
+          className="w-56">
           email
         </TableColumn>
-        <TableColumn key="username" className="w-56">
+        <TableColumn
+          key="username"
+          className="w-56">
           username
         </TableColumn>
         <TableColumn key="cog1">hld</TableColumn>
@@ -732,7 +489,14 @@ export const UserTable = () => {
     );
   };
 
-  const appsCogecoBody = ({ user }: { user: User }) => {
+  /**
+   * Renders the apps COGECO table body.
+   *
+   * @param {Object} params - The parameters for the apps COGECO table body.
+   * @param {User} params.user - The user object.
+   * @returns {JSX.Element} The rendered apps COGECO table body.
+   */
+  const appsCogecoBody = ({ user }: { user: User }): JSX.Element => {
     return (
       <TableRow key={user.id}>
         <TableCell>{user.email}</TableCell>
@@ -748,13 +512,22 @@ export const UserTable = () => {
     );
   };
 
-  const appsVistabeamHeader = () => {
+  /**
+   * Renders the apps Vistabeam table header.
+   *
+   * @returns {JSX.Element} The rendered apps Vistabeam table header.
+   */
+  const appsVistabeamHeader = (): JSX.Element => {
     return (
       <TableHeader>
-        <TableColumn key="email" className="w-56">
+        <TableColumn
+          key="email"
+          className="w-56">
           email
         </TableColumn>
-        <TableColumn key="username" className="w-56">
+        <TableColumn
+          key="username"
+          className="w-56">
           username
         </TableColumn>
         <TableColumn key="vista1">hld</TableColumn>
@@ -764,7 +537,14 @@ export const UserTable = () => {
     );
   };
 
-  const appsVistabeamBody = ({ user }: { user: User }) => {
+  /**
+   * Renders the apps Vistabeam table body.
+   *
+   * @param {Object} params - The parameters for the apps Vistabeam table body.
+   * @param {User} params.user - The user object.
+   * @returns {JSX.Element} The rendered apps Vistabeam table body.
+   */
+  const appsVistabeamBody = ({ user }: { user: User }): JSX.Element => {
     return (
       <TableRow key={user.id}>
         <TableCell>{user.email}</TableCell>
@@ -794,13 +574,22 @@ export const UserTable = () => {
     );
   };
 
-  const appsXploreHeader = () => {
+  /**
+   * Renders the apps Xplore table header.
+   *
+   * @returns {JSX.Element} The rendered apps Xplore table header.
+   */
+  const appsXploreHeader = (): JSX.Element => {
     return (
       <TableHeader>
-        <TableColumn key="email" className="w-56">
+        <TableColumn
+          key="email"
+          className="w-56">
           email
         </TableColumn>
-        <TableColumn key="username" className="w-56">
+        <TableColumn
+          key="username"
+          className="w-56">
           username
         </TableColumn>
         <TableColumn key="xplore1">admin</TableColumn>
@@ -808,7 +597,14 @@ export const UserTable = () => {
     );
   };
 
-  const appsXploreBody = ({ user }: { user: User }) => {
+  /**
+   * Renders the apps Xplore table body.
+   *
+   * @param {Object} params - The parameters for the apps Xplore table body.
+   * @param {User} params.user - The user object.
+   * @returns {JSX.Element} The rendered apps Xplore table body.
+   */
+  const appsXploreBody = ({ user }: { user: User }): JSX.Element => {
     return (
       <TableRow key={user.id}>
         <TableCell>{user.email}</TableCell>
@@ -837,8 +633,8 @@ export const UserTable = () => {
           }}
           color="primary"
           selectionMode="single"
-          topContent={topContent()}
-        >
+          topContent={topContent()}>
+          {/* Render the appropriate table header based on the selected menu */}
           {selectedMenu === "default"
             ? defaultHeader()
             : selectedMenu === "docs"
@@ -852,8 +648,11 @@ export const UserTable = () => {
                     : selectedMenu === "apps-vistabeam"
                       ? appsVistabeamHeader()
                       : appsXploreHeader()}
-          <TableBody emptyContent="No entries found" items={users}>
+          <TableBody
+            emptyContent="No entries found"
+            items={users}>
             {(user) =>
+              // Render the appropriate table body based on the selected menu
               selectedMenu === "default"
                 ? defaultBody({ user })
                 : selectedMenu === "docs"

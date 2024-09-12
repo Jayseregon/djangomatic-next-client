@@ -20,7 +20,7 @@ import { useTranslations } from "next-intl";
 import { usePathname } from "next/navigation";
 
 import { siteConfig } from "@/config/site";
-import { ThemeSwitch } from "@/components/theme-switch";
+import { ThemeSwitch } from "@/components/ui/ThemeSwitch";
 import { Logo } from "@/components/icons";
 
 import { SignOut } from "./sign-in";
@@ -32,7 +32,16 @@ interface NavbarProps {
   session?: any;
 }
 
-export const Navbar = ({ nonce, session }: NavbarProps) => {
+/**
+ * Navbar component renders the navigation bar with various items and user profile options.
+ * It includes a brand logo, navigation links, theme switcher, locale switcher, and user profile dropdown.
+ *
+ * @param {Object} props - The props for the Navbar component.
+ * @param {string} [props.nonce] - Optional nonce for the component.
+ * @param {any} [props.session] - Optional session object containing user information.
+ * @returns {JSX.Element | null} The rendered Navbar component or null if the user is on the signin page.
+ */
+export const Navbar = ({ nonce, session }: NavbarProps): JSX.Element | null => {
   // Navbar state
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const t = useTranslations("UserProfile");
@@ -51,16 +60,17 @@ export const Navbar = ({ nonce, session }: NavbarProps) => {
       maxWidth="2xl"
       nonce={nonce}
       position="sticky"
-      onMenuOpenChange={setIsMenuOpen}
-    >
+      onMenuOpenChange={setIsMenuOpen}>
       <NavbarContent nonce={nonce}>
-        <NavbarBrand as="li" className="gap-3 max-w-fit" nonce={nonce}>
+        <NavbarBrand
+          as="li"
+          className="gap-3 max-w-fit"
+          nonce={nonce}>
           <Link
             className="flex justify-start items-center gap-4"
             color="foreground"
             href="/"
-            nonce={nonce}
-          >
+            nonce={nonce}>
             <Logo nonce={nonce} />
             <p className="font-bold text-inherit">{siteConfig.name}</p>
           </Link>
@@ -68,7 +78,9 @@ export const Navbar = ({ nonce, session }: NavbarProps) => {
       </NavbarContent>
 
       {/* navbar menu  */}
-      <NavbarContent justify="center" nonce={nonce}>
+      <NavbarContent
+        justify="center"
+        nonce={nonce}>
         {/* toggle menu */}
         <NavbarMenuToggle
           aria-label={isMenuOpen ? "Close Menu" : "Open Menu"}
@@ -79,13 +91,14 @@ export const Navbar = ({ nonce, session }: NavbarProps) => {
         {/* or list items menu */}
         <ul className="hidden md:flex items-start justify-start gap-16">
           {siteConfig.navItems.map((item, index) => (
-            <NavbarItem key={`${item}-${index}-navbar`} nonce={nonce}>
+            <NavbarItem
+              key={`${item}-${index}-navbar`}
+              nonce={nonce}>
               <Link
                 color="foreground"
                 href={item.href}
                 nonce={nonce}
-                underline="hover"
-              >
+                underline="hover">
                 {item.label}
               </Link>
             </NavbarItem>
@@ -94,7 +107,9 @@ export const Navbar = ({ nonce, session }: NavbarProps) => {
       </NavbarContent>
 
       {/* avatar menu with theme switch and search */}
-      <NavbarContent justify="end" nonce={nonce}>
+      <NavbarContent
+        justify="end"
+        nonce={nonce}>
         {/* <NavbarItem
           className="hidden md:flex"
           nonce={nonce}>
@@ -112,7 +127,9 @@ export const Navbar = ({ nonce, session }: NavbarProps) => {
           <LocaleSwitcher nonce={nonce} />
         </NavbarItem>
 
-        <Dropdown nonce={nonce} placement="bottom-end">
+        <Dropdown
+          nonce={nonce}
+          placement="bottom-end">
           <DropdownTrigger nonce={nonce}>
             <Avatar
               as="button"
@@ -131,14 +148,12 @@ export const Navbar = ({ nonce, session }: NavbarProps) => {
           <DropdownMenu
             aria-label="Profile Actions"
             nonce={nonce}
-            variant="flat"
-          >
+            variant="flat">
             <DropdownItem
               key="profile"
               className="h-14 gap-2"
               nonce={nonce}
-              textValue="Signed In profile name"
-            >
+              textValue="Signed In profile name">
               <p className="font-semibold">
                 {t("dItemSignedInTitle")}
                 {session?.user ? session?.user?.name : t("dItemUserName")}
@@ -147,15 +162,17 @@ export const Navbar = ({ nonce, session }: NavbarProps) => {
                 {session?.user ? session?.user?.email : t("dItemUserEmail")}
               </p>
             </DropdownItem>
-            <DropdownItem key="settings" nonce={nonce} textValue="My Settings">
+            <DropdownItem
+              key="settings"
+              nonce={nonce}
+              textValue="My Settings">
               {t("dItemSettings")}
             </DropdownItem>
             <DropdownItem
               key="logout"
               color="danger"
               nonce={nonce}
-              textValue="Log Out"
-            >
+              textValue="Log Out">
               <SignOut buttonName={t("dItemLogOut")} />
             </DropdownItem>
           </DropdownMenu>
@@ -167,7 +184,9 @@ export const Navbar = ({ nonce, session }: NavbarProps) => {
         {/* <SearchInput alwaysExpanded={true} /> */}
         <div className="mx-4 mt-2 flex flex-col gap-3">
           {siteConfig.navItems.map((item, index) => (
-            <NavbarMenuItem key={`${item}-${index}-dropdown`} nonce={nonce}>
+            <NavbarMenuItem
+              key={`${item}-${index}-dropdown`}
+              nonce={nonce}>
               <Link
                 className="w-full"
                 color="foreground"
@@ -176,8 +195,7 @@ export const Navbar = ({ nonce, session }: NavbarProps) => {
                 size="lg"
                 onPress={() => {
                   setIsMenuOpen((prev) => !prev);
-                }}
-              >
+                }}>
                 {item.label}
               </Link>
             </NavbarMenuItem>

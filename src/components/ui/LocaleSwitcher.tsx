@@ -16,20 +16,33 @@ export interface LocaleSwitcherProps {
   nonce?: string;
 }
 
-export default function LocaleSwitcher({ nonce }: LocaleSwitcherProps) {
+/**
+ * LocaleSwitcher component allows users to switch between different locales.
+ * It updates the user's preferred locale in local storage and cookies.
+ *
+ * @param {Object} props - The props for the LocaleSwitcher component.
+ * @param {string} [props.nonce] - Optional nonce for the component.
+ * @returns {JSX.Element} The rendered LocaleSwitcher component.
+ */
+export default function LocaleSwitcher({
+  nonce,
+}: LocaleSwitcherProps): JSX.Element {
   const t = useTranslations("LocaleSwitcher");
   const locale = useLocale();
 
   const [, startTransition] = useTransition();
 
+  /**
+   * Handles the locale change event.
+   *
+   * @param {string} locale - The selected locale.
+   */
   function onSelectChange(locale: string) {
     localStorage.setItem("preferredLocale", locale);
     document.cookie = `NEXT_LOCALE=${locale}; path=/; max-age=31536000; SameSite=Lax`;
 
     startTransition(() => {
-      startTransition(() => {
-        setUserLocale(locale as "en" | "fr");
-      });
+      setUserLocale(locale as "en" | "fr");
     });
   }
 
@@ -39,12 +52,10 @@ export default function LocaleSwitcher({ nonce }: LocaleSwitcherProps) {
         content: "p-0 border-small border-divider bg-background",
       }}
       nonce={nonce}
-      radius="sm"
-    >
+      radius="sm">
       <DropdownTrigger
         className="px-2 py-1 rounded-lg hover:bg-primary-100"
-        nonce={nonce}
-      >
+        nonce={nonce}>
         {t("localeFlag", { locale })}
       </DropdownTrigger>
       <DropdownMenu
@@ -65,15 +76,13 @@ export default function LocaleSwitcher({ nonce }: LocaleSwitcherProps) {
         nonce={nonce}
         selectedKeys={[locale]}
         selectionMode="single"
-        onAction={(key) => onSelectChange(key as string)}
-      >
+        onAction={(key) => onSelectChange(key as string)}>
         {locales.map((curLocale) => (
           <DropdownItem
             key={curLocale}
             className="h-13"
             nonce={nonce}
-            textValue={curLocale}
-          >
+            textValue={curLocale}>
             {t("locale", { locale: curLocale })}
           </DropdownItem>
         ))}

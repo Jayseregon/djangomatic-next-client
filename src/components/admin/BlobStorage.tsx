@@ -24,7 +24,7 @@ import {
 
 import { TrashIcon, GearIcon } from "../icons";
 
-interface BlobTagsProps {
+export interface BlobTagsProps {
   clientName: string;
   categoryName: string;
   uuid: string;
@@ -40,8 +40,11 @@ export interface BlobProps {
 
 /**
  * BlobStorage component for managing Azure Blob Storage uploads and displaying blob list.
+ * It allows users to upload files, view the list of uploaded blobs, and delete blobs.
+ *
+ * @returns {JSX.Element} The rendered BlobStorage component.
  */
-export const BlobStorage = () => {
+export const BlobStorage = (): JSX.Element => {
   const [file, setFile] = useState<File | null>(null);
   const [fileName, setFileName] = useState<string | null>(null);
   const [categoryName, setCategoryName] = useState<string>("");
@@ -96,7 +99,7 @@ export const BlobStorage = () => {
   useEffect(() => {
     if (uploadUUID) {
       const eventSource = new EventSource(
-        `/api/azure-blob/progress?uuid=${uploadUUID}`,
+        `/api/azure-blob/progress?uuid=${uploadUUID}`
       );
 
       eventSource.onmessage = (event) => {
@@ -194,22 +197,34 @@ export const BlobStorage = () => {
     }
   };
 
-  const loaddingContent = () => {
+  /**
+   * Render loading content.
+   *
+   * @returns {JSX.Element} The loading content.
+   */
+  const loadingContent = (): JSX.Element => {
     return (
-      <div className="flex flex-col items-center justify-center pt-16">
-        <Spinner color="primary" label="Loading..." />
+      <div className="flex flex-col items-center justify-center pt-24">
+        <Spinner
+          color="primary"
+          label="Loading..."
+        />
       </div>
     );
   };
 
-  const topContent = () => {
+  /**
+   * Render the top content for file upload and category/client selection.
+   *
+   * @returns {JSX.Element} The top content.
+   */
+  const topContent = (): JSX.Element => {
     return (
       <div className="pb-5">
         <div className="flex w-full inline-block py-1 rounded-3xl bg-transparent border-0 text-sm text-foreground ring-1 ring-inset ring-gray-300 dark:ring-gray-700">
           <label
             className="block w-40 py-1.5 bg-transparent border border-transparent border-r-slate-300 dark:border-r-slate-700 text-sm text-foreground text-center"
-            htmlFor="file-input"
-          >
+            htmlFor="file-input">
             <span>Select a file</span>
             <input
               aria-label="file-input"
@@ -233,13 +248,16 @@ export const BlobStorage = () => {
               aria-label="category-name"
               className="block min-w-52 rounded-3xl bg-background border-0 py-1.5 text-sm text-foreground shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-gray-700 focus:ring-2 focus:ring-inset focus:ring-foreground dark:focus:ring-foreground"
               value={categoryName}
-              onChange={(e) => setCategoryName(e.target.value)}
-            >
-              <option disabled value="">
+              onChange={(e) => setCategoryName(e.target.value)}>
+              <option
+                disabled
+                value="">
                 Select a category
               </option>
               {videosData.category_labels.map((category) => (
-                <option key={category.key} value={category.key}>
+                <option
+                  key={category.key}
+                  value={category.key}>
                   {category.label}
                 </option>
               ))}
@@ -249,13 +267,16 @@ export const BlobStorage = () => {
               aria-label="client-name"
               className="block min-w-52 rounded-3xl bg-background border-0 py-1.5 text-sm text-foreground shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-gray-700 focus:ring-2 focus:ring-inset focus:ring-foreground dark:focus:ring-foreground"
               value={clientName}
-              onChange={(e) => setClientName(e.target.value)}
-            >
-              <option disabled value="">
+              onChange={(e) => setClientName(e.target.value)}>
+              <option
+                disabled
+                value="">
                 Select a client
               </option>
               {videosData.client_labels.map((client) => (
-                <option key={client.key} value={client.key}>
+                <option
+                  key={client.key}
+                  value={client.key}>
                   {client.label}
                 </option>
               ))}
@@ -267,10 +288,13 @@ export const BlobStorage = () => {
             disabled={isUploading}
             isDisabled={isUploading}
             radius="full"
-            onClick={handleUpload}
-          >
+            onClick={handleUpload}>
             {isUploading ? (
-              <Spinner aria-label="upload-spinner" color="white" size="sm" />
+              <Spinner
+                aria-label="upload-spinner"
+                color="white"
+                size="sm"
+              />
             ) : (
               "Upload"
             )}
@@ -305,28 +329,41 @@ export const BlobStorage = () => {
           selectionMode="single"
           sortDescriptor={blobsList.sortDescriptor}
           topContent={topContent()}
-          onSortChange={blobsList.sort}
-        >
+          onSortChange={blobsList.sort}>
           <TableHeader>
-            <TableColumn key="name" allowsSorting>
+            <TableColumn
+              key="name"
+              allowsSorting>
               Name
             </TableColumn>
-            <TableColumn key="extension" allowsSorting>
+            <TableColumn
+              key="extension"
+              allowsSorting>
               Format
             </TableColumn>
-            <TableColumn key="dir" allowsSorting>
+            <TableColumn
+              key="dir"
+              allowsSorting>
               Azure Directory
             </TableColumn>
-            <TableColumn key="tags.categoryName" allowsSorting>
+            <TableColumn
+              key="tags.categoryName"
+              allowsSorting>
               Category Name
             </TableColumn>
-            <TableColumn key="tags.clientName" allowsSorting>
+            <TableColumn
+              key="tags.clientName"
+              allowsSorting>
               Client Name
             </TableColumn>
-            <TableColumn key="createdOn" allowsSorting>
+            <TableColumn
+              key="createdOn"
+              allowsSorting>
               Date Upload
             </TableColumn>
-            <TableColumn key="actions" className="ps-4">
+            <TableColumn
+              key="actions"
+              className="ps-4">
               <GearIcon />
             </TableColumn>
           </TableHeader>
@@ -334,11 +371,10 @@ export const BlobStorage = () => {
             emptyContent={"No blobs to display."}
             isLoading={blobsList.isLoading}
             items={blobsList.items}
-            loadingContent={loaddingContent()}
-          >
+            loadingContent={loadingContent()}>
             {(item) => {
               const [baseName, extension, dir] = extractAzureFileData(
-                item.name,
+                item.name
               );
 
               return (
@@ -358,8 +394,7 @@ export const BlobStorage = () => {
                       color="danger"
                       size="sm"
                       variant="bordered"
-                      onClick={() => handleDelete(item.name)}
-                    >
+                      onClick={() => handleDelete(item.name)}>
                       <TrashIcon size={13} />
                     </Button>
                   </TableCell>

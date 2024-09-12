@@ -5,7 +5,13 @@ import { Snippet } from "@nextui-org/snippet";
 
 import { title } from "@/components/primitives";
 
-export default function PathInDev() {
+/**
+ * PathInDev component displays a message indicating that the current page is under development.
+ * It extracts the app name from the current path and displays it in the message.
+ *
+ * @returns {JSX.Element} The rendered PathInDev component.
+ */
+export default function PathInDev(): JSX.Element {
   const currentPath = usePathname();
   const pathSegments = currentPath.split("/");
   const appName = pathSegments[pathSegments.length - 1]

@@ -4,16 +4,27 @@ import React from "react";
 
 import { ironSessionOptions, IronSessionData } from "@/src/lib/session";
 
-export async function GetIronSessionData() {
+/**
+ * GetIronSessionData function retrieves the Iron Session data using the provided session options.
+ *
+ * @returns {Promise<IronSessionData>} The Iron Session data.
+ */
+export async function GetIronSessionData(): Promise<IronSessionData> {
   const ironSession = await getIronSession<IronSessionData>(
     cookies(),
-    ironSessionOptions,
+    ironSessionOptions
   );
 
   return ironSession;
 }
 
-export async function RenderSessionData() {
+/**
+ * RenderSessionData component fetches and displays the Iron Session data.
+ * It retrieves the session data using GetIronSessionData and displays the auth and refresh tokens.
+ *
+ * @returns {JSX.Element} The rendered RenderSessionData component.
+ */
+export async function RenderSessionData(): Promise<JSX.Element> {
   const ironSession = await GetIronSessionData();
 
   return (

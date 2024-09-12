@@ -1,8 +1,8 @@
 import { headers } from "next/headers";
 import { unstable_setRequestLocale } from "next-intl/server";
 
-import { SidebarDocs } from "@/src/components/sidebars";
-import SearchInput from "@/src/components/SearchInput";
+import { SidebarDocs } from "@/src/components/ui/sidebars";
+import { SearchInput } from "@/src/components/ui/SearchInput";
 
 export default function DocsLayout({
   children,

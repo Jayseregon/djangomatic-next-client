@@ -4,16 +4,25 @@ import { unstable_setRequestLocale } from "next-intl/server";
 
 import { siteConfig } from "@/config/site";
 import { title, subtitle } from "@/components/primitives";
-import { UnAuthenticated } from "@/components/unAuthenticated";
+import { UnAuthenticated } from "@/components/auth/unAuthenticated";
 import { auth } from "@/auth";
-// import { ColorCard, ColorCardScale } from "@/components/ColorCard";
+import { DisplaySemanticColors } from "@/components/ColorCard";
 // import { UserData } from "@/src/components/UserData";
 
+/**
+ * RootPage component sets the request locale and renders the HomeContent component.
+ * It fetches the user session and passes it to the HomeContent component.
+ *
+ * @param {Object} props - The props for the RootPage component.
+ * @param {Object} props.params - The parameters for the RootPage component.
+ * @param {string} props.params.locale - The locale to be set for the request.
+ * @returns {JSX.Element} The rendered RootPage component.
+ */
 export default async function RootPage({
   params: { locale },
 }: {
   params: { locale: string };
-}) {
+}): Promise<JSX.Element> {
   const session = await auth();
 
   unstable_setRequestLocale(locale);
@@ -21,7 +30,16 @@ export default async function RootPage({
   return <HomeContent session={session} />;
 }
 
-function HomeContent({ session }: { session: any }) {
+/**
+ * HomeContent component renders the main content of the home page.
+ * It displays the site name, hero title, hero subtitle, a code snippet, and semantic colors.
+ * If the user is not authenticated, it displays the UnAuthenticated component.
+ *
+ * @param {Object} props - The props for the HomeContent component.
+ * @param {any} props.session - The session object containing user information.
+ * @returns {JSX.Element} The rendered HomeContent component.
+ */
+function HomeContent({ session }: { session: any }): JSX.Element {
   const t = useTranslations("HomePage");
 
   if (!session) return <UnAuthenticated />;
@@ -38,21 +56,17 @@ function HomeContent({ session }: { session: any }) {
       </div>
 
       <div className="mt-8">
-        <Snippet hideCopyButton hideSymbol variant="flat">
+        <Snippet
+          hideCopyButton
+          hideSymbol
+          variant="flat">
           <span>{t("code")}</span>
         </Snippet>
       </div>
 
       {/* <UserData session={session} /> */}
 
-      {/* <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-2">
-        <ColorCard />
-        <ColorCardScale target_color="primary" />
-        <ColorCardScale target_color="secondary" />
-        <ColorCardScale target_color="success" />
-        <ColorCardScale target_color="warning" />
-        <ColorCardScale target_color="danger" />
-      </div> */}
+      <DisplaySemanticColors />
     </section>
   );
 }

@@ -1,118 +1,90 @@
 "use client";
 
-import { Button } from "@nextui-org/react";
-import React, { useEffect, useState } from "react";
+import React from "react";
 
-import { startTask, checkTaskStatus } from "@/lib/dbRequests";
-
+import { useInputData } from "./inputDataProviders";
 import {
-  InputDataProps,
-  TaskDataProps,
   DatabaseDropdown,
   SchemasDropdown,
   TablesDropdown,
-  DisplayFieldChoice,
-  DisplayFieldChoiceHtml,
-  DownloadButton,
+  DisplayFieldGuideline,
 } from "./serverDropdowns";
 
 type AppType = "hld" | "lld" | "snap" | "admin" | "";
 
-interface DatabaseSchemaTableSelectorProps {
+interface DatabaseSchemaTable3SelectorProps {
   appType: AppType;
   pattern: string;
-  nonce: string | undefined;
+  dbClass: string;
 }
 
-// Component for selecting a database, schema, and table
-export const DatabaseSchemaTableSelector = ({
+interface DatabaseSchema2SelectorProps {
+  appType: AppType;
+  dbClass: string;
+}
+
+/**
+ * Component for selecting a database, schema, and table.
+ *
+ * @param {DatabaseSchemaTable3SelectorProps} props - The props for the component.
+ * @returns {JSX.Element} The rendered component.
+ */
+export const DatabaseSchemaTable3Selector = ({
   appType,
   pattern,
-  nonce,
-}: DatabaseSchemaTableSelectorProps) => {
-  const [inputData, setInputData] = useState<InputDataProps>({
-    dbChoice: null,
-    schemaChoice: null,
-    tableChoice: null,
-  });
-  const [taskData, setTaskData] = useState<TaskDataProps>({
-    taskId: null,
-    taskStatus: null,
-    taskResult: null,
-    downloadUrl: null,
-  });
-
-  const handleTask = async () => {
-    if (inputData.dbChoice && inputData.schemaChoice) {
-      const task_id = await startTask({
-        db_choice: inputData.dbChoice,
-        schema_choice: inputData.schemaChoice,
-      });
-
-      setTaskData((prevTaskData: TaskDataProps) => ({
-        ...prevTaskData,
-        taskId: task_id,
-      }));
-    }
-  };
-
-  useEffect(() => {
-    if (taskData.taskId) {
-      checkTaskStatus({
-        task_id: taskData.taskId,
-        waitTime: 1000,
-        setTaskData: setTaskData,
-        accessDownload: true,
-      });
-    }
-  }, [taskData.taskId]);
+  dbClass,
+}: DatabaseSchemaTable3SelectorProps): JSX.Element => {
+  const { inputData, setInputData } = useInputData();
 
   return (
-    <div>
-      <div className="grid grid-cols-2 gap-8">
-        <div className="grid grid-rows-3 gap-3">
-          <DatabaseDropdown
-            appType={appType}
-            dbClass="db_class_spokane_valley"
-            setInputData={setInputData}
-          />
-          <SchemasDropdown inputData={inputData} setInputData={setInputData} />
-          <TablesDropdown
-            inputData={inputData}
-            pattern={pattern}
-            setInputData={setInputData}
-          />
-        </div>
-        <div className="grid grid-rows-3 gap-3">
-          <DisplayFieldChoice fieldChoice={inputData.dbChoice} />
-          <DisplayFieldChoice fieldChoice={inputData.schemaChoice} />
-          <DisplayFieldChoice fieldChoice={inputData.tableChoice} />
-        </div>
+    <div className="grid grid-cols-2 gap-8 pt-3 pb-8">
+      <div className="grid grid-rows-3 gap-3">
+        <DisplayFieldGuideline guideline="Select a database." />
+        <DisplayFieldGuideline guideline="Select a schema." />
+        <DisplayFieldGuideline guideline="Select a table." />
       </div>
+      <div className="grid grid-rows-3 gap-3">
+        <DatabaseDropdown
+          appType={appType}
+          dbClass={dbClass}
+          setInputData={setInputData}
+        />
+        <SchemasDropdown inputData={inputData} setInputData={setInputData} />
+        <TablesDropdown
+          inputData={inputData}
+          pattern={pattern}
+          setInputData={setInputData}
+        />
+      </div>
+    </div>
+  );
+};
 
-      <Button
-        className="bg-primary text-white min-w-96 h-10 my-3"
-        radius="full"
-        variant="solid"
-        onClick={handleTask}
-      >
-        Start Task
-      </Button>
+/**
+ * Component for selecting a database and schema.
+ *
+ * @param {DatabaseSchema2SelectorProps} props - The props for the component.
+ * @returns {JSX.Element} The rendered component.
+ */
+export const DatabaseSchema2Selector = ({
+  appType,
+  dbClass,
+}: DatabaseSchema2SelectorProps): JSX.Element => {
+  const { inputData, setInputData } = useInputData();
 
-      <div className="grid grid-cols-2 gap-8">
-        <div className="grid grid-rows-3 gap-3">
-          <DisplayFieldChoice fieldChoice="Task Status" />
-          <DisplayFieldChoice fieldChoice="Task Result" />
-          <DisplayFieldChoice fieldChoice="Download Url" />
-        </div>
-        <div className="grid grid-rows-3 gap-3">
-          <DisplayFieldChoice fieldChoice={taskData.taskStatus} />
-          <DisplayFieldChoiceHtml
-            fieldChoice={taskData.taskResult}
-            nonce={nonce}
-          />
-          <DownloadButton downloadUrl={taskData.downloadUrl} />
-        </div>
+  return (
+    <div className="grid grid-cols-2 gap-8 pt-3 pb-8">
+      <div className="grid grid-rows-2 gap-3">
+        <DisplayFieldGuideline guideline="Select a database." />
+        <DisplayFieldGuideline guideline="Select a schema." />
+      </div>
+      <div className="grid grid-rows-2 gap-3">
+        <DatabaseDropdown
+          appType={appType}
+          dbClass={dbClass}
+          setInputData={setInputData}
+        />
+        <SchemasDropdown inputData={inputData} setInputData={setInputData} />
       </div>
     </div>
   );

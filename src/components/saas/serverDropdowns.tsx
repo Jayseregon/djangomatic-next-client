@@ -9,11 +9,11 @@ import {
 } from "@nextui-org/react";
 import { useTranslations } from "next-intl";
 import React, { useEffect, useState } from "react";
-import DOMPurify from "dompurify";
 
 import { availableDatabases } from "@/src/config/saasDatabases";
 import { cn } from "@/lib/utils";
 import { fetchDbSchemas, fetchSchemaTables } from "@/lib/dbRequests";
+import { stripHtmlTags } from "@/lib/utils";
 
 import { TxtPlaceholder } from "../pulsePlaceholder";
 
@@ -28,6 +28,7 @@ export interface TaskDataProps {
   taskStatus: string | null;
   taskResult: any;
   downloadUrl: string | null;
+  isLoading: boolean;
 }
 
 export interface DatabaseDropdownProps {
@@ -63,6 +64,10 @@ export interface DisplayFieldChoiceProps {
   nonce?: string;
 }
 
+export interface DisplayFieldGuidelineProps {
+  guideline: string;
+}
+
 export interface DownloadButtonProps {
   downloadUrl: string | null;
   nonce?: string;
@@ -82,12 +87,20 @@ export interface DefaultButtonSelectorProps {
   type?: "default" | "danger";
 }
 
-// default button selector component
+/**
+ * Default button selector component.
+ *
+ * @param {DefaultButtonSelectorProps} props - The props for the component.
+ * @param {string} props.label - The label to display on the button.
+ * @param {boolean} [props.isDisabled=false] - Whether the button is disabled.
+ * @param {string} [props.type] - The type of the button (e.g., "danger").
+ * @returns {JSX.Element} The rendered component.
+ */
 export const DefaultButtonSelector = ({
   label,
   isDisabled = false,
   type,
-}: DefaultButtonSelectorProps) => {
+}: DefaultButtonSelectorProps): JSX.Element => {
   const t = useTranslations();
 
   return (
@@ -105,14 +118,24 @@ export const DefaultButtonSelector = ({
   );
 };
 
-// default dropdown selector component
+/**
+ * Default dropdown selector component.
+ *
+ * @param {DropDownSelectorProps} props - The props for the component.
+ * @param {Array<{ value: string; label: string }>} props.items - The items to display in the dropdown.
+ * @param {string} props.selectedLabel - The label of the selected item.
+ * @param {string} props.selectedKey - The key of the selected item.
+ * @param {React.Dispatch<React.SetStateAction<string>>} props.setSelectedKey - The function to update the selected key.
+ * @param {(key: string) => void} props.handleSelect - The function to handle item selection.
+ * @returns {JSX.Element} The rendered component.
+ */
 export const DropDownSelector = ({
   items,
   selectedLabel,
   selectedKey,
   setSelectedKey,
   handleSelect,
-}: DropDownSelectorProps) => {
+}: DropDownSelectorProps): JSX.Element => {
   return (
     <Dropdown backdrop="blur">
       <DropdownTrigger>
@@ -150,13 +173,22 @@ export const DropDownSelector = ({
   );
 };
 
-// Component for selecting a database
+/**
+ * Component for selecting a database.
+ *
+ * @param {DatabaseDropdownProps} props - The props for the component.
+ * @param {AppType} props.appType - The application type (e.g., "hld", "lld", "snap", "admin").
+ * @param {string} props.dbClass - The database class.
+ * @param {string | null} [props.appTypeIncludeKey=null] - Optional key to include for the "admin" app type.
+ * @param {React.Dispatch<React.SetStateAction<InputDataProps>>} props.setInputData - The function to update input data.
+ * @returns {JSX.Element} The rendered component.
+ */
 export const DatabaseDropdown = ({
   appType,
   dbClass,
   appTypeIncludeKey = null,
   setInputData,
-}: DatabaseDropdownProps) => {
+}: DatabaseDropdownProps): JSX.Element => {
   const t = useTranslations("ServerDropdowns");
 
   const [options, setOptions] = useState<{ value: string; label: string }[]>(
@@ -165,6 +197,7 @@ export const DatabaseDropdown = ({
   const [selectedKey, setSelectedKey] = useState<string>("select_database");
   const [selectedLabel, setSelectedLabel] = useState<string>(t("dbMenu_label"));
 
+  // Populate database dropdown options based on appType and dbClass
   useEffect(() => {
     const populateDatabaseDropdown = () => {
       const newOptions = [];
@@ -209,6 +242,7 @@ export const DatabaseDropdown = ({
     populateDatabaseDropdown();
   }, [appType, dbClass, appTypeIncludeKey]);
 
+  // Update selected label when selected key or options change
   useEffect(() => {
     const label =
       options.find((option) => option.value === selectedKey)?.label ||
@@ -217,6 +251,11 @@ export const DatabaseDropdown = ({
     setSelectedLabel(label);
   }, [selectedKey, options]);
 
+  /**
+   * Handles the selection of a database.
+   *
+   * @param {string} key - The key of the selected database.
+   */
   const handleSelect = (key: string) => {
     setInputData((prevDataChoices: InputDataProps) => ({
       ...prevDataChoices,
@@ -235,11 +274,18 @@ export const DatabaseDropdown = ({
   );
 };
 
-// Component for selecting a schema
+/**
+ * Component for selecting a schema.
+ *
+ * @param {SchemasDropdownProps} props - The props for the component.
+ * @param {InputDataProps} props.inputData - The input data containing database choice.
+ * @param {React.Dispatch<React.SetStateAction<InputDataProps>>} props.setInputData - The function to update input data.
+ * @returns {JSX.Element} The rendered component.
+ */
 export const SchemasDropdown = ({
   inputData,
   setInputData,
-}: SchemasDropdownProps) => {
+}: SchemasDropdownProps): JSX.Element => {
   const t = useTranslations("ServerDropdowns");
 
   const [dbSchemas, setDbSchemas] = useState<SchemaDropdownData[] | null>(null);
@@ -248,6 +294,7 @@ export const SchemasDropdown = ({
     t("schMenu_label"),
   );
 
+  // Fetch schemas when database choice changes
   useEffect(() => {
     const fetchSchemas = async () => {
       if (inputData.dbChoice) {
@@ -262,6 +309,7 @@ export const SchemasDropdown = ({
     fetchSchemas();
   }, [inputData.dbChoice]);
 
+  // Update selected label when selected key or database schemas change
   useEffect(() => {
     const label =
       dbSchemas?.find((schema) => schema.value === selectedKey)?.label ||
@@ -270,6 +318,11 @@ export const SchemasDropdown = ({
     setSelectedLabel(label);
   }, [selectedKey, dbSchemas]);
 
+  /**
+   * Handles the selection of a schema.
+   *
+   * @param {string} key - The key of the selected schema.
+   */
   const handleSelect = (key: string) => {
     setInputData((prevDataChoices: InputDataProps) => ({
       ...prevDataChoices,
@@ -304,12 +357,20 @@ export const SchemasDropdown = ({
   );
 };
 
-// Component for selecting a table
+/**
+ * Component for selecting a table.
+ *
+ * @param {TablesDropdownProps} props - The props for the component.
+ * @param {InputDataProps} props.inputData - The input data containing database and schema choices.
+ * @param {React.Dispatch<React.SetStateAction<InputDataProps>>} props.setInputData - The function to update input data.
+ * @param {string} props.pattern - The user pattern for filtering tables.
+ * @returns {JSX.Element} The rendered component.
+ */
 export const TablesDropdown = ({
   inputData,
   setInputData,
   pattern,
-}: TablesDropdownProps) => {
+}: TablesDropdownProps): JSX.Element => {
   const t = useTranslations("ServerDropdowns");
 
   const [schTables, setSchTables] = useState<TableDropdownData[] | null>(null);
@@ -318,6 +379,7 @@ export const TablesDropdown = ({
     t("tblMenu_label"),
   );
 
+  // Fetch tables when database or schema choice changes
   useEffect(() => {
     const fetchTables = async () => {
       if (inputData.dbChoice && inputData.schemaChoice) {
@@ -339,6 +401,7 @@ export const TablesDropdown = ({
     fetchTables();
   }, [inputData.dbChoice, inputData.schemaChoice]);
 
+  // Update selected label when selected key or schema tables change
   useEffect(() => {
     const label =
       schTables?.find((table) => table.value === selectedKey)?.label ||
@@ -347,6 +410,11 @@ export const TablesDropdown = ({
     setSelectedLabel(label);
   }, [selectedKey, schTables]);
 
+  /**
+   * Handles the selection of a table.
+   *
+   * @param {string} key - The key of the selected table.
+   */
   const handleSelect = (key: string) => {
     setInputData((prevDataChoices: InputDataProps) => ({
       ...prevDataChoices,
@@ -381,11 +449,18 @@ export const TablesDropdown = ({
   );
 };
 
-// Components for displaying the selected field choice
+/**
+ * Component for displaying the selected field choice.
+ *
+ * @param {DisplayFieldChoiceProps} props - The props for the component.
+ * @param {string} props.fieldChoice - The selected field choice to display.
+ * @param {string} props.nonce - The nonce for inline styles.
+ * @returns {JSX.Element} The rendered component.
+ */
 export const DisplayFieldChoice = ({
   fieldChoice,
   nonce,
-}: DisplayFieldChoiceProps) => {
+}: DisplayFieldChoiceProps): JSX.Element => {
   return (
     <div>
       {fieldChoice ? (
@@ -407,8 +482,39 @@ export const DisplayFieldChoice = ({
   );
 };
 
-// Component for downloading the task result
-export const DownloadButton = ({ downloadUrl, nonce }: DownloadButtonProps) => {
+/**
+ * Component for displaying a field guideline.
+ *
+ * @param {DisplayFieldGuidelineProps} props - The props for the component.
+ * @param {string} props.guideline - The guideline text to display.
+ * @returns {JSX.Element} The rendered component.
+ */
+export const DisplayFieldGuideline = ({
+  guideline,
+}: DisplayFieldGuidelineProps): JSX.Element => {
+  return (
+    <div className="border-b-2 border-primary min-w-96 h-10 flex items-center justify-start indent-4">
+      {guideline}
+    </div>
+  );
+};
+
+/**
+ * Component for downloading the task result.
+ *
+ * @param {DownloadButtonProps} props - The props for the component.
+ * @param {string} props.downloadUrl - The URL to download the task result from.
+ * @param {string} props.nonce - The nonce for inline styles.
+ * @returns {JSX.Element} The rendered component.
+ */
+export const DownloadButton = ({
+  downloadUrl,
+  nonce,
+}: DownloadButtonProps): JSX.Element => {
+  /**
+   * Handles the download process by creating a temporary link element
+   * and triggering a click event on it.
+   */
   const handleDownload = () => {
     if (downloadUrl) {
       const link = document.createElement("a");
@@ -441,27 +547,36 @@ export const DownloadButton = ({ downloadUrl, nonce }: DownloadButtonProps) => {
   );
 };
 
-// Component for displaying the task result as sanitized html
+/**
+ * Component for displaying the task result as plain text.
+ *
+ * @param {DisplayFieldChoiceProps} props - The props for the component.
+ * @param {string} props.fieldChoice - The HTML string to be stripped of tags.
+ * @param {string} props.nonce - The nonce for inline styles.
+ * @returns {JSX.Element} The rendered component.
+ */
 export const DisplayFieldChoiceHtml = ({
   fieldChoice,
   nonce,
-}: DisplayFieldChoiceProps) => {
-  // Sanitize the HTML content and add the nonce to inline styles
-  const sanitizedHtml = DOMPurify.sanitize(fieldChoice || "", {
-    ADD_ATTR: ["nonce"],
-    ADD_TAGS: ["style"],
-    FORCE_BODY: true,
-    IN_PLACE: true,
-  });
+}: DisplayFieldChoiceProps): JSX.Element => {
+  const [plainText, setPlainText] = useState<string>("");
+
+  // Effect hook to strip HTML tags from fieldChoice and set plain text
+  useEffect(() => {
+    if (fieldChoice && typeof window !== "undefined") {
+      setPlainText(stripHtmlTags(fieldChoice));
+    }
+  }, [fieldChoice]);
 
   return (
     <div>
-      {fieldChoice ? (
+      {plainText ? (
         <div
-          dangerouslySetInnerHTML={{ __html: sanitizedHtml }}
           className="border-2 border-primary rounded-3xl min-w-96 h-10 flex items-center justify-center"
           nonce={nonce}
-        />
+        >
+          {plainText}
+        </div>
       ) : (
         <div className="border-2 border-primary rounded-3xl p-2 max-w-96 h-10">
           <TxtPlaceholder nonce={nonce} />

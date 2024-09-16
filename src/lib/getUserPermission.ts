@@ -24,7 +24,14 @@ export interface UserSchema {
   canAccessVideoSttar: boolean;
 }
 
-export async function fetchUser(email: string) {
+/**
+ * Fetch user data based on email.
+ *
+ * @param {string} email - The email of the user to fetch data for.
+ * @returns {Promise<any>} The user data.
+ * @throws Will throw an error if the fetch operation fails.
+ */
+export async function fetchUser(email: string): Promise<any> {
   const response = await fetch("/api/prisma-user-perms", {
     method: "POST",
     headers: {

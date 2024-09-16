@@ -40,6 +40,7 @@ interface fetchSchemaTablesProps {
 interface startTaskProps {
   db_choice: string;
   schema_choice: string;
+  endpoint: string;
 }
 
 interface checkTaskStatusProps {
@@ -275,6 +276,7 @@ export const fetchSchemaTables = async ({
 export const startTask = async ({
   db_choice,
   schema_choice,
+  endpoint,
 }: startTaskProps) => {
   const { djAuthToken } = await getServerTokens();
 
@@ -287,7 +289,7 @@ export const startTask = async ({
     }
 
     // define request params
-    const endpoint = "/saas/tds/ajax/query-compile-hp-by-splits1/";
+    // const endpoint = "/saas/tds/ajax/query-compile-hp-by-splits1/";
     const payload = {
       db_choice: db_choice,
       schema_choice: schema_choice,
@@ -373,6 +375,11 @@ export const checkTaskStatus = async ({
       setTaskData((prevTaskData: TaskDataProps) => ({
         ...prevTaskData,
         taskResult: sanitizedResult,
+      }));
+
+      setTaskData((prevTaskData: TaskDataProps) => ({
+        ...prevTaskData,
+        isLoading: false,
       }));
 
       if (accessDownload) {

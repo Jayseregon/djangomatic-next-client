@@ -14,21 +14,27 @@ import { videosData } from "@/config/videosData";
 import { BlobProps } from "../admin/BlobStorage";
 
 // define the types for the Sidebar component
-interface SidebarProps {
+export interface SidebarProps {
   nonce?: string;
 }
 // define the types for the apps data arrays
-interface AppItem {
+export interface AppItem {
   label: string;
   href: string;
   type?: string;
+  desc?: string;
+  version?: string;
+  date_upd?: string;
+  desc_upd?: string;
+  doc_href?: string;
+  is_active?: string;
 }
-interface AppCategory {
+export interface AppCategory {
   title: string;
   data: AppItem[];
 }
 // define the types for the SidebarSection component
-interface SidebarSectionProps {
+export interface SidebarSectionProps {
   categories: AppCategory[];
   nonce?: string;
 }

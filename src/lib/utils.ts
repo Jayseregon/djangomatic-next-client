@@ -1,10 +1,22 @@
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 
-export function cn(...inputs: ClassValue[]) {
+/**
+ * Merge Tailwind CSS classes with clsx.
+ *
+ * @param {...ClassValue[]} inputs - The class values to merge.
+ * @returns {string} - The merged class string.
+ */
+export function cn(...inputs: ClassValue[]): string {
   return twMerge(clsx(inputs));
 }
 
+/**
+ * Format a date string or timestamp into a readable date format.
+ *
+ * @param {string | number} input - The date string or timestamp.
+ * @returns {string} - The formatted date string.
+ */
 export function formatDate(input: string | number): string {
   const date = new Date(input);
 
@@ -29,6 +41,12 @@ export function sanitizeFileName(fileName: string): string {
     .toLowerCase();
 }
 
+/**
+ * Extract Azure file data from a file path.
+ *
+ * @param {string} filePath - The file path.
+ * @returns {(string | undefined)[]} - An array containing the base name, extension, and directory.
+ */
 export function extractAzureFileData(filePath: string): (string | undefined)[] {
   const splitParts = filePath.split("/");
   const fileName = splitParts.pop();
@@ -39,6 +57,12 @@ export function extractAzureFileData(filePath: string): (string | undefined)[] {
   return [baseName, extension, dir] || ["", "", ""];
 }
 
+/**
+ * Format an Azure date string into a readable date format.
+ *
+ * @param {string} dateString - The Azure date string.
+ * @returns {string} - The formatted date string.
+ */
 export function formatAzureDate(dateString: string): string {
   const date = new Date(dateString);
 
@@ -49,9 +73,32 @@ export function formatAzureDate(dateString: string): string {
   });
 }
 
+/**
+ * Convert a string to title case.
+ *
+ * @param {string} str - The string to convert.
+ * @returns {string} - The title-cased string.
+ */
 export function titleCase(str: string): string {
   return str
     .split("_")
     .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
     .join(" ");
 }
+
+/**
+ * Strip HTML tags from a string and return only the text content.
+ *
+ * @param {string} html - The HTML string to strip tags from.
+ * @returns {string} - The plain text content.
+ */
+export const stripHtmlTags = (html: string): string => {
+  if (typeof window === "undefined") {
+    return html; // Return the original HTML string if running on the server
+  }
+  const tempDiv = document.createElement("div");
+
+  tempDiv.innerHTML = html;
+
+  return tempDiv.textContent || tempDiv.innerText || "";
+};

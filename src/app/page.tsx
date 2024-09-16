@@ -6,7 +6,7 @@ import { siteConfig } from "@/config/site";
 import { title, subtitle } from "@/components/primitives";
 import { UnAuthenticated } from "@/components/auth/unAuthenticated";
 import { auth } from "@/auth";
-import { DisplaySemanticColors } from "@/components/ColorCard";
+// import { DisplaySemanticColors } from "@/components/ColorCard";
 // import { UserData } from "@/src/components/UserData";
 
 /**
@@ -63,7 +63,7 @@ function HomeContent({ session }: { session: any }): JSX.Element {
 
       {/* <UserData session={session} /> */}
 
-      <DisplaySemanticColors />
+      {/* <DisplaySemanticColors /> */}
     </section>
   );
 }

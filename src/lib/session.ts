@@ -6,12 +6,18 @@ export interface IronSessionData {
   clientAuthToken?: string | null;
 }
 
+/**
+ * Default values for Iron Session Data.
+ */
 export const defaultIronSession: IronSessionData = {
   djAuthToken: "",
   djRefreshToken: "",
   clientAuthToken: "",
 };
 
+/**
+ * Options for configuring Iron Session.
+ */
 export const ironSessionOptions: SessionOptions = {
   password: process.env.SESSION_SECRET as string,
   cookieName: "iron-session-secure-cookie-auth-backend-jwt-token",

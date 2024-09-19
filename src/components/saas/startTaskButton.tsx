@@ -3,46 +3,70 @@
 import { Button, Spinner } from "@nextui-org/react";
 import React, { useEffect } from "react";
 
-import { startTask, checkTaskStatus } from "@/lib/dbRequests";
+import { startTask, checkTaskStatus, startTaskProps } from "@/lib/dbRequests";
 
 import { useInputData, useTaskData } from "./inputDataProviders";
 import { TaskDataProps } from "./serverDropdowns";
 import { DownloadButton } from "./serverDropdowns";
 import { useConsoleData } from "./inputDataProviders";
+import { useTranslations } from "next-intl";
 
 /**
  * Component for starting a task and displaying its status.
  * Utilizes input data, task data, and console data contexts.
  *
- * @param {object} props - The props for the component.
- * @param {string} props.taskEndpoint - The endpoint to start the task.
  * @returns {JSX.Element} The rendered component.
  */
-export const StartTaskButton = ({
-  taskEndpoint,
-}: {
-  taskEndpoint: string;
-}): JSX.Element => {
+export const StartTaskButton = (): JSX.Element => {
   const { inputData } = useInputData();
   const { taskData, setTaskData } = useTaskData();
   const { appendToConsole } = useConsoleData();
+  const t = useTranslations("startTaskButton");
+
+  let taskOptions: startTaskProps = {
+    db_choice: inputData.dbChoice || "",
+    schema_choice: inputData.schemaChoice || "",
+    dbClass: inputData.dbClass,
+    endpoint: inputData.taskEndpoint,
+  };
+
+  if (inputData.file) {
+    taskOptions = {
+      ...taskOptions,
+      file: inputData.file,
+    };
+  }
+
+  if (inputData.tdsUsername && inputData.tdsPassword) {
+    taskOptions = {
+      ...taskOptions,
+      tdsUsername: inputData.tdsUsername,
+      tdsPassword: inputData.tdsPassword,
+      arcgisErase: inputData.arcgisErase,
+      arcgisSnapshot: inputData.arcgisSnapshot,
+    };
+  }
+
+  if (inputData.tableChoice) {
+    taskOptions = {
+      ...taskOptions,
+      table_choice: inputData.tableChoice,
+    };
+  }
 
   /**
    * Handles the task initiation process.
    * Sets the task as loading and starts the task with the selected database and schema choices.
    */
   const handleTask = async () => {
-    if (inputData.dbChoice && inputData.schemaChoice) {
+    if (taskOptions) {
       setTaskData((prevTaskData: TaskDataProps) => ({
         ...prevTaskData,
         isLoading: true,
       }));
+
       appendToConsole("$ Starting task...");
-      const task_id = await startTask({
-        db_choice: inputData.dbChoice,
-        schema_choice: inputData.schemaChoice,
-        endpoint: taskEndpoint,
-      });
+      const task_id = await startTask(taskOptions);
 
       setTaskData((prevTaskData: TaskDataProps) => ({
         ...prevTaskData,
@@ -61,7 +85,8 @@ export const StartTaskButton = ({
         task_id: taskData.taskId,
         waitTime: 1000,
         setTaskData: setTaskData,
-        accessDownload: true,
+        taskOptions: taskOptions,
+        accessDownload: inputData.asDownloadable,
       });
     }
   }, [taskData.taskId]);
@@ -69,17 +94,20 @@ export const StartTaskButton = ({
   return (
     <div>
       <Button
-        className="bg-primary text-white min-w-96 h-10 my-3"
+        className="bg-primary text-white w-full max-w-96 h-10 my-3"
         disabled={taskData.isLoading}
         isDisabled={taskData.isLoading}
         radius="full"
         variant="solid"
-        onClick={handleTask}
-      >
+        onClick={handleTask}>
         {taskData.isLoading ? (
-          <Spinner aria-label="upload-spinner" color="white" size="sm" />
+          <Spinner
+            aria-label="upload-spinner"
+            color="white"
+            size="sm"
+          />
         ) : (
-          "Start Task"
+          t("label")
         )}
       </Button>
       {taskData.downloadUrl && (

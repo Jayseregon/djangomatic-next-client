@@ -3,7 +3,7 @@ import { getCookie, setCookie, hasCookie } from "cookies-next";
 import { LRUCache } from "lru-cache";
 import DOMPurify from "isomorphic-dompurify";
 import { jwtDecode } from "jwt-decode";
-
+// import { useConsoleData } from "../components/saas/inputDataProviders";
 import { TaskDataProps } from "@/components/saas/serverDropdowns";
 
 const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
@@ -35,18 +35,27 @@ interface fetchSchemaTablesProps {
   target_db: string;
   schema_choice: string;
   user_pattern: string;
+  endpoint?: string;
 }
 
-interface startTaskProps {
+export interface startTaskProps {
   db_choice: string;
   schema_choice: string;
+  table_choice?: string;
+  dbClass: string;
   endpoint: string;
+  file?: File;
+  tdsUsername?: string;
+  tdsPassword?: string;
+  arcgisErase?: boolean;
+  arcgisSnapshot?: boolean;
 }
 
 interface checkTaskStatusProps {
   task_id: string;
   waitTime: number;
   setTaskData: React.Dispatch<React.SetStateAction<TaskDataProps>>;
+  taskOptions?: startTaskProps;
   accessDownload?: boolean;
 }
 
@@ -219,6 +228,7 @@ export const fetchSchemaTables = async ({
   target_db,
   schema_choice,
   user_pattern,
+  endpoint = "/saas/tds/ajax/query-poles-tables-from-schema/",
 }: fetchSchemaTablesProps) => {
   const cacheKey = `${target_db}-${schema_choice}-${user_pattern}`;
   const cachedData = tablesCache.get(cacheKey);
@@ -237,7 +247,7 @@ export const fetchSchemaTables = async ({
     }
 
     // define request params
-    const endpoint = "/saas/tds/ajax/query-poles-tables-from-schema/";
+    // const endpoint = "/saas/tds/ajax/query-poles-tables-from-schema/";
     const payload = {
       target_db: target_db,
       schema_choice: schema_choice,
@@ -276,7 +286,14 @@ export const fetchSchemaTables = async ({
 export const startTask = async ({
   db_choice,
   schema_choice,
+  table_choice,
+  dbClass,
   endpoint,
+  file,
+  tdsUsername,
+  tdsPassword,
+  arcgisErase,
+  arcgisSnapshot,
 }: startTaskProps) => {
   const { djAuthToken } = await getServerTokens();
 
@@ -289,14 +306,39 @@ export const startTask = async ({
     }
 
     // define request params
-    // const endpoint = "/saas/tds/ajax/query-compile-hp-by-splits1/";
-    const payload = {
-      db_choice: db_choice,
-      schema_choice: schema_choice,
-    };
+    const payload = new FormData();
+    payload.append("db_choice", db_choice);
+    payload.append("schema_choice", schema_choice);
+    payload.append("db_class", dbClass);
+
+    if (file) {
+      payload.append("file", file);
+    }
+
+    if (tdsUsername && tdsPassword) {
+      payload.append("db621_user", tdsUsername);
+      payload.append("db621_pwd", tdsPassword);
+      payload.append("erase_previous", arcgisErase ? "yes" : "no");
+      payload.append("snapshot", arcgisSnapshot ? "yes" : "no");
+    }
+
+    // Append the same table_choice value to multiple fields
+    // because the backend can accept it in any of these fields
+    if (table_choice) {
+      payload.append("pole_table_choice", table_choice);
+      payload.append("table_choice", table_choice);
+      payload.append("dfn_choice", table_choice);
+    }
+
+    // Log the payload for debugging
+    for (let pair of payload.entries()) {
+      console.log(pair[0] + ": " + pair[1]);
+    }
+
     const headers = {
       "X-CSRFToken": csrfToken,
       Authorization: `Bearer ${djAuthToken}`,
+      // "Content-Type": "multipart/form-data", // Axios sets this automatically when using FormData
     };
     // make request
     const response = await axiosInstance.post(endpoint, payload, { headers });
@@ -311,7 +353,22 @@ export const startTask = async ({
     return task_id;
   } catch (error: any) {
     console.error("Error starting task:", error);
-    // return [{ error: "no data found" }];
+
+    // Handle specific Axios errors
+    if (error.response) {
+      // Server responded with a status other than 200 range
+      console.error("Response data:", error.response.data);
+      console.error("Response status:", error.response.status);
+      console.error("Response headers:", error.response.headers);
+    } else if (error.request) {
+      // Request was made but no response was received
+      console.error("Request data:", error.request);
+    } else {
+      // Something happened in setting up the request
+      console.error("Error message:", error.message);
+    }
+
+    throw error; // Re-throw the error after logging
   }
 };
 
@@ -319,9 +376,11 @@ export const checkTaskStatus = async ({
   task_id,
   waitTime,
   setTaskData,
+  taskOptions,
   accessDownload = false,
 }: checkTaskStatusProps) => {
   const { djAuthToken } = await getServerTokens();
+  // const { appendToConsole } = useConsoleData();
 
   try {
     // get the csrf token from server
@@ -361,7 +420,7 @@ export const checkTaskStatus = async ({
             setTaskData,
             accessDownload,
           }),
-        waitTime,
+        waitTime
       );
     } else {
       // process the result once finished
@@ -376,6 +435,32 @@ export const checkTaskStatus = async ({
         ...prevTaskData,
         taskResult: sanitizedResult,
       }));
+
+      // auto start snapshot after db621 imports, if flag is true
+      if (data.status === "SUCCESS" && taskOptions?.arcgisSnapshot) {
+        try {
+          // update endpoint for snapshot
+          const updatedTaskOptions: startTaskProps = {
+            ...taskOptions,
+            endpoint: "/saas/tds/ajax/arcgis/auto-snapshots-db621/", // pass snapshot endpoint
+            arcgisSnapshot: false, // reset the flag
+          };
+
+          // start the task
+          const task_id = await startTask(updatedTaskOptions);
+
+          // check the task status
+          checkTaskStatus({
+            task_id: task_id,
+            waitTime: 1000,
+            setTaskData: setTaskData,
+            taskOptions: updatedTaskOptions,
+            accessDownload: false,
+          });
+        } catch (error) {
+          console.error("Error during snapshot task restart:", error);
+        }
+      }
 
       setTaskData((prevTaskData: TaskDataProps) => ({
         ...prevTaskData,

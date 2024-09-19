@@ -102,3 +102,8 @@ export const stripHtmlTags = (html: string): string => {
 
   return tempDiv.textContent || tempDiv.innerText || "";
 };
+
+
+export const maskPassword = (password: string): string => {
+  return "*".repeat(password.length);
+};

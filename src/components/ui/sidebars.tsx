@@ -23,10 +23,12 @@ export interface AppItem {
   href: string;
   type?: string;
   desc?: string;
+  endpoint?: string;
   version?: string;
   date_upd?: string;
-  desc_upd?: string;
   doc_href?: string;
+  dbClass?: string;
+  asDownloadable?: boolean;
   is_active?: string;
 }
 export interface AppCategory {

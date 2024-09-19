@@ -8,9 +8,9 @@ import React, {
   ReactNode,
 } from "react";
 
-import { stripHtmlTags } from "@/src/lib/utils";
-
+import { stripHtmlTags, maskPassword } from "@/src/lib/utils";
 import { InputDataProps, TaskDataProps } from "./serverDropdowns";
+
 /**
  * Interface for the InputDataContext properties.
  */
@@ -21,13 +21,15 @@ interface InputDataContextProps {
   setTaskData: React.Dispatch<React.SetStateAction<TaskDataProps>>;
   consoleOutput: string;
   appendToConsole: (newData: string) => void;
+  appName: string;
+  setAppName: React.Dispatch<React.SetStateAction<string>>;
 }
 
 /**
  * Context for managing input and task data.
  */
 const InputDataContext = createContext<InputDataContextProps | undefined>(
-  undefined,
+  undefined
 );
 
 /**
@@ -75,6 +77,28 @@ export const useTaskData = (): {
 };
 
 /**
+ * Custom hook to use app name context.
+ *
+ * @returns {object} The app name and setter function.
+ * @throws Will throw an error if used outside of InputDataProvider.
+ */
+export const useAppName = (): {
+  appName: string;
+  setAppName: React.Dispatch<React.SetStateAction<string>>;
+} => {
+  const context = useContext(InputDataContext);
+
+  if (!context) {
+    throw new Error("useAppName must be used within an InputDataProvider");
+  }
+
+  return {
+    appName: context.appName,
+    setAppName: context.setAppName,
+  };
+};
+
+/**
  * Custom hook to use console data context.
  *
  * @returns {object} The console output and append function.
@@ -112,6 +136,16 @@ export const InputDataProvider = ({
     dbChoice: null,
     schemaChoice: null,
     tableChoice: null,
+    appType: "",
+    dbClass: "",
+    taskEndpoint: "",
+    asDownloadable: false,
+    file: undefined,
+    fileName: null,
+    tdsUsername: null,
+    tdsPassword: null,
+    arcgisErase: false,
+    arcgisSnapshot: false,
   };
   const initTaskData: TaskDataProps = {
     taskId: null,
@@ -120,13 +154,16 @@ export const InputDataProvider = ({
     downloadUrl: null,
     isLoading: false,
   };
+  const initAppName: string = "";
   const [initialInputData, setInitialInputData] =
     useState<InputDataProps>(initInputData);
   const [initialTaskData, setInitialTaskData] =
     useState<TaskDataProps>(initTaskData);
+  const [initialAppName, setInitialAppName] = useState<string>(initAppName);
   const [inputData, setInputData] = useState<InputDataProps>(initInputData);
   const [taskData, setTaskData] = useState<TaskDataProps>(initTaskData);
   const [consoleOutput, setConsoleOutput] = useState<string>("");
+  const [appName, setAppName] = useState<string>(initAppName);
 
   /**
    * Function to append new data to the console output.
@@ -148,7 +185,7 @@ export const InputDataProvider = ({
     }
     if (inputData.schemaChoice !== initialInputData.schemaChoice) {
       appendToConsole(
-        `$ InputData: schema choice >> ${inputData.schemaChoice}`,
+        `$ InputData: schema choice >> ${inputData.schemaChoice}`
       );
       setInitialInputData({
         ...initialInputData,
@@ -160,6 +197,47 @@ export const InputDataProvider = ({
       setInitialInputData({
         ...initialInputData,
         tableChoice: inputData.tableChoice,
+      });
+    }
+    if (inputData.fileName !== initialInputData.fileName) {
+      appendToConsole(`$ InputData: file >> ${inputData.fileName}`);
+      setInitialInputData({
+        ...initialInputData,
+        fileName: inputData.fileName,
+      });
+    }
+    if (inputData.tdsUsername !== initialInputData.tdsUsername) {
+      appendToConsole(`$ InputData: TDS username >> ${inputData.tdsUsername}`);
+      setInitialInputData({
+        ...initialInputData,
+        tdsUsername: inputData.tdsUsername,
+      });
+    }
+    if (inputData.tdsPassword !== initialInputData.tdsPassword) {
+      appendToConsole(
+        `$ InputData: TDS password >> ${maskPassword(inputData.tdsPassword || "")}`
+      );
+      setInitialInputData({
+        ...initialInputData,
+        tdsPassword: inputData.tdsPassword,
+      });
+    }
+    if (inputData.arcgisErase !== initialInputData.arcgisErase) {
+      appendToConsole(
+        `$ InputData: erase DFN in DB621 >> ${inputData.arcgisErase}`
+      );
+      setInitialInputData({
+        ...initialInputData,
+        arcgisErase: inputData.arcgisErase,
+      });
+    }
+    if (inputData.arcgisSnapshot !== initialInputData.arcgisSnapshot) {
+      appendToConsole(
+        `$ InputData: create DFN snapshots >> ${inputData.arcgisSnapshot}`
+      );
+      setInitialInputData({
+        ...initialInputData,
+        arcgisSnapshot: inputData.arcgisSnapshot,
       });
     }
   }, [inputData]);
@@ -179,7 +257,7 @@ export const InputDataProvider = ({
     }
     if (taskData.taskResult !== initialTaskData.taskResult) {
       appendToConsole(
-        `$ TaskData: task result >> ${stripHtmlTags(taskData.taskResult)}`,
+        `$ TaskData: task result >> ${stripHtmlTags(taskData.taskResult)}`
       );
       setInitialTaskData({
         ...initialTaskData,
@@ -187,6 +265,14 @@ export const InputDataProvider = ({
       });
     }
   }, [taskData]);
+
+  // Watch for changes in appName and append to console
+  useEffect(() => {
+    if (appName !== initialAppName) {
+      appendToConsole(`$ RemoteApp: initializing >> ${appName}`);
+      setInitialAppName(appName);
+    }
+  }, [appName, setAppName]);
 
   return (
     <InputDataContext.Provider
@@ -197,8 +283,9 @@ export const InputDataProvider = ({
         setTaskData,
         consoleOutput,
         appendToConsole,
-      }}
-    >
+        appName,
+        setAppName,
+      }}>
       {children}
     </InputDataContext.Provider>
   );

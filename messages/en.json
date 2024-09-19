@@ -31,7 +31,7 @@
   },
   "Docs": {
     "title": "Docs",
-    "subtitle": "Usage Guidelines", 
+    "subtitle": "Usage Guidelines",
     "videoPage": {
       "subtitle": "Video Tutorials",
       "loading": "Loading videos..."
@@ -45,16 +45,132 @@
     "link_title": "Usage Guidelines"
   },
   "ServerDropdowns": {
-    "dbMenu_label": "Select a database",
-    "schMenu_label": "Select a schema",
-    "schMenu_loading": "Loading schemas...",
-    "tblMenu_label": "Select a table",
-    "tblMenu_loading": "Loading tables...",
-    "menuNoData": "No data available"
+    "dbMenu_label": "Database",
+    "schMenu_label": "Schema",
+    "tblMenu_label": "Table",
+    "loading": "Loading...",
+    "menuNoData": "No data available",
+    "zipFile": {
+      "label": "Zip File",
+      "helperText": "Insert the zip file to process"
+    }
   },
-  "HP_by_Splits1": {
-    "title": "HP by Splits1",
-    "subtitle": "Compile HP by L1 splitters, inside a node.",
-    "code": "Currently in development"
+  "startTaskButton": {
+    "label": "Start Task"
+  },
+  "consoleDisplay": {
+    "label": "The save button in the console allow to export the logs and share it with the development team."
+  },
+  "appDropdownHelper": {
+    "database": "Pick the target database",
+    "schema": "Select the schema containing the project",
+    "pole_table": "Choose the pole layer", 
+    "dfn_table": "Choose the DFN to process", 
+    "input_username": "Please enter TDS username",
+    "input_password": "Please enter TDS password", 
+    "control_erase": "Erase existing",
+    "control_snap": "Auto snapshots"
+  },
+  "tdsApps": {
+    "address_breakdown": {
+      "description": "This app aims to compile an address breakdown as an Excel file along with a map screenshot.",
+      "update": "French translation support and compatibility."
+    },
+    "dfn_boundaries": {
+      "description": "This app generates an AGOL DFN boundaries layer in Postgres for client import.",
+      "update": "French translation support and compatibility."
+    },
+    "gps_to_shp": {
+      "description": "This app compiles and sanitizes ungraded GPS surveys into SHP files suitable for HLD.",
+      "update": "French translation support and compatibility."
+    },
+    "gps_to_postgres": {
+      "description": "This app imports new graded GPS surveys or appends them to existing tables.",
+      "update": "French translation support and compatibility."
+    },
+    "gps_to_postgres_refresh": {
+      "description": "This app performs a fresh GPS import, erasing old data.",
+      "update": "French translation support and compatibility."
+    },
+    "hld_to_kmz": {
+      "description": "This app produces KMZ mappings for each DFN's HLD.",
+      "update": "French translation support and compatibility."
+    },
+    "hld_to_postgres": {
+      "description": "This app imports new HLD data or appends it to existing tables.",
+      "update": "French translation support and compatibility."
+    },
+    "hld_to_postgres_refresh": {
+      "description": "This app performs a fresh HLD import, erasing old data.",
+      "update": "French translation support and compatibility."
+    },
+    "node_quantities": {
+      "description": "This app extracts node AER/UG length quantities in feet.",
+      "update": "First time app deployment."
+    },
+    "hp_by_splits1": {
+      "description": "This app compiles HP data by L1 splitters within a node.",
+      "update": "Resolve an issue when addresses are empty."
+    },
+    "poles_numbering": {
+      "description": "This app creates a pole ID field based on the leaflet order.",
+      "update": "French translation support and compatibility."
+    },
+    "midspan_calculation": {
+      "description": "This app recalculates project midspans based on pole updates.",
+      "update": "French translation support and compatibility."
+    },
+    "dfn_poles_calculations": {
+      "description": "This app provides pole attachment suggestions and table pre-fill by DFN.",
+      "update": "French translation support and compatibility."
+    },
+    "node_poles_calculations": {
+      "description": "This app provides pole attachment suggestions and table pre-fill by Node.",
+      "update": "French translation support and compatibility."
+    },
+    "pole_class_length_estimator": {
+      "description": "This app estimates missing pole classes and lengths by DFN.",
+      "update": "French translation support and compatibility."
+    },
+    "extract_data_dp": {
+      "description": "This app extracts pole owner and HP data counts for DP.",
+      "update": "French translation support and compatibility."
+    },
+    "import_to_db621": {
+      "description": "This app imports DFN design data to DB621 and performs auto snapshots.",
+      "update": "French translation support and compatibility."
+    },
+    "update_db621": {
+      "description": "This app updates DFN attributes in DB621.",
+      "update": "French translation support and compatibility."
+    },
+    "snapshots_from_db621": {
+      "description": "This app generates snapshots from DB621.",
+      "update": "French translation support and compatibility."
+    },
+    "dfn_bounds_db621": {
+      "description": "This app imports, updates, or deletes DFN boundaries.",
+      "update": "First time app deployment."
+    },
+    "resolve_null_geom": {
+      "description": "This app removes null geometries from the Postgres database.",
+      "update": "French translation support and compatibility."
+    },
+    "recover_from_version": {
+      "description": "This app recovers deleted data from versioning in the Postgres database.",
+      "update": "French translation support and compatibility."
+    },
+    "change_table_ownership_uniq": {
+      "description": "This app changes table ownership and permissions from/to UNIQ in the Postgres database.",
+      "update": "French translation support and compatibility."
+    },
+    "clean_table_ownership": {
+      "description": "This app cleans table ownership and permissions in the entire schema of the Postgres database.",
+      "update": "French translation support and compatibility."
+    },
+    "postgres_versioning": {
+      "description": "This app enables versioning for untracked schemas and tables in Postgres.",
+      "update": "French translation support and compatibility."
+    }
   }
 }

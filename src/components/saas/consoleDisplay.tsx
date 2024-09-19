@@ -1,8 +1,9 @@
 "use client";
 
 import React, { useEffect, useRef } from "react";
-
 import { useConsoleData } from "./inputDataProviders";
+import { SaveIcon } from "../icons";
+import { useTranslations } from "next-intl";
 
 /**
  * ConsoleDisplay component to display text data in a console/terminal-like feel.
@@ -12,6 +13,7 @@ import { useConsoleData } from "./inputDataProviders";
 export const ConsoleDisplay = (): JSX.Element => {
   const { consoleOutput } = useConsoleData();
   const consoleRef = useRef<HTMLDivElement>(null);
+  const t = useTranslations("consoleDisplay");
 
   // Scroll to the bottom whenever consoleOutput changes
   useEffect(() => {
@@ -20,16 +22,37 @@ export const ConsoleDisplay = (): JSX.Element => {
     }
   }, [consoleOutput]);
 
+  /**
+   * Function to download console output as a text file.
+   */
+  const downloadConsoleLog = () => {
+    const element = document.createElement("a");
+    const file = new Blob([consoleOutput], { type: "text/plain" });
+    element.href = URL.createObjectURL(file);
+    element.download = "console_log.txt";
+    document.body.appendChild(element); // Required for this to work in FireFox
+    element.click();
+  };
+
   return (
     <div>
-      <div
-        ref={consoleRef}
-        className="bg-slate-900 w-[45rem] text-wrap h-48 scroll-smooth rounded-xl mx-auto text-white text-start font-mono tracking-tighter py-2 ps-4 border-2 border-primary overflow-y-scroll text-wrap break-all"
-      >
-        {consoleOutput.split("\n").map((line, index) => (
-          <div key={index}>{line}</div>
-        ))}
+      <div className="relative bg-slate-900 w-[45rem] h-48 rounded-xl mx-auto text-white font-mono border-2 border-primary overflow-hidden">
+        <div
+          ref={consoleRef}
+          className="w-full h-full overflow-y-scroll p-4 text-start tracking-tighter break-all">
+          {/* Display each line of the console output */}
+          {consoleOutput.split("\n").map((line, index) => (
+            <div key={index}>{line}</div>
+          ))}
+        </div>
+        <button
+          onClick={downloadConsoleLog}
+          className="absolute top-2 right-2 text-white"
+          title="Download Console Log">
+          <SaveIcon />
+        </button>
       </div>
+      <p className="text-xs italic pt-1">{t("label")}</p>
     </div>
   );
 };

@@ -21,6 +21,16 @@ export interface InputDataProps {
   dbChoice: string | null;
   schemaChoice: string | null;
   tableChoice: string | null;
+  dbClass: string;
+  appType?: string;
+  taskEndpoint: string;
+  asDownloadable?: boolean;
+  file?: File;
+  fileName?: string | null;
+  tdsUsername?: string | null;
+  tdsPassword?: string | null;
+  arcgisErase?: boolean;
+  arcgisSnapshot?: boolean;
 }
 
 export interface TaskDataProps {
@@ -34,7 +44,6 @@ export interface TaskDataProps {
 export interface DatabaseDropdownProps {
   appType?: string;
   dbClass: string;
-  appTypeIncludeKey?: string | null;
   setInputData: React.Dispatch<React.SetStateAction<InputDataProps>>;
 }
 
@@ -52,6 +61,7 @@ export interface TablesDropdownProps {
   inputData: InputDataProps;
   setInputData: React.Dispatch<React.SetStateAction<InputDataProps>>;
   pattern: string;
+  endpoint?: string;
 }
 
 export interface TableDropdownData {
@@ -105,14 +115,13 @@ export const DefaultButtonSelector = ({
 
   return (
     <Button
-      className={cn("border-primary bg-transparent min-w-96 h-10", {
-        "border-danger text-danger bg-transparent min-w-96 h-10":
+      className={cn("border-primary bg-transparent w-full h-10", {
+        "border-danger text-danger bg-transparent w-full h-10":
           type === "danger",
       })}
       isDisabled={isDisabled ? true : false}
       radius="full"
-      variant="bordered"
-    >
+      variant="bordered">
       {t(label)}
     </Button>
   );
@@ -140,10 +149,9 @@ export const DropDownSelector = ({
     <Dropdown backdrop="blur">
       <DropdownTrigger>
         <Button
-          className="bg-primary text-white min-w-96 h-10"
+          className="bg-primary text-white w-full h-10"
           radius="full"
-          variant="solid"
-        >
+          variant="solid">
           {selectedLabel}
         </Button>
       </DropdownTrigger>
@@ -158,13 +166,11 @@ export const DropDownSelector = ({
           const selected = Array.from(keys)[0] as string;
 
           setSelectedKey(selected);
-        }}
-      >
+        }}>
         {(item) => (
           <DropdownItem
             key={item.value}
-            onClick={() => handleSelect(item.value)}
-          >
+            onClick={() => handleSelect(item.value)}>
             {item.label}
           </DropdownItem>
         )}
@@ -186,13 +192,12 @@ export const DropDownSelector = ({
 export const DatabaseDropdown = ({
   appType,
   dbClass,
-  appTypeIncludeKey = null,
   setInputData,
 }: DatabaseDropdownProps): JSX.Element => {
   const t = useTranslations("ServerDropdowns");
 
   const [options, setOptions] = useState<{ value: string; label: string }[]>(
-    [],
+    []
   );
   const [selectedKey, setSelectedKey] = useState<string>("select_database");
   const [selectedLabel, setSelectedLabel] = useState<string>(t("dbMenu_label"));
@@ -219,11 +224,7 @@ export const DatabaseDropdown = ({
               value: key,
               label: availableDatabases[dbClass][key],
             });
-          } else if (
-            appType === "admin" &&
-            appTypeIncludeKey &&
-            key.includes(appTypeIncludeKey)
-          ) {
+          } else if (appType === "admin") {
             newOptions.push({
               value: key,
               label: availableDatabases[dbClass][key],
@@ -240,7 +241,7 @@ export const DatabaseDropdown = ({
     };
 
     populateDatabaseDropdown();
-  }, [appType, dbClass, appTypeIncludeKey]);
+  }, [appType, dbClass]);
 
   // Update selected label when selected key or options change
   useEffect(() => {
@@ -291,7 +292,7 @@ export const SchemasDropdown = ({
   const [dbSchemas, setDbSchemas] = useState<SchemaDropdownData[] | null>(null);
   const [selectedKey, setSelectedKey] = useState<string>("select_schema");
   const [selectedLabel, setSelectedLabel] = useState<string>(
-    t("schMenu_label"),
+    t("schMenu_label")
   );
 
   // Fetch schemas when database choice changes
@@ -350,7 +351,7 @@ export const SchemasDropdown = ({
       ) : (
         <DefaultButtonSelector
           isDisabled={true}
-          label="ServerDropdowns.schMenu_loading"
+          label="ServerDropdowns.loading"
         />
       )}
     </div>
@@ -370,13 +371,14 @@ export const TablesDropdown = ({
   inputData,
   setInputData,
   pattern,
+  endpoint,
 }: TablesDropdownProps): JSX.Element => {
   const t = useTranslations("ServerDropdowns");
 
   const [schTables, setSchTables] = useState<TableDropdownData[] | null>(null);
   const [selectedKey, setSelectedKey] = useState<string>("select_table");
   const [selectedLabel, setSelectedLabel] = useState<string>(
-    t("tblMenu_label"),
+    t("tblMenu_label")
   );
 
   // Fetch tables when database or schema choice changes
@@ -387,11 +389,12 @@ export const TablesDropdown = ({
           target_db: inputData.dbChoice,
           schema_choice: inputData.schemaChoice,
           user_pattern: pattern,
+          endpoint: endpoint,
         });
         // Sort the tables array before setting it
         const sortedTables = tables.sort(
           (a: TableDropdownData, b: TableDropdownData) =>
-            a.label.localeCompare(b.label),
+            a.label.localeCompare(b.label)
         );
 
         setSchTables(sortedTables);
@@ -442,7 +445,7 @@ export const TablesDropdown = ({
       ) : (
         <DefaultButtonSelector
           isDisabled={true}
-          label="ServerDropdowns.tblMenu_loading"
+          label="ServerDropdowns.loading"
         />
       )}
     </div>
@@ -465,16 +468,14 @@ export const DisplayFieldChoice = ({
     <div>
       {fieldChoice ? (
         <div
-          className="border-2 border-primary rounded-3xl min-w-96 h-10 flex items-center justify-center"
-          nonce={nonce}
-        >
+          className="border-2 border-primary rounded-3xl w-full h-10 flex items-center justify-center"
+          nonce={nonce}>
           {fieldChoice}
         </div>
       ) : (
         <div
           className="border-2 border-primary rounded-3xl p-2 max-w-96 h-10"
-          nonce={nonce}
-        >
+          nonce={nonce}>
           <TxtPlaceholder nonce={nonce} />
         </div>
       )}
@@ -493,7 +494,7 @@ export const DisplayFieldGuideline = ({
   guideline,
 }: DisplayFieldGuidelineProps): JSX.Element => {
   return (
-    <div className="border-b-2 border-primary min-w-96 h-10 flex items-center justify-start indent-4">
+    <div className="border-b-2 border-primary w-full h-10 flex items-center justify-start indent-4">
       {guideline}
     </div>
   );
@@ -530,16 +531,15 @@ export const DownloadButton = ({
     <div>
       {downloadUrl ? (
         <Button
-          className="bg-primary text-white min-w-96 h-10"
+          className="bg-primary text-white w-full max-w-96 h-10"
           nonce={nonce}
           radius="full"
           variant="solid"
-          onClick={handleDownload}
-        >
+          onClick={handleDownload}>
           Download
         </Button>
       ) : (
-        <div className="border-2 border-primary rounded-3xl p-2 max-w-96 h-10">
+        <div className="border-2 border-primary rounded-3xl p-2 w-full max-w-96 h-10">
           <TxtPlaceholder nonce={nonce} />
         </div>
       )}
@@ -572,9 +572,8 @@ export const DisplayFieldChoiceHtml = ({
     <div>
       {plainText ? (
         <div
-          className="border-2 border-primary rounded-3xl min-w-96 h-10 flex items-center justify-center"
-          nonce={nonce}
-        >
+          className="border-2 border-primary rounded-3xl w-full h-10 flex items-center justify-center"
+          nonce={nonce}>
           {plainText}
         </div>
       ) : (

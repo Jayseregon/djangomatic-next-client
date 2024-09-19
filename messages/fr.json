@@ -45,16 +45,132 @@
     "link_title": "Guide d'utilisation"
   },
   "ServerDropdowns": {
-    "dbMenu_label": "Sélectionner une base de données",
-    "schMenu_label": "Selectionner un schéma",
-    "schMenu_loading": "Chargement des schémas...",
-    "tblMenu_label": "Selectionner une table",
-    "tblMenu_loading": "Chargement des tables...",
-    "menuNoData": "Pas de données disponibles"
-  }, 
-  "HP_by_Splits1": {
-    "title": "HP by Splits1",
-    "subtitle": "Compiler HP par splitter L1, dans un nœud.",
-    "code": "Actuellement en développement"
+    "dbMenu_label": "Base de données",
+    "schMenu_label": "Schéma",
+    "tblMenu_label": "Table",
+    "loading": "Chargement...",
+    "menuNoData": "Pas de données disponibles",
+    "zipFile": {
+      "label": "Fichier Zip",
+      "helperText": "Insérez le fichier zip à traiter"
+    }
+  },
+  "startTaskButton": {
+    "label": "Démarrer tâche"
+  },
+  "consoleDisplay": {
+    "label": "Le bouton de sauvegarde de la console permet d'exporter le log et de le partager avec l'équipe de développement."
+  },
+  "appDropdownHelper": {
+    "database": "Choisissez la base de données cible",
+    "schema": "Sélectionnez le schéma contenant le projet",
+    "pole_table": "Choisissez la couche de poteaux",
+    "dfn_table": "Choisissez le DFN à traiter",
+    "input_username": "Veuillez entrer votre nom d'utilisateur TDS",
+    "input_password": "Veuillez entrer votre mot de passe TDS",
+    "control_erase": "Supprimer existants",
+    "control_snap": "Snapshots auto"
+  },
+  "tdsApps": {
+    "address_breakdown": {
+      "description": "Cette application vise à compiler une répartition des adresses sous forme de fichier Excel avec une capture d'écran de la carte.",
+      "update": "Support de traduction en français et compatibilité."
+    },
+    "dfn_boundaries": {
+      "description": "Cette application génère une couche de limites DFN AGOL dans Postgres pour l'importation par le client.",
+      "update": "Support de traduction en français et compatibilité."
+    },
+    "gps_to_shp": {
+      "description": "Cette application compile et assainit les relevés GPS non classés en fichiers SHP adaptés au HLD.",
+      "update": "Support de traduction en français et compatibilité."
+    },
+    "gps_to_postgres": {
+      "description": "Cette application importe de nouveaux relevés GPS classés ou les ajoute aux tables existantes.",
+      "update": "Support de traduction en français et compatibilité."
+    },
+    "gps_to_postgres_refresh": {
+      "description": "Cette application effectue une nouvelle importation GPS, en effaçant les anciennes données.",
+      "update": "Support de traduction en français et compatibilité."
+    },
+    "hld_to_kmz": {
+      "description": "Cette application produit des cartes KMZ pour chaque HLD de DFN.",
+      "update": "Support de traduction en français et compatibilité."
+    },
+    "hld_to_postgres": {
+      "description": "Cette application importe de nouvelles données HLD ou les ajoute aux tables existantes.",
+      "update": "Support de traduction en français et compatibilité."
+    },
+    "hld_to_postgres_refresh": {
+      "description": "Cette application effectue une nouvelle importation HLD, en effaçant les anciennes données.",
+      "update": "Support de traduction en français et compatibilité."
+    },
+    "node_quantities": {
+      "description": "Cette application extrait les quantités de longueur AER/UG des nœuds en pieds.",
+      "update": "Première mise en service de l'application."
+    },
+    "hp_by_splits1": {
+      "description": "Cette application compile les données HP par répartiteurs L1 au sein d'un nœud.",
+      "update": "Résolution d'un problème lorsque les adresses sont vides."
+    },
+    "poles_numbering": {
+      "description": "Cette application crée un champ d'identification des poteaux basé sur l'ordre des feuilles.",
+      "update": "Support de traduction en français et compatibilité."
+    },
+    "midspan_calculation": {
+      "description": "Cette application recalcule les mi-portées du projet en fonction des mises à jour des poteaux.",
+      "update": "Support de traduction en français et compatibilité."
+    },
+    "dfn_poles_calculations": {
+      "description": "Cette application fournit des suggestions de fixation des poteaux et un pré-remplissage des tables par DFN.",
+      "update": "Support de traduction en français et compatibilité."
+    },
+    "node_poles_calculations": {
+      "description": "Cette application fournit des suggestions de fixation des poteaux et un pré-remplissage des tables par nœud.",
+      "update": "Support de traduction en français et compatibilité."
+    },
+    "pole_class_length_estimator": {
+      "description": "Cette application estime les classes et longueurs de poteaux manquants par DFN.",
+      "update": "Support de traduction en français et compatibilité."
+    },
+    "extract_data_dp": {
+      "description": "Cette application extrait les données de propriétaire de poteaux et les comptes HP pour DP.",
+      "update": "Support de traduction en français et compatibilité."
+    },
+    "import_to_db621": {
+      "description": "Cette application importe les données de conception DFN dans DB621 et effectue des instantanés automatiques.",
+      "update": "Support de traduction en français et compatibilité."
+    },
+    "update_db621": {
+      "description": "Cette application met à jour les attributs DFN dans DB621.",
+      "update": "Support de traduction en français et compatibilité."
+    },
+    "snapshots_from_db621": {
+      "description": "Cette application génère des instantanés à partir de DB621.",
+      "update": "Support de traduction en français et compatibilité."
+    },
+    "dfn_bounds_db621": {
+      "description": "Cette application importe, met à jour ou supprime les limites DFN.",
+      "update": "Première mise en service de l'application."
+    },
+    "resolve_null_geom": {
+      "description": "Cette application supprime les géométries nulles de la base de données Postgres.",
+      "update": "Support de traduction en français et compatibilité."
+    },
+    "recover_from_version": {
+      "description": "Cette application récupère les données supprimées à partir de la version dans la base de données Postgres.",
+      "update": "Support de traduction en français et compatibilité."
+    },
+    "change_table_ownership_uniq": {
+      "description": "Cette application modifie la propriété et les permissions des tables de/vers UNIQ dans la base de données Postgres.",
+      "update": "Support de traduction en français et compatibilité."
+    },
+    "clean_table_ownership": {
+      "description": "Cette application nettoie la propriété et les permissions des tables dans tout le schéma de la base de données Postgres.",
+      "update": "Support de traduction en français et compatibilité."
+    },
+    "postgres_versioning": {
+      "description": "Cette application permet la versioning pour les schémas et tables non suivis dans Postgres.",
+      "update": "Support de traduction en français et compatibilité."
+    }
   }
 }

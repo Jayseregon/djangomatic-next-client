@@ -6,11 +6,12 @@ import { AppPageTitle } from "@/src/components/saas/appPageTitle";
 import { StartTaskButton } from "@/src/components/saas/startTaskButton";
 import { InputDataProvider } from "@/src/components/saas/inputDataProviders";
 import { ConsoleDisplay } from "@/src/components/saas/consoleDisplay";
+import { AppPageDescription } from "@/src/components/saas/appPageDescription";
 
 /**
  * SaasPage component handles authentication and renders the SaasPageContent if the user is authenticated.
  *
- * @returns {JSX.Element} The rendered SaasPage component.
+ * @returns {Promise<JSX.Element>} The rendered SaasPage component.
  */
 export default async function SaasPage(): Promise<JSX.Element> {
   const session = await auth();
@@ -22,29 +23,31 @@ export default async function SaasPage(): Promise<JSX.Element> {
 
 /**
  * SaasPageContent component renders the main content of the SaaS page.
- * It includes the AppPageTitle, DatabaseSchemaTableSelector, and AnotherComponent.
+ * It includes the AppPageTitle, AppPageDescription, DatabaseSchema2Selector, ConsoleDisplay, and StartTaskButton components.
  *
  * @param {Object} props - The props for the SaasPageContent component.
  * @param {any} props.session - The session object containing user information.
  * @returns {JSX.Element} The rendered SaasPageContent component.
  */
 function SaasPageContent({ session }: { session: any }): JSX.Element {
-  const endpoint = "/saas/tds/ajax/query-compile-hp-by-splits1/";
+  const client = "tds_saas";
 
   return (
     <WithPermissionOverlay
       email={session.user.email}
-      permission="canAccessAppsTdsAdmin"
-    >
-      <div className="space-y-5">
-        <AppPageTitle client="tds_saas" />
+      permission="canAccessAppsTdsAdmin">
+      <div className="space-y-5 mb-5">
         <InputDataProvider>
-          <DatabaseSchema2Selector
-            appType="hld"
-            dbClass="db_class_spokane_valley"
-          />
+          {/* Automatically detects and displays the app name */}
+          <AppPageTitle client={client} />
+          {/* Automatically detects and displays the app description, version, and update date */}
+          <AppPageDescription client={client} />
+          {/* Allows the user to select a database and schema */}
+          <DatabaseSchema2Selector appType="hld" />
+          {/* Shows the console output */}
           <ConsoleDisplay />
-          <StartTaskButton taskEndpoint={endpoint} />
+          {/* Starts the task */}
+          <StartTaskButton />
         </InputDataProvider>
       </div>
     </WithPermissionOverlay>

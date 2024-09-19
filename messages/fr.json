@@ -66,8 +66,10 @@
     "schema": "Sélectionnez le schéma contenant le projet",
     "pole_table": "Choisissez la couche de poteaux",
     "dfn_table": "Choisissez le DFN à traiter",
+    "node_p_calc": "Choisissez la couche poteaux à traiter",
     "input_username": "Veuillez entrer votre nom d'utilisateur TDS",
     "input_password": "Veuillez entrer votre mot de passe TDS",
+    "input_uuidPole": "Optionnel : UUID poteau pour traitement ponctuel",
     "control_erase": "Supprimer existants",
     "control_snap": "Snapshots auto"
   },

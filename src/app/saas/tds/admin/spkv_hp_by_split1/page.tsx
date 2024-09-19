@@ -35,7 +35,8 @@ function SaasPageContent({ session }: { session: any }): JSX.Element {
   return (
     <WithPermissionOverlay
       email={session.user.email}
-      permission="canAccessAppsTdsAdmin">
+      permission="canAccessAppsTdsAdmin"
+    >
       <div className="space-y-5 mb-5">
         <InputDataProvider>
           {/* Automatically detects and displays the app name */}

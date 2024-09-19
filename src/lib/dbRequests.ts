@@ -3,6 +3,7 @@ import { getCookie, setCookie, hasCookie } from "cookies-next";
 import { LRUCache } from "lru-cache";
 import DOMPurify from "isomorphic-dompurify";
 import { jwtDecode } from "jwt-decode";
+
 // import { useConsoleData } from "../components/saas/inputDataProviders";
 import { TaskDataProps } from "@/components/saas/serverDropdowns";
 
@@ -45,10 +46,12 @@ export interface startTaskProps {
   dbClass: string;
   endpoint: string;
   file?: File;
+  uuidPole?: string;
   tdsUsername?: string;
   tdsPassword?: string;
   arcgisErase?: boolean;
   arcgisSnapshot?: boolean;
+  is_override?: boolean;
 }
 
 interface checkTaskStatusProps {
@@ -289,11 +292,13 @@ export const startTask = async ({
   table_choice,
   dbClass,
   endpoint,
+  uuidPole,
   file,
   tdsUsername,
   tdsPassword,
   arcgisErase,
   arcgisSnapshot,
+  is_override,
 }: startTaskProps) => {
   const { djAuthToken } = await getServerTokens();
 
@@ -307,6 +312,7 @@ export const startTask = async ({
 
     // define request params
     const payload = new FormData();
+
     payload.append("db_choice", db_choice);
     payload.append("schema_choice", schema_choice);
     payload.append("db_class", dbClass);
@@ -330,10 +336,30 @@ export const startTask = async ({
       payload.append("dfn_choice", table_choice);
     }
 
-    // Log the payload for debugging
-    for (let pair of payload.entries()) {
-      console.log(pair[0] + ": " + pair[1]);
+    // set override flag for import HLD/GPS to Postgres
+    if (
+      endpoint === "/saas/tds/ajax/query-import-hld-to-postgres/" ||
+      endpoint === "/saas/tds/ajax/query-import-gps-to-postgres/"
+    ) {
+      if (is_override) {
+        payload.append("is_override", "yes");
+      }
     }
+
+    // set projectType value for poles calculations
+    if (endpoint === "/saas/tds/ajax/query-poles-dfn-calc/") {
+      if (is_override) {
+        payload.append("projectType", "HLD");
+      } else {
+        payload.append("projectType", "LLD");
+      }
+      payload.append("uuidPole", uuidPole || "");
+    }
+
+    // // Log the payload for debugging
+    // for (let pair of payload.entries()) {
+    //   console.log(pair[0] + ": " + pair[1]);
+    // }
 
     const headers = {
       "X-CSRFToken": csrfToken,
@@ -354,21 +380,20 @@ export const startTask = async ({
   } catch (error: any) {
     console.error("Error starting task:", error);
 
-    // Handle specific Axios errors
-    if (error.response) {
-      // Server responded with a status other than 200 range
-      console.error("Response data:", error.response.data);
-      console.error("Response status:", error.response.status);
-      console.error("Response headers:", error.response.headers);
-    } else if (error.request) {
-      // Request was made but no response was received
-      console.error("Request data:", error.request);
-    } else {
-      // Something happened in setting up the request
-      console.error("Error message:", error.message);
-    }
-
-    throw error; // Re-throw the error after logging
+    // // Handle specific Axios errors
+    // if (error.response) {
+    //   // Server responded with a status other than 200 range
+    //   console.error("Response data:", error.response.data);
+    //   console.error("Response status:", error.response.status);
+    //   console.error("Response headers:", error.response.headers);
+    // } else if (error.request) {
+    //   // Request was made but no response was received
+    //   console.error("Request data:", error.request);
+    // } else {
+    //   // Something happened in setting up the request
+    //   console.error("Error message:", error.message);
+    // }
+    // throw error; // re-throw the error
   }
 };
 
@@ -420,7 +445,7 @@ export const checkTaskStatus = async ({
             setTaskData,
             accessDownload,
           }),
-        waitTime
+        waitTime,
       );
     } else {
       // process the result once finished

@@ -1,9 +1,11 @@
 "use client";
 
 import { usePathname } from "next/navigation";
+import { useTranslations } from "next-intl";
+
 import { title } from "@/components/primitives";
 import { saasData } from "@/src/config/saasData";
-import { useTranslations } from "next-intl";
+
 import { AppItem } from "../ui/sidebars";
 
 interface PillVersioningProps {
@@ -28,7 +30,7 @@ export const AppPageDescription = ({
   const currentPath = usePathname();
   // Find the app data based on the current path
   const appData = (saasData[client] as AppItem[]).find(
-    (app) => app.href === currentPath
+    (app) => app.href === currentPath,
   );
   const appDesc = appData?.desc;
   const appVersion = appData?.version;
@@ -37,10 +39,7 @@ export const AppPageDescription = ({
   return (
     <div className="grid grid-cols-1 gap-5 pb-10">
       {/* Display the version and last updated date */}
-      <PillVersioning
-        version={appVersion}
-        dateUpdated={appDateUpdated}
-      />
+      <PillVersioning dateUpdated={appDateUpdated} version={appVersion} />
       <div className="text-wrap break-all max-w-2xl mx-auto">
         {/* Display the app description */}
         <h2 className={title({ size: "xs" })}>{t(`${appDesc}.description`)}</h2>

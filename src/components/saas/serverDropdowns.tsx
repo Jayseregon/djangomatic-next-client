@@ -25,6 +25,8 @@ export interface InputDataProps {
   appType?: string;
   taskEndpoint: string;
   asDownloadable?: boolean;
+  willOverride?: boolean;
+  uuidPole?: string;
   file?: File;
   fileName?: string | null;
   tdsUsername?: string | null;
@@ -121,7 +123,8 @@ export const DefaultButtonSelector = ({
       })}
       isDisabled={isDisabled ? true : false}
       radius="full"
-      variant="bordered">
+      variant="bordered"
+    >
       {t(label)}
     </Button>
   );
@@ -151,7 +154,8 @@ export const DropDownSelector = ({
         <Button
           className="bg-primary text-white w-full h-10"
           radius="full"
-          variant="solid">
+          variant="solid"
+        >
           {selectedLabel}
         </Button>
       </DropdownTrigger>
@@ -166,11 +170,13 @@ export const DropDownSelector = ({
           const selected = Array.from(keys)[0] as string;
 
           setSelectedKey(selected);
-        }}>
+        }}
+      >
         {(item) => (
           <DropdownItem
             key={item.value}
-            onClick={() => handleSelect(item.value)}>
+            onClick={() => handleSelect(item.value)}
+          >
             {item.label}
           </DropdownItem>
         )}
@@ -197,7 +203,7 @@ export const DatabaseDropdown = ({
   const t = useTranslations("ServerDropdowns");
 
   const [options, setOptions] = useState<{ value: string; label: string }[]>(
-    []
+    [],
   );
   const [selectedKey, setSelectedKey] = useState<string>("select_database");
   const [selectedLabel, setSelectedLabel] = useState<string>(t("dbMenu_label"));
@@ -292,7 +298,7 @@ export const SchemasDropdown = ({
   const [dbSchemas, setDbSchemas] = useState<SchemaDropdownData[] | null>(null);
   const [selectedKey, setSelectedKey] = useState<string>("select_schema");
   const [selectedLabel, setSelectedLabel] = useState<string>(
-    t("schMenu_label")
+    t("schMenu_label"),
   );
 
   // Fetch schemas when database choice changes
@@ -378,7 +384,7 @@ export const TablesDropdown = ({
   const [schTables, setSchTables] = useState<TableDropdownData[] | null>(null);
   const [selectedKey, setSelectedKey] = useState<string>("select_table");
   const [selectedLabel, setSelectedLabel] = useState<string>(
-    t("tblMenu_label")
+    t("tblMenu_label"),
   );
 
   // Fetch tables when database or schema choice changes
@@ -394,7 +400,7 @@ export const TablesDropdown = ({
         // Sort the tables array before setting it
         const sortedTables = tables.sort(
           (a: TableDropdownData, b: TableDropdownData) =>
-            a.label.localeCompare(b.label)
+            a.label.localeCompare(b.label),
         );
 
         setSchTables(sortedTables);
@@ -469,13 +475,15 @@ export const DisplayFieldChoice = ({
       {fieldChoice ? (
         <div
           className="border-2 border-primary rounded-3xl w-full h-10 flex items-center justify-center"
-          nonce={nonce}>
+          nonce={nonce}
+        >
           {fieldChoice}
         </div>
       ) : (
         <div
           className="border-2 border-primary rounded-3xl p-2 max-w-96 h-10"
-          nonce={nonce}>
+          nonce={nonce}
+        >
           <TxtPlaceholder nonce={nonce} />
         </div>
       )}
@@ -535,7 +543,8 @@ export const DownloadButton = ({
           nonce={nonce}
           radius="full"
           variant="solid"
-          onClick={handleDownload}>
+          onClick={handleDownload}
+        >
           Download
         </Button>
       ) : (
@@ -573,7 +582,8 @@ export const DisplayFieldChoiceHtml = ({
       {plainText ? (
         <div
           className="border-2 border-primary rounded-3xl w-full h-10 flex items-center justify-center"
-          nonce={nonce}>
+          nonce={nonce}
+        >
           {plainText}
         </div>
       ) : (

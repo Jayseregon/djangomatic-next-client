@@ -2,10 +2,13 @@
 
 import React, { ChangeEvent, useState, MouseEvent } from "react";
 import { useTranslations } from "next-intl";
+import { Button } from "@nextui-org/react";
+import DOMPurify from "dompurify";
+
+import { ThumbsUpIcon, ThumbsDownIcon } from "../icons";
+
 import { useInputData } from "./inputDataProviders";
 import { InputDataProps } from "./serverDropdowns";
-import { Button } from "@nextui-org/react";
-import { ThumbsUpIcon, ThumbsDownIcon } from "../icons";
 import {
   DatabaseDropdown,
   SchemasDropdown,
@@ -59,16 +62,13 @@ export const DatabaseSchemaTable3Selector = ({
           setInputData={setInputData}
         />
         {/* Dropdown for selecting a schema */}
-        <SchemasDropdown
-          inputData={inputData}
-          setInputData={setInputData}
-        />
+        <SchemasDropdown inputData={inputData} setInputData={setInputData} />
         {/* Dropdown for selecting a table */}
         <TablesDropdown
+          endpoint={endpoint}
           inputData={inputData}
           pattern={pattern}
           setInputData={setInputData}
-          endpoint={endpoint}
         />
       </div>
     </div>
@@ -101,10 +101,7 @@ export const DatabaseSchema2Selector = ({
           setInputData={setInputData}
         />
         {/* Dropdown for selecting a schema */}
-        <SchemasDropdown
-          inputData={inputData}
-          setInputData={setInputData}
-        />
+        <SchemasDropdown inputData={inputData} setInputData={setInputData} />
       </div>
     </div>
   );
@@ -115,7 +112,7 @@ export const DatabaseSchema2Selector = ({
  *
  * @returns {JSX.Element} The rendered component.
  */
-export const FileInputButton = (): JSX.Element => {
+export const ZipFileInputButton = (): JSX.Element => {
   const t = useTranslations("ServerDropdowns");
   const { setInputData } = useInputData();
   const [fileName, setFileName] = useState<string | null>(null);
@@ -127,6 +124,7 @@ export const FileInputButton = (): JSX.Element => {
    */
   const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
+
     if (file) {
       setFileName(file.name);
       setInputData((prevDataChoices: InputDataProps) => ({
@@ -145,15 +143,16 @@ export const FileInputButton = (): JSX.Element => {
       <div className="flex w-full inline-block rounded-3xl bg-transparent border-0 text-sm text-white ring-1 ring-inset ring-primary">
         <label
           className="flex items-center justify-center w-20 h-10 bg-primary text-sm text-white text-center rounded-l-3xl ps-2"
-          htmlFor="file-input">
+          htmlFor="file-input"
+        >
           <span>{t("zipFile.label")}</span>
           <input
+            accept=".zip"
             aria-label="file-input"
             className="sr-only"
             id="file-input"
             name="file-input"
             type="file"
-            accept=".zip"
             onChange={handleFileChange}
           />
         </label>
@@ -183,6 +182,7 @@ export const InputArcGISCreds = (): JSX.Element => {
    */
   const handleInputBlur = (event: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
+
     if (name === "username") {
       setInputData((prevDataChoices: InputDataProps) => ({
         ...prevDataChoices,
@@ -202,11 +202,11 @@ export const InputArcGISCreds = (): JSX.Element => {
         <p>{t("input_username")}</p>
         <div className="border-2 border-primary rounded-3xl w-full flex items-center justify-center">
           <input
-            type="text"
+            className="border-0 focus:ring-0 focus:ring-inset text-white bg-transparent text-center"
             id="username"
             name="username"
             placeholder="freddie_mercury"
-            className="border-0 focus:ring-0 focus:ring-inset text-white bg-transparent text-center"
+            type="text"
             onBlur={handleInputBlur}
           />
         </div>
@@ -215,11 +215,11 @@ export const InputArcGISCreds = (): JSX.Element => {
         <p>{t("input_password")}</p>
         <div className="border-2 border-primary rounded-3xl w-full flex items-center justify-center">
           <input
-            type="password"
+            className="border-0 focus:ring-0 focus:ring-inset text-white bg-transparent text-center"
             id="password"
             name="password"
             placeholder="********"
-            className="border-0 focus:ring-0 focus:ring-inset text-white bg-transparent text-center"
+            type="password"
             onBlur={handleInputBlur}
           />
         </div>
@@ -246,6 +246,7 @@ export const ArcGISControls = (): JSX.Element => {
    */
   const handleControlChange = (event: MouseEvent<HTMLButtonElement>) => {
     const { id } = event.currentTarget;
+
     if (id === "arcgisErase") {
       setInputData((prevDataChoices: InputDataProps) => ({
         ...prevDataChoices,
@@ -265,11 +266,12 @@ export const ArcGISControls = (): JSX.Element => {
         <p className="text-center">{t("control_erase")}</p>
         <Button
           isIconOnly
+          color={inputData.arcgisErase ? "success" : "danger"}
           id="arcgisErase"
           name="arcgisErase"
           variant="bordered"
-          color={inputData.arcgisErase ? "success" : "danger"}
-          onClick={handleControlChange}>
+          onClick={handleControlChange}
+        >
           {inputData.arcgisErase ? <ThumbsUpIcon /> : <ThumbsDownIcon />}
         </Button>
       </div>
@@ -277,13 +279,60 @@ export const ArcGISControls = (): JSX.Element => {
         <p className="text-center">{t("control_snap")}</p>
         <Button
           isIconOnly
+          color={inputData.arcgisSnapshot ? "success" : "danger"}
           id="arcgisSnapshot"
           name="arcgisSnapshot"
           variant="bordered"
-          color={inputData.arcgisSnapshot ? "success" : "danger"}
-          onClick={handleControlChange}>
+          onClick={handleControlChange}
+        >
           {inputData.arcgisSnapshot ? <ThumbsUpIcon /> : <ThumbsDownIcon />}
         </Button>
+      </div>
+    </div>
+  );
+};
+
+/**
+ * Component for inputting a UUID.
+ * Validates and sanitizes the input to ensure it is a valid string and not malicious code.
+ *
+ * @returns {JSX.Element} The rendered PoleUuidInput component.
+ */
+export const PoleUuidInput = (): JSX.Element => {
+  const t = useTranslations("appDropdownHelper");
+  const { setInputData } = useInputData();
+
+  /**
+   * Handle input blur event.
+   * Sanitizes the input to ensure it is a valid string and updates the input data state.
+   *
+   * @param {ChangeEvent<HTMLInputElement>} event - The blur event.
+   */
+  const handleInputBlur = (event: ChangeEvent<HTMLInputElement>) => {
+    const uuidInput = event.target.value.trim();
+    // Sanitize the input to remove any potentially malicious code
+    const sanitizedInput = DOMPurify.sanitize(uuidInput);
+
+    // Update the input data state with the sanitized input
+    setInputData((prevDataChoices: InputDataProps) => ({
+      ...prevDataChoices,
+      uuidPole: sanitizedInput,
+    }));
+  };
+
+  return (
+    <div className="grid grid-cols-2 gap-8 pb-8">
+      {/* Display guidelines for the input field */}
+      <DisplayFieldGuideline guideline={t("input_uuidPole")} />
+      <div className="border-2 border-primary rounded-3xl w-full flex items-center justify-center">
+        <input
+          className="border-0 focus:ring-0 focus:ring-inset text-white bg-transparent text-center"
+          id="uuidPole"
+          name="uuidPole"
+          placeholder="xxxxx-xxxx-xxxx-xxxx-xxxx"
+          type="text"
+          onBlur={handleInputBlur}
+        />
       </div>
     </div>
   );

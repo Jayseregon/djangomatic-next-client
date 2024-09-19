@@ -4,7 +4,7 @@ export const saasData = {
   tds_saas: [
     // Address Breakdown --> not yet implemented
     {
-      label: "Address Breakdown",
+      label: "Address Breakdown - UNAV",
       type: "hld",
       href: "/saas/tds/hld/spkv_adr_xls",
       endpoint: "/saas/tds/",
@@ -13,12 +13,13 @@ export const saasData = {
       date_upd: "2024-03-26",
       doc_href: "/saas/tds/empty",
       asDownloadable: false,
+      willOverride: false,
       dbClass: "db_class_spokane_valley",
       is_active: "N",
     },
     // DFN Boundaries --> not yet implemented
     {
-      label: "DFN Boundaries",
+      label: "DFN Boundaries - UNAV",
       type: "hld",
       href: "/saas/tds/hld/spkv_dfn_lots",
       endpoint: "/saas/tds/",
@@ -27,12 +28,13 @@ export const saasData = {
       date_upd: "2024-03-26",
       doc_href: "/saas/tds/empty",
       asDownloadable: false,
+      willOverride: false,
       dbClass: "db_class_spokane_valley",
       is_active: "N",
     },
     // GPS to SHP --> not yet implemented
     {
-      label: "GPS to SHP",
+      label: "GPS to SHP - UNAV",
       type: "hld",
       href: "/saas/tds/hld/spkv_gps_shp",
       endpoint: "/saas/tds/",
@@ -41,12 +43,13 @@ export const saasData = {
       date_upd: "2024-03-26",
       doc_href: "/saas/tds/empty",
       asDownloadable: false,
+      willOverride: false,
       dbClass: "db_class_spokane_valley",
       is_active: "N",
     },
     // GPS to Postgres
     {
-      label: "GPS to Postgres",
+      label: "GPS to Postgres - Ok",
       type: "hld",
       href: "/saas/tds/hld/spkv_gps_db",
       endpoint: "/saas/tds/ajax/query-import-gps-to-postgres/",
@@ -55,26 +58,28 @@ export const saasData = {
       date_upd: "2024-03-26",
       doc_href: "/saas/tds/empty",
       asDownloadable: false,
+      willOverride: false,
       dbClass: "db_class_spokane_valley",
       is_active: "Y",
     },
     // GPS Postgres - Override
     {
-      label: "GPS to Postgres",
+      label: "GPS to Postgres - Ok",
       type: "override",
       href: "/saas/tds/override/spkv_override_gps",
-      endpoint: "/saas/tds/",
+      endpoint: "/saas/tds/ajax/query-import-gps-to-postgres/",
       desc: "gps_to_postgres_refresh",
       version: "1.0.1",
       date_upd: "2024-03-26",
       doc_href: "/saas/tds/empty",
       asDownloadable: false,
+      willOverride: true,
       dbClass: "db_class_spokane_valley",
       is_active: "Y",
     },
     // HLD to KMZ --> not yet implemented
     {
-      label: "HLD to KMZ",
+      label: "HLD to KMZ - UNAV",
       type: "hld",
       href: "/saas/tds/hld/spkv_hld_kmz",
       endpoint: "/saas/tds/",
@@ -83,12 +88,13 @@ export const saasData = {
       date_upd: "2024-03-26",
       doc_href: "/saas/tds/empty",
       asDownloadable: false,
+      willOverride: false,
       dbClass: "db_class_spokane_valley",
       is_active: "N",
     },
     // HLD to Postgres
     {
-      label: "HLD to Postgres",
+      label: "HLD to Postgres - Ok",
       type: "hld",
       href: "/saas/tds/hld/spkv_hld_db",
       endpoint: "/saas/tds/ajax/query-import-hld-to-postgres/",
@@ -97,26 +103,28 @@ export const saasData = {
       date_upd: "2024-03-26",
       doc_href: "/saas/tds/empty",
       asDownloadable: false,
+      willOverride: false,
       dbClass: "db_class_spokane_valley",
       is_active: "Y",
     },
     // HLD Postgres - Override
     {
-      label: "HLD to Postgres",
+      label: "HLD to Postgres - Ok",
       type: "override",
       href: "/saas/tds/override/spkv_override_hld_db",
-      endpoint: "/saas/tds/",
+      endpoint: "/saas/tds/ajax/query-import-hld-to-postgres/",
       desc: "hld_to_postgres_refresh",
       version: "1.0.1",
       date_upd: "2024-03-26",
       doc_href: "/saas/tds/empty",
       asDownloadable: false,
+      willOverride: true,
       dbClass: "db_class_spokane_valley",
       is_active: "Y",
     },
     // Node Quantities - admin
     {
-      label: "Node Quantities",
+      label: "Node Quantities - Ok",
       type: "admin",
       href: "/saas/tds/admin/spkv_node_qty",
       endpoint: "/saas/tds/ajax/query-extract-node-length-qt/",
@@ -124,13 +132,14 @@ export const saasData = {
       version: "1.0.0",
       date_upd: "2024-04-05",
       doc_href: "/saas/tds/empty",
-      asDownloadable: false,
+      asDownloadable: true,
+      willOverride: false,
       dbClass: "db_class_spokane_valley",
       is_active: "Y",
     },
     // HP by Splits1 - admin
     {
-      label: "HP by Splits1",
+      label: "HP by Splits1 - Ok",
       type: "admin",
       href: "/saas/tds/admin/spkv_hp_by_split1",
       endpoint: "/saas/tds/ajax/query-compile-hp-by-splits1/",
@@ -138,13 +147,14 @@ export const saasData = {
       version: "1.0.2",
       date_upd: "2024-05-23",
       doc_href: "/saas/tds/empty",
-      asDownloadable: false,
+      asDownloadable: true,
+      willOverride: false,
       dbClass: "db_class_spokane_valley",
       is_active: "Y",
     },
     // Poles automatic ID generator in DFN
     {
-      label: "Poles Numbering",
+      label: "Poles Numbering - To-Do",
       type: "lld",
       href: "/saas/tds/lld/poles_numbering",
       endpoint: "/saas/tds/ajax/query-poles-auto-id/",
@@ -153,12 +163,13 @@ export const saasData = {
       date_upd: "2024-03-26",
       doc_href: "/saas/tds/doc_pole_numbering",
       asDownloadable: false,
+      willOverride: false,
       dbClass: "db_class_spokane_valley",
       is_active: "Y",
     },
     // Midspans calculation in DFN
     {
-      label: "Midspan Calculation",
+      label: "Midspan Calculation - To-Do",
       type: "lld",
       href: "/saas/tds/lld/midspan_auto_calc",
       endpoint: "/saas/tds/ajax/query-midspan-auto-calc/",
@@ -167,12 +178,13 @@ export const saasData = {
       date_upd: "2024-03-26",
       doc_href: "/saas/tds/doc_midspan_calculator",
       asDownloadable: false,
+      willOverride: false,
       dbClass: "db_class_spokane_valley",
       is_active: "Y",
     },
     // Poles table pre-fill and suggestions calculation - by DFN
     {
-      label: "DFN Poles Calculations",
+      label: "DFN Poles Calculations - Ok",
       type: "lld",
       href: "/saas/tds/lld/dfn_poles_calc",
       endpoint: "/saas/tds/ajax/query-poles-dfn-calc/",
@@ -181,26 +193,28 @@ export const saasData = {
       date_upd: "2024-03-26",
       doc_href: "/saas/tds/doc_dfn_poles_calculator",
       asDownloadable: false,
+      willOverride: false, // using willOverride to provide 'projectType' in API endpoint - will set to LLD
       dbClass: "db_class_spokane_valley",
       is_active: "Y",
     },
     // Poles table pre-fill and suggestions calculation - by Node
     {
-      label: "Node Poles Calculations",
+      label: "Node Poles Calculations - Ok",
       type: "hld",
       href: "/saas/tds/hld/node_poles_calc",
-      endpoint: "/saas/tds/",
+      endpoint: "/saas/tds/ajax/query-poles-dfn-calc/",
       desc: "node_poles_calculations",
       version: "1.3.2",
       date_upd: "2024-03-26",
       doc_href: "/saas/tds/doc_dfn_poles_calculator",
       asDownloadable: false,
+      willOverride: true, // using willOverride to provide 'projectType' in API endpoint - will set to HLD
       dbClass: "db_class_spokane_valley",
       is_active: "Y",
     },
     // Pole estimator for missing classes en lengths, by DFN
     {
-      label: "Pole Class-Length Estimator",
+      label: "Pole Class-Length Estimator - To-Do",
       type: "lld",
       href: "/saas/tds/lld/pole_class_length_est",
       endpoint: "/saas/tds/ajax/query-pole-class-length-est/",
@@ -209,12 +223,13 @@ export const saasData = {
       date_upd: "2024-03-26",
       doc_href: "/saas/tds/doc_pole_class_length_estimator",
       asDownloadable: false,
+      willOverride: false,
       dbClass: "db_class_spokane_valley",
       is_active: "Y",
     },
     // Extract Pole and HP data for DP
     {
-      label: "Extract Data DP",
+      label: "Extract Data DP - To-Do",
       type: "lld",
       href: "/saas/tds/lld/extract_data_dp",
       endpoint: "/saas/tds/ajax/query-extract-data-dp/",
@@ -223,13 +238,14 @@ export const saasData = {
       date_upd: "2024-03-26",
       doc_href: "/saas/tds/empty",
       asDownloadable: false,
+      willOverride: false,
       dbClass: "db_class_spokane_valley",
       is_active: "Y",
     },
     // ARCGIS API APPS
     // Import to DB621
     {
-      label: "Import to DB621",
+      label: "Import to DB621 - Ok",
       type: "arcgis",
       href: "/saas/tds/arcgis/arcgis_api_import_db621",
       endpoint: "/saas/tds/ajax/arcgis/import-dfn-db621/",
@@ -238,12 +254,13 @@ export const saasData = {
       date_upd: "2024-03-26",
       doc_href: "/saas/tds/empty",
       asDownloadable: false,
+      willOverride: false,
       dbClass: "db_class_spokane_valley",
       is_active: "Y",
     },
     // Update to DB621
     {
-      label: "Update DB621",
+      label: "Update DB621 - Ok",
       type: "arcgis",
       href: "/saas/tds/arcgis/arcgis_api_update_db621",
       endpoint: "/saas/tds/ajax/arcgis/update-dfn-db621/",
@@ -252,12 +269,13 @@ export const saasData = {
       date_upd: "2024-03-26",
       doc_href: "/saas/tds/empty",
       asDownloadable: false,
+      willOverride: false,
       dbClass: "db_class_spkv_snapshot",
       is_active: "Y",
     },
     // Snapshots from DB621
     {
-      label: "Snapshots from DB621",
+      label: "Snapshots from DB621 - Ok",
       type: "arcgis",
       href: "/saas/tds/arcgis/arcgis_api_snapshots_db621",
       endpoint: "/saas/tds/ajax/arcgis/auto-snapshots-db621/",
@@ -266,12 +284,13 @@ export const saasData = {
       date_upd: "2024-03-26",
       doc_href: "/saas/tds/empty",
       asDownloadable: false,
+      willOverride: false,
       dbClass: "db_class_spokane_valley",
       is_active: "Y",
     },
     // DFN Bounds CRUD DB621
     {
-      label: "DFN Bounds DB621",
+      label: "DFN Bounds DB621 - Ok",
       type: "arcgis",
       href: "/saas/tds/arcgis/arcgis_api_dfn_bounds_crud_db621",
       endpoint: "/saas/tds/ajax/arcgis/auto-dfn-crud-db621/",
@@ -280,13 +299,14 @@ export const saasData = {
       date_upd: "2024-04-22",
       doc_href: "/saas/tds/empty",
       asDownloadable: false,
+      willOverride: false,
       dbClass: "db_class_spokane_valley",
       is_active: "Y",
     },
     // SUPER APPS
     // Resolve Null Geom
     {
-      label: "Resolve Null Geom",
+      label: "Resolve Null Geom - To-Do",
       type: "super",
       href: "/saas/tds/super/resolve_null_geom",
       endpoint: "/saas/tds/ajax/super/query-resolve-null-geom-main/",
@@ -295,12 +315,13 @@ export const saasData = {
       date_upd: "2024-03-26",
       doc_href: "/saas/tds/empty",
       asDownloadable: false,
+      willOverride: false,
       dbClass: "db_class_spokane_valley",
       is_active: "Y",
     },
     // Recover deleted data
     {
-      label: "Recover from Version",
+      label: "Recover from Version - To-Do",
       type: "super",
       href: "/saas/tds/super/recover_version",
       endpoint: "/saas/tds/ajax/super/query-recover-version-prod/",
@@ -309,12 +330,13 @@ export const saasData = {
       date_upd: "2024-03-26",
       doc_href: "/saas/tds/empty",
       asDownloadable: false,
+      willOverride: false,
       dbClass: "db_class_spokane_valley",
       is_active: "Y",
     },
     // Change Table Ownership UNIQ
     {
-      label: "Change Table Ownership UNIQ",
+      label: "Change Table Ownership UNIQ - To-Do",
       type: "super",
       href: "/saas/tds/super/uniq_change_tbl_own",
       endpoint: "/saas/tds/ajax/super/query-change-ownership-uniq/",
@@ -323,12 +345,13 @@ export const saasData = {
       date_upd: "2024-03-26",
       doc_href: "/saas/tds/empty",
       asDownloadable: false,
+      willOverride: false,
       dbClass: "db_class_spokane_valley",
       is_active: "Y",
     },
     // Clean Table Ownership
     {
-      label: "Clean Table Ownership",
+      label: "Clean Table Ownership - To-Do",
       type: "super",
       href: "/saas/tds/super/clean_tbl_own",
       endpoint: "/saas/tds/ajax/super/query-clean-table-ownership/",
@@ -337,12 +360,13 @@ export const saasData = {
       date_upd: "2024-03-26",
       doc_href: "/saas/tds/empty",
       asDownloadable: false,
+      willOverride: false,
       dbClass: "db_class_spokane_valley",
       is_active: "Y",
     },
     // Postgres Versioning
     {
-      label: "Postgres Versioning",
+      label: "Postgres Versioning - To-Do",
       type: "super",
       href: "/saas/tds/super/postgres_version",
       endpoint: "/saas/tds/ajax/super/query-postgres-version/",
@@ -351,6 +375,7 @@ export const saasData = {
       date_upd: "2024-03-26",
       doc_href: "/saas/tds/empty",
       asDownloadable: false,
+      willOverride: false,
       dbClass: "db_class_spokane_valley",
       is_active: "Y",
     },

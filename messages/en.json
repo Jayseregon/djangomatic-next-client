@@ -66,8 +66,10 @@
     "schema": "Select the schema containing the project",
     "pole_table": "Choose the pole layer", 
     "dfn_table": "Choose the DFN to process", 
+    "node_p_calc": "Choose the poles layer to process", 
     "input_username": "Please enter TDS username",
     "input_password": "Please enter TDS password", 
+    "input_uuidPole": "Optional: pole UUID for ponctual processing",
     "control_erase": "Erase existing",
     "control_snap": "Auto snapshots"
   },

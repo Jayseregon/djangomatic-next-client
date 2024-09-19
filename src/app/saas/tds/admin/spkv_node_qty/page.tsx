@@ -1,7 +1,7 @@
 import { UnAuthenticated } from "@/components/auth/unAuthenticated";
 import { auth } from "@/auth";
 import { DatabaseSchema2Selector } from "@/src/components/saas/serverSelectors";
-import { FileInputButton } from "@/src/components/saas/serverSelectors";
+import { ZipFileInputButton } from "@/src/components/saas/serverSelectors";
 import { WithPermissionOverlay } from "@/src/components/auth/withPermissionOverlay";
 import { AppPageTitle } from "@/src/components/saas/appPageTitle";
 import { StartTaskButton } from "@/src/components/saas/startTaskButton";
@@ -36,7 +36,8 @@ function SaasPageContent({ session }: { session: any }): JSX.Element {
   return (
     <WithPermissionOverlay
       email={session.user.email}
-      permission="canAccessAppsTdsAdmin">
+      permission="canAccessAppsTdsAdmin"
+    >
       <div className="space-y-5 mb-5">
         <InputDataProvider>
           {/* Automatically detects and displays the app name */}
@@ -44,7 +45,7 @@ function SaasPageContent({ session }: { session: any }): JSX.Element {
           {/* Automatically detects and displays the app description, version, and update date */}
           <AppPageDescription client={client} />
           {/* Allows the user to input a zip file */}
-          <FileInputButton />
+          <ZipFileInputButton />
           {/* Allows the user to select a database and schema */}
           <DatabaseSchema2Selector appType="hld" />
           {/* Shows the console output */}

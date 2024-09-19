@@ -2,6 +2,7 @@
 
 import { Button, Spinner } from "@nextui-org/react";
 import React, { useEffect } from "react";
+import { useTranslations } from "next-intl";
 
 import { startTask, checkTaskStatus, startTaskProps } from "@/lib/dbRequests";
 
@@ -9,7 +10,6 @@ import { useInputData, useTaskData } from "./inputDataProviders";
 import { TaskDataProps } from "./serverDropdowns";
 import { DownloadButton } from "./serverDropdowns";
 import { useConsoleData } from "./inputDataProviders";
-import { useTranslations } from "next-intl";
 
 /**
  * Component for starting a task and displaying its status.
@@ -51,6 +51,20 @@ export const StartTaskButton = (): JSX.Element => {
     taskOptions = {
       ...taskOptions,
       table_choice: inputData.tableChoice,
+    };
+  }
+
+  if (inputData.willOverride) {
+    taskOptions = {
+      ...taskOptions,
+      is_override: inputData.willOverride,
+    };
+  }
+
+  if (inputData.uuidPole) {
+    taskOptions = {
+      ...taskOptions,
+      uuidPole: inputData.uuidPole,
     };
   }
 
@@ -99,13 +113,10 @@ export const StartTaskButton = (): JSX.Element => {
         isDisabled={taskData.isLoading}
         radius="full"
         variant="solid"
-        onClick={handleTask}>
+        onClick={handleTask}
+      >
         {taskData.isLoading ? (
-          <Spinner
-            aria-label="upload-spinner"
-            color="white"
-            size="sm"
-          />
+          <Spinner aria-label="upload-spinner" color="white" size="sm" />
         ) : (
           t("label")
         )}

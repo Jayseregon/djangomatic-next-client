@@ -40,7 +40,8 @@ function SaasPageContent({ session }: { session: any }): JSX.Element {
   return (
     <WithPermissionOverlay
       email={session.user.email}
-      permission="canAccessAppsTdsArcGIS">
+      permission="canAccessAppsTdsArcGIS"
+    >
       <div className="space-y-5 mb-5">
         <InputDataProvider>
           {/* Automatically detects and displays the app name */}
@@ -49,10 +50,10 @@ function SaasPageContent({ session }: { session: any }): JSX.Element {
           <AppPageDescription client={client} />
           {/* Allows the user to select a database, schema, DFN */}
           <DatabaseSchemaTable3Selector
+            appType="lld"
+            endpoint={endpoint}
             pattern="*"
             tableDescription="dfn_table"
-            endpoint={endpoint}
-            appType="lld"
           />
           <div className="flex gap-3">
             <InputArcGISCreds />

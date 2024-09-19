@@ -29,6 +29,7 @@ export interface AppItem {
   doc_href?: string;
   dbClass?: string;
   asDownloadable?: boolean;
+  willOverride?: boolean;
   is_active?: string;
 }
 export interface AppCategory {
@@ -172,7 +173,9 @@ const SidebarVideosSection = (): JSX.Element => {
  * @param {string} [props.nonce] - An optional nonce for the Link component.
  * @returns {JSX.Element} The rendered SidebarSaas component.
  */
-export const SidebarSaas: React.FC<SidebarProps> = ({ nonce }) => {
+export const SidebarSaas: React.FC<SidebarProps> = ({
+  nonce,
+}: SidebarProps): JSX.Element => {
   const t = useTranslations("SaasSidebar");
   const currentPath = usePathname();
   const saasPath = siteConfig.navItems.filter(
@@ -186,8 +189,13 @@ export const SidebarSaas: React.FC<SidebarProps> = ({ nonce }) => {
    * @param {string} type - The type of application to filter.
    * @returns {AppItem[]} The filtered application data.
    */
-  const extractAppDataTds = (prop: keyof typeof saasData, type: string) =>
-    (saasData[prop] as AppItem[]).filter((item) => item.type === type);
+  const extractAppDataTds = (
+    prop: keyof typeof saasData,
+    type: string,
+  ): AppItem[] =>
+    (saasData[prop] as AppItem[])
+      .filter((item) => item.type === type)
+      .sort((a, b) => a.label.localeCompare(b.label));
 
   /**
    * Gets application categories based on the provided data target and titles.
@@ -204,10 +212,12 @@ export const SidebarSaas: React.FC<SidebarProps> = ({ nonce }) => {
     dataTarget: keyof typeof saasData;
     titles: string[];
   }): AppCategory[] =>
-    titles.map((title) => ({
-      title: title.toUpperCase(),
-      data: extractAppDataTds(dataTarget, title.toLowerCase()),
-    }));
+    titles
+      .sort((a, b) => a.localeCompare(b))
+      .map((title) => ({
+        title: title.toUpperCase(),
+        data: extractAppDataTds(dataTarget, title.toLowerCase()),
+      }));
 
   // Extract TDS apps data
   const appCategoriesTDS = getAppCategories({
@@ -335,8 +345,13 @@ export const SidebarDocs: React.FC<SidebarProps> = ({ nonce }) => {
    * @param {boolean} isQGIS - Flag to filter QGIS documentation.
    * @returns {AppItem[]} The filtered documentation data.
    */
-  const extractDocsData = (prop: keyof typeof docsData, isQGIS: boolean) =>
-    docsData[prop].filter((item) => item.is_qgis_doc === isQGIS);
+  const extractDocsData = (
+    prop: keyof typeof docsData,
+    isQGIS: boolean,
+  ): AppItem[] =>
+    docsData[prop]
+      .filter((item) => item.is_qgis_doc === isQGIS)
+      .sort((a, b) => a.label.localeCompare(b.label));
 
   /**
    * Gets documentation categories based on the provided data target.

@@ -2,10 +2,13 @@
 
 import { useEffect } from "react";
 import { usePathname } from "next/navigation";
+
 import { title } from "@/components/primitives";
 import { saasData } from "@/src/config/saasData";
-import { useAppName, useInputData } from "./inputDataProviders";
+
 import { AppItem } from "../ui/sidebars";
+
+import { useAppName, useInputData } from "./inputDataProviders";
 import { InputDataProps } from "./serverDropdowns";
 
 /**
@@ -27,13 +30,14 @@ export const AppPageTitle = ({
 
   // Find the app data based on the current path
   const appData = (saasData[client] as AppItem[]).find(
-    (app) => app.href === currentPath
+    (app) => app.href === currentPath,
   );
   const appName = appData?.label;
   const endpoint = appData?.endpoint;
   const asDownloadable = appData?.asDownloadable;
+  const willOverride = appData?.willOverride;
   const dbClass = appData?.dbClass;
-  const appType = appData?.type
+  const appType = appData?.type;
 
   useEffect(() => {
     // Set the app name and task endpoint in the input data context
@@ -42,6 +46,7 @@ export const AppPageTitle = ({
       ...prevDataChoices,
       taskEndpoint: endpoint || "",
       asDownloadable: asDownloadable,
+      willOverride: willOverride,
       dbClass: dbClass || "",
       appType: appType || "",
     }));
@@ -51,6 +56,9 @@ export const AppPageTitle = ({
     <div className="grid grid-cols-1 gap-5 pb-10">
       {/* Display the app name */}
       <h1 className={title()}>{appName}</h1>
+      {willOverride && appType === "override" && (
+        <h2 className={title({ size: "xs" })}>[override]</h2>
+      )}
     </div>
   );
 };

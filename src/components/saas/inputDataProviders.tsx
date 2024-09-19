@@ -9,6 +9,7 @@ import React, {
 } from "react";
 
 import { stripHtmlTags, maskPassword } from "@/src/lib/utils";
+
 import { InputDataProps, TaskDataProps } from "./serverDropdowns";
 
 /**
@@ -29,7 +30,7 @@ interface InputDataContextProps {
  * Context for managing input and task data.
  */
 const InputDataContext = createContext<InputDataContextProps | undefined>(
-  undefined
+  undefined,
 );
 
 /**
@@ -140,6 +141,8 @@ export const InputDataProvider = ({
     dbClass: "",
     taskEndpoint: "",
     asDownloadable: false,
+    willOverride: false,
+    uuidPole: "",
     file: undefined,
     fileName: null,
     tdsUsername: null,
@@ -185,7 +188,7 @@ export const InputDataProvider = ({
     }
     if (inputData.schemaChoice !== initialInputData.schemaChoice) {
       appendToConsole(
-        `$ InputData: schema choice >> ${inputData.schemaChoice}`
+        `$ InputData: schema choice >> ${inputData.schemaChoice}`,
       );
       setInitialInputData({
         ...initialInputData,
@@ -215,7 +218,7 @@ export const InputDataProvider = ({
     }
     if (inputData.tdsPassword !== initialInputData.tdsPassword) {
       appendToConsole(
-        `$ InputData: TDS password >> ${maskPassword(inputData.tdsPassword || "")}`
+        `$ InputData: TDS password >> ${maskPassword(inputData.tdsPassword || "")}`,
       );
       setInitialInputData({
         ...initialInputData,
@@ -224,7 +227,7 @@ export const InputDataProvider = ({
     }
     if (inputData.arcgisErase !== initialInputData.arcgisErase) {
       appendToConsole(
-        `$ InputData: erase DFN in DB621 >> ${inputData.arcgisErase}`
+        `$ InputData: erase DFN in DB621 >> ${inputData.arcgisErase}`,
       );
       setInitialInputData({
         ...initialInputData,
@@ -233,11 +236,18 @@ export const InputDataProvider = ({
     }
     if (inputData.arcgisSnapshot !== initialInputData.arcgisSnapshot) {
       appendToConsole(
-        `$ InputData: create DFN snapshots >> ${inputData.arcgisSnapshot}`
+        `$ InputData: create DFN snapshots >> ${inputData.arcgisSnapshot}`,
       );
       setInitialInputData({
         ...initialInputData,
         arcgisSnapshot: inputData.arcgisSnapshot,
+      });
+    }
+    if (inputData.uuidPole !== initialInputData.uuidPole) {
+      appendToConsole(`$ InputData: pole uuid >> ${inputData.uuidPole}`);
+      setInitialInputData({
+        ...initialInputData,
+        uuidPole: inputData.uuidPole,
       });
     }
   }, [inputData]);
@@ -257,7 +267,7 @@ export const InputDataProvider = ({
     }
     if (taskData.taskResult !== initialTaskData.taskResult) {
       appendToConsole(
-        `$ TaskData: task result >> ${stripHtmlTags(taskData.taskResult)}`
+        `$ TaskData: task result >> ${stripHtmlTags(taskData.taskResult)}`,
       );
       setInitialTaskData({
         ...initialTaskData,
@@ -272,6 +282,16 @@ export const InputDataProvider = ({
       appendToConsole(`$ RemoteApp: initializing >> ${appName}`);
       setInitialAppName(appName);
     }
+    if (
+      inputData.willOverride !== initialInputData.willOverride &&
+      inputData.appType === "override"
+    ) {
+      appendToConsole(`$ RemoteApp: !! >> will ERASE existing data`);
+      setInitialInputData({
+        ...initialInputData,
+        willOverride: inputData.willOverride,
+      });
+    }
   }, [appName, setAppName]);
 
   return (
@@ -285,7 +305,8 @@ export const InputDataProvider = ({
         appendToConsole,
         appName,
         setAppName,
-      }}>
+      }}
+    >
       {children}
     </InputDataContext.Provider>
   );

@@ -1,9 +1,11 @@
 "use client";
 
 import React, { useEffect, useRef } from "react";
-import { useConsoleData } from "./inputDataProviders";
-import { SaveIcon } from "../icons";
 import { useTranslations } from "next-intl";
+
+import { SaveIcon } from "../icons";
+
+import { useConsoleData } from "./inputDataProviders";
 
 /**
  * ConsoleDisplay component to display text data in a console/terminal-like feel.
@@ -28,6 +30,7 @@ export const ConsoleDisplay = (): JSX.Element => {
   const downloadConsoleLog = () => {
     const element = document.createElement("a");
     const file = new Blob([consoleOutput], { type: "text/plain" });
+
     element.href = URL.createObjectURL(file);
     element.download = "console_log.txt";
     document.body.appendChild(element); // Required for this to work in FireFox
@@ -39,16 +42,18 @@ export const ConsoleDisplay = (): JSX.Element => {
       <div className="relative bg-slate-900 w-[45rem] h-48 rounded-xl mx-auto text-white font-mono border-2 border-primary overflow-hidden">
         <div
           ref={consoleRef}
-          className="w-full h-full overflow-y-scroll p-4 text-start tracking-tighter break-all">
+          className="w-full h-full overflow-y-scroll p-4 text-start tracking-tighter break-all"
+        >
           {/* Display each line of the console output */}
           {consoleOutput.split("\n").map((line, index) => (
             <div key={index}>{line}</div>
           ))}
         </div>
         <button
-          onClick={downloadConsoleLog}
           className="absolute top-2 right-2 text-white"
-          title="Download Console Log">
+          title="Download Console Log"
+          onClick={downloadConsoleLog}
+        >
           <SaveIcon />
         </button>
       </div>

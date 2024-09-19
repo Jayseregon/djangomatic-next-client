@@ -4,7 +4,7 @@ export const saasData = {
   tds_saas: [
     // Address Breakdown --> not yet implemented
     {
-      label: "Address Breakdown - UNAV",
+      label: "UNAV - Address Breakdown",
       type: "hld",
       href: "/saas/tds/hld/spkv_adr_xls",
       endpoint: "/saas/tds/",
@@ -19,7 +19,7 @@ export const saasData = {
     },
     // DFN Boundaries --> not yet implemented
     {
-      label: "DFN Boundaries - UNAV",
+      label: "UNAV - DFN Boundaries",
       type: "hld",
       href: "/saas/tds/hld/spkv_dfn_lots",
       endpoint: "/saas/tds/",
@@ -34,7 +34,7 @@ export const saasData = {
     },
     // GPS to SHP --> not yet implemented
     {
-      label: "GPS to SHP - UNAV",
+      label: "UNAV - GPS to SHP",
       type: "hld",
       href: "/saas/tds/hld/spkv_gps_shp",
       endpoint: "/saas/tds/",
@@ -49,7 +49,7 @@ export const saasData = {
     },
     // GPS to Postgres
     {
-      label: "GPS to Postgres - Ok",
+      label: "GPS to Postgres",
       type: "hld",
       href: "/saas/tds/hld/spkv_gps_db",
       endpoint: "/saas/tds/ajax/query-import-gps-to-postgres/",
@@ -64,7 +64,7 @@ export const saasData = {
     },
     // GPS Postgres - Override
     {
-      label: "GPS to Postgres - Ok",
+      label: "GPS to Postgres",
       type: "override",
       href: "/saas/tds/override/spkv_override_gps",
       endpoint: "/saas/tds/ajax/query-import-gps-to-postgres/",
@@ -79,7 +79,7 @@ export const saasData = {
     },
     // HLD to KMZ --> not yet implemented
     {
-      label: "HLD to KMZ - UNAV",
+      label: "UNAV - HLD to KMZ",
       type: "hld",
       href: "/saas/tds/hld/spkv_hld_kmz",
       endpoint: "/saas/tds/",
@@ -94,7 +94,7 @@ export const saasData = {
     },
     // HLD to Postgres
     {
-      label: "HLD to Postgres - Ok",
+      label: "HLD to Postgres",
       type: "hld",
       href: "/saas/tds/hld/spkv_hld_db",
       endpoint: "/saas/tds/ajax/query-import-hld-to-postgres/",
@@ -109,7 +109,7 @@ export const saasData = {
     },
     // HLD Postgres - Override
     {
-      label: "HLD to Postgres - Ok",
+      label: "HLD to Postgres",
       type: "override",
       href: "/saas/tds/override/spkv_override_hld_db",
       endpoint: "/saas/tds/ajax/query-import-hld-to-postgres/",
@@ -124,7 +124,7 @@ export const saasData = {
     },
     // Node Quantities - admin
     {
-      label: "Node Quantities - Ok",
+      label: "Node Quantities",
       type: "admin",
       href: "/saas/tds/admin/spkv_node_qty",
       endpoint: "/saas/tds/ajax/query-extract-node-length-qt/",
@@ -139,7 +139,7 @@ export const saasData = {
     },
     // HP by Splits1 - admin
     {
-      label: "HP by Splits1 - Ok",
+      label: "HP by Splits1",
       type: "admin",
       href: "/saas/tds/admin/spkv_hp_by_split1",
       endpoint: "/saas/tds/ajax/query-compile-hp-by-splits1/",
@@ -154,7 +154,7 @@ export const saasData = {
     },
     // Poles automatic ID generator in DFN
     {
-      label: "Poles Numbering - To-Do",
+      label: "Poles Numbering",
       type: "lld",
       href: "/saas/tds/lld/poles_numbering",
       endpoint: "/saas/tds/ajax/query-poles-auto-id/",
@@ -169,7 +169,7 @@ export const saasData = {
     },
     // Midspans calculation in DFN
     {
-      label: "Midspan Calculation - To-Do",
+      label: "Midspan Calculation",
       type: "lld",
       href: "/saas/tds/lld/midspan_auto_calc",
       endpoint: "/saas/tds/ajax/query-midspan-auto-calc/",
@@ -184,7 +184,7 @@ export const saasData = {
     },
     // Poles table pre-fill and suggestions calculation - by DFN
     {
-      label: "DFN Poles Calculations - Ok",
+      label: "DFN Poles Calculations",
       type: "lld",
       href: "/saas/tds/lld/dfn_poles_calc",
       endpoint: "/saas/tds/ajax/query-poles-dfn-calc/",
@@ -199,7 +199,7 @@ export const saasData = {
     },
     // Poles table pre-fill and suggestions calculation - by Node
     {
-      label: "Node Poles Calculations - Ok",
+      label: "Node Poles Calculations",
       type: "hld",
       href: "/saas/tds/hld/node_poles_calc",
       endpoint: "/saas/tds/ajax/query-poles-dfn-calc/",
@@ -214,7 +214,7 @@ export const saasData = {
     },
     // Pole estimator for missing classes en lengths, by DFN
     {
-      label: "Pole Class-Length Estimator - To-Do",
+      label: "Pole Class-Length Estimator",
       type: "lld",
       href: "/saas/tds/lld/pole_class_length_est",
       endpoint: "/saas/tds/ajax/query-pole-class-length-est/",
@@ -229,7 +229,7 @@ export const saasData = {
     },
     // Extract Pole and HP data for DP
     {
-      label: "Extract Data DP - To-Do",
+      label: "Extract Data DP",
       type: "lld",
       href: "/saas/tds/lld/extract_data_dp",
       endpoint: "/saas/tds/ajax/query-extract-data-dp/",
@@ -237,7 +237,7 @@ export const saasData = {
       version: "1.1.3",
       date_upd: "2024-03-26",
       doc_href: "/saas/tds/empty",
-      asDownloadable: false,
+      asDownloadable: true,
       willOverride: false,
       dbClass: "db_class_spokane_valley",
       is_active: "Y",
@@ -245,7 +245,7 @@ export const saasData = {
     // ARCGIS API APPS
     // Import to DB621
     {
-      label: "Import to DB621 - Ok",
+      label: "Import to DB621",
       type: "arcgis",
       href: "/saas/tds/arcgis/arcgis_api_import_db621",
       endpoint: "/saas/tds/ajax/arcgis/import-dfn-db621/",
@@ -260,7 +260,7 @@ export const saasData = {
     },
     // Update to DB621
     {
-      label: "Update DB621 - Ok",
+      label: "Update DB621",
       type: "arcgis",
       href: "/saas/tds/arcgis/arcgis_api_update_db621",
       endpoint: "/saas/tds/ajax/arcgis/update-dfn-db621/",
@@ -275,7 +275,7 @@ export const saasData = {
     },
     // Snapshots from DB621
     {
-      label: "Snapshots from DB621 - Ok",
+      label: "Snapshots from DB621",
       type: "arcgis",
       href: "/saas/tds/arcgis/arcgis_api_snapshots_db621",
       endpoint: "/saas/tds/ajax/arcgis/auto-snapshots-db621/",
@@ -290,7 +290,7 @@ export const saasData = {
     },
     // DFN Bounds CRUD DB621
     {
-      label: "DFN Bounds DB621 - Ok",
+      label: "DFN Bounds DB621",
       type: "arcgis",
       href: "/saas/tds/arcgis/arcgis_api_dfn_bounds_crud_db621",
       endpoint: "/saas/tds/ajax/arcgis/auto-dfn-crud-db621/",

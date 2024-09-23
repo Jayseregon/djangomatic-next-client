@@ -61,6 +61,13 @@ export const StartTaskButton = (): JSX.Element => {
     };
   }
 
+  if (inputData.operationChoice) {
+    taskOptions = {
+      ...taskOptions,
+      operationChoice: inputData.operationChoice,
+    };
+  }
+
   if (inputData.uuidPole) {
     taskOptions = {
       ...taskOptions,

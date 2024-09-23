@@ -48,6 +48,7 @@
     "dbMenu_label": "Base de données",
     "schMenu_label": "Schéma",
     "tblMenu_label": "Table",
+    "operation_label": "Opération",
     "loading": "Chargement...",
     "menuNoData": "Pas de données disponibles",
     "zipFile": {
@@ -67,6 +68,11 @@
     "pole_table": "Choisissez la couche de poteaux",
     "dfn_table": "Choisissez le DFN à traiter",
     "node_p_calc": "Choisissez la couche poteaux à traiter",
+    "recover_tbl": "Choisissez la table à récupérer",
+    "recover_op": "Choisissez l'opération à effectuer",
+    "version_uniq": "Assigner UNIQ",
+    "version_pattern": "Choisissez le pattern Node_DFN",
+    "version_full_db": "Version complète DB",
     "input_username": "Veuillez entrer votre nom d'utilisateur TDS",
     "input_password": "Veuillez entrer votre mot de passe TDS",
     "input_uuidPole": "Optionnel : UUID poteau pour traitement ponctuel",
@@ -123,11 +129,11 @@
       "update": "Support de traduction en français et compatibilité."
     },
     "dfn_poles_calculations": {
-      "description": "Cette application fournit des suggestions de fixation des poteaux et un pré-remplissage des tables par DFN.",
+      "description": "Cette application fournit des suggestions de réarrangement des poteaux et un pré-remplissage des tables par DFN.",
       "update": "Support de traduction en français et compatibilité."
     },
     "node_poles_calculations": {
-      "description": "Cette application fournit des suggestions de fixation des poteaux et un pré-remplissage des tables par nœud.",
+      "description": "Cette application fournit des suggestions de réarrangement des poteaux et un pré-remplissage des tables par nœud.",
       "update": "Support de traduction en français et compatibilité."
     },
     "pole_class_length_estimator": {
@@ -173,6 +179,32 @@
     "postgres_versioning": {
       "description": "Cette application permet la versioning pour les schémas et tables non suivis dans Postgres.",
       "update": "Support de traduction en français et compatibilité."
+    }
+  },
+  "vistambeamApps": {
+    "gps_to_shp": {
+      "description": "Cette application compile et assainit les relevés GPS non classés en fichiers SHP adaptés au HLD.",
+      "update": "Implémentation des outils Vistabeam."
+    },
+    "gps_to_postgres": {
+      "description": "Cette application importe de nouveaux relevés GPS classés ou les ajoute aux tables existantes.",
+      "update": "Implémentation des outils Vistabeam."
+    },
+    "gps_to_postgres_refresh": {
+      "description": "Cette application effectue une nouvelle importation GPS, en effaçant les anciennes données.",
+      "update": "Implémentation des outils Vistabeam."
+    },
+    "node_poles_calculations": {
+      "description": "Cette application fournit des suggestions de réarrangement des poteaux et un pré-remplissage des tables par nœud.",
+      "update": "Implémentation des outils Vistabeam."
+    },
+    "resolve_null_geom": {
+      "description": "Cette application supprime les géométries nulles de la base de données Postgres.",
+      "update": "Implémentation des outils Vistabeam."
+    },
+    "recover_from_version": {
+      "description": "Cette application récupère les données supprimées à partir de la version dans la base de données Postgres.",
+      "update": "Implémentation des outils Vistabeam."
     }
   }
 }

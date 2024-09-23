@@ -143,6 +143,7 @@ export const InputDataProvider = ({
     asDownloadable: false,
     willOverride: false,
     uuidPole: "",
+    operationChoice: "",
     file: undefined,
     fileName: null,
     tdsUsername: null,
@@ -248,6 +249,36 @@ export const InputDataProvider = ({
       setInitialInputData({
         ...initialInputData,
         uuidPole: inputData.uuidPole,
+      });
+    }
+    if (inputData.operationChoice !== initialInputData.operationChoice) {
+      appendToConsole(
+        `$ InputData: recover operation >> ${inputData.operationChoice}`,
+      );
+      setInitialInputData({
+        ...initialInputData,
+        operationChoice: inputData.operationChoice,
+      });
+    }
+    if (inputData.willOverride !== initialInputData.willOverride) {
+      if (
+        inputData.taskEndpoint ===
+        "/saas/tds/ajax/super/query-change-ownership-uniq/"
+      ) {
+        appendToConsole(
+          `$ InputData: assign ownership UNIQ >> ${inputData.willOverride}`,
+        );
+      } else if (
+        inputData.taskEndpoint ===
+        "/saas/tds/ajax/super/query-postgres-version/"
+      ) {
+        appendToConsole(
+          `$ InputData: run full db >> ${inputData.willOverride}`,
+        );
+      }
+      setInitialInputData({
+        ...initialInputData,
+        willOverride: inputData.willOverride,
       });
     }
   }, [inputData]);

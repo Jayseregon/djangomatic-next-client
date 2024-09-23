@@ -38,6 +38,8 @@ export const AppPageTitle = ({
   const willOverride = appData?.willOverride;
   const dbClass = appData?.dbClass;
   const appType = appData?.type;
+  const splitPath = currentPath.split("/");
+  const clientName = splitPath[2];
 
   useEffect(() => {
     // Set the app name and task endpoint in the input data context
@@ -55,7 +57,10 @@ export const AppPageTitle = ({
   return (
     <div className="grid grid-cols-1 gap-5 pb-10">
       {/* Display the app name */}
-      <h1 className={title()}>{appName}</h1>
+      <div className="grid grid-cols-1 gap-2">
+        <h1 className={title()}>{appName}</h1>
+        <h2>{clientName.toUpperCase()}</h2>
+      </div>
       {willOverride && appType === "override" && (
         <h2 className={title({ size: "xs" })}>[override]</h2>
       )}

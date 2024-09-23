@@ -2,7 +2,13 @@
 
 import React, { ChangeEvent, useState, MouseEvent } from "react";
 import { useTranslations } from "next-intl";
-import { Button } from "@nextui-org/react";
+import {
+  Dropdown,
+  DropdownTrigger,
+  DropdownMenu,
+  DropdownItem,
+  Button,
+} from "@nextui-org/react";
 import DOMPurify from "dompurify";
 
 import { ThumbsUpIcon, ThumbsDownIcon } from "../icons";
@@ -293,6 +299,51 @@ export const ArcGISControls = (): JSX.Element => {
 };
 
 /**
+ * SuperVersionControl component for toggling the override state.
+ * Displays a button that toggles the `willOverride` state in `inputData`.
+ *
+ * @param {Object} props - The props for the component.
+ * @param {string} props.btnHelper - The helper text for the button.
+ * @returns {JSX.Element} The rendered SuperVersionControl component.
+ */
+export const SuperVersionControl = ({
+  btnHelper,
+}: {
+  btnHelper: string;
+}): JSX.Element => {
+  const t = useTranslations("appDropdownHelper");
+  const { inputData, setInputData } = useInputData();
+
+  /**
+   * Handle button click event.
+   * Toggles the `willOverride` state in `inputData`.
+   */
+  const handleControlChange = () => {
+    setInputData((prevDataChoices: InputDataProps) => ({
+      ...prevDataChoices,
+      willOverride: !prevDataChoices.willOverride,
+    }));
+  };
+
+  return (
+    <div className="flex justify-end w-full">
+      <div className="flex flex-col items-center gap-1">
+        <p className="text-center">{t(btnHelper)}</p>
+        <Button
+          isIconOnly
+          color={inputData.willOverride ? "success" : "danger"}
+          id="versionControle"
+          variant="bordered"
+          onClick={handleControlChange}
+        >
+          {inputData.willOverride ? <ThumbsUpIcon /> : <ThumbsDownIcon />}
+        </Button>
+      </div>
+    </div>
+  );
+};
+
+/**
  * Component for inputting a UUID.
  * Validates and sanitizes the input to ensure it is a valid string and not malicious code.
  *
@@ -334,6 +385,74 @@ export const PoleUuidInput = (): JSX.Element => {
           onBlur={handleInputBlur}
         />
       </div>
+    </div>
+  );
+};
+
+/**
+ * DropdownOperationSelector component for selecting an operation.
+ * Displays hardcoded choices and updates the inputData state with the selected value.
+ *
+ * @returns {JSX.Element} The rendered DropdownOperationSelector component.
+ */
+export const DropdownOperationSelector = (): JSX.Element => {
+  const t = useTranslations();
+  const { setInputData } = useInputData();
+  const [selectedLabel, setSelectedLabel] = useState<string>(
+    t("ServerDropdowns.operation_label"),
+  );
+
+  // Hardcoded choices
+  const items = [
+    { label: "DELETE", value: "DELETE" },
+    { label: "INITIAL", value: "INITIAL" },
+    { label: "UPDATE", value: "UPDATE" },
+    { label: "INSERT", value: "INSERT" },
+  ];
+
+  /**
+   * Handle selection change event.
+   * Updates the selected label and input data state.
+   *
+   * @param {string} selected - The selected value.
+   */
+  const handleSelectionChange = (selected: string) => {
+    setSelectedLabel(selected);
+    setInputData((prevDataChoices) => ({
+      ...prevDataChoices,
+      operationChoice: selected,
+    }));
+  };
+
+  return (
+    <div className="grid grid-cols-2 gap-8 pb-8">
+      {/* Display guidelines for the dropdown */}
+      <DisplayFieldGuideline guideline={t("appDropdownHelper.recover_op")} />
+      <Dropdown backdrop="blur">
+        <DropdownTrigger>
+          <Button
+            className="bg-primary text-white w-full h-10"
+            radius="full"
+            variant="solid"
+          >
+            {selectedLabel}
+          </Button>
+        </DropdownTrigger>
+        <DropdownMenu
+          disallowEmptySelection
+          aria-label="dropdown operation choices"
+          className="max-h-48 overflow-y-auto"
+          items={items}
+          selectionMode="single"
+          onSelectionChange={(keys) => {
+            const selected = Array.from(keys)[0] as string;
+
+            handleSelectionChange(selected);
+          }}
+        >
+          {(item) => <DropdownItem key={item.value}>{item.label}</DropdownItem>}
+        </DropdownMenu>
+      </Dropdown>
     </div>
   );
 };

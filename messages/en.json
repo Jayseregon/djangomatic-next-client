@@ -48,6 +48,7 @@
     "dbMenu_label": "Database",
     "schMenu_label": "Schema",
     "tblMenu_label": "Table",
+    "operation_label": "Operation",
     "loading": "Loading...",
     "menuNoData": "No data available",
     "zipFile": {
@@ -64,11 +65,16 @@
   "appDropdownHelper": {
     "database": "Pick the target database",
     "schema": "Select the schema containing the project",
-    "pole_table": "Choose the pole layer", 
-    "dfn_table": "Choose the DFN to process", 
-    "node_p_calc": "Choose the pole layer to process", 
+    "pole_table": "Choose the pole layer",
+    "dfn_table": "Choose the DFN to process",
+    "node_p_calc": "Choose the pole layer to process",
+    "recover_tbl": "Choose the table to recover",
+    "recover_op": "Choose the operation to perform",
+    "version_uniq": "Assign UNIQ",
+    "version_pattern": "Choose the Node_DFN pattern",
+    "version_full_db": "Version full DB",
     "input_username": "Please enter TDS username",
-    "input_password": "Please enter TDS password", 
+    "input_password": "Please enter TDS password",
     "input_uuidPole": "Optional: pole UUID for ponctual processing",
     "control_erase": "Erase existing",
     "control_snap": "Auto snapshots"
@@ -173,6 +179,32 @@
     "postgres_versioning": {
       "description": "This app enables versioning for untracked schemas and tables in Postgres.",
       "update": "French translation support and compatibility."
+    }
+  },
+  "vistambeamApps": {
+    "gps_to_shp": {
+      "description": "This app compiles and sanitizes ungraded GPS surveys into SHP files suitable for HLD.",
+      "update": "Vistabeam tools implementation."
+    },
+    "gps_to_postgres": {
+      "description": "This app imports new graded GPS surveys or appends them to existing tables.",
+      "update": "Vistabeam tools implementation."
+    },
+    "gps_to_postgres_refresh": {
+      "description": "This app performs a fresh GPS import, erasing old data.",
+      "update": "Vistabeam tools implementation."
+    },
+    "node_poles_calculations": {
+      "description": "This app provides pole attachment suggestions and table pre-fill by Node.",
+      "update": "Vistabeam tools implementation."
+    },
+    "resolve_null_geom": {
+      "description": "This app removes null geometries from the Postgres database.",
+      "update": "Vistabeam tools implementation."
+    },
+    "recover_from_version": {
+      "description": "This app recovers deleted data from versioning in the Postgres database.",
+      "update": "Vistabeam tools implementation."
     }
   }
 }

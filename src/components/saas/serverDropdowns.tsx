@@ -26,6 +26,7 @@ export interface InputDataProps {
   taskEndpoint: string;
   asDownloadable?: boolean;
   willOverride?: boolean;
+  operationChoice?: string;
   uuidPole?: string;
   file?: File;
   fileName?: string | null;
@@ -408,7 +409,7 @@ export const TablesDropdown = ({
     };
 
     fetchTables();
-  }, [inputData.dbChoice, inputData.schemaChoice]);
+  }, [inputData.schemaChoice]);
 
   // Update selected label when selected key or schema tables change
   useEffect(() => {

@@ -46,6 +46,7 @@ export interface startTaskProps {
   dbClass: string;
   endpoint: string;
   file?: File;
+  operationChoice?: string;
   uuidPole?: string;
   tdsUsername?: string;
   tdsPassword?: string;
@@ -294,6 +295,7 @@ export const startTask = async ({
   endpoint,
   uuidPole,
   file,
+  operationChoice,
   tdsUsername,
   tdsPassword,
   arcgisErase,
@@ -328,12 +330,17 @@ export const startTask = async ({
       payload.append("snapshot", arcgisSnapshot ? "yes" : "no");
     }
 
+    if (operationChoice) {
+      payload.append("operation_choice", operationChoice);
+    }
+
     // Append the same table_choice value to multiple fields
     // because the backend can accept it in any of these fields
     if (table_choice) {
       payload.append("pole_table_choice", table_choice);
       payload.append("table_choice", table_choice);
       payload.append("dfn_choice", table_choice);
+      payload.append("pattern_choice", table_choice);
     }
 
     // set override flag for import HLD/GPS to Postgres
@@ -343,6 +350,20 @@ export const startTask = async ({
     ) {
       if (is_override) {
         payload.append("is_override", "yes");
+      }
+    }
+
+    // set 'assign_uniq' flag for change ownership UNIQ
+    if (endpoint === "/saas/tds/ajax/super/query-change-ownership-uniq/") {
+      if (is_override) {
+        payload.append("assign_uniq", "yes");
+      }
+    }
+
+    // set 'run_full_db' flag for full db version
+    if (endpoint === "/saas/tds/ajax/super/query-postgres-version/") {
+      if (is_override) {
+        payload.append("run_full_db", "yes");
       }
     }
 
@@ -380,20 +401,20 @@ export const startTask = async ({
   } catch (error: any) {
     console.error("Error starting task:", error);
 
-    // // Handle specific Axios errors
-    // if (error.response) {
-    //   // Server responded with a status other than 200 range
-    //   console.error("Response data:", error.response.data);
-    //   console.error("Response status:", error.response.status);
-    //   console.error("Response headers:", error.response.headers);
-    // } else if (error.request) {
-    //   // Request was made but no response was received
-    //   console.error("Request data:", error.request);
-    // } else {
-    //   // Something happened in setting up the request
-    //   console.error("Error message:", error.message);
-    // }
-    // throw error; // re-throw the error
+    // Handle specific Axios errors
+    if (error.response) {
+      // Server responded with a status other than 200 range
+      console.error("Response data:", error.response.data);
+      console.error("Response status:", error.response.status);
+      console.error("Response headers:", error.response.headers);
+    } else if (error.request) {
+      // Request was made but no response was received
+      console.error("Request data:", error.request);
+    } else {
+      // Something happened in setting up the request
+      console.error("Error message:", error.message);
+    }
+    throw error; // re-throw the error
   }
 };
 
@@ -506,5 +527,20 @@ export const checkTaskStatus = async ({
     }
   } catch (error: any) {
     console.error("Error checking task status:", error);
+
+    // Handle specific Axios errors
+    if (error.response) {
+      // Server responded with a status other than 200 range
+      console.error("Response data:", error.response.data);
+      console.error("Response status:", error.response.status);
+      console.error("Response headers:", error.response.headers);
+    } else if (error.request) {
+      // Request was made but no response was received
+      console.error("Request data:", error.request);
+    } else {
+      // Something happened in setting up the request
+      console.error("Error message:", error.message);
+    }
+    throw error; // re-throw the error
   }
 };

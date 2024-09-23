@@ -184,27 +184,33 @@
   "vistambeamApps": {
     "gps_to_shp": {
       "description": "Cette application compile et assainit les relevés GPS non classés en fichiers SHP adaptés au HLD.",
-      "update": "Implémentation des outils Vistabeam."
+      "update": "Implémentation de l'outil Vistabeam."
     },
     "gps_to_postgres": {
       "description": "Cette application importe de nouveaux relevés GPS classés ou les ajoute aux tables existantes.",
-      "update": "Implémentation des outils Vistabeam."
+      "update": "Implémentation de l'outil Vistabeam."
     },
     "gps_to_postgres_refresh": {
       "description": "Cette application effectue une nouvelle importation GPS, en effaçant les anciennes données.",
-      "update": "Implémentation des outils Vistabeam."
+      "update": "Implémentation de l'outil Vistabeam."
     },
     "node_poles_calculations": {
       "description": "Cette application fournit des suggestions de réarrangement des poteaux et un pré-remplissage des tables par nœud.",
-      "update": "Implémentation des outils Vistabeam."
+      "update": "Implémentation de l'outil Vistabeam."
     },
     "resolve_null_geom": {
       "description": "Cette application supprime les géométries nulles de la base de données Postgres.",
-      "update": "Implémentation des outils Vistabeam."
+      "update": "Implémentation de l'outil Vistabeam."
     },
     "recover_from_version": {
       "description": "Cette application récupère les données supprimées à partir de la version dans la base de données Postgres.",
-      "update": "Implémentation des outils Vistabeam."
+      "update": "Implémentation de l'outil Vistabeam."
+    }
+  },
+  "xploreApps": {
+    "extract_bom_summary": {
+      "description": "Cette application produit un résumé BOM à partir d'un fichier zip contenant des shapefiles extraits d'AutoCAD.",
+      "update": "Implémentation de l'outil Xplore."
     }
   }
 }

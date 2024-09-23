@@ -23,10 +23,12 @@ interface PillVersioningProps {
  */
 export const AppPageDescription = ({
   client,
+  targetTranslation = "tdsApps",
 }: {
   client: keyof typeof saasData;
-}) => {
-  const t = useTranslations("tdsApps");
+  targetTranslation?: string;
+}): JSX.Element => {
+  const t = useTranslations(targetTranslation);
   const currentPath = usePathname();
   // Find the app data based on the current path
   const appData = (saasData[client] as AppItem[]).find(

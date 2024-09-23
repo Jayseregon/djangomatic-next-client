@@ -18,7 +18,7 @@ function cspMiddleware(req: NextRequest): NextResponse {
   const cspHeader = `
   default-src 'self';
   script-src 'self' 'nonce-${nonce}' 'strict-dynamic' https://github.com https://docker-django-next-client.azurewebsites.net;
-  style-src 'self' 'nonce-${nonce}';
+  style-src 'self' 'nonce-${nonce}'
   img-src 'self' blob: data: https://i.pravatar.cc https://github.com https://avatars.githubusercontent.com https://*.githubusercontent.com;
   font-src 'self';
   object-src 'none';

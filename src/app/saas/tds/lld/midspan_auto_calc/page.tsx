@@ -7,6 +7,8 @@ import { StartTaskButton } from "@/src/components/saas/startTaskButton";
 import { InputDataProvider } from "@/src/components/saas/inputDataProviders";
 import { ConsoleDisplay } from "@/src/components/saas/consoleDisplay";
 import { AppPageDescription } from "@/src/components/saas/appPageDescription";
+// import dynamic from "next/dynamic";
+// import { useMemo } from "react";
 
 /**
  * SaasPage component handles authentication and renders the SaasPageContent if the user is authenticated.
@@ -32,6 +34,15 @@ export default async function SaasPage(): Promise<JSX.Element> {
 function SaasPageContent({ session }: { session: any }): JSX.Element {
   const client = "tds_saas";
 
+  // const Map = useMemo(
+  //   () =>
+  //     dynamic(() => import("@/components/mapping/Map"), {
+  //       loading: () => <p>A map is loading</p>,
+  //       ssr: false,
+  //     }),
+  //   []
+  // );
+
   return (
     <WithPermissionOverlay
       email={session.user.email}
@@ -52,6 +63,9 @@ function SaasPageContent({ session }: { session: any }): JSX.Element {
           <ConsoleDisplay />
           {/* Starts the task */}
           <StartTaskButton />
+          {/* <div className="mx-auto w-[40rem] h-[25rem]">
+            <Map posix={[45.4942495, -73.7408609]} />
+          </div> */}
         </InputDataProvider>
       </div>
     </WithPermissionOverlay>

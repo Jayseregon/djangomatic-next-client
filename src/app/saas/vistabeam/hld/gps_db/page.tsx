@@ -45,7 +45,10 @@ function SaasPageContent({ session }: { session: any }): JSX.Element {
           {/* Automatically detects and displays the app name */}
           <AppPageTitle client={client} />
           {/* Automatically detects and displays the app description, version, and update date */}
-          <AppPageDescription client={client} />
+          <AppPageDescription
+            client={client}
+            targetTranslation="vistambeamApps"
+          />
           {/* Allows the user to input a zip file */}
           <ZipFileInputButton />
           {/* Allows the user to select a database, schema, DFN */}

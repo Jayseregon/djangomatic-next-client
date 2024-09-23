@@ -206,5 +206,11 @@
       "description": "This app recovers deleted data from versioning in the Postgres database.",
       "update": "Vistabeam tools implementation."
     }
+  },
+  "xploreApps": {
+    "extract_bom_summary": {
+      "description": "This app creates a BOM summary from a zip file containing AutoCAD extracted shapefiles.",
+      "update": "Xplore tools implementation."
+    }
   }
 }

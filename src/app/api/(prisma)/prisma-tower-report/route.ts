@@ -1,0 +1,58 @@
+import { NextResponse } from "next/server";
+import { PrismaClient } from "@prisma/client";
+
+const prisma = new PrismaClient();
+
+export async function GET(request: Request) {
+  const { searchParams } = new URL(request.url);
+  const id = searchParams.get("id");
+
+  if (!id) {
+    return new NextResponse("ID is required", { status: 400 });
+  }
+
+  try {
+    const report = await prisma.towerReport.findUnique({
+      where: { id },
+      include: {
+        site_images: true,
+        front_image: true,
+        deficiency_images: true,
+      },
+    });
+
+    if (!report) {
+      return new NextResponse("Report not found", { status: 404 });
+    }
+
+    console.log("Find unique report:", report);
+
+    return NextResponse.json(report);
+  } catch (error) {
+    console.error("Error fetching report:", error);
+
+    return new NextResponse("Error fetching report", { status: 500 });
+  } finally {
+    await prisma.$disconnect();
+  }
+}
+
+export async function POST() {
+  return new NextResponse("Method Not Allowed", { status: 405 });
+}
+
+export async function PATCH() {
+  return new NextResponse("Method Not Allowed", { status: 405 });
+}
+
+export async function PUT() {
+  return new NextResponse("Method Not Allowed", { status: 405 });
+}
+
+export async function DELETE() {
+  return new NextResponse("Method Not Allowed", { status: 405 });
+}
+
+export async function OPTIONS() {
+  return new NextResponse("Method Not Allowed", { status: 405 });
+}

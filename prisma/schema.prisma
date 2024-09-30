@@ -5,7 +5,8 @@
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+  previewFeatures = ["relationJoins"]
 }
 
 datasource db {
@@ -40,4 +41,39 @@ model User {
   canAccessVideoDefault          Boolean  @default(false)
   canAccessVideoQGIS             Boolean  @default(false)
   canAccessVideoSttar            Boolean  @default(false)
+}
+
+model TowerReport {
+  id                String             @id @default(cuid())
+  createdAt         DateTime           @default(now())
+  updatedAt         DateTime           @updatedAt
+  front_image       TowerReportImage[] @relation("FrontImage")
+  site_images       TowerReportImage[] @relation("SiteImages")
+  deficiency_images TowerReportImage[] @relation("DeficiencyImages")
+  jde_work_order    String
+  jde_job           String
+  site_name         String
+  site_code         String
+  site_region       String
+  tower_id          String
+  tower_name        String
+  tower_site_name   String
+  job_description   String
+  job_revision      String
+  design_standard   String
+  client_name       String
+  client_company    String
+}
+
+model TowerReportImage {
+  id                  String       @id @default(cuid())
+  url                 String
+  label               String
+  azureId             String
+  siteProjectId       String?
+  frontProjectId      String?
+  deficiencyProjectId String?
+  siteProject         TowerReport? @relation(fields: [siteProjectId], references: [id], name: "SiteImages", map: "SiteImages_projectId_fkey")
+  frontProject        TowerReport? @relation(fields: [frontProjectId], references: [id], name: "FrontImage", map: "FrontImage_projectId_fkey")
+  deficiencyProject   TowerReport? @relation(fields: [deficiencyProjectId], references: [id], name: "DeficiencyImages", map: "DeficiencyImages_projectId_fkey")
 }

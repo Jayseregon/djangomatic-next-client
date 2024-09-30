@@ -19,6 +19,10 @@ export const siteConfig = {
       href: "/boards",
     },
     {
+      label: "Reports",
+      href: "/reports",
+    },
+    {
       label: "R&D",
       href: "/rnd",
     },

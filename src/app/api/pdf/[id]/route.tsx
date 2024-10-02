@@ -1,124 +1,97 @@
 import { PrismaClient } from "@prisma/client";
 import React from "react";
-import {
-  Page,
-  Text,
-  View,
-  Document,
-  Image,
-  StyleSheet,
-  renderToStream,
-} from "@react-pdf/renderer";
+import { Page, Document, Font, renderToStream } from "@react-pdf/renderer";
 import { NextResponse } from "next/server";
 
-import { TowerReport } from "@/src/components/reports/TowerReportsDashboard";
+import { titleCase } from "@/src/lib/utils";
+import { StylesPDF } from "@/styles/stylesPDF";
+import { TowerReport, TOCSections } from "@/src/types/reports";
+import FrontPage from "@/src/components/reports/pdfBlocks/rogers/FrontPage";
+import AuthorPage from "@/src/components/reports/pdfBlocks/rogers/AuthorPage";
+import TableOfContentsPage from "@/src/components/reports/pdfBlocks/rogers/TableOfContentsPage";
+import ScopeOfWorkPage from "@/src/components/reports/pdfBlocks/rogers/ScopeOfWorkPage";
+import AntennaAndTransmissionPage from "@/src/components/reports/pdfBlocks/rogers/AntennaAndTransmissionPage";
+import DeficienciesPage from "@/src/components/reports/pdfBlocks/rogers/DeficienciesPage";
+import SitePhotosPage from "@/src/components/reports/pdfBlocks/rogers/SitePhotosPage";
+import PageFooter from "@/src/components/reports/pdfBlocks/rogers/PageFooter";
+import AppendixA from "@/src/components/reports/pdfBlocks/rogers/AppendixA";
+import AppendixB from "@/src/components/reports/pdfBlocks/rogers/AppendixB";
+import AppendixC from "@/src/components/reports/pdfBlocks/rogers/AppendixC";
 
 const prisma = new PrismaClient();
 
-// Create styles
-const styles = StyleSheet.create({
-  page: {
-    display: "flex",
-    flexDirection: "column",
-    padding: 20,
-    fontSize: 12,
-    lineHeight: 1,
-    fontFamily: "Times-Roman",
-  },
-  section: {
-    flexGrow: 1,
-    border: "1px solid #4a5568",
-  },
-  text: {
-    marginBottom: 10,
-  },
-  imageContainer: {
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    margin: 5,
-  },
-  image: {
-    marginBottom: 3,
-  },
-  label: {
-    textAlign: "center",
-    fontSize: 10,
-    fontFamily: "Times-Italic",
-  },
-  imageColumn: {
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    justifyContent: "center",
-    flexGrow: 1,
-  },
-  footer: {
-    position: "absolute",
-    bottom: 10,
-    left: 10,
-    right: 0,
-    textAlign: "left",
-    fontSize: 10,
-  },
-  sectionTitleContainer: {
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "center",
-    alignItems: "center",
-    height: "100%",
-  },
-  sectionTitle: {
-    marginBottom: 10,
-    fontSize: 16,
-    fontWeight: "bold",
-    textAlign: "center",
-  },
-});
+// disable hyphenation
+Font.registerHyphenationCallback((word) => [word]);
 
 // Create Report Document Component
-const ReportDocument = ({ report }: { report: TowerReport }) => {
-  const siteImagePairs = [];
-
-  for (let i = 0; i < report.site_images.length; i += 2) {
-    siteImagePairs.push(report.site_images.slice(i, i + 2));
-  }
-
+const ReportDocument = ({
+  report,
+  tocSections,
+  willCaptureToc,
+}: {
+  report: TowerReport;
+  tocSections: TOCSections[];
+  willCaptureToc: boolean;
+}) => {
   return (
     <Document>
-      <Page size="LETTER" style={styles.page}>
-        <Text>{report.site_name}</Text>
-        <Text>{report.site_code}</Text>
-        <Text>{report.jde_job}</Text>
-        <Text>{report.design_standard}</Text>
-        <Text>{report.client_company}</Text>
-        <Text>{report.client_name}</Text>
-      </Page>
-      <Page size="LETTER" style={styles.page}>
-        <View style={styles.sectionTitleContainer}>
-          <Text style={styles.sectionTitle}>SITE PHOTOS</Text>
-        </View>
-        {siteImagePairs.map((pair, index) => (
-          <View key={index} break style={styles.imageColumn}>
-            {pair.map((image, idx) => (
-              <View key={idx} style={styles.imageContainer}>
-                <Image src={image.url} style={styles.image} />
-                <Text style={styles.label}>{image.label}</Text>
-              </View>
-            ))}
-          </View>
-        ))}
-        <Text
-          fixed
-          render={({ pageNumber, totalPages }) => (
-            <>
-              Page{" "}
-              <Text style={{ fontFamily: "Times-Bold" }}>{pageNumber}</Text> of{" "}
-              {totalPages}
-            </>
-          )}
-          style={styles.footer}
+      {/* Front cover page */}
+      <FrontPage report={report} />
+
+      {/* New page document corpus */}
+      <Page size="LETTER" style={StylesPDF.page}>
+        {/* New page Author */}
+        <AuthorPage report={report} />
+
+        {/* New page TOC */}
+        <TableOfContentsPage tocSections={tocSections} />
+
+        {/* New page SOW */}
+        <ScopeOfWorkPage
+          report={report}
+          tocSections={tocSections}
+          willCaptureToc={willCaptureToc}
         />
+
+        {/* New page Antenna & Transmission Line Inventory */}
+        <AntennaAndTransmissionPage
+          tocSections={tocSections}
+          willCaptureToc={willCaptureToc}
+        />
+
+        {/* New page DEFICIENCIES (if exists) */}
+        {report.deficiency_images.length > 0 && (
+          <DeficienciesPage
+            report={report}
+            tocSections={tocSections}
+            willCaptureToc={willCaptureToc}
+          />
+        )}
+
+        {/* New page SITE PHOTOS */}
+        <SitePhotosPage
+          report={report}
+          tocSections={tocSections}
+          willCaptureToc={willCaptureToc}
+        />
+
+        {/* Page Footer */}
+        <PageFooter />
+      </Page>
+
+      {/* New page for Appendices */}
+      <Page size="LETTER" style={StylesPDF.page}>
+        {/* New page Appendix A */}
+        <AppendixA tocSections={tocSections} willCaptureToc={willCaptureToc} />
+
+        {/* New page Appendix B */}
+        <AppendixB tocSections={tocSections} willCaptureToc={willCaptureToc} />
+
+        {/* New page Appendix C */}
+        <AppendixC tocSections={tocSections} willCaptureToc={willCaptureToc} />
+
+        {/* Page Footer */}
+        <PageFooter />
       </Page>
     </Document>
   );
@@ -141,7 +114,44 @@ export async function GET(
     return new Response("Report not found", { status: 404 });
   }
 
-  const stream = await renderToStream(<ReportDocument report={report} />);
+  const tocSections: TOCSections[] = [];
 
-  return new NextResponse(stream as unknown as ReadableStream);
+  console.log("TOC bf: ", tocSections);
+
+  await renderToStream(
+    <ReportDocument
+      report={report}
+      tocSections={tocSections}
+      willCaptureToc={true}
+    />,
+  );
+
+  const stream = await renderToStream(
+    <ReportDocument
+      report={report}
+      tocSections={tocSections}
+      willCaptureToc={false}
+    />,
+  );
+
+  console.log("TOC af: ", tocSections);
+
+  const response = new NextResponse(stream as unknown as ReadableStream);
+
+  response.headers.set("Content-Type", "application/pdf");
+  response.headers.set(
+    "Content-Disposition",
+    `inline; filename="${report.site_code}-${titleCase(
+      report.tower_site_name,
+    )}-${report.site_region}-${report.jde_job}-PCI.pdf"`,
+  );
+
+  // response.headers.set(
+  //   "Content-Disposition",
+  //   `attachment; filename="${report.site_code}-${titleCase(
+  //     report.tower_site_name
+  //   )}-${report.site_region}-${report.jde_job}-PCI.pdf"`
+  // );
+
+  return response;
 }

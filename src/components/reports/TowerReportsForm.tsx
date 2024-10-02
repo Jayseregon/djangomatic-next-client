@@ -2,19 +2,14 @@ import React, { useState, useEffect } from "react";
 import { Button } from "@nextui-org/react";
 
 import siteImagesLabelOptionsData from "public/reports/rogers/siteImagesLabelOptions.json";
+import { TowerReport, TowerReportImage } from "@/types/reports";
+import { TowerReportFormProps } from "@/interfaces/reports";
 
 import { SaveIcon, CancelIcon, PDFFileIcon } from "../icons";
 import { FormInput, FormSectionTitle } from "../ui/formInput";
 
-import { TowerReport, TowerReportImage } from "./TowerReportsDashboard";
 import QuickbaseInputs from "./QuickbaseInputs";
 import { ImageUpload } from "./ImageUpload";
-
-interface TowerReportFormProps {
-  report?: Partial<TowerReport> | null;
-  onSave: (report: Partial<TowerReport>) => void;
-  onCancel: (newlyUploadedImages: TowerReportImage[], subdir: string) => void;
-}
 
 export const TowerReportForm = ({
   report,

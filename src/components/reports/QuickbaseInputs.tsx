@@ -1,11 +1,7 @@
+import { QuickbaseInputsProps } from "@/src/interfaces/reports";
+
 import { FormInput } from "../ui/formInput";
 
-import { TowerReport } from "./TowerReportsDashboard";
-
-interface QuickbaseInputsProps {
-  formData: Partial<TowerReport>;
-  handleChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-}
 export default function QuickbaseInputs({
   formData,
   handleChange,

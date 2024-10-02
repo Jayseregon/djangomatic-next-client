@@ -1,0 +1,113 @@
+import { StyleSheet } from "@react-pdf/renderer";
+
+export const StylesPDF = StyleSheet.create({
+  page: {
+    position: "relative",
+    flexDirection: "column",
+    padding: "50 80",
+    fontSize: 12,
+    lineHeight: 1,
+    fontFamily: "Helvetica",
+  },
+  frontCoverSection: {
+    top: 100,
+    textAlign: "center",
+    fontFamily: "Helvetica-Bold",
+  },
+  frontCoverCredits: {
+    position: "absolute",
+    bottom: 50,
+    left: 50,
+    right: 50,
+    textAlign: "justify",
+    fontSize: 10,
+    color: "#ACC6FC",
+    paddingLeft: 40,
+    paddingRight: 40,
+  },
+  frontCoverImage: {
+    paddingTop: 120,
+    alignSelf: "center",
+    width: "50%",
+    height: "auto",
+  },
+  text: {
+    marginBottom: 10,
+  },
+  imageContainer: {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    margin: 5,
+  },
+  image: {
+    marginBottom: 3,
+  },
+  label: {
+    textAlign: "center",
+    fontSize: 10,
+    fontFamily: "Helvetica-Oblique",
+  },
+  imageColumn: {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "center",
+    flexGrow: 1,
+  },
+  pageCount: {
+    position: "absolute",
+    bottom: 10,
+    left: 10,
+    right: 0,
+    textAlign: "left",
+    fontSize: 10,
+  },
+  pageImageFooter: {
+    position: "absolute",
+    bottom: -1,
+    right: -2,
+    width: 50,
+    height: 50,
+  },
+  pageClientLogo: {
+    position: "absolute",
+    top: 30,
+    right: 20,
+    height: "auto",
+    width: 120,
+  },
+  pageTDLogo: {
+    position: "absolute",
+    top: 20,
+    left: 20,
+    height: 40,
+    width: "auto",
+  },
+  sectionTitleContainer: {
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "center",
+    height: "100%",
+  },
+  sectionAuthorContainer: {
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "center",
+    lineHeight: 1.5,
+  },
+  pageTitle: {
+    fontSize: 14,
+    paddingBottom: 30,
+    textTransform: "uppercase",
+    fontFamily: "Helvetica-Bold",
+    textAlign: "center",
+    textDecoration: "underline",
+  },
+  PageContentSection: {
+    lineHeight: 1.5,
+    textAlign: "justify",
+    paddingBottom: 10,
+  },
+});

@@ -2,22 +2,10 @@ import React, { useState, useEffect, useRef } from "react";
 import { Button } from "@nextui-org/react";
 
 import { cn } from "@/src/lib/utils";
+import { ImageUploadProps } from "@/src/interfaces/reports";
 
 import { TrashIcon, AddImageIcon } from "../icons";
 import { LabelInput, DisplayInput } from "../ui/formInput";
-
-import { TowerReportImage } from "./TowerReportsDashboard";
-
-interface ImageUploadProps {
-  images: TowerReportImage[];
-  onImagesChange: (images: TowerReportImage[]) => void;
-  subdir: string;
-  onNewImageUpload: (image: TowerReportImage) => void;
-  newImageButtonName: string;
-  labelOptions?: string[];
-  maxImages?: number;
-  isFrontcover?: boolean; // New optional prop for front cover
-}
 
 export const ImageUpload = ({
   images,

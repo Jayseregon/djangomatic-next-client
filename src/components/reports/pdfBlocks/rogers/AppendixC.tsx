@@ -1,8 +1,9 @@
 import { View } from "@react-pdf/renderer";
 
-import { TOCSectionPDF } from "@/src/components/reports/TOCSection";
 import { StylesPDF } from "@/styles/stylesPDF";
 import { TOCSections } from "@/src/types/reports";
+
+import { TOCSectionPDF } from "./TOCSection";
 
 export default function AppendixC({
   tocSections,
@@ -12,7 +13,7 @@ export default function AppendixC({
   willCaptureToc: boolean;
 }) {
   return (
-    <View style={StylesPDF.sectionTitleContainer}>
+    <View break style={StylesPDF.sectionTitleContainer}>
       <TOCSectionPDF
         id="appendix-c"
         style={StylesPDF.pageTitle}

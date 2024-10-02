@@ -1,8 +1,9 @@
 import { View } from "@react-pdf/renderer";
 
-import { TOCSectionPDF } from "@/src/components/reports/TOCSection";
 import { StylesPDF } from "@/styles/stylesPDF";
 import { TOCSections } from "@/src/types/reports";
+
+import { TOCSectionPDF } from "./TOCSection";
 
 export default function AppendixA({
   tocSections,

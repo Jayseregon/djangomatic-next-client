@@ -3,7 +3,9 @@ import { Text, View } from "@react-pdf/renderer";
 
 import { StylesPDF } from "@/styles/stylesPDF";
 import { TOCSections } from "@/src/types/reports";
-import { TOCSectionPDF } from "@/src/components/reports/TOCSection";
+
+import { TOCSectionPDF } from "./TOCSection";
+import { ListTitle, ListItem } from "./ListElements";
 
 export default function AntennaAndTransmissionPage({
   tocSections,
@@ -22,17 +24,17 @@ export default function AntennaAndTransmissionPage({
       >
         Antenna and Transmission Line Inventory
       </TOCSectionPDF>
-      <Text style={StylesPDF.PageContentSection}>
+      <Text style={StylesPDF.PageContentSectionIndent}>
         During our field visit, we completed the following inventory of new
         antennas and transmission lines on the tower.
       </Text>
-
-      <Text style={{ paddingTop: 30, paddingBottom: 5 }}>Notes:</Text>
-      <View style={{ lineHeight: 1.5, paddingLeft: 5 }}>
-        <Text>
-          1. Antenna loading listed above are included in the installation SOW
-        </Text>
-        <Text>2. The azimuths are +/- 10</Text>
+      <View style={[StylesPDF.PageContentSection, { paddingTop: 30 }]}>
+        <ListTitle title="Notes:" />
+        <ListItem
+          number="1"
+          text="Antenna loading listed above are included in the installation SOW"
+        />
+        <ListItem number="2" text="The azimuths are +/- 10" />
       </View>
     </View>
   );

@@ -1,0 +1,248 @@
+{
+  "listA": {
+    "title": {
+      "letter": "a",
+      "title": "Tower Members"
+    },
+    "items": [
+      "Check structure for bent, fractured or missing members and check member size for conformance to available drawings."
+    ]
+  },
+  "listB": {
+    "title": {
+      "letter": "b",
+      "title": "Tower Connections"
+    },
+    "items": [
+      "Check connections for cracks in welds and for loose, missing or short bolts, and check for conformance to available drawings. At least 10% of all connection bolts and 100% of the splice bolts are to be torque checked."
+    ]
+  },
+  "listC": {
+    "title": {
+      "letter": "c",
+      "title": "Ladders, Gratings, Handrails, Fall Arresting Device, and Anti Climb"
+    },
+    "items": [
+      "Check for fractured members, fractured welds and loose or missing supports. Check general condition of fall arresting devices if present."
+    ]
+  },
+  "listD": {
+    "title": {
+      "letter": "d",
+      "title": "Guys and Guy Hardware"
+    },
+    "nestedItems": {
+      "title": [
+        "Check guy hardware, including turnbuckles, thimbles, grips, shackles, bolts and cotter pins, for:"
+      ],
+      "items": [
+        "Broken or damaged guy strands",
+        "Slippage of guy grips and clips",
+        "Rotation of turnbuckles",
+        "Loose or broken ties on guy ends",
+        "Loose, worn, cracked, bent or missing hardware (i.e. Turnbuckles, thimbles, clips, shackles, cotter pins, etc.)",
+        "Articulation of turnbuckles",
+        "Turnbuckle take-up gap remaining",
+        "Description and dimensions of all pressed sleeves",
+        "Ice break-up protection in front of guy grounds"
+      ]
+    }
+  },
+  "listE": {
+    "title": {
+      "letter": "e",
+      "title": "Foundations"
+    },
+    "items": [
+      "Check concrete and grout for movement, cracking, spalling and deterioration.",
+      "Check visible portion of anchor shafts, guy anchor plates, base plates and anchor bolts for bending and fractures.",
+      "Check for adequate drainage and backfill, and base plates for full bearing."
+    ]
+  },
+  "listF": {
+    "title": {
+      "letter": "f",
+      "title": "Antennas and Antenna Mounts"
+    },
+    "items": [
+      "Check visible components of the antennas and mounts for damage, loose or missing bolts, cracked welds, bent, fractured or missing members.",
+      "Check antenna position, elevation, azimuth and model to match as per design drawings.",
+      "Check Antenna mount material thickness, dimension and finish in conformance design and fabrication drawings.",
+      "Check for rust in antenna mount members. All field cut materials and field drill holes shall be cold galvanized."
+    ]
+  },
+  "listG": {
+    "title": {
+      "letter": "g",
+      "title": "Transmission Lines"
+    },
+    "items": [
+      "Check transmission lines for fractured, loose or missing supports and connections, missing protective sleeves under wrap lock connections, dents or damage in the lines and lines rubbing against members.",
+      "Check for missing grounding kits and weather proofing at all connectors (taped or cold shrink)."
+    ]
+  },
+  "listH": {
+    "title": {
+      "letter": "h",
+      "title": "Waveguide Bridge"
+    },
+    "items": [
+      "Check waveguide bridge for fractured, loose or missing supports and cover plates, and for bent, fractured or missing members."
+    ]
+  },
+  "listI": {
+    "title": {
+      "letter": "i",
+      "title": "Grounding and Lightning Rod"
+    },
+    "items": [
+      "Check lightning rod and ground wires on the tower base, guy wires, transmission lines and waveguide bridge for electrical continuity and loose or missing connections.",
+      "Check that grounding kit leads, straps and wires follow a smooth path towards the ground without kinks or sharp bends.",
+      "Check for grounding of equipment's in compliance with design drawings and Rogers Network Standard."
+    ]
+  },
+  "listJ": {
+    "title": {
+      "letter": "j",
+      "title": "Insulators"
+    },
+    "items": [
+      "Check insulators on guys and tower bases for cracks, flaws, chipping, and leaking where applicable.",
+      "Check insulators on guys with binoculars."
+    ]
+  },
+  "listK": {
+    "title": {
+      "letter": "k",
+      "title": "Conduit and Lighting"
+    },
+    "items": [
+      "Check conduit for deterioration, cracks, kinks, loose or missing supports; loose or missing junction box covers and screws and blocked drainage holes.",
+      "Check lamp fixtures for missing, loose or broken hardware and fittings; broken globes and burned out bulbs.",
+      "Check obstruction lighting for conformance with Transport Canada Requirements."
+    ]
+  },
+  "listL": {
+    "title": {
+      "letter": "l",
+      "title": "Painting"
+    },
+    "items": [
+      "Check painting for conformance with Transport Canada specifications with respect to length and positioning of colour bands, that colours are correct and that appropriate inside and outside surfaces of the tower are painted.",
+      "Check paint for peeling, blistering, flaking, fading, and oxidation, and comment whether the paint pattern is visually effective."
+    ]
+  },
+  "listM": {
+    "title": {
+      "letter": "m",
+      "title": "Galvanizing and other Anti-Corrosion Treatment"
+    },
+    "items": [
+      "Check all galvanized components of the tower (ie. Tower members, connections, ladder, guys and guy hardware, base plates and anchor bolts, waveguide bridge, conduit, etc…) for scratching or scoring, flaking, rusting, peeling and blistering of the galvanized surfaces.",
+      "Check non-galvanized metal surfaces (ie. Antenna and transmission line connections, etc…) for rusting or other surface deterioration."
+    ]
+  },
+  "listN": {
+    "title": {
+      "letter": "n",
+      "title": "Guy Tensions"
+    },
+    "items": [
+      "Guy tensions are measured by the pulse or swing method, unless noted is otherwise in the report. For new structures, the allowable range for guy tensions is +15% and - 5%. For existing structures, the allowable range for guy tensions is ±10%."
+    ]
+  },
+  "listO": {
+    "title": {
+      "letter": "o",
+      "title": "Vertical Alignment and Tower Twist"
+    },
+    "items": [
+      "The vertical alignment of the tower is measured and is as noted in the report. The out of tolerance between any two elevations on guyed and self-supporting structures is 1 in 500.",
+      "Tower verticality measurements are taken from: two directions for monopoles, three directions for triangular towers, and four directions for square towers.",
+      "The tower twist is measured and is as noted in the report. The allowable twist between any two elevations is to be within 0.5° in 3m. The maximum twist over the height of the structure is not to exceed 5°. Measurements are taken from three directions for triangular towers and from four directions for square towers."
+    ]
+  },
+  "listP": {
+    "title": {
+      "letter": "p",
+      "title": "Site Work"
+    },
+    "items": [
+      "Check general condition of security fences, compound area, access road, and shelter exterior.",
+      "CSA Standard S37-13 Antenna's, towers and antenna-supporting structures addresses the special conditions associated with safe access on towers and contains requirements for tower owners to upgrade towers for compliance with the required features for ladders and climbing facilities. The Standard addresses fixed ladders and climbing facilities, platforms, fall arresting devices, access through and around obstructions, and retrofitting."
+    ]
+  },
+  "list161": {
+    "title": {
+      "letter": "16.1",
+      "title": "Ladder and Climbing Facility Foot and Toe Clearance"
+    },
+    "items": [
+      "At any rung or step location, where the foot of a climber would be placed, there must be a space above the step which is clear of any obstructions. This space must measure at least 100mm (4 in.) vertically, 125mm (5 in.) horizontally and 180 mm (7 in.) deep. This is a requirement for towers with either a fixed ladder or an integral climbing facility."
+    ]
+  },
+  "list162": {
+    "title": {
+      "letter": "16.2",
+      "title": "Ladder and Climbing Facility Rung Spacing"
+    },
+    "items": [
+      "The Standard recommends a consistent fixed ladder rung spacing of 300mm. Where the structure has a climbing facility that is an integral part of the structure the centre-to-centre between rungs may be increased to 410mm. The Standard requires provision for existing structures with climbing facilities having an increased or irregular rung spacing since the tower sections may vary."
+    ]
+  },
+  "list163": {
+    "title": {
+      "letter": "16.3",
+      "title": "Platforms"
+    },
+    "items": [
+      "Platforms are required unless the structure is equipped with a fall arresting device. All platforms shall have the required specific features as described in the Standard. Rest platforms are to be located at a maximum vertical spacing of 18m.",
+      "Work platforms are to be located at levels where work is performed. Interchange platforms are to be located at any point where the ladder or climbing facility changes from one location on the tower to another, or, when the rung spacing changes."
+    ]
+  },
+  "list164": {
+    "title": {
+      "letter": "16.4",
+      "title": "Fall Arresting Devices"
+    },
+    "items": [
+      "Fall Arresting Devices, having the required specific features as described in the Standard and are used where the structure is not equipped with ladder cages or loops. Fall arresting devices may be used in lieu of platform."
+    ]
+  },
+  "list165": {
+    "title": {
+      "letter": "16.5",
+      "title": "Ladder Cage and Hoops"
+    },
+    "items": [
+      "Ladder Cages and Hoops, having the required specific features as described in the Standard, are required unless the structure is equipped with a fall arresting device."
+    ]
+  },
+  "list167": {
+    "title": {
+      "letter": "16.7",
+      "title": "Restricted Clearance and Access Through Obstructions"
+    },
+    "items": [
+      "There must be at least 660mm (26in.) diameter clearance from the center line of a rung clear of any obstruction on the climbing side of the ladder to provide for the climber's head and body. Typical obstructions may include structural features such as torsion resistors or antenna mounts, or items such as antennas, mounts, and transmission lines."
+    ]
+  },
+  "list168": {
+    "title": {
+      "letter": "16.8",
+      "title": "Retrofitting"
+    },
+    "items": [
+      "As part of their maintenance inspection program, existing towers are to be reviewed with respect to required climbing safety features (section 16). An Engineer shall review those observations and make recommendations to the owner relative to the meeting of the requirements. The recommendations are to be implemented over a time period noted in the Standard and commencing after the first Engineer report."
+    ]
+  },
+  "list169": {
+    "title": {
+      "letter": "16.9",
+      "title": "Suitable Warning Signs"
+    },
+    "items": [
+      "For structures which are not in conformance with the requirements of this Standard suitable warning signs shall be posted at the base of the tower, identifying the location of non-conforming requirements along the height of the tower, and also including notification that the tower is to be climbed only by qualified person. Warning markers, or other suitable means, are also to be provided both above and below the non-conforming requirements on the tower."
+    ]
+  }
+}

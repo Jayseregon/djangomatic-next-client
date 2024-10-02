@@ -1,0 +1,18 @@
+{
+  "list1": {
+    "title": "Tower Orientation",
+    "items": [
+      "Tower Leg 1 is referenced as tower leg clockwise from north.",
+      "Anchor A1 is referenced as anchor clockwise from north.",
+      "Tower face A is referenced as face clockwise from north.",
+      "For a guyed tower with only one anchor on each azimuth, B anchors are omitted."
+    ]
+  },
+  "list2": {
+    "title": "Tower Alignment and Twist",
+    "items": [
+      "Deflections in X and Y directions are determined from locations behind Anchors 1B, 2B, and 3B. (+ to right, - to left)",
+      "Positive tower twist is counter clockwise."
+    ]
+  }
+}

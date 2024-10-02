@@ -3,7 +3,8 @@ import { Text, View } from "@react-pdf/renderer";
 
 import { StylesPDF } from "@/styles/stylesPDF";
 import { TOCSections, TowerReport } from "@/src/types/reports";
-import { TOCSectionPDF } from "@/src/components/reports/TOCSection";
+
+import { TOCSectionPDF } from "./TOCSection";
 
 export default function ScopeOfWorkPage({
   report,
@@ -24,7 +25,7 @@ export default function ScopeOfWorkPage({
       >
         Scope of Work
       </TOCSectionPDF>
-      <Text style={StylesPDF.PageContentSection}>
+      <Text style={StylesPDF.PageContentSectionIndent}>
         Telecon Design Inc. has carried out an inspection field review of the
         new antenna installation in accordance with the field review
         recommendations of the latest {report.design_standard} standard.

@@ -106,8 +106,64 @@ export const StylesPDF = StyleSheet.create({
     textDecoration: "underline",
   },
   PageContentSection: {
-    lineHeight: 1.5,
+    lineHeight: 1.2,
     textAlign: "justify",
     paddingBottom: 10,
+  },
+  PageContentSectionIndent: {
+    textIndent: 20,
+    lineHeight: 1.2,
+    textAlign: "justify",
+    paddingBottom: 10,
+  },
+  AppendixContentSection: {
+    lineHeight: 1.2,
+    fontSize: 10,
+    textAlign: "justify",
+    paddingBottom: 10,
+  },
+  AppendixContentSectionIndent: {
+    textIndent: 20,
+    fontSize: 10,
+    lineHeight: 1.2,
+    textAlign: "justify",
+    paddingBottom: 10,
+  },
+  listItemContainer: {
+    flexDirection: "row",
+    alignItems: "flex-start",
+    paddingLeft: 5,
+    marginBottom: 5,
+  },
+  subListItemContainer: {
+    flexDirection: "row",
+    alignItems: "flex-start",
+    paddingLeft: 20,
+    marginBottom: 5,
+  },
+  listTitle: {
+    fontSize: 11,
+    textDecoration: "underline",
+    paddingBottom: 5,
+  },
+  listTitleBold: {
+    fontSize: 11,
+    textDecoration: "underline",
+    fontFamily: "Helvetica-Bold",
+    paddingBottom: 5,
+  },
+  listItemNumber: {
+    width: 20,
+  },
+  listItemText: {
+    flex: 1,
+    textAlign: "justify",
+  },
+  sideBySideContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+  sideBySideItem: {
+    width: "50%",
   },
 });

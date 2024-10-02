@@ -1,5 +1,5 @@
 import React from "react";
-import { Page, Text, View, Image } from "@react-pdf/renderer";
+import { Page, Text, View, Image as PdfImg } from "@react-pdf/renderer";
 
 import { titleCase } from "@/src/lib/utils";
 import { StylesPDF } from "@/styles/stylesPDF";
@@ -9,13 +9,13 @@ export default function FrontPage({ report }: { report: TowerReport }) {
   return (
     <Page size="LETTER" style={StylesPDF.page}>
       {/* Header TD Logo */}
-      <Image
+      <PdfImg
         fixed
         src="./public/reports/telecon-design-logo.png"
         style={StylesPDF.pageTDLogo}
       />
       {/* Header Rogers Logo */}
-      <Image
+      <PdfImg
         fixed
         src="./public/reports/rogers/rogers-logo.png"
         style={StylesPDF.pageClientLogo}
@@ -53,7 +53,7 @@ export default function FrontPage({ report }: { report: TowerReport }) {
         </Text>
       </View>
       {/* central front cover image */}
-      <Image
+      <PdfImg
         fixed
         src={report.front_image[0].url}
         style={StylesPDF.frontCoverImage}
@@ -72,7 +72,7 @@ export default function FrontPage({ report }: { report: TowerReport }) {
         </Text>
       </View>
       {/* Footer Rogers corner */}
-      <Image
+      <PdfImg
         fixed
         src="./public/reports/rogers/rogers-footer.jpg"
         style={StylesPDF.pageImageFooter}

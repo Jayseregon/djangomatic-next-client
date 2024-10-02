@@ -116,8 +116,6 @@ export async function GET(
 
   const tocSections: TOCSections[] = [];
 
-  console.log("TOC bf: ", tocSections);
-
   await renderToStream(
     <ReportDocument
       report={report}
@@ -134,7 +132,7 @@ export async function GET(
     />,
   );
 
-  console.log("TOC af: ", tocSections);
+  // console.log("TOC af: ", tocSections);
 
   const response = new NextResponse(stream as unknown as ReadableStream);
 

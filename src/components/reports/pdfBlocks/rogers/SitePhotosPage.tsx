@@ -1,5 +1,5 @@
 import React from "react";
-import { Text, View, Image } from "@react-pdf/renderer";
+import { Text, View, Image as PdfImg } from "@react-pdf/renderer";
 
 import { StylesPDF } from "@/styles/stylesPDF";
 import { TOCSections, TowerReport } from "@/src/types/reports";
@@ -37,7 +37,7 @@ export default function SitePhotosPage({
         <View key={index} break style={StylesPDF.imageColumn}>
           {pair.map((image, idx) => (
             <View key={idx} style={StylesPDF.imageContainer}>
-              <Image src={image.url} style={StylesPDF.image} />
+              <PdfImg src={image.url} style={StylesPDF.image} />
               <Text style={StylesPDF.label}>{image.label}</Text>
             </View>
           ))}

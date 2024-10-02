@@ -1,5 +1,5 @@
 import React from "react";
-import { Text, Image } from "@react-pdf/renderer";
+import { Text, Image as PdfImg } from "@react-pdf/renderer";
 
 import { StylesPDF } from "@/styles/stylesPDF";
 
@@ -18,7 +18,7 @@ export default function PageFooter() {
         style={StylesPDF.pageCount}
       />
       {/* Footer Rogers corner */}
-      <Image
+      <PdfImg
         fixed
         src="./public/reports/rogers/rogers-footer.jpg"
         style={StylesPDF.pageImageFooter}

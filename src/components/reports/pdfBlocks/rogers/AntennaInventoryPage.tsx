@@ -7,7 +7,7 @@ import { TOCSections } from "@/src/types/reports";
 import { TOCSectionPDF } from "./TOCSection";
 import { ListTitle, ListItem } from "./ListElements";
 
-export default function AntennaAndTransmissionPage({
+export default function AntennaInventoryPage({
   tocSections,
   willCaptureToc,
 }: {

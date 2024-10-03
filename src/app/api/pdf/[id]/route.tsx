@@ -10,7 +10,7 @@ import FrontPage from "@/src/components/reports/pdfBlocks/rogers/FrontPage";
 import AuthorPage from "@/src/components/reports/pdfBlocks/rogers/AuthorPage";
 import TableOfContentsPage from "@/src/components/reports/pdfBlocks/rogers/TableOfContentsPage";
 import ScopeOfWorkPage from "@/src/components/reports/pdfBlocks/rogers/ScopeOfWorkPage";
-import AntennaAndTransmissionPage from "@/src/components/reports/pdfBlocks/rogers/AntennaAndTransmissionPage";
+import AntennaInventoryPage from "@/src/components/reports/pdfBlocks/rogers/AntennaInventoryPage";
 import DeficienciesPage from "@/src/components/reports/pdfBlocks/rogers/DeficienciesPage";
 import SitePhotosPage from "@/src/components/reports/pdfBlocks/rogers/SitePhotosPage";
 import PageFooter from "@/src/components/reports/pdfBlocks/rogers/PageFooter";
@@ -54,7 +54,7 @@ const ReportDocument = ({
         />
 
         {/* New page Antenna & Transmission Line Inventory */}
-        <AntennaAndTransmissionPage
+        <AntennaInventoryPage
           tocSections={tocSections}
           willCaptureToc={willCaptureToc}
         />

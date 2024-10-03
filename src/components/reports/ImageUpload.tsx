@@ -20,17 +20,18 @@ export const ImageUpload = ({
   isFrontcover,
 }: ImageUploadProps) => {
   const [localImages, setLocalImages] = useState<
-    { file: File | null; label: string; url?: string }[]
+    { file: File | null; label: string; url?: string; imgIndex: number }[]
   >([]);
   const isInitialized = useRef(false);
 
   useEffect(() => {
     // Initialize localImages state based on the images prop only once
     if (!isInitialized.current && images.length > 0) {
-      const initialLocalImages = images.map((image) => ({
+      const initialLocalImages = images.map((image, index) => ({
         file: null,
         label: isFrontcover ? "Front Cover" : image.label,
         url: image.url,
+        imgIndex: image.imgIndex ?? index, // Use imgIndex if available, otherwise use index
       }));
 
       setLocalImages([...initialLocalImages]);
@@ -38,12 +39,24 @@ export const ImageUpload = ({
     }
   }, [images, isFrontcover]);
 
+  const findFirstAvailableIndex = () => {
+    const indices = localImages.map((image) => image.imgIndex);
+    let index = 0;
+
+    while (indices.includes(index)) {
+      index++;
+    }
+
+    return index;
+  };
+
   const handleImageChange = async (index: number, files: FileList) => {
     const newImages = [...localImages];
 
     if (files && files[0]) {
       const file = files[0];
       const label = isFrontcover ? "Front Cover" : newImages[index].label;
+      const imgIndex = index; // Use the index as imgIndex
       const { url, azureId, id } = await uploadImageToAzure(
         file,
         label,
@@ -53,6 +66,7 @@ export const ImageUpload = ({
         id,
         url,
         label,
+        imgIndex,
         azureId,
         siteProjectId: null,
         frontProjectId: null,
@@ -60,7 +74,7 @@ export const ImageUpload = ({
       };
 
       onImagesChange([...images, newImage]);
-      newImages[index] = { ...newImages[index], file, url };
+      newImages[index] = { ...newImages[index], file, url, imgIndex };
       onNewImageUpload(newImage);
     }
     setLocalImages(newImages);
@@ -75,22 +89,16 @@ export const ImageUpload = ({
     const { value } = e.target;
     const newImages = [...localImages];
 
-    // Remove any existing index prefix
-    const prefix = `${index + 1}. `;
-    const newValue = value.startsWith(prefix)
-      ? value.slice(prefix.length)
-      : value;
-
-    // Update the label with the new value and prefix
+    // Update the label with the new value
     newImages[index] = {
       ...newImages[index],
-      label: `${index + 1}. ${newValue}`,
+      label: value,
     };
     setLocalImages(newImages);
 
     // Update the label in the images prop
     const updatedImages = images.map((img, i) =>
-      i === index ? { ...img, label: `${index + 1}. ${newValue}` } : img,
+      i === index ? { ...img, label: value } : img,
     );
 
     onImagesChange(updatedImages);
@@ -102,15 +110,21 @@ export const ImageUpload = ({
       (!isFrontcover &&
         (maxImages === undefined || localImages.length < maxImages))
     ) {
+      const availableIndex = findFirstAvailableIndex();
+
       setLocalImages((prev) => [
         ...prev,
-        { file: null, label: isFrontcover ? "Front Cover" : "" },
+        {
+          file: null,
+          label: isFrontcover ? "Front Cover" : "",
+          imgIndex: availableIndex,
+        },
       ]);
     }
   };
 
   const removeImageField = async (index: number) => {
-    const imageToRemove = images[index];
+    const imageToRemove = images.find((img) => img.imgIndex === index);
 
     if (imageToRemove) {
       await fetch(
@@ -119,9 +133,9 @@ export const ImageUpload = ({
           method: "DELETE",
         },
       );
-      onImagesChange(images.filter((_, i) => i !== index));
+      onImagesChange(images.filter((img) => img.imgIndex !== index));
     }
-    const newImages = localImages.filter((_, i) => i !== index);
+    const newImages = localImages.filter((img) => img.imgIndex !== index);
 
     setLocalImages(newImages);
   };
@@ -149,65 +163,75 @@ export const ImageUpload = ({
 
   return (
     <>
-      {localImages.map((image, index) => (
-        <div
-          key={index}
-          className={`flex items-center justify-center ${isFrontcover ? "" : "space-x-4"}`}
-        >
-          {image.url ? (
-            <>
-              <img
-                alt={image.label}
-                className="size-20 object-cover rounded-lg"
-                src={image.url}
-              />
-              {!isFrontcover && <DisplayInput value={image.label} />}
-              <Button
-                isIconOnly
-                className="ml-2"
-                color="danger"
-                radius="full"
-                variant="light"
-                onClick={() => removeImageField(index)}
-              >
-                <TrashIcon />
-              </Button>
-            </>
-          ) : (
-            <div
-              className={cn(
-                isFrontcover
-                  ? "grid grid-cols-[1fr_auto] items-center min-w-[50vw] px-20 gap-4"
-                  : "grid grid-cols-[1fr_1fr_auto] min-w-full px-20 items-center gap-4",
-              )}
-            >
-              <DropArea
-                index={index}
-                isDisabled={!image.label}
-                onFilesAdded={(files) => handleImageChange(index, files)}
-              />
-              {!isFrontcover && (
-                <LabelInput
-                  name={`label-${index}`}
-                  options={labelOptions || []}
-                  placeholder="Select a label"
-                  value={image.label}
-                  onChange={(e) => handleLabelChange(index, e)}
+      {localImages
+        .sort((a, b) => a.imgIndex - b.imgIndex)
+        .map((image, index) => (
+          <div
+            key={index}
+            className={`flex items-center justify-center ${
+              isFrontcover ?? "space-x-4"
+            }`}
+          >
+            {image.url ? (
+              <>
+                <img
+                  alt={image.label}
+                  className="size-20 object-cover rounded-lg"
+                  src={image.url}
                 />
-              )}
-              <Button
-                isIconOnly
-                color="danger"
-                radius="full"
-                variant="light"
-                onClick={() => removeImageField(index)}
+                {!isFrontcover && (
+                  <DisplayInput
+                    value={image.imgIndex + 1 + ". " + image.label}
+                  />
+                )}
+                <Button
+                  isIconOnly
+                  className="ml-2"
+                  color="danger"
+                  radius="full"
+                  variant="light"
+                  onClick={() => removeImageField(image.imgIndex)}
+                >
+                  <TrashIcon />
+                </Button>
+              </>
+            ) : (
+              <div
+                className={cn(
+                  isFrontcover
+                    ? "grid grid-cols-[1fr_auto] items-center min-w-[50vw] px-20 gap-4"
+                    : "grid grid-cols-[1fr_1fr_auto] min-w-full px-20 items-center gap-4",
+                )}
               >
-                <TrashIcon />
-              </Button>
-            </div>
-          )}
-        </div>
-      ))}
+                <DropArea
+                  index={image.imgIndex}
+                  isDisabled={!image.label}
+                  onFilesAdded={(files) =>
+                    handleImageChange(image.imgIndex, files)
+                  }
+                />
+                {!isFrontcover && (
+                  <LabelInput
+                    name={`label-${image.imgIndex}`}
+                    options={labelOptions || []}
+                    placeholder="Select a label"
+                    value={image.label}
+                    onChange={(e) => handleLabelChange(image.imgIndex, e)}
+                  />
+                )}
+                <Button
+                  isIconOnly
+                  color="danger"
+                  radius="full"
+                  variant="light"
+                  onClick={() => removeImageField(image.imgIndex)}
+                >
+                  <TrashIcon />
+                </Button>
+              </div>
+            )}
+          </div>
+        ))}
       {((isFrontcover && localImages.length === 0) ||
         (!isFrontcover &&
           (maxImages === undefined || localImages.length < maxImages))) && (

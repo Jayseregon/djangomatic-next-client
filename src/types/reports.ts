@@ -24,6 +24,7 @@ export type TowerReportImage = {
   id: string;
   url: string;
   label: string;
+  imgIndex: number;
   azureId: string;
 };
 

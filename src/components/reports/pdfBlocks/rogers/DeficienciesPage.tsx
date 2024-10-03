@@ -15,6 +15,10 @@ export default function DeficienciesPage({
   tocSections: TOCSections[];
   willCaptureToc: boolean;
 }) {
+  const sortedImages = [
+    ...report.deficiency_images.sort((a, b) => a.imgIndex - b.imgIndex),
+  ];
+
   return (
     <>
       <View break>
@@ -42,11 +46,13 @@ export default function DeficienciesPage({
           Deficiency Photos
         </TOCSectionPDF>
       </View>
-      {report.deficiency_images.map((image, index) => (
+      {sortedImages.map((image, index) => (
         <View key={index} break style={StylesPDF.imageColumn}>
           <View style={StylesPDF.imageContainer}>
             <PdfImg src={image.url} style={StylesPDF.image} />
-            <Text style={StylesPDF.label}>{image.label}</Text>
+            <Text style={StylesPDF.label}>
+              {image.imgIndex + 1 + ". " + image.label}
+            </Text>
           </View>
         </View>
       ))}

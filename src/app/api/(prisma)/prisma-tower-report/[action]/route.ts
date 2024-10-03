@@ -20,6 +20,7 @@ export async function POST(request: Request) {
             url: image.url,
             label: image.label,
             azureId: image.azureId,
+            imgIndex: image.imgIndex,
           })),
         },
         front_image: {
@@ -27,6 +28,7 @@ export async function POST(request: Request) {
             url: image.url,
             label: image.label,
             azureId: image.azureId,
+            imgIndex: image.imgIndex,
           })),
         },
         deficiency_images: {
@@ -34,6 +36,7 @@ export async function POST(request: Request) {
             url: image.url,
             label: image.label,
             azureId: image.azureId,
+            imgIndex: image.imgIndex,
           })),
         },
       },
@@ -74,6 +77,7 @@ export async function PUT(request: Request) {
             url: image.url,
             label: image.label,
             azureId: image.azureId,
+            imgIndex: image.imgIndex,
           })),
         },
         front_image: {
@@ -82,6 +86,7 @@ export async function PUT(request: Request) {
             url: image.url,
             label: image.label,
             azureId: image.azureId,
+            imgIndex: image.imgIndex,
           })),
         },
         deficiency_images: {
@@ -90,6 +95,7 @@ export async function PUT(request: Request) {
             url: image.url,
             label: image.label,
             azureId: image.azureId,
+            imgIndex: image.imgIndex,
           })),
         },
       },

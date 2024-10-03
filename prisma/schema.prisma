@@ -69,6 +69,7 @@ model TowerReportImage {
   id                  String       @id @default(cuid())
   url                 String
   label               String
+  imgIndex            Int
   azureId             String
   siteProjectId       String?
   frontProjectId      String?

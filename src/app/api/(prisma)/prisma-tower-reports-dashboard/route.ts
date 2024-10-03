@@ -13,7 +13,7 @@ export async function GET() {
       },
     });
 
-    // console.log("Find all reports:", reports);
+    console.log("Find all reports:", reports);
 
     return NextResponse.json(reports);
   } catch (error) {

@@ -15,10 +15,15 @@ export default function SitePhotosPage({
   tocSections: TOCSections[];
   willCaptureToc: boolean;
 }) {
+  // Sort the site_images by imgIndex
+  const sortedSiteImages = [...report.site_images].sort(
+    (a, b) => a.imgIndex - b.imgIndex,
+  );
+
   const siteImagePairs = [];
 
-  for (let i = 0; i < report.site_images.length; i += 2) {
-    siteImagePairs.push(report.site_images.slice(i, i + 2));
+  for (let i = 0; i < sortedSiteImages.length; i += 2) {
+    siteImagePairs.push(sortedSiteImages.slice(i, i + 2));
   }
 
   return (
@@ -39,7 +44,9 @@ export default function SitePhotosPage({
           {pair.map((image, idx) => (
             <View key={idx} style={StylesPDF.imageContainer}>
               <PdfImg src={image.url} style={StylesPDF.image} />
-              <Text style={StylesPDF.label}>{image.label}</Text>
+              <Text style={StylesPDF.label}>
+                {image.imgIndex + 1 + ". " + image.label}
+              </Text>
             </View>
           ))}
         </View>

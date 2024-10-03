@@ -11,7 +11,7 @@
     "dev": "concurrently \"npm:dev:*\"",
     "build": "npm run build:content && npm run build:next",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint --fix"
   },
   "dependencies": {
     "@auth/unstorage-adapter": "^2.5.3",

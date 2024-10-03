@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { TrashIcon } from "../icons";
 import { Button } from "@nextui-org/react";
-import { FormInputProps, LabelInputProps } from "@/interfaces/reports";
 
+import { FormInputProps, LabelInputProps } from "@/interfaces/reports";
+import { cn } from "@/src/lib/utils";
+
+import { TrashIcon } from "../icons";
 
 export const FormInput = ({
   value,
@@ -11,24 +13,28 @@ export const FormInput = ({
   placeholder,
   type = "text",
   onChange,
-  isRounded=true,
+  isRounded = true,
 }: FormInputProps) => {
   return (
     <div className="grid grid-cols-1 gap-1">
-      {label && <p className="text-ellipsis overflow-hidden text-primary text-sm">
-        {label}
-      </p>}
-      <div className={`border-2 border-primary ${isRounded && "rounded-3xl"} w-full flex items-center justify-center`}>
+      {label && (
+        <p className="text-ellipsis overflow-hidden text-primary text-sm">
+          {label}
+        </p>
+      )}
+      <div
+        className={`border-2 border-primary ${isRounded && "rounded-3xl"} w-full flex items-center justify-center`}
+      >
         <input
           required
           className="border-0 focus:ring-0 focus:ring-inset text-foreground bg-transparent text-center text-ellipsis overflow-hidden"
           id={name}
           name={name}
           placeholder={placeholder || undefined}
+          step={type === "number" ? "0.01" : undefined}
           type={type}
           value={value}
           onChange={onChange}
-          step={type === "number" ? "0.01" : undefined}
         />
       </div>
     </div>
@@ -86,10 +92,7 @@ export const LabelInput = ({
       />
       <datalist id={`${name}-datalist`}>
         {options.map((option, index) => (
-          <option
-            key={index}
-            value={option}
-          />
+          <option key={index} value={option} />
         ))}
       </datalist>
     </div>
@@ -110,8 +113,34 @@ export const TrashButton = ({
       color="danger"
       radius="full"
       variant="light"
-      onClick={onClick}>
+      onClick={onClick}
+    >
       <TrashIcon />
+    </Button>
+  );
+};
+
+export const AddButtom = ({
+  onClick,
+  label,
+  className,
+}: {
+  onClick: () => void;
+  label: string;
+  className?: string;
+}) => {
+  return (
+    <Button
+      className={cn(
+        "mt-4 max-w-[30vw] mx-auto border-indigo-700 dark:border-indigo-300 text-indigo-700 dark:text-indigo-300",
+        className,
+      )}
+      radius="lg"
+      type="button"
+      variant="ghost"
+      onClick={onClick}
+    >
+      {label}
     </Button>
   );
 };

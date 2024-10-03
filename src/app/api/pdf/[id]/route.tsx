@@ -39,9 +39,7 @@ const ReportDocument = ({
       <FrontPage report={report} />
 
       {/* New page document corpus */}
-      <Page
-        size="LETTER"
-        style={StylesPDF.page}>
+      <Page size="LETTER" style={StylesPDF.page}>
         {/* New page Author */}
         <AuthorPage report={report} />
 
@@ -84,26 +82,15 @@ const ReportDocument = ({
       </Page>
 
       {/* New page for Appendices */}
-      <Page
-        size="LETTER"
-        style={StylesPDF.page}>
+      <Page size="LETTER" style={StylesPDF.page}>
         {/* New page Appendix A */}
-        <AppendixA
-          tocSections={tocSections}
-          willCaptureToc={willCaptureToc}
-        />
+        <AppendixA tocSections={tocSections} willCaptureToc={willCaptureToc} />
 
         {/* New page Appendix B */}
-        <AppendixB
-          tocSections={tocSections}
-          willCaptureToc={willCaptureToc}
-        />
+        <AppendixB tocSections={tocSections} willCaptureToc={willCaptureToc} />
 
         {/* New page Appendix C */}
-        <AppendixC
-          tocSections={tocSections}
-          willCaptureToc={willCaptureToc}
-        />
+        <AppendixC tocSections={tocSections} willCaptureToc={willCaptureToc} />
 
         {/* Page Footer */}
         <PageFooter />
@@ -114,7 +101,7 @@ const ReportDocument = ({
 
 export async function GET(
   request: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: { id: string } },
 ) {
   if (!params.id || params.id === "new") {
     return new Response("ID is required", { status: 400 });
@@ -141,7 +128,7 @@ export async function GET(
       report={report}
       tocSections={tocSections}
       willCaptureToc={true}
-    />
+    />,
   );
 
   const stream = await renderToStream(
@@ -149,7 +136,7 @@ export async function GET(
       report={report}
       tocSections={tocSections}
       willCaptureToc={false}
-    />
+    />,
   );
 
   // console.log("TOC af: ", tocSections);
@@ -160,8 +147,8 @@ export async function GET(
   response.headers.set(
     "Content-Disposition",
     `inline; filename="${report.site_code}-${titleCase(
-      report.tower_site_name
-    )}-${report.site_region}-${report.jde_job}-PCI.pdf"`
+      report.tower_site_name,
+    )}-${report.site_region}-${report.jde_job}-PCI.pdf"`,
   );
 
   // response.headers.set(

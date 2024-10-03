@@ -215,5 +215,3 @@ export const TowerReportsDashboard = () => {
     </div>
   );
 };
-
-export default TowerReportsDashboard;

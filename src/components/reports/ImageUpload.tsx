@@ -1,10 +1,14 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Button } from "@nextui-org/react";
 
 import { cn } from "@/src/lib/utils";
 import { ImageUploadProps } from "@/src/interfaces/reports";
 
-import { LabelInput, DisplayInput, TrashButton } from "../ui/formInput";
+import {
+  LabelInput,
+  DisplayInput,
+  TrashButton,
+  AddButtom,
+} from "../ui/formInput";
 
 import { DropArea } from "./DropArea";
 
@@ -59,7 +63,7 @@ export default function ImageUpload({
       const { url, azureId, id } = await uploadImageToAzure(
         file,
         label,
-        subdir
+        subdir,
       );
       const newImage = {
         id,
@@ -81,7 +85,7 @@ export default function ImageUpload({
 
   const handleLabelChange = (
     index: number,
-    e: React.ChangeEvent<HTMLInputElement>
+    e: React.ChangeEvent<HTMLInputElement>,
   ) => {
     if (isFrontcover) return; // Prevent label change if it's a front cover
 
@@ -97,7 +101,7 @@ export default function ImageUpload({
 
     // Update the label in the images prop
     const updatedImages = images.map((img, i) =>
-      i === index ? { ...img, label: value } : img
+      i === index ? { ...img, label: value } : img,
     );
 
     onImagesChange(updatedImages);
@@ -130,7 +134,7 @@ export default function ImageUpload({
         `/api/azure-report-images/delete?subdir=${subdir}&azureId=${imageToRemove.azureId}`,
         {
           method: "DELETE",
-        }
+        },
       );
       onImagesChange(images.filter((img) => img.imgIndex !== index));
     }
@@ -142,7 +146,7 @@ export default function ImageUpload({
   const uploadImageToAzure = async (
     file: File,
     label: string,
-    subdir: string
+    subdir: string,
   ) => {
     const formData = new FormData();
 
@@ -169,7 +173,8 @@ export default function ImageUpload({
             key={index}
             className={`flex items-center justify-center ${
               isFrontcover ?? "space-x-4"
-            }`}>
+            }`}
+          >
             {image.url ? (
               <>
                 <img
@@ -183,8 +188,8 @@ export default function ImageUpload({
                   />
                 )}
                 <TrashButton
-                  onClick={() => removeImageField(image.imgIndex)}
                   className="ml-2"
+                  onClick={() => removeImageField(image.imgIndex)}
                 />
               </>
             ) : (
@@ -192,8 +197,9 @@ export default function ImageUpload({
                 className={cn(
                   isFrontcover
                     ? "grid grid-cols-[1fr_auto] items-center min-w-[50vw] px-20 gap-4"
-                    : "grid grid-cols-[1fr_1fr_auto] min-w-full px-20 items-center gap-4"
-                )}>
+                    : "grid grid-cols-[1fr_1fr_auto] min-w-full px-20 items-center gap-4",
+                )}
+              >
                 <DropArea
                   index={image.imgIndex}
                   isDisabled={!image.label}
@@ -218,14 +224,10 @@ export default function ImageUpload({
       {((isFrontcover && localImages.length === 0) ||
         (!isFrontcover &&
           (maxImages === undefined || localImages.length < maxImages))) && (
-        <Button
-          className="mt-4 max-w-[30vw] mx-auto border-indigo-700 dark:border-indigo-300 text-indigo-700 dark:text-indigo-300"
-          radius="lg"
-          type="button"
-          variant="ghost"
-          onClick={addImageField}>
-          {`Add ${newImageButtonName} Image`}
-        </Button>
+        <AddButtom
+          label={`Add ${newImageButtonName} Image`}
+          onClick={addImageField}
+        />
       )}
     </>
   );

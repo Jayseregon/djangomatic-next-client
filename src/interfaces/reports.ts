@@ -64,7 +64,7 @@ export interface AntennaTransmissionInputsProps {
   onAntennaChange: (
     index: number,
     field: string,
-    value: string | number
+    value: string | number,
   ) => void;
   onAddAntenna: () => void;
   onRemoveAntenna: (index: number) => void;

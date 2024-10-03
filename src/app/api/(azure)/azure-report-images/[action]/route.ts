@@ -3,6 +3,7 @@ import { Readable } from "stream";
 import { v4 as uuidv4 } from "uuid";
 import { NextResponse } from "next/server";
 import { BlobServiceClient } from "@azure/storage-blob";
+import sharp from "sharp";
 
 const rootdir = "tower_reports_images";
 
@@ -31,7 +32,7 @@ export async function POST(request: Request): Promise<Response> {
       {
         message: "One of {file, label, subdir} is missing",
       },
-      { status: 400 },
+      { status: 400 }
     );
   }
 
@@ -45,7 +46,7 @@ export async function POST(request: Request): Promise<Response> {
       blobContentType: file.type || "application/octet-stream",
     },
     tags: {
-      label: label.toString(),
+      // label: label.toString(),
       azureId: azureId.toString(),
     },
   };
@@ -53,7 +54,15 @@ export async function POST(request: Request): Promise<Response> {
   // Convert file to buffer and create a readable stream
   const arrayBuffer = await file.arrayBuffer();
   const buffer = Buffer.from(arrayBuffer);
-  const stream = Readable.from(buffer);
+
+  // Compress the image using sharp
+  const compressedBuffer = await sharp(buffer)
+    .resize({ width: 1700 }) // Resize to 2000px width
+    .jpeg({ quality: 80 }) // Compress to JPEG with 70% quality
+    .toBuffer();
+
+  // Create a readable stream from the compressed buffer
+  const stream = Readable.from(compressedBuffer);
 
   // Upload options
   const blockSize = 4 * 1024 * 1024; // 4MB block size
@@ -71,7 +80,7 @@ export async function POST(request: Request): Promise<Response> {
     stream,
     uploadOptions.bufferSize,
     uploadOptions.maxBuffers,
-    uploadOptions,
+    uploadOptions
   );
 
   // Set tags for the uploaded blob
@@ -99,7 +108,7 @@ export async function DELETE(request: Request): Promise<Response> {
   if (!azureId || !subdir) {
     return NextResponse.json(
       { message: "One of {Azure ID, subdir} is missing" },
-      { status: 400 },
+      { status: 400 }
     );
   }
 
@@ -131,7 +140,23 @@ export async function DELETE(request: Request): Promise<Response> {
 
     return NextResponse.json(
       { message: "Failed to delete blob" },
-      { status: 500 },
+      { status: 500 }
     );
   }
+}
+
+export async function GET() {
+  return new NextResponse("Method Not Allowed", { status: 405 });
+}
+
+export async function PATCH() {
+  return new NextResponse("Method Not Allowed", { status: 405 });
+}
+
+export async function PUT() {
+  return new NextResponse("Method Not Allowed", { status: 405 });
+}
+
+export async function OPTIONS() {
+  return new NextResponse("Method Not Allowed", { status: 405 });
 }

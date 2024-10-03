@@ -25,7 +25,7 @@ export const FormInput = ({
 }: FormInputProps) => {
   return (
     <div className="grid grid-cols-1 gap-1">
-      <p className="text-ellipsis overflow-hidden">{label}</p>
+      <p className="text-ellipsis overflow-hidden text-primary text-sm">{label}</p>
       <div className="border-2 border-primary rounded-3xl w-full flex items-center justify-center">
         <input
           required

@@ -1,8 +1,7 @@
 import { NextResponse } from "next/server";
 import { PrismaClient } from "@prisma/client";
 
-import { TowerReportImage } from "@/src/components/reports/TowerReportsDashboard";
-
+import { TowerReportImage } from "@/src/types/reports";
 const prisma = new PrismaClient();
 
 export async function POST(request: Request) {

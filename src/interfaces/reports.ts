@@ -29,3 +29,10 @@ export interface TOCSectionProps {
   tocSections: TOCSections[];
   willCaptureToc: boolean;
 }
+
+export interface DropAreaProps {
+  onFilesAdded: (files: FileList) => void;
+  newImageButtonName: string;
+  isDisabled: boolean;
+  index: number;
+}

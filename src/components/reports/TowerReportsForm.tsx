@@ -2,14 +2,19 @@ import React, { useState, useEffect } from "react";
 import { Button } from "@nextui-org/react";
 
 import siteImagesLabelOptionsData from "public/reports/rogers/siteImagesLabelOptions.json";
-import { TowerReport, TowerReportImage } from "@/types/reports";
+import {
+  TowerReport,
+  TowerReportImage,
+  AntennaTransmissionLine,
+} from "@/types/reports";
 import { TowerReportFormProps } from "@/interfaces/reports";
 
 import { SaveIcon, CancelIcon, PDFFileIcon } from "../icons";
 import { FormInput, FormSectionTitle } from "../ui/formInput";
 
 import QuickbaseInputs from "./QuickbaseInputs";
-import { ImageUpload } from "./ImageUpload";
+import ImageUpload from "./ImageUpload";
+import AntennaTransmissionInputs from "./AntennaTransmissionInputs";
 
 export const TowerReportForm = ({
   report,
@@ -34,10 +39,13 @@ export const TowerReportForm = ({
   const [siteImages, setSiteImages] = useState<TowerReportImage[]>([]);
   const [frontImages, setFrontImages] = useState<TowerReportImage[]>([]);
   const [deficiencyImages, setDeficiencyImages] = useState<TowerReportImage[]>(
-    [],
+    []
   );
   const [newlyUploadedImages, setNewlyUploadedImages] = useState<
     TowerReportImage[]
+  >([]);
+  const [antennaInventory, setAntennaInventory] = useState<
+    AntennaTransmissionLine[]
   >([]);
   const subdir = `${formData.jde_job}-${formData.jde_work_order}` || "";
   const siteImagesLabelOptions: string[] = siteImagesLabelOptionsData;
@@ -62,6 +70,7 @@ export const TowerReportForm = ({
       setSiteImages(report.site_images || []);
       setFrontImages(report.front_image || []);
       setDeficiencyImages(report.deficiency_images || []);
+      setAntennaInventory(report.antenna_inventory || []);
     }
   }, [report]);
 
@@ -72,6 +81,7 @@ export const TowerReportForm = ({
       site_images: siteImages,
       front_image: frontImages,
       deficiency_images: deficiencyImages,
+      antenna_inventory: antennaInventory,
     });
   };
 
@@ -85,7 +95,7 @@ export const TowerReportForm = ({
 
   const handleSearchQB = async () => {
     const response = await fetch(
-      `/api/quickbase?id=${formData.jde_work_order}`,
+      `/api/quickbase?id=${formData.jde_work_order}`
     );
     const data = await response.json();
 
@@ -115,15 +125,49 @@ export const TowerReportForm = ({
   };
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     const { name, value } = e.target;
-
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
+  const handleAntennaInventoryChange = (
+    index: number,
+    field: string,
+    value: string | number
+  ) => {
+    setAntennaInventory((prev) => {
+      const updatedInventory = [...prev];
+      updatedInventory[index] = { ...updatedInventory[index], [field]: value };
+      return updatedInventory;
+    });
+  };
+
+  const handleAddAntenna = () => {
+    setAntennaInventory((prev) => [
+      ...prev,
+      {
+        id: "",
+        elevation: 0,
+        quantity: 0,
+        equipment: "",
+        azimuth: 0,
+        tx_line: "",
+        odu: "",
+        carrier: "",
+        projectId: [],
+      },
+    ]);
+  };
+
+  const handleRemoveAntenna = (index: number) => {
+    setAntennaInventory((prev) => prev.filter((_, i) => i !== index));
+  };
+
   return (
-    <form className="space-y-4 w-full px-20 pt-5" onSubmit={handleSubmit}>
+    <form
+      className="space-y-4 w-full px-20 pt-5"
+      onSubmit={handleSubmit}>
       {/* Quickbase Query */}
       <div className="grid grid-cols-2 items-center mx-20 gap-8">
         <FormInput
@@ -133,17 +177,15 @@ export const TowerReportForm = ({
           value={formData.jde_work_order}
           onChange={handleChange}
         />
-        <div className="grid grid-cols-1 gap-1">
-          <p>&nbsp;</p>
+        <div className="h-full w-full content-end">
           <Button
-            className="bg-primary text-white w-full w-full h-10 my-3"
+            className="bg-primary text-white w-full w-full h-10"
             isDisabled={
               !formData.jde_work_order || formData.jde_work_order?.length < 6
             }
             radius="full"
             variant="solid"
-            onClick={handleSearchQB}
-          >
+            onClick={handleSearchQB}>
             Search QB
           </Button>
         </div>
@@ -165,10 +207,21 @@ export const TowerReportForm = ({
       <FormSectionTitle title="Quickbase Project Data" />
 
       {/* Quickbase Data */}
-      <QuickbaseInputs formData={formData} handleChange={handleChange} />
+      <QuickbaseInputs
+        formData={formData}
+        handleChange={handleChange}
+      />
 
       {/* Divider */}
       <FormSectionTitle title="Antenna & Transmission Line Inventory" />
+
+      {/* Antenna & Transmission Line Inventory */}
+      <AntennaTransmissionInputs
+        antennaInventory={antennaInventory}
+        onAntennaChange={handleAntennaInventoryChange}
+        onAddAntenna={handleAddAntenna}
+        onRemoveAntenna={handleRemoveAntenna}
+      />
 
       {/* Divider */}
       <FormSectionTitle title="Deficiency Images" />
@@ -201,15 +254,17 @@ export const TowerReportForm = ({
       )}
 
       <div className="space-x-4 mt-4 mx-auto">
-        <Button isIconOnly color="success" type="submit">
+        <Button
+          isIconOnly
+          color="success"
+          type="submit">
           <SaveIcon />
         </Button>
         <Button
           isIconOnly
           color="primary"
           type="button"
-          onClick={handleGeneratePDF}
-        >
+          onClick={handleGeneratePDF}>
           <PDFFileIcon />
         </Button>
         <Button
@@ -217,8 +272,7 @@ export const TowerReportForm = ({
           color="danger"
           type="button"
           variant="bordered"
-          onClick={handleCancelClick}
-        >
+          onClick={handleCancelClick}>
           <CancelIcon />
         </Button>
       </div>

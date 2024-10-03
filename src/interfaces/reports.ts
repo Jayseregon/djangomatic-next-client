@@ -1,4 +1,9 @@
-import { TowerReport, TowerReportImage, TOCSections } from "@/types/reports";
+import {
+  TowerReport,
+  TowerReportImage,
+  TOCSections,
+  AntennaTransmissionLine,
+} from "@/types/reports";
 
 export interface TowerReportFormProps {
   report?: Partial<TowerReport> | null;
@@ -34,4 +39,33 @@ export interface DropAreaProps {
   onFilesAdded: (files: FileList) => void;
   isDisabled: boolean;
   index: number;
+}
+
+export interface FormInputProps {
+  value: string | number | undefined;
+  name: string;
+  label?: string;
+  placeholder?: string;
+  type?: string;
+  isRounded?: boolean;
+  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+}
+
+export interface LabelInputProps {
+  value: string | undefined;
+  name: string;
+  placeholder: string;
+  options: string[];
+  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+}
+
+export interface AntennaTransmissionInputsProps {
+  antennaInventory: AntennaTransmissionLine[];
+  onAntennaChange: (
+    index: number,
+    field: string,
+    value: string | number
+  ) => void;
+  onAddAntenna: () => void;
+  onRemoveAntenna: (index: number) => void;
 }

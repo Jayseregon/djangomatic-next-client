@@ -44,12 +44,12 @@ model User {
 }
 
 model TowerReport {
-  id                String             @id @default(cuid())
-  createdAt         DateTime           @default(now())
-  updatedAt         DateTime           @updatedAt
-  front_image       TowerReportImage[] @relation("FrontImage")
-  site_images       TowerReportImage[] @relation("SiteImages")
-  deficiency_images TowerReportImage[] @relation("DeficiencyImages")
+  id                String                    @id @default(cuid())
+  createdAt         DateTime                  @default(now())
+  updatedAt         DateTime                  @updatedAt
+  front_image       TowerReportImage[]        @relation("FrontImage")
+  site_images       TowerReportImage[]        @relation("SiteImages")
+  deficiency_images TowerReportImage[]        @relation("DeficiencyImages")
   jde_work_order    String
   jde_job           String
   site_name         String
@@ -63,6 +63,7 @@ model TowerReport {
   design_standard   String
   client_name       String
   client_company    String
+  antenna_inventory AntennaTransmissionLine[] @relation("AntennaTransmissionLine")
 }
 
 model TowerReportImage {
@@ -77,4 +78,17 @@ model TowerReportImage {
   siteProject         TowerReport? @relation(fields: [siteProjectId], references: [id], name: "SiteImages", map: "SiteImages_projectId_fkey")
   frontProject        TowerReport? @relation(fields: [frontProjectId], references: [id], name: "FrontImage", map: "FrontImage_projectId_fkey")
   deficiencyProject   TowerReport? @relation(fields: [deficiencyProjectId], references: [id], name: "DeficiencyImages", map: "DeficiencyImages_projectId_fkey")
+}
+
+model AntennaTransmissionLine {
+  id            String      @id @default(cuid())
+  elevation     Float
+  quantity      Int
+  equipment     String
+  azimuth       Float
+  tx_line       String
+  odu           String
+  carrier       String
+  projectId     String
+  reportProject TowerReport @relation(fields: [projectId], references: [id], name: "AntennaTransmissionLine", map: "AntennaTransmissionLine_projectId_fkey")
 }

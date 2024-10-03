@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { PrismaClient } from "@prisma/client";
 
-import { TowerReportImage } from "@/src/types/reports";
+import { TowerReportImage, AntennaTransmissionLine } from "@/src/types/reports";
 const prisma = new PrismaClient();
 
 export async function POST(request: Request) {
@@ -10,11 +10,23 @@ export async function POST(request: Request) {
     const site_images = data.site_images || [];
     const front_image = data.front_image || [];
     const deficiency_images = data.deficiency_images || [];
+    const antenna_inventory = data.antenna_inventory || [];
 
     // Create the report with nested images
     const newReport = await prisma.towerReport.create({
       data: {
         ...data,
+        antenna_inventory: {
+          create: antenna_inventory.map((antenna: AntennaTransmissionLine) => ({
+            elevation: antenna.elevation,
+            quantity: antenna.quantity,
+            equipment: antenna.equipment,
+            azimuth: antenna.azimuth,
+            tx_line: antenna.tx_line,
+            odu: antenna.odu,
+            carrier: antenna.carrier,
+          })),
+        },
         site_images: {
           create: site_images.map((image: TowerReportImage) => ({
             url: image.url,
@@ -65,12 +77,25 @@ export async function PUT(request: Request) {
     const site_images = data.site_images || [];
     const front_image = data.front_image || [];
     const deficiency_images = data.deficiency_images || [];
+    const antenna_inventory = data.antenna_inventory || [];
 
     // Update the report
     const updatedReport = await prisma.towerReport.update({
       where: { id },
       data: {
         ...data,
+        antenna_inventory: {
+          deleteMany: {},
+          create: antenna_inventory.map((antenna: AntennaTransmissionLine) => ({
+            elevation: antenna.elevation,
+            quantity: antenna.quantity,
+            equipment: antenna.equipment,
+            azimuth: antenna.azimuth,
+            tx_line: antenna.tx_line,
+            odu: antenna.odu,
+            carrier: antenna.carrier,
+          })),
+        },
         site_images: {
           deleteMany: {},
           create: site_images.map((image: TowerReportImage) => ({
@@ -131,6 +156,10 @@ export async function DELETE(request: Request) {
 
     await prisma.towerReportImage.deleteMany({
       where: { deficiencyProjectId: id },
+    });
+
+    await prisma.antennaTransmissionLine.deleteMany({
+      where: { projectId: id },
     });
 
     // Then delete the report

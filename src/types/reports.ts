@@ -18,6 +18,7 @@ export type TowerReport = {
   design_standard: string;
   client_name: string;
   client_company: string;
+  antenna_inventory: AntennaTransmissionLine[];
 };
 
 export type TowerReportImage = {
@@ -31,4 +32,15 @@ export type TowerReportImage = {
 export type TOCSections = {
   title: string;
   pageNumber: number;
+};
+
+export type AntennaTransmissionLine = {
+  id: string;
+  elevation: number;
+  quantity: number;
+  equipment: string;
+  azimuth: number;
+  tx_line: string;
+  odu: string;
+  carrier: string;
 };

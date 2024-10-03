@@ -7,7 +7,9 @@ import { TowerReport } from "@/src/types/reports";
 
 export default function FrontPage({ report }: { report: TowerReport }) {
   return (
-    <Page size="LETTER" style={StylesPDF.page}>
+    <Page
+      size="LETTER"
+      style={StylesPDF.page}>
       {/* Header TD Logo */}
       <PdfImg
         fixed
@@ -26,8 +28,7 @@ export default function FrontPage({ report }: { report: TowerReport }) {
           style={{
             textTransform: "uppercase",
             fontSize: 14,
-          }}
-        >
+          }}>
           post construction inspection report
         </Text>
         <Text style={{ padding: "5 0" }}>for</Text>
@@ -35,8 +36,7 @@ export default function FrontPage({ report }: { report: TowerReport }) {
           style={{
             fontSize: 18,
             textTransform: "capitalize",
-          }}
-        >
+          }}>
           rogers wireless
         </Text>
         <Text style={{ padding: "10 0" }}>
@@ -55,7 +55,7 @@ export default function FrontPage({ report }: { report: TowerReport }) {
       {/* central front cover image */}
       <PdfImg
         fixed
-        src={report.front_image[0].url}
+        src={report.front_image.length > 0 ? report.front_image[0].url : "./public/static/landscape-placeholder.png"}
         style={StylesPDF.frontCoverImage}
       />
       {/* Disclaimer */}

@@ -1,43 +1,34 @@
 import React, { useState, useEffect } from "react";
+import { TrashIcon } from "../icons";
+import { Button } from "@nextui-org/react";
+import { FormInputProps, LabelInputProps } from "@/interfaces/reports";
 
-interface FormInputProps {
-  value: string | undefined;
-  name: string;
-  label: string;
-  placeholder: string;
-  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-}
-
-interface LabelInputProps {
-  value: string | undefined;
-  name: string;
-  placeholder: string;
-  options: string[];
-  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-}
 
 export const FormInput = ({
   value,
   name,
   label,
   placeholder,
+  type = "text",
   onChange,
+  isRounded=true,
 }: FormInputProps) => {
   return (
     <div className="grid grid-cols-1 gap-1">
-      <p className="text-ellipsis overflow-hidden text-primary text-sm">
+      {label && <p className="text-ellipsis overflow-hidden text-primary text-sm">
         {label}
-      </p>
-      <div className="border-2 border-primary rounded-3xl w-full flex items-center justify-center">
+      </p>}
+      <div className={`border-2 border-primary ${isRounded && "rounded-3xl"} w-full flex items-center justify-center`}>
         <input
           required
           className="border-0 focus:ring-0 focus:ring-inset text-foreground bg-transparent text-center text-ellipsis overflow-hidden"
           id={name}
           name={name}
-          placeholder={placeholder}
-          type="text"
+          placeholder={placeholder || undefined}
+          type={type}
           value={value}
           onChange={onChange}
+          step={type === "number" ? "0.01" : undefined}
         />
       </div>
     </div>
@@ -95,9 +86,32 @@ export const LabelInput = ({
       />
       <datalist id={`${name}-datalist`}>
         {options.map((option, index) => (
-          <option key={index} value={option} />
+          <option
+            key={index}
+            value={option}
+          />
         ))}
       </datalist>
     </div>
+  );
+};
+
+export const TrashButton = ({
+  onClick,
+  className,
+}: {
+  onClick: () => void;
+  className?: string;
+}) => {
+  return (
+    <Button
+      isIconOnly
+      className={className}
+      color="danger"
+      radius="full"
+      variant="light"
+      onClick={onClick}>
+      <TrashIcon />
+    </Button>
   );
 };

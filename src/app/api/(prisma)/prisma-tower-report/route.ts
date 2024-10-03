@@ -18,6 +18,7 @@ export async function GET(request: Request) {
         site_images: true,
         front_image: true,
         deficiency_images: true,
+        antenna_inventory: true,
       },
     });
 

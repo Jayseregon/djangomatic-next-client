@@ -10,6 +10,7 @@ export async function GET() {
         site_images: true,
         front_image: true,
         deficiency_images: true,
+        antenna_inventory: true,
       },
     });
 

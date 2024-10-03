@@ -4,12 +4,11 @@ import { Button } from "@nextui-org/react";
 import { cn } from "@/src/lib/utils";
 import { ImageUploadProps } from "@/src/interfaces/reports";
 
-import { TrashIcon } from "../icons";
-import { LabelInput, DisplayInput } from "../ui/formInput";
+import { LabelInput, DisplayInput, TrashButton } from "../ui/formInput";
 
 import { DropArea } from "./DropArea";
 
-export const ImageUpload = ({
+export default function ImageUpload({
   images,
   onImagesChange,
   subdir,
@@ -18,7 +17,7 @@ export const ImageUpload = ({
   labelOptions,
   maxImages,
   isFrontcover,
-}: ImageUploadProps) => {
+}: ImageUploadProps) {
   const [localImages, setLocalImages] = useState<
     { file: File | null; label: string; url?: string; imgIndex: number }[]
   >([]);
@@ -60,7 +59,7 @@ export const ImageUpload = ({
       const { url, azureId, id } = await uploadImageToAzure(
         file,
         label,
-        subdir,
+        subdir
       );
       const newImage = {
         id,
@@ -82,7 +81,7 @@ export const ImageUpload = ({
 
   const handleLabelChange = (
     index: number,
-    e: React.ChangeEvent<HTMLInputElement>,
+    e: React.ChangeEvent<HTMLInputElement>
   ) => {
     if (isFrontcover) return; // Prevent label change if it's a front cover
 
@@ -98,7 +97,7 @@ export const ImageUpload = ({
 
     // Update the label in the images prop
     const updatedImages = images.map((img, i) =>
-      i === index ? { ...img, label: value } : img,
+      i === index ? { ...img, label: value } : img
     );
 
     onImagesChange(updatedImages);
@@ -131,7 +130,7 @@ export const ImageUpload = ({
         `/api/azure-report-images/delete?subdir=${subdir}&azureId=${imageToRemove.azureId}`,
         {
           method: "DELETE",
-        },
+        }
       );
       onImagesChange(images.filter((img) => img.imgIndex !== index));
     }
@@ -143,7 +142,7 @@ export const ImageUpload = ({
   const uploadImageToAzure = async (
     file: File,
     label: string,
-    subdir: string,
+    subdir: string
   ) => {
     const formData = new FormData();
 
@@ -170,8 +169,7 @@ export const ImageUpload = ({
             key={index}
             className={`flex items-center justify-center ${
               isFrontcover ?? "space-x-4"
-            }`}
-          >
+            }`}>
             {image.url ? (
               <>
                 <img
@@ -184,25 +182,18 @@ export const ImageUpload = ({
                     value={image.imgIndex + 1 + ". " + image.label}
                   />
                 )}
-                <Button
-                  isIconOnly
-                  className="ml-2"
-                  color="danger"
-                  radius="full"
-                  variant="light"
+                <TrashButton
                   onClick={() => removeImageField(image.imgIndex)}
-                >
-                  <TrashIcon />
-                </Button>
+                  className="ml-2"
+                />
               </>
             ) : (
               <div
                 className={cn(
                   isFrontcover
                     ? "grid grid-cols-[1fr_auto] items-center min-w-[50vw] px-20 gap-4"
-                    : "grid grid-cols-[1fr_1fr_auto] min-w-full px-20 items-center gap-4",
-                )}
-              >
+                    : "grid grid-cols-[1fr_1fr_auto] min-w-full px-20 items-center gap-4"
+                )}>
                 <DropArea
                   index={image.imgIndex}
                   isDisabled={!image.label}
@@ -219,15 +210,7 @@ export const ImageUpload = ({
                     onChange={(e) => handleLabelChange(image.imgIndex, e)}
                   />
                 )}
-                <Button
-                  isIconOnly
-                  color="danger"
-                  radius="full"
-                  variant="light"
-                  onClick={() => removeImageField(image.imgIndex)}
-                >
-                  <TrashIcon />
-                </Button>
+                <TrashButton onClick={() => removeImageField(image.imgIndex)} />
               </div>
             )}
           </div>
@@ -240,11 +223,10 @@ export const ImageUpload = ({
           radius="lg"
           type="button"
           variant="ghost"
-          onClick={addImageField}
-        >
+          onClick={addImageField}>
           {`Add ${newImageButtonName} Image`}
         </Button>
       )}
     </>
   );
-};
+}

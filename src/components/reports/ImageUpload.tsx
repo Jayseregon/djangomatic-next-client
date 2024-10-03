@@ -1,12 +1,13 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Button } from "@nextui-org/react";
-import { DropArea } from "./DropArea";
 
 import { cn } from "@/src/lib/utils";
 import { ImageUploadProps } from "@/src/interfaces/reports";
 
-import { TrashIcon, AddImageIcon } from "../icons";
+import { TrashIcon } from "../icons";
 import { LabelInput, DisplayInput } from "../ui/formInput";
+
+import { DropArea } from "./DropArea";
 
 export const ImageUpload = ({
   images,
@@ -46,7 +47,7 @@ export const ImageUpload = ({
       const { url, azureId, id } = await uploadImageToAzure(
         file,
         label,
-        subdir
+        subdir,
       );
       const newImage = {
         id,
@@ -67,7 +68,7 @@ export const ImageUpload = ({
 
   const handleLabelChange = (
     index: number,
-    e: React.ChangeEvent<HTMLInputElement>
+    e: React.ChangeEvent<HTMLInputElement>,
   ) => {
     if (isFrontcover) return; // Prevent label change if it's a front cover
 
@@ -89,7 +90,7 @@ export const ImageUpload = ({
 
     // Update the label in the images prop
     const updatedImages = images.map((img, i) =>
-      i === index ? { ...img, label: `${index + 1}. ${newValue}` } : img
+      i === index ? { ...img, label: `${index + 1}. ${newValue}` } : img,
     );
 
     onImagesChange(updatedImages);
@@ -116,7 +117,7 @@ export const ImageUpload = ({
         `/api/azure-report-images/delete?subdir=${subdir}&azureId=${imageToRemove.azureId}`,
         {
           method: "DELETE",
-        }
+        },
       );
       onImagesChange(images.filter((_, i) => i !== index));
     }
@@ -128,7 +129,7 @@ export const ImageUpload = ({
   const uploadImageToAzure = async (
     file: File,
     label: string,
-    subdir: string
+    subdir: string,
   ) => {
     const formData = new FormData();
 
@@ -151,7 +152,8 @@ export const ImageUpload = ({
       {localImages.map((image, index) => (
         <div
           key={index}
-          className={`flex items-center justify-center ${isFrontcover ? "" : "space-x-4"}`}>
+          className={`flex items-center justify-center ${isFrontcover ? "" : "space-x-4"}`}
+        >
           {image.url ? (
             <>
               <img
@@ -166,7 +168,8 @@ export const ImageUpload = ({
                 color="danger"
                 radius="full"
                 variant="light"
-                onClick={() => removeImageField(index)}>
+                onClick={() => removeImageField(index)}
+              >
                 <TrashIcon />
               </Button>
             </>
@@ -175,13 +178,13 @@ export const ImageUpload = ({
               className={cn(
                 isFrontcover
                   ? "grid grid-cols-[1fr_auto] items-center min-w-[50vw] px-20 gap-4"
-                  : "grid grid-cols-[1fr_1fr_auto] min-w-full px-20 items-center gap-4"
-              )}>
+                  : "grid grid-cols-[1fr_1fr_auto] min-w-full px-20 items-center gap-4",
+              )}
+            >
               <DropArea
-                onFilesAdded={(files) => handleImageChange(index, files)}
-                newImageButtonName="New"
-                isDisabled={!image.label}
                 index={index}
+                isDisabled={!image.label}
+                onFilesAdded={(files) => handleImageChange(index, files)}
               />
               {!isFrontcover && (
                 <LabelInput
@@ -197,7 +200,8 @@ export const ImageUpload = ({
                 color="danger"
                 radius="full"
                 variant="light"
-                onClick={() => removeImageField(index)}>
+                onClick={() => removeImageField(index)}
+              >
                 <TrashIcon />
               </Button>
             </div>
@@ -212,7 +216,8 @@ export const ImageUpload = ({
           radius="lg"
           type="button"
           variant="ghost"
-          onClick={addImageField}>
+          onClick={addImageField}
+        >
           {`Add ${newImageButtonName} Image`}
         </Button>
       )}

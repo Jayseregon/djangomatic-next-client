@@ -1,11 +1,10 @@
 import React, { useState } from "react";
 import { Button } from "@nextui-org/react";
+
 import { DropAreaProps } from "@/src/interfaces/reports";
-import { AddImageIcon } from "../icons";
 
 export const DropArea = ({
   onFilesAdded,
-  newImageButtonName,
   isDisabled,
   index,
 }: DropAreaProps) => {
@@ -35,11 +34,18 @@ export const DropArea = ({
     }
   };
 
+  const handleKeyDown = (event: React.KeyboardEvent) => {
+    if (!isDisabled && (event.key === "Enter" || event.key === " ")) {
+      const fileInput = document.getElementById(`file-input-${index}`);
+
+      if (fileInput) {
+        (fileInput as HTMLInputElement).click();
+      }
+    }
+  };
+
   return (
     <div
-      onDragOver={handleDragOver}
-      onDragLeave={handleDragLeave}
-      onDrop={handleDrop}
       className={`w-full mx-auto border-2 border-dashed rounded-full ${
         isDragging
           ? "border-emerald-700 dark:border-emerald-300"
@@ -47,33 +53,43 @@ export const DropArea = ({
             ? "border-gray-300 dark:border-gray-800"
             : "border-primary cursor-pointer"
       }`}
+      role="button"
+      tabIndex={0}
       onClick={() => {
         if (!isDisabled) {
           const fileInput = document.getElementById(`file-input-${index}`);
+
           if (fileInput) {
             (fileInput as HTMLInputElement).click();
           }
         }
-      }}>
+      }}
+      onDragLeave={handleDragLeave}
+      onDragOver={handleDragOver}
+      onDrop={handleDrop}
+      onKeyDown={handleKeyDown}
+    >
       <input
-        id={`file-input-${index}`}
-        type="file"
         multiple
         className="hidden"
+        id={`file-input-${index}`}
+        type="file"
         onChange={handleFileChange}
       />
       <Button
         className="text-foreground w-full h-10"
+        isDisabled={isDisabled}
         radius="full"
         variant="light"
-        isDisabled={isDisabled}
         onClick={(e) => {
           e.stopPropagation(); // Prevent the click event from bubbling up to the div
           const fileInput = document.getElementById(`file-input-${index}`);
+
           if (fileInput) {
             (fileInput as HTMLInputElement).click();
           }
-        }}>
+        }}
+      >
         Drag & drop a file here, or click to browse
       </Button>
     </div>

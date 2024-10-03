@@ -32,7 +32,7 @@ export async function POST(request: Request): Promise<Response> {
       {
         message: "One of {file, label, subdir} is missing",
       },
-      { status: 400 }
+      { status: 400 },
     );
   }
 
@@ -80,7 +80,7 @@ export async function POST(request: Request): Promise<Response> {
     stream,
     uploadOptions.bufferSize,
     uploadOptions.maxBuffers,
-    uploadOptions
+    uploadOptions,
   );
 
   // Set tags for the uploaded blob
@@ -108,7 +108,7 @@ export async function DELETE(request: Request): Promise<Response> {
   if (!azureId || !subdir) {
     return NextResponse.json(
       { message: "One of {Azure ID, subdir} is missing" },
-      { status: 400 }
+      { status: 400 },
     );
   }
 
@@ -140,7 +140,7 @@ export async function DELETE(request: Request): Promise<Response> {
 
     return NextResponse.json(
       { message: "Failed to delete blob" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

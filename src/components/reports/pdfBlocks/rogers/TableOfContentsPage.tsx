@@ -4,11 +4,11 @@ import { Text, View, Link } from "@react-pdf/renderer";
 import { StylesPDF } from "@/styles/stylesPDF";
 import { TOCSections } from "@/src/types/reports";
 
-export default function TableOfContentsPage({
+const TableOfContentsPage = ({
   tocSections,
 }: {
   tocSections: TOCSections[];
-}) {
+}) => {
   const generateDots = (
     title: string,
     pageNumber: number,
@@ -86,4 +86,6 @@ export default function TableOfContentsPage({
       })}
     </View>
   );
-}
+};
+
+export default TableOfContentsPage;

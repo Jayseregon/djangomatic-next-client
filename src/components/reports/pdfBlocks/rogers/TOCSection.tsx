@@ -3,7 +3,7 @@ import { Text } from "@react-pdf/renderer";
 
 import { TOCSectionProps } from "@/src/interfaces/reports";
 
-export const TOCSectionPDF = ({
+const TOCSectionPDF = ({
   id,
   style,
   children,
@@ -46,3 +46,5 @@ export const TOCSectionPDF = ({
     );
   }
 };
+
+export default TOCSectionPDF;

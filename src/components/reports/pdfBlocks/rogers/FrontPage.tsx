@@ -5,7 +5,7 @@ import { titleCase } from "@/src/lib/utils";
 import { StylesPDF } from "@/styles/stylesPDF";
 import { TowerReport } from "@/src/types/reports";
 
-export default function FrontPage({ report }: { report: TowerReport }) {
+const FrontPage = ({ report }: { report: TowerReport }) => {
   return (
     <Page size="LETTER" style={StylesPDF.page}>
       {/* Header TD Logo */}
@@ -83,4 +83,6 @@ export default function FrontPage({ report }: { report: TowerReport }) {
       />
     </Page>
   );
-}
+};
+
+export default FrontPage;

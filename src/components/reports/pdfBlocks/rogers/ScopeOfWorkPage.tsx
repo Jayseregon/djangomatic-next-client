@@ -4,9 +4,9 @@ import { Text, View } from "@react-pdf/renderer";
 import { StylesPDF } from "@/styles/stylesPDF";
 import { TOCSections, TowerReport } from "@/src/types/reports";
 
-import { TOCSectionPDF } from "./TOCSection";
+import TOCSectionPDF from "./TOCSection";
 
-export default function ScopeOfWorkPage({
+const ScopeOfWorkPage = ({
   report,
   tocSections,
   willCaptureToc,
@@ -14,7 +14,7 @@ export default function ScopeOfWorkPage({
   report: TowerReport;
   tocSections: TOCSections[];
   willCaptureToc: boolean;
-}) {
+}) => {
   return (
     <View break>
       <TOCSectionPDF
@@ -48,4 +48,6 @@ export default function ScopeOfWorkPage({
       </Text>
     </View>
   );
-}
+};
+
+export default ScopeOfWorkPage;

@@ -3,7 +3,7 @@ import { Text, Image as PdfImg } from "@react-pdf/renderer";
 
 import { StylesPDF } from "@/styles/stylesPDF";
 
-export default function PageFooter() {
+const PageFooter = () => {
   return (
     <>
       <Text
@@ -25,4 +25,6 @@ export default function PageFooter() {
       />
     </>
   );
-}
+};
+
+export default PageFooter;

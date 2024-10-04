@@ -54,10 +54,13 @@ const ReportDocument = ({
         />
 
         {/* New page Antenna & Transmission Line Inventory */}
-        <AntennaInventoryPage
-          tocSections={tocSections}
-          willCaptureToc={willCaptureToc}
-        />
+        {report.antenna_inventory.length > 0 && (
+          <AntennaInventoryPage
+            antennaInventory={report.antenna_inventory}
+            tocSections={tocSections}
+            willCaptureToc={willCaptureToc}
+          />
+        )}
 
         {/* New page DEFICIENCIES (if exists) */}
         {report.deficiency_images.length > 0 && (

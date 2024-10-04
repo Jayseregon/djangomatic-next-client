@@ -2,18 +2,21 @@ import React from "react";
 import { Text, View } from "@react-pdf/renderer";
 
 import { StylesPDF } from "@/styles/stylesPDF";
-import { TOCSections } from "@/src/types/reports";
+import { AntennaTransmissionLine, TOCSections } from "@/src/types/reports";
 
-import { TOCSectionPDF } from "./TOCSection";
+import TOCSectionPDF from "./TOCSection";
 import { ListTitle, ListItem } from "./ListElements";
+import AntennaInventoryTable from "./AntennaInventoryTable";
 
-export default function AntennaInventoryPage({
+const AntennaInventoryPage = ({
+  antennaInventory,
   tocSections,
   willCaptureToc,
 }: {
+  antennaInventory: AntennaTransmissionLine[];
   tocSections: TOCSections[];
   willCaptureToc: boolean;
-}) {
+}) => {
   return (
     <View break>
       <TOCSectionPDF
@@ -28,6 +31,7 @@ export default function AntennaInventoryPage({
         During our field visit, we completed the following inventory of new
         antennas and transmission lines on the tower.
       </Text>
+      <AntennaInventoryTable items={antennaInventory} />
       <View style={[StylesPDF.PageContentSection, { paddingTop: 30 }]}>
         <ListTitle title="Notes:" />
         <ListItem
@@ -38,4 +42,6 @@ export default function AntennaInventoryPage({
       </View>
     </View>
   );
-}
+};
+
+export default AntennaInventoryPage;

@@ -4,7 +4,7 @@ import { Text, View } from "@react-pdf/renderer";
 import { StylesPDF } from "@/styles/stylesPDF";
 import { TowerReport } from "@/src/types/reports";
 
-export default function AuthorPage({ report }: { report: TowerReport }) {
+const AuthorPage = ({ report }: { report: TowerReport }) => {
   return (
     <View style={StylesPDF.sectionAuthorContainer}>
       <Text
@@ -48,4 +48,6 @@ export default function AuthorPage({ report }: { report: TowerReport }) {
       <Text>Brampton, ON L6T 0C1</Text>
     </View>
   );
-}
+};
+
+export default AuthorPage;

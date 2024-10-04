@@ -4,9 +4,9 @@ import { Text, View, Image as PdfImg } from "@react-pdf/renderer";
 import { StylesPDF } from "@/styles/stylesPDF";
 import { TOCSections, TowerReport } from "@/src/types/reports";
 
-import { TOCSectionPDF } from "./TOCSection";
+import TOCSectionPDF from "./TOCSection";
 
-export default function SitePhotosPage({
+const SitePhotosPage = ({
   report,
   tocSections,
   willCaptureToc,
@@ -14,7 +14,7 @@ export default function SitePhotosPage({
   report: TowerReport;
   tocSections: TOCSections[];
   willCaptureToc: boolean;
-}) {
+}) => {
   // Sort the site_images by imgIndex
   const sortedSiteImages = [...report.site_images].sort(
     (a, b) => a.imgIndex - b.imgIndex,
@@ -53,4 +53,6 @@ export default function SitePhotosPage({
       ))}
     </>
   );
-}
+};
+
+export default SitePhotosPage;

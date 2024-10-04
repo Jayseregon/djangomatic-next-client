@@ -4,9 +4,9 @@ import { Text, View, Image as PdfImg } from "@react-pdf/renderer";
 import { StylesPDF } from "@/styles/stylesPDF";
 import { TOCSections, TowerReport } from "@/src/types/reports";
 
-import { TOCSectionPDF } from "./TOCSection";
+import TOCSectionPDF from "./TOCSection";
 
-export default function DeficienciesPage({
+const DeficienciesPage = ({
   report,
   tocSections,
   willCaptureToc,
@@ -14,7 +14,7 @@ export default function DeficienciesPage({
   report: TowerReport;
   tocSections: TOCSections[];
   willCaptureToc: boolean;
-}) {
+}) => {
   const sortedImages = [
     ...report.deficiency_images.sort((a, b) => a.imgIndex - b.imgIndex),
   ];
@@ -58,4 +58,6 @@ export default function DeficienciesPage({
       ))}
     </>
   );
-}
+};
+
+export default DeficienciesPage;

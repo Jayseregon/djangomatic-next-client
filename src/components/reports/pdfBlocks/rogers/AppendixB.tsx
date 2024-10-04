@@ -11,15 +11,15 @@ import {
   ListCheckingTitle,
   SubListItem,
 } from "./ListElements";
-import { TOCSectionPDF } from "./TOCSection";
+import TOCSectionPDF from "./TOCSection";
 
-export default function AppendixB({
+const AppendixB = ({
   tocSections,
   willCaptureToc,
 }: {
   tocSections: TOCSections[];
   willCaptureToc: boolean;
-}) {
+}) => {
   return (
     <>
       <View style={StylesPDF.sectionTitleContainer}>
@@ -119,4 +119,6 @@ export default function AppendixB({
       </View>
     </>
   );
-}
+};
+
+export default AppendixB;

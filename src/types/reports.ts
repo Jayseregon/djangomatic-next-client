@@ -25,6 +25,8 @@ export type TowerReportImage = {
   id: string;
   url: string;
   label: string;
+  deficiency_check_procedure: string;
+  deficiency_recommendation: string;
   imgIndex: number;
   azureId: string;
 };

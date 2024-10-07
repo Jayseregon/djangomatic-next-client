@@ -50,7 +50,7 @@ export const DropArea = ({
         isDragging
           ? "border-emerald-700 dark:border-emerald-300"
           : isDisabled
-            ? "border-gray-300 dark:border-gray-800"
+            ? "border-gray-300 dark:border-gray-800 cursor-not-allowed"
             : "border-primary cursor-pointer"
       }`}
       role="button"

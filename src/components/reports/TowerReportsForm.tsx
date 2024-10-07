@@ -13,7 +13,7 @@ import { SaveIcon, CancelIcon, PDFFileIcon } from "../icons";
 import { FormInput, FormSectionTitle } from "../ui/formInput";
 
 import QuickbaseInputs from "./QuickbaseInputs";
-import ImageUpload from "./ImageUpload";
+import ImageUpload from "./imageUpload/ImageUpload";
 import AntennaTransmissionInputs from "./AntennaTransmissionInputs";
 
 export const TowerReportForm = ({
@@ -198,7 +198,8 @@ export const TowerReportForm = ({
         <ImageUpload
           images={frontImages}
           isFrontcover={true}
-          newImageButtonName="Cover"
+          labelPlaceholder="Front Image"
+          newImageButtonName="Add Cover Image"
           subdir={subdir}
           onImagesChange={setFrontImages}
           onNewImageUpload={handleNewImageUpload}
@@ -229,8 +230,10 @@ export const TowerReportForm = ({
       {formData.jde_work_order && formData.jde_work_order?.length > 5 && (
         <ImageUpload
           images={deficiencyImages}
+          isDeficiency={true}
           labelOptions={[]}
-          newImageButtonName="Deficiency"
+          labelPlaceholder="Description"
+          newImageButtonName="Add Deficiency"
           subdir={subdir}
           onImagesChange={setDeficiencyImages}
           onNewImageUpload={handleNewImageUpload}
@@ -245,7 +248,8 @@ export const TowerReportForm = ({
         <ImageUpload
           images={siteImages}
           labelOptions={siteImagesLabelOptions}
-          newImageButtonName="Site"
+          labelPlaceholder="Select/Edit an option"
+          newImageButtonName="Add Site Image"
           subdir={subdir}
           onImagesChange={setSiteImages}
           onNewImageUpload={handleNewImageUpload}

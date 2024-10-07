@@ -223,6 +223,7 @@ export const StylesPDF = StyleSheet.create({
     borderRightWidth: 1,
     fontSize: 10,
     textAlign: "center",
+    alignItems: "stretch",
   },
   trElevation: {
     width: "10%",

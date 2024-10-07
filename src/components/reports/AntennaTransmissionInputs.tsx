@@ -11,6 +11,7 @@ const inputsList: {
     field: keyof AntennaTransmissionLine;
     placeholder: string;
     type: string;
+    withTooltip?: boolean;
   };
 } = {
   elevation: {
@@ -18,42 +19,49 @@ const inputsList: {
     field: "elevation",
     placeholder: "0.00",
     type: "number",
+    withTooltip: false,
   },
   quantity: {
     label: "Quantity",
     field: "quantity",
     placeholder: "0",
     type: "number",
+    withTooltip: false,
   },
   equipment: {
     label: "Equipment",
     field: "equipment",
     placeholder: "Equipment",
     type: "text",
+    withTooltip: true,
   },
   azimuth: {
     label: "Azimuth",
     field: "azimuth",
     placeholder: "0.0",
     type: "number",
+    withTooltip: false,
   },
   tx_line: {
     label: "TX Line",
     field: "tx_line",
     placeholder: "TX Line",
     type: "text",
+    withTooltip: true,
   },
   odu: {
     label: "ODU",
     field: "odu",
     placeholder: "ODU",
     type: "text",
+    withTooltip: true,
   },
   carrier: {
     label: "Carrier",
     field: "carrier",
     placeholder: "Carrier",
     type: "text",
+    withTooltip: false,
   },
 };
 
@@ -111,6 +119,7 @@ export default function AntennaTransmissionInputs({
                     placeholder={inputConfig.placeholder}
                     type={inputConfig.type}
                     value={antenna[inputConfig.field]}
+                    withTooltip={inputConfig.withTooltip}
                     onChange={(e) =>
                       handleChange(
                         index,

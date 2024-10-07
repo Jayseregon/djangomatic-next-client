@@ -22,9 +22,11 @@ export interface ImageUploadProps {
   subdir: string;
   onNewImageUpload: (image: TowerReportImage) => void;
   newImageButtonName: string;
+  labelPlaceholder: string;
   labelOptions?: string[];
   maxImages?: number;
   isFrontcover?: boolean;
+  isDeficiency?: boolean;
 }
 
 export interface TOCSectionProps {
@@ -48,6 +50,7 @@ export interface FormInputProps {
   placeholder?: string;
   type?: string;
   isRounded?: boolean;
+  withTooltip?: boolean;
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
@@ -68,4 +71,40 @@ export interface AntennaTransmissionInputsProps {
   ) => void;
   onAddAntenna: () => void;
   onRemoveAntenna: (index: number) => void;
+}
+
+export interface LocalImages {
+  file: File | null;
+  label: string;
+  url?: string;
+  imgIndex: number;
+  deficiency_check_procedure: string;
+  deficiency_recommendation: string;
+}
+
+export interface FormInputRowProps {
+  image: LocalImages;
+  isDeficiency: boolean;
+  isFrontcover?: boolean;
+  labelOptions?: string[];
+  labelPlaceholder: string;
+  handleImageChange: (index: number, files: FileList) => void;
+  handleLabelChange: (
+    index: number,
+    e: React.ChangeEvent<HTMLInputElement>,
+  ) => void;
+  handleDeficiencyCheckProcedureChange: (
+    e: React.ChangeEvent<HTMLInputElement>,
+  ) => void;
+  handleDeficiencyRecommendationChange: (
+    e: React.ChangeEvent<HTMLInputElement>,
+  ) => void;
+  removeImageField: (index: number) => void;
+}
+
+export interface ImageRowProps {
+  image: LocalImages;
+  isDeficiency: boolean;
+  isFrontcover?: boolean;
+  removeImageField: (index: number) => void;
 }

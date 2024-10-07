@@ -1,28 +1,40 @@
 import React from "react";
 import { Text, View } from "@react-pdf/renderer";
 
-import { AntennaTransmissionLine } from "@/src/types/reports";
 import { StylesPDF } from "@/styles/stylesPDF";
+import { AntennaTransmissionLine } from "@/src/types/reports";
 
 const AntennaInventoryTableRow = ({
   items,
 }: {
   items: AntennaTransmissionLine[];
-}) => {
-  const rows = items.map((item: AntennaTransmissionLine) => (
-    <View key={item.id} style={StylesPDF.trContainerA}>
-      <Text style={StylesPDF.trElevation}>{item.elevation}</Text>
-      <Text style={StylesPDF.trAntenna}>
-        ({item.quantity}) {item.equipment}
-      </Text>
-      <Text style={StylesPDF.trAzimuth}>{item.azimuth}</Text>
-      <Text style={StylesPDF.trTxLine}>{item.tx_line}</Text>
-      <Text style={StylesPDF.trOdu}>{item.odu}</Text>
-      <Text style={StylesPDF.trCarrier}>{item.carrier}</Text>
-    </View>
-  ));
-
-  return <>{rows}</>;
-};
+}) => (
+  <>
+    {items.map((item, index) => (
+      <View key={index} style={StylesPDF.trContainerA}>
+        <View style={StylesPDF.trElevation}>
+          <Text>{item.elevation}</Text>
+        </View>
+        <View style={StylesPDF.trAntenna}>
+          <Text>
+            ({item.quantity}) {item.equipment}
+          </Text>
+        </View>
+        <View style={StylesPDF.trAzimuth}>
+          <Text>{item.azimuth}</Text>
+        </View>
+        <View style={StylesPDF.trTxLine}>
+          <Text>{item.tx_line}</Text>
+        </View>
+        <View style={StylesPDF.trOdu}>
+          <Text>{item.odu}</Text>
+        </View>
+        <View style={StylesPDF.trCarrier}>
+          <Text>{item.carrier}</Text>
+        </View>
+      </View>
+    ))}
+  </>
+);
 
 export default AntennaInventoryTableRow;

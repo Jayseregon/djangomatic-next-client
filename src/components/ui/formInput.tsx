@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Button } from "@nextui-org/react";
+import { Button, Tooltip } from "@nextui-org/react";
 
 import { FormInputProps, LabelInputProps } from "@/interfaces/reports";
 import { cn } from "@/src/lib/utils";
@@ -14,6 +14,7 @@ export const FormInput = ({
   type = "text",
   onChange,
   isRounded = true,
+  withTooltip = false,
 }: FormInputProps) => {
   return (
     <div className="grid grid-cols-1 gap-1">
@@ -22,30 +23,88 @@ export const FormInput = ({
           {label}
         </p>
       )}
-      <div
-        className={`border-2 border-primary ${isRounded && "rounded-3xl"} w-full flex items-center justify-center`}
-      >
-        <input
-          required
-          className="border-0 focus:ring-0 focus:ring-inset text-foreground bg-transparent text-center text-ellipsis overflow-hidden"
-          id={name}
-          name={name}
-          placeholder={placeholder || undefined}
-          step={type === "number" ? "0.01" : undefined}
-          type={type}
-          value={value}
-          onChange={onChange}
-        />
-      </div>
+      {withTooltip ? (
+        <Tooltip
+          key={value}
+          color="primary"
+          content={value}
+          offset={-25}
+          placement="top"
+        >
+          <div
+            className={`border-2 border-primary ${isRounded && "rounded-3xl"} w-full flex items-center justify-center`}
+          >
+            <input
+              required
+              className="border-0 focus:ring-0 focus:ring-inset text-foreground bg-transparent text-center text-ellipsis overflow-hidden"
+              id={name}
+              name={name}
+              placeholder={placeholder || undefined}
+              step={type === "number" ? "0.01" : undefined}
+              type={type}
+              value={value}
+              onChange={onChange}
+            />
+          </div>
+        </Tooltip>
+      ) : (
+        <div
+          className={`border-2 border-primary ${isRounded && "rounded-3xl"} w-full flex items-center justify-center`}
+        >
+          <input
+            required
+            className="border-0 focus:ring-0 focus:ring-inset text-foreground bg-transparent text-center text-ellipsis overflow-hidden"
+            id={name}
+            name={name}
+            placeholder={placeholder || undefined}
+            step={type === "number" ? "0.01" : undefined}
+            type={type}
+            value={value}
+            onChange={onChange}
+          />
+        </div>
+      )}
     </div>
   );
 };
 
-export const DisplayInput = ({ value }: { value: string }) => {
+export const DisplayInput = ({
+  value,
+  width,
+}: {
+  value: string;
+  width?: string;
+}) => {
   return (
-    <div className="border-2 h-10 border-primary/50 text-foreground/50 rounded-3xl w-1/2 text-nowrap flex items-center justify-left ps-5">
+    <div
+      className={`border-2 h-10 border-primary/50 text-foreground/50 rounded-3xl ${width ? width : "w-1/2"} text-nowrap flex items-center justify-left ps-5`}
+    >
       <p className="text-ellipsis overflow-hidden">{value}</p>
     </div>
+  );
+};
+
+export const DisplayInputWithTooltip = ({
+  value,
+  width,
+}: {
+  value: string;
+  width?: string;
+}) => {
+  return (
+    <Tooltip
+      key={value}
+      color="primary"
+      content={value}
+      offset={-25}
+      placement="top"
+    >
+      <div
+        className={`border-2 h-10 border-primary/50 text-foreground/50 rounded-3xl ${width ? width : "w-1/2"} text-nowrap flex items-center justify-left ps-5`}
+      >
+        <p className="text-ellipsis overflow-hidden">{value}</p>
+      </div>
+    </Tooltip>
   );
 };
 

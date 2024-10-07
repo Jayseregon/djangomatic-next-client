@@ -33,6 +33,8 @@ export async function POST(request: Request) {
             label: image.label,
             azureId: image.azureId,
             imgIndex: image.imgIndex,
+            deficiency_check_procedure: image.deficiency_check_procedure,
+            deficiency_recommendation: image.deficiency_recommendation,
           })),
         },
         front_image: {
@@ -41,6 +43,8 @@ export async function POST(request: Request) {
             label: image.label,
             azureId: image.azureId,
             imgIndex: image.imgIndex,
+            deficiency_check_procedure: image.deficiency_check_procedure,
+            deficiency_recommendation: image.deficiency_recommendation,
           })),
         },
         deficiency_images: {
@@ -49,6 +53,8 @@ export async function POST(request: Request) {
             label: image.label,
             azureId: image.azureId,
             imgIndex: image.imgIndex,
+            deficiency_check_procedure: image.deficiency_check_procedure,
+            deficiency_recommendation: image.deficiency_recommendation,
           })),
         },
       },
@@ -103,6 +109,8 @@ export async function PUT(request: Request) {
             label: image.label,
             azureId: image.azureId,
             imgIndex: image.imgIndex,
+            deficiency_check_procedure: image.deficiency_check_procedure,
+            deficiency_recommendation: image.deficiency_recommendation,
           })),
         },
         front_image: {
@@ -112,6 +120,8 @@ export async function PUT(request: Request) {
             label: image.label,
             azureId: image.azureId,
             imgIndex: image.imgIndex,
+            deficiency_check_procedure: image.deficiency_check_procedure,
+            deficiency_recommendation: image.deficiency_recommendation,
           })),
         },
         deficiency_images: {
@@ -121,6 +131,8 @@ export async function PUT(request: Request) {
             label: image.label,
             azureId: image.azureId,
             imgIndex: image.imgIndex,
+            deficiency_check_procedure: image.deficiency_check_procedure,
+            deficiency_recommendation: image.deficiency_recommendation,
           })),
         },
       },

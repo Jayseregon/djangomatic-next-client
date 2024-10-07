@@ -1,0 +1,16 @@
+-- AlterTable
+ALTER TABLE "TowerReport" ADD COLUMN     "deficiency_check_procedure" TEXT NOT NULL DEFAULT '',
+ADD COLUMN     "deficiency_recommendation" TEXT NOT NULL DEFAULT '',
+ALTER COLUMN "jde_job" SET DEFAULT '',
+ALTER COLUMN "site_name" SET DEFAULT '',
+ALTER COLUMN "site_code" SET DEFAULT '',
+ALTER COLUMN "design_standard" SET DEFAULT '',
+ALTER COLUMN "client_name" SET DEFAULT '',
+ALTER COLUMN "client_company" SET DEFAULT '',
+ALTER COLUMN "jde_work_order" SET DEFAULT '',
+ALTER COLUMN "job_description" SET DEFAULT '',
+ALTER COLUMN "site_region" SET DEFAULT '',
+ALTER COLUMN "tower_id" SET DEFAULT '',
+ALTER COLUMN "tower_name" SET DEFAULT '',
+ALTER COLUMN "tower_site_name" SET DEFAULT '',
+ALTER COLUMN "job_revision" SET DEFAULT '';

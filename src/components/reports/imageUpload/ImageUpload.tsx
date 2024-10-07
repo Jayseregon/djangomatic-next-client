@@ -1,16 +1,12 @@
+// ImageUpload.tsx
 import React, { useState, useEffect, useRef } from "react";
 
-import { cn } from "@/src/lib/utils";
-import { ImageUploadProps } from "@/src/interfaces/reports";
+import { ImageUploadProps, LocalImages } from "@/src/interfaces/reports";
+import { AddButtom } from "@/src/components/ui/formInput";
 
-import {
-  LabelInput,
-  DisplayInput,
-  TrashButton,
-  AddButtom,
-} from "../ui/formInput";
-
-import { DropArea } from "./DropArea";
+import Header from "./Header";
+import ImageRow from "./ImageRow";
+import FormInputRow from "./FormInputRow";
 
 export default function ImageUpload({
   images,
@@ -18,23 +14,24 @@ export default function ImageUpload({
   subdir,
   onNewImageUpload,
   newImageButtonName,
+  labelPlaceholder,
   labelOptions,
   maxImages,
   isFrontcover,
+  isDeficiency = false,
 }: ImageUploadProps) {
-  const [localImages, setLocalImages] = useState<
-    { file: File | null; label: string; url?: string; imgIndex: number }[]
-  >([]);
+  const [localImages, setLocalImages] = useState<LocalImages[]>([]);
   const isInitialized = useRef(false);
 
   useEffect(() => {
-    // Initialize localImages state based on the images prop only once
     if (!isInitialized.current && images.length > 0) {
       const initialLocalImages = images.map((image, index) => ({
         file: null,
         label: isFrontcover ? "Front Cover" : image.label,
         url: image.url,
-        imgIndex: image.imgIndex ?? index, // Use imgIndex if available, otherwise use index
+        imgIndex: image.imgIndex ?? index,
+        deficiency_check_procedure: image.deficiency_check_procedure,
+        deficiency_recommendation: image.deficiency_recommendation,
       }));
 
       setLocalImages([...initialLocalImages]);
@@ -59,7 +56,13 @@ export default function ImageUpload({
     if (files && files[0]) {
       const file = files[0];
       const label = isFrontcover ? "Front Cover" : newImages[index].label;
-      const imgIndex = index; // Use the index as imgIndex
+      const imgIndex = index;
+      const deficiency_check_procedure = isDeficiency
+        ? newImages[index].deficiency_check_procedure
+        : "";
+      const deficiency_recommendation = isDeficiency
+        ? newImages[index].deficiency_recommendation
+        : "";
       const { url, azureId, id } = await uploadImageToAzure(
         file,
         label,
@@ -71,6 +74,8 @@ export default function ImageUpload({
         label,
         imgIndex,
         azureId,
+        deficiency_check_procedure,
+        deficiency_recommendation,
         siteProjectId: null,
         frontProjectId: null,
         deficiencyProjectId: null,
@@ -87,21 +92,65 @@ export default function ImageUpload({
     index: number,
     e: React.ChangeEvent<HTMLInputElement>,
   ) => {
-    if (isFrontcover) return; // Prevent label change if it's a front cover
+    if (isFrontcover) return;
 
     const { value } = e.target;
     const newImages = [...localImages];
 
-    // Update the label with the new value
     newImages[index] = {
       ...newImages[index],
       label: value,
     };
     setLocalImages(newImages);
 
-    // Update the label in the images prop
     const updatedImages = images.map((img, i) =>
       i === index ? { ...img, label: value } : img,
+    );
+
+    onImagesChange(updatedImages);
+  };
+
+  const handleDeficiencyCheckProcedureChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    const index = parseInt(e.target.name.split("-")[1], 10);
+
+    if (isFrontcover) return;
+
+    const { value } = e.target;
+    const newImages = [...localImages];
+
+    newImages[index] = {
+      ...newImages[index],
+      deficiency_check_procedure: value,
+    };
+    setLocalImages(newImages);
+
+    const updatedImages = images.map((img, i) =>
+      i === index ? { ...img, deficiency_check_procedure: value } : img,
+    );
+
+    onImagesChange(updatedImages);
+  };
+
+  const handleDeficiencyRecommendationChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    const index = parseInt(e.target.name.split("-")[1], 10);
+
+    if (isFrontcover) return;
+
+    const { value } = e.target;
+    const newImages = [...localImages];
+
+    newImages[index] = {
+      ...newImages[index],
+      deficiency_recommendation: value,
+    };
+    setLocalImages(newImages);
+
+    const updatedImages = images.map((img, i) =>
+      i === index ? { ...img, deficiency_recommendation: value } : img,
     );
 
     onImagesChange(updatedImages);
@@ -121,6 +170,8 @@ export default function ImageUpload({
           file: null,
           label: isFrontcover ? "Front Cover" : "",
           imgIndex: availableIndex,
+          deficiency_check_procedure: "",
+          deficiency_recommendation: "",
         },
       ]);
     }
@@ -166,68 +217,42 @@ export default function ImageUpload({
 
   return (
     <>
+      {isDeficiency && localImages.length > 0 && <Header />}
       {localImages
         .sort((a, b) => a.imgIndex - b.imgIndex)
-        .map((image, index) => (
-          <div
-            key={index}
-            className={`flex items-center justify-center ${
-              isFrontcover ?? "space-x-4"
-            }`}
-          >
-            {image.url ? (
-              <>
-                <img
-                  alt={image.label}
-                  className="size-20 object-cover rounded-lg"
-                  src={image.url}
-                />
-                {!isFrontcover && (
-                  <DisplayInput
-                    value={image.imgIndex + 1 + ". " + image.label}
-                  />
-                )}
-                <TrashButton
-                  className="ml-2"
-                  onClick={() => removeImageField(image.imgIndex)}
-                />
-              </>
-            ) : (
-              <div
-                className={cn(
-                  isFrontcover
-                    ? "grid grid-cols-[1fr_auto] items-center min-w-[50vw] px-20 gap-4"
-                    : "grid grid-cols-[1fr_1fr_auto] min-w-full px-20 items-center gap-4",
-                )}
-              >
-                <DropArea
-                  index={image.imgIndex}
-                  isDisabled={!image.label}
-                  onFilesAdded={(files) =>
-                    handleImageChange(image.imgIndex, files)
-                  }
-                />
-                {!isFrontcover && (
-                  <LabelInput
-                    name={`label-${image.imgIndex}`}
-                    options={labelOptions || []}
-                    placeholder="Select a label"
-                    value={image.label}
-                    onChange={(e) => handleLabelChange(image.imgIndex, e)}
-                  />
-                )}
-                <TrashButton onClick={() => removeImageField(image.imgIndex)} />
-              </div>
-            )}
-          </div>
-        ))}
+        .map((image, index) =>
+          image.url ? (
+            <ImageRow
+              key={index}
+              image={image}
+              isDeficiency={isDeficiency}
+              isFrontcover={isFrontcover}
+              removeImageField={removeImageField}
+            />
+          ) : (
+            <FormInputRow
+              key={index}
+              handleDeficiencyCheckProcedureChange={
+                handleDeficiencyCheckProcedureChange
+              }
+              handleDeficiencyRecommendationChange={
+                handleDeficiencyRecommendationChange
+              }
+              handleImageChange={handleImageChange}
+              handleLabelChange={handleLabelChange}
+              image={image}
+              isDeficiency={isDeficiency}
+              isFrontcover={isFrontcover}
+              labelOptions={labelOptions}
+              labelPlaceholder={labelPlaceholder}
+              removeImageField={removeImageField}
+            />
+          ),
+        )}
       {((isFrontcover && localImages.length === 0) ||
         (!isFrontcover &&
           (maxImages === undefined || localImages.length < maxImages))) && (
-        <AddButtom
-          label={`Add ${newImageButtonName} Image`}
-          onClick={addImageField}
-        />
+        <AddButtom label={newImageButtonName} onClick={addImageField} />
       )}
     </>
   );

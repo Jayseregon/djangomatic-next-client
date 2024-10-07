@@ -17,7 +17,7 @@ interface FooterProps {
 export const Footer = ({ nonce }: FooterProps): JSX.Element => {
   return (
     <footer
-      className="w-full flex items-center justify-center py-3 text-slate-300 dark:text-slate-700 space-x-1"
+      className="w-full flex items-center justify-center pt-10 pb-3 text-slate-300 dark:text-slate-700 space-x-1"
       nonce={nonce || undefined}
     >
       <span>Made with</span>

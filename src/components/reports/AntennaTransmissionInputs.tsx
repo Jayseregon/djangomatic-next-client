@@ -90,18 +90,22 @@ export default function AntennaTransmissionInputs({
   return (
     <>
       <div className="items-end space-y-2">
-        <div className="grid grid-flow-col auto-cols-fr items-center mx-20 pe-10">
-          {Object.keys(inputsList).map((k, i) => {
-            return (
-              <div
-                key={i}
-                className="text-nowrap text-ellipsis text-sm text-primary overflow-hidden"
-              >
-                {inputsList[k].label}
-              </div>
-            );
-          })}
-        </div>
+        {antennaInventory.length > 0 ? (
+          <div className="grid grid-flow-col auto-cols-fr items-center mx-20 pe-10">
+            {Object.keys(inputsList).map((k, i) => {
+              return (
+                <div
+                  key={i}
+                  className="text-nowrap text-ellipsis text-sm text-primary overflow-hidden"
+                >
+                  {inputsList[k].label}
+                </div>
+              );
+            })}
+          </div>
+        ) : (
+          <></>
+        )}
 
         {antennaInventory.map((antenna, index) => (
           <div key={index} className="grid grid-cols-[1fr_auto] mx-20">

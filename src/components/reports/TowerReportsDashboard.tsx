@@ -91,9 +91,21 @@ export const TowerReportsDashboard = () => {
     window.open(`/api/pdf/${reportId}`, "_blank");
   };
 
+  const topContent = (
+    <div className="flex items-center justify-center">
+      <Button
+        className="bg-primary text-white w-full w-1/2 h-10"
+        radius="full"
+        variant="solid"
+        onClick={handleCreate}
+      >
+        Create New Report
+      </Button>
+    </div>
+  );
+
   return (
     <div className="mt-10 w-full">
-      <Button onClick={handleCreate}>Create New Report</Button>
       <div className="overflow-x-auto">
         <Table
           isHeaderSticky
@@ -105,6 +117,7 @@ export const TowerReportsDashboard = () => {
           }}
           color="primary"
           selectionMode="single"
+          topContent={topContent}
         >
           <TableHeader>
             {/* <TableColumn key="created" className="text-center">Created</TableColumn> */}

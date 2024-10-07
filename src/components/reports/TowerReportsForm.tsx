@@ -216,12 +216,14 @@ export const TowerReportForm = ({
       <FormSectionTitle title="Antenna & Transmission Line Inventory" />
 
       {/* Antenna & Transmission Line Inventory */}
-      <AntennaTransmissionInputs
-        antennaInventory={antennaInventory}
-        onAddAntenna={handleAddAntenna}
-        onAntennaChange={handleAntennaInventoryChange}
-        onRemoveAntenna={handleRemoveAntenna}
-      />
+      {formData.jde_work_order && formData.jde_work_order?.length > 5 && (
+        <AntennaTransmissionInputs
+          antennaInventory={antennaInventory}
+          onAddAntenna={handleAddAntenna}
+          onAntennaChange={handleAntennaInventoryChange}
+          onRemoveAntenna={handleRemoveAntenna}
+        />
+      )}
 
       {/* Divider */}
       <FormSectionTitle title="Deficiency Images" />

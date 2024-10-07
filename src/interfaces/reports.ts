@@ -51,6 +51,7 @@ export interface FormInputProps {
   type?: string;
   isRounded?: boolean;
   withTooltip?: boolean;
+  className?: string;
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
 

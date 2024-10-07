@@ -5,6 +5,7 @@ import { StylesPDF } from "@/styles/stylesPDF";
 import { TOCSections, TowerReport } from "@/src/types/reports";
 
 import TOCSectionPDF from "./TOCSection";
+import DeficienciesTable from "./DeficienciesTable";
 
 const DeficienciesPage = ({
   report,
@@ -35,6 +36,7 @@ const DeficienciesPage = ({
           the checking procedure in the appendix. Please refer to the detailed
           sheets for pictures.
         </Text>
+        <DeficienciesTable items={report.deficiency_images} />
       </View>
       <View break style={StylesPDF.sectionTitleContainer}>
         <TOCSectionPDF

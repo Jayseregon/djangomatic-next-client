@@ -15,12 +15,12 @@ export const siteConfig = {
       href: "/docs",
     },
     {
-      label: "Boards",
-      href: "/boards",
-    },
-    {
       label: "Reports",
       href: "/reports",
+    },
+    {
+      label: "Boards",
+      href: "/boards",
     },
     {
       label: "R&D",

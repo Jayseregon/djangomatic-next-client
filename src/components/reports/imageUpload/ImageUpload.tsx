@@ -8,7 +8,7 @@ import Header from "./Header";
 import ImageRow from "./ImageRow";
 import FormInputRow from "./FormInputRow";
 
-export default function ImageUpload({
+export const ImageUpload: React.FC<ImageUploadProps> = ({
   images,
   onImagesChange,
   subdir,
@@ -19,7 +19,7 @@ export default function ImageUpload({
   maxImages,
   isFrontcover,
   isDeficiency = false,
-}: ImageUploadProps) {
+}) => {
   const [localImages, setLocalImages] = useState<LocalImages[]>([]);
   const isInitialized = useRef(false);
 
@@ -256,4 +256,6 @@ export default function ImageUpload({
       )}
     </>
   );
-}
+};
+
+export default ImageUpload;

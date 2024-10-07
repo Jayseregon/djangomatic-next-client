@@ -6,7 +6,9 @@ import { cn } from "@/src/lib/utils";
 
 import { TrashIcon } from "../icons";
 
-export const FormInput = ({
+import CustomTooltip from "./CustomTooltip";
+
+export const FormInput: React.FC<FormInputProps> = ({
   value,
   name,
   label,
@@ -15,7 +17,7 @@ export const FormInput = ({
   onChange,
   isRounded = true,
   withTooltip = false,
-}: FormInputProps) => {
+}) => {
   return (
     <div className="grid grid-cols-1 gap-1">
       {label && (
@@ -24,13 +26,7 @@ export const FormInput = ({
         </p>
       )}
       {withTooltip ? (
-        <Tooltip
-          key={value}
-          color="primary"
-          content={value}
-          offset={-25}
-          placement="top"
-        >
+        <CustomTooltip content={value}>
           <div
             className={`border-2 border-primary ${isRounded && "rounded-3xl"} w-full flex items-center justify-center`}
           >
@@ -44,9 +40,10 @@ export const FormInput = ({
               type={type}
               value={value}
               onChange={onChange}
+              onFocus={(e) => e.stopPropagation()}
             />
           </div>
-        </Tooltip>
+        </CustomTooltip>
       ) : (
         <div
           className={`border-2 border-primary ${isRounded && "rounded-3xl"} w-full flex items-center justify-center`}
@@ -96,7 +93,7 @@ export const DisplayInputWithTooltip = ({
       key={value}
       color="primary"
       content={value}
-      offset={-25}
+      offset={-7}
       placement="top"
     >
       <div

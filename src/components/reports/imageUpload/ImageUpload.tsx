@@ -1,4 +1,3 @@
-// ImageUpload.tsx
 import React, { useState, useEffect, useRef } from "react";
 
 import { ImageUploadProps, LocalImages } from "@/src/interfaces/reports";
@@ -215,6 +214,39 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({
     return { url: data.url, azureId: data.azureId, id: data.id };
   };
 
+  const handleDragStart = (e: React.DragEvent<HTMLDivElement>) => {
+    e.dataTransfer.setData("text/plain", e.currentTarget.dataset.index!);
+  };
+
+  const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+  };
+
+  const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    const draggedIndex = e.dataTransfer.getData("text/plain");
+    const targetIndex = e.currentTarget.dataset.index;
+
+    if (draggedIndex !== targetIndex) {
+      const reorderedImages = [...localImages];
+      const [draggedImage] = reorderedImages.splice(Number(draggedIndex), 1);
+
+      reorderedImages.splice(Number(targetIndex), 0, draggedImage);
+
+      // Update imgIndex for each image
+      const updatedImages = reorderedImages.map((image, index) => ({
+        ...image,
+        imgIndex: index,
+        id: images[index]?.id ?? null,
+        azureId: images[index]?.azureId ?? null,
+        url: image.url ?? "",
+      }));
+
+      setLocalImages(updatedImages);
+      onImagesChange(updatedImages);
+    }
+  };
+
   return (
     <>
       {isDeficiency && localImages.length > 0 && <Header />}
@@ -222,31 +254,47 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({
         .sort((a, b) => a.imgIndex - b.imgIndex)
         .map((image, index) =>
           image.url ? (
-            <ImageRow
+            <div
               key={index}
-              image={image}
-              isDeficiency={isDeficiency}
-              isFrontcover={isFrontcover}
-              removeImageField={removeImageField}
-            />
+              draggable
+              data-index={index}
+              onDragOver={handleDragOver}
+              onDragStart={handleDragStart}
+              onDrop={handleDrop}
+            >
+              <ImageRow
+                image={image}
+                isDeficiency={isDeficiency}
+                isFrontcover={isFrontcover}
+                removeImageField={removeImageField}
+              />
+            </div>
           ) : (
-            <FormInputRow
+            <div
               key={index}
-              handleDeficiencyCheckProcedureChange={
-                handleDeficiencyCheckProcedureChange
-              }
-              handleDeficiencyRecommendationChange={
-                handleDeficiencyRecommendationChange
-              }
-              handleImageChange={handleImageChange}
-              handleLabelChange={handleLabelChange}
-              image={image}
-              isDeficiency={isDeficiency}
-              isFrontcover={isFrontcover}
-              labelOptions={labelOptions}
-              labelPlaceholder={labelPlaceholder}
-              removeImageField={removeImageField}
-            />
+              draggable
+              data-index={index}
+              onDragOver={handleDragOver}
+              onDragStart={handleDragStart}
+              onDrop={handleDrop}
+            >
+              <FormInputRow
+                handleDeficiencyCheckProcedureChange={
+                  handleDeficiencyCheckProcedureChange
+                }
+                handleDeficiencyRecommendationChange={
+                  handleDeficiencyRecommendationChange
+                }
+                handleImageChange={handleImageChange}
+                handleLabelChange={handleLabelChange}
+                image={image}
+                isDeficiency={isDeficiency}
+                isFrontcover={isFrontcover}
+                labelOptions={labelOptions}
+                labelPlaceholder={labelPlaceholder}
+                removeImageField={removeImageField}
+              />
+            </div>
           ),
         )}
       {((isFrontcover && localImages.length === 0) ||

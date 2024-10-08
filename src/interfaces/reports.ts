@@ -8,9 +8,11 @@ import {
 export interface TowerReportFormProps {
   report?: Partial<TowerReport> | null;
   onSave: (report: Partial<TowerReport>) => void;
-  onLocalSave: (
-    report: Partial<TowerReport>,
-  ) => Promise<{ success: boolean; message: string; id?: string }>;
+  onLocalSave: (report: Partial<TowerReport>) => Promise<{
+    success: boolean;
+    isNewReport: boolean;
+    response: { message: string; id: string; updatedAt: Date };
+  }>;
   onCancel: (newlyUploadedImages: TowerReportImage[], subdir: string) => void;
 }
 

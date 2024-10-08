@@ -21,8 +21,6 @@ export default function ReportFormPage() {
         body: JSON.stringify(report),
       });
 
-      console.log("response", response);
-
       if (!response.ok) {
         throw new Error(`Failed to save report: ${response.statusText}`);
       }
@@ -48,22 +46,38 @@ export default function ReportFormPage() {
       }
 
       const responseData = await response.json();
-      const reportId = responseData.report.id;
+      const reportId: string = responseData.report.id;
+      const reportUpdatedAt: Date = new Date(responseData.report.updatedAt);
       const successMessage = "Report successfully created and saved!";
 
-      console.log("Inside handleLocalSave [new]: ", reportId);
+      localStorage.setItem(
+        "reportNotification",
+        JSON.stringify({
+          message: successMessage,
+          id: reportId,
+          updatedAt: reportUpdatedAt,
+        }),
+      );
 
       router.push(`/reports/${reportId}`);
 
-      console.log("After router push");
-
-      return { success: true, message: successMessage, id: reportId };
+      return {
+        success: true,
+        isNewReport: true,
+        response: {
+          message: successMessage,
+          id: reportId,
+          updatedAt: reportUpdatedAt,
+        },
+      };
     } catch (error) {
       const errorMessage = `Failed to save tower report: ${(error as Error).message}`;
 
-      console.error(errorMessage);
-
-      return { success: false, message: errorMessage };
+      return {
+        success: false,
+        isNewReport: true,
+        response: { message: errorMessage, id: "", updatedAt: new Date() },
+      };
     }
   };
 

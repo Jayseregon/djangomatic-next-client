@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { Button, Tooltip } from "@nextui-org/react";
+import { CircleMinus } from "lucide-react";
 
 import { FormInputProps, LabelInputProps } from "@/interfaces/reports";
 import { cn } from "@/src/lib/utils";
-
-import { TrashIcon } from "../icons";
 
 import CustomTooltip from "./CustomTooltip";
 
@@ -171,7 +170,7 @@ export const TrashButton = ({
       variant="light"
       onClick={onClick}
     >
-      <TrashIcon />
+      <CircleMinus />
     </Button>
   );
 };

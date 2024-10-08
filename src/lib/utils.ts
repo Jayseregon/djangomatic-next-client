@@ -54,7 +54,7 @@ export function extractAzureFileData(filePath: string): (string | undefined)[] {
   const baseName = fileName?.split(".")[0];
   const extension = fileName?.split(".")?.pop();
 
-  return [baseName, extension, dir] || ["", "", ""];
+  return [baseName || "", extension || "", dir || ""];
 }
 
 /**

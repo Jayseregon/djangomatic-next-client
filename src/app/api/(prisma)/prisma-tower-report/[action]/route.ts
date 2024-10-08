@@ -138,7 +138,7 @@ export async function PUT(request: Request) {
       },
     });
 
-    return NextResponse.json(updatedReport);
+    return NextResponse.json({ report: updatedReport }, { status: 201 });
   } catch (error) {
     console.error(error);
 

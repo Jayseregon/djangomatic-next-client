@@ -11,10 +11,9 @@ import {
   TableCell,
   Button,
 } from "@nextui-org/react";
+import { Cog, Download, Pencil, Trash2 } from "lucide-react";
 
 import { TowerReport } from "@/src/types/reports";
-
-import { TrashIcon, PencilFillIcon, GearIcon, PDFFileIcon } from "../icons";
 
 export const TowerReportsDashboard = () => {
   const [towerReports, setTowerReports] = useState<TowerReport[]>([]);
@@ -154,7 +153,7 @@ export const TowerReportsDashboard = () => {
             </TableColumn>
             <TableColumn key="actions">
               <div className="flex items-center justify-center w-full h-full">
-                <GearIcon />
+                <Cog />
               </div>
             </TableColumn>
           </TableHeader>
@@ -197,7 +196,7 @@ export const TowerReportsDashboard = () => {
                       variant="bordered"
                       onClick={() => handleEdit(report.id)}
                     >
-                      <PencilFillIcon />
+                      <Pencil />
                     </Button>
                     <Button
                       isIconOnly
@@ -207,7 +206,7 @@ export const TowerReportsDashboard = () => {
                       variant="bordered"
                       onClick={() => handleGeneratePDF(report.id)}
                     >
-                      <PDFFileIcon />
+                      <Download />
                     </Button>
                     <Button
                       isIconOnly
@@ -216,7 +215,7 @@ export const TowerReportsDashboard = () => {
                       variant="bordered"
                       onClick={() => handleDelete(report.id)}
                     >
-                      <TrashIcon />
+                      <Trash2 />
                     </Button>
                   </div>
                 </TableCell>

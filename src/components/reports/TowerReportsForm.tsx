@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Button } from "@nextui-org/react";
+import { CircleOff, Download, FileOutput, Save } from "lucide-react";
 
 import siteImagesLabelOptionsData from "public/reports/rogers/siteImagesLabelOptions.json";
 import {
@@ -9,7 +10,7 @@ import {
 } from "@/types/reports";
 import { TowerReportFormProps } from "@/interfaces/reports";
 
-import { SaveIcon, CancelIcon, PDFFileIcon, SaveExitIcon } from "../icons";
+import ToastNotification, { ToastResponse } from "../ui/ToastNotification";
 import { FormInput, FormSectionTitle } from "../ui/formInput";
 
 import QuickbaseInputs from "./QuickbaseInputs";
@@ -50,6 +51,12 @@ export const TowerReportForm = ({
   >([]);
   const subdir = `${formData.jde_job}-${formData.jde_work_order}` || "";
   const siteImagesLabelOptions: string[] = siteImagesLabelOptionsData;
+  const [toastOpen, setToastOpen] = useState(false);
+  const [toastMessage, setToastMessage] = useState<ToastResponse>({
+    message: "",
+    id: "",
+    updatedAt: new Date(),
+  });
 
   useEffect(() => {
     if (report) {
@@ -72,6 +79,15 @@ export const TowerReportForm = ({
       setFrontImages(report.front_image || []);
       setDeficiencyImages(report.deficiency_images || []);
       setAntennaInventory(report.antenna_inventory || []);
+    }
+    const notification = localStorage.getItem("reportNotification");
+
+    if (notification) {
+      setTimeout(() => {
+        setToastMessage(JSON.parse(notification));
+        setToastOpen(true);
+      }, 500);
+      localStorage.removeItem("reportNotification");
     }
   }, [report]);
 
@@ -98,11 +114,13 @@ export const TowerReportForm = ({
     if (result.success) {
       // Reset the state of newlyUploadedImages after a successful local save
       setNewlyUploadedImages([]);
-
-      // TO-DO add a toast notification
-      console.log("Inside report form: ", result.message);
+      if (!result.isNewReport) {
+        setToastMessage(result.response);
+        setToastOpen(true);
+      }
     } else {
-      console.log("Error: ", result.message);
+      setToastMessage(result.response);
+      setToastOpen(true);
     }
   };
 
@@ -281,7 +299,7 @@ export const TowerReportForm = ({
 
       <div className="space-x-4 mt-4 mx-auto">
         <Button isIconOnly color="success" type="submit">
-          <SaveExitIcon />
+          <FileOutput />
         </Button>
         <Button
           isIconOnly
@@ -290,7 +308,7 @@ export const TowerReportForm = ({
           variant="bordered"
           onClick={handleSaveAndContinue}
         >
-          <SaveIcon />
+          <Save />
         </Button>
         <Button
           isIconOnly
@@ -299,7 +317,7 @@ export const TowerReportForm = ({
           variant="bordered"
           onClick={handleGeneratePDF}
         >
-          <PDFFileIcon />
+          <Download />
         </Button>
         <Button
           isIconOnly
@@ -308,9 +326,14 @@ export const TowerReportForm = ({
           variant="bordered"
           onClick={handleCancelClick}
         >
-          <CancelIcon />
+          <CircleOff />
         </Button>
       </div>
+      <ToastNotification
+        open={toastOpen}
+        response={toastMessage}
+        setOpen={setToastOpen}
+      />
     </form>
   );
 };

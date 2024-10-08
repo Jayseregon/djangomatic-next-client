@@ -67,18 +67,29 @@ export default function ReportFormPage() {
         throw new Error(`Failed to save report: ${response.statusText}`);
       }
 
-      const successMessage = "Report saved successfully!";
+      const responseData = await response.json();
+      const reportId: string = responseData.report.id;
+      const reportUpdatedAt: Date = new Date(responseData.report.updatedAt);
+      const successMessage = "Report successfully saved!";
 
-      console.log("Inside handleLocalSave [id]: ", successMessage);
-
-      return { success: true, message: successMessage };
+      return {
+        success: true,
+        isNewReport: false,
+        response: {
+          message: successMessage,
+          id: reportId,
+          updatedAt: reportUpdatedAt,
+        },
+      };
     } catch (error) {
       // Failure message
       const errorMessage = `Failed to save tower report: ${(error as Error).message}`;
 
-      console.error(errorMessage);
-
-      return { success: false, message: errorMessage };
+      return {
+        success: false,
+        isNewReport: false,
+        response: { message: errorMessage, id: "", updatedAt: new Date() },
+      };
     }
   };
 

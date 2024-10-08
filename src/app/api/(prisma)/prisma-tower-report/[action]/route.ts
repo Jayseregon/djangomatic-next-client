@@ -60,7 +60,7 @@ export async function POST(request: Request) {
       },
     });
 
-    return NextResponse.json(newReport, { status: 201 });
+    return NextResponse.json({ report: newReport }, { status: 201 });
   } catch (error) {
     console.error(error);
 

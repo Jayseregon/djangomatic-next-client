@@ -9,7 +9,7 @@ import {
 } from "@/types/reports";
 import { TowerReportFormProps } from "@/interfaces/reports";
 
-import { SaveIcon, CancelIcon, PDFFileIcon } from "../icons";
+import { SaveIcon, CancelIcon, PDFFileIcon, SaveExitIcon } from "../icons";
 import { FormInput, FormSectionTitle } from "../ui/formInput";
 
 import QuickbaseInputs from "./QuickbaseInputs";
@@ -19,6 +19,7 @@ import AntennaTransmissionInputs from "./AntennaTransmissionInputs";
 export const TowerReportForm = ({
   report,
   onSave,
+  onLocalSave,
   onCancel,
 }: TowerReportFormProps) => {
   const [formData, setFormData] = useState<Partial<TowerReport>>({
@@ -83,6 +84,26 @@ export const TowerReportForm = ({
       deficiency_images: deficiencyImages,
       antenna_inventory: antennaInventory,
     });
+  };
+
+  const handleSaveAndContinue = async () => {
+    const result = await onLocalSave({
+      ...formData,
+      site_images: siteImages,
+      front_image: frontImages,
+      deficiency_images: deficiencyImages,
+      antenna_inventory: antennaInventory,
+    });
+
+    if (result.success) {
+      // Reset the state of newlyUploadedImages after a successful local save
+      setNewlyUploadedImages([]);
+
+      // TO-DO add a toast notification
+      console.log("Inside report form: ", result.message);
+    } else {
+      console.log("Error: ", result.message);
+    }
   };
 
   const handleCancelClick = () => {
@@ -260,12 +281,22 @@ export const TowerReportForm = ({
 
       <div className="space-x-4 mt-4 mx-auto">
         <Button isIconOnly color="success" type="submit">
+          <SaveExitIcon />
+        </Button>
+        <Button
+          isIconOnly
+          color="success"
+          type="button"
+          variant="bordered"
+          onClick={handleSaveAndContinue}
+        >
           <SaveIcon />
         </Button>
         <Button
           isIconOnly
           color="primary"
           type="button"
+          variant="bordered"
           onClick={handleGeneratePDF}
         >
           <PDFFileIcon />

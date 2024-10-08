@@ -33,7 +33,7 @@ export default function ReportFormPage() {
     }
   }, [id]);
 
-  const handleSave = async (report: Partial<TowerReport>) => {
+  const handleSaveAndClose = async (report: Partial<TowerReport>) => {
     try {
       const response = await fetch(`/api/prisma-tower-report/update?id=${id}`, {
         method: "PUT",
@@ -50,6 +50,35 @@ export default function ReportFormPage() {
       router.push("/reports");
     } catch (error) {
       console.error("Failed to save tower report:", error);
+    }
+  };
+
+  const handleLocalSave = async (report: Partial<TowerReport>) => {
+    try {
+      const response = await fetch(`/api/prisma-tower-report/update?id=${id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(report),
+      });
+
+      if (!response.ok) {
+        throw new Error(`Failed to save report: ${response.statusText}`);
+      }
+
+      const successMessage = "Report saved successfully!";
+
+      console.log("Inside handleLocalSave [id]: ", successMessage);
+
+      return { success: true, message: successMessage };
+    } catch (error) {
+      // Failure message
+      const errorMessage = `Failed to save tower report: ${(error as Error).message}`;
+
+      console.error(errorMessage);
+
+      return { success: false, message: errorMessage };
     }
   };
 
@@ -81,7 +110,8 @@ export default function ReportFormPage() {
       <TowerReportForm
         report={report}
         onCancel={handleCancel}
-        onSave={handleSave}
+        onLocalSave={handleLocalSave}
+        onSave={handleSaveAndClose}
       />
     </div>
   );

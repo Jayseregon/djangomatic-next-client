@@ -11,7 +11,29 @@ export default function ReportFormPage() {
   const router = useRouter();
   const [report] = useState<Partial<TowerReport>>({});
 
-  const handleSave = async (report: Partial<TowerReport>) => {
+  const handleSaveAndClose = async (report: Partial<TowerReport>) => {
+    try {
+      const response = await fetch("/api/prisma-tower-report/create", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(report),
+      });
+
+      console.log("response", response);
+
+      if (!response.ok) {
+        throw new Error(`Failed to save report: ${response.statusText}`);
+      }
+
+      router.push("/reports");
+    } catch (error) {
+      console.error("Failed to save tower report:", error);
+    }
+  };
+
+  const handleLocalSave = async (report: Partial<TowerReport>) => {
     try {
       const response = await fetch("/api/prisma-tower-report/create", {
         method: "POST",
@@ -25,9 +47,23 @@ export default function ReportFormPage() {
         throw new Error(`Failed to save report: ${response.statusText}`);
       }
 
-      router.push("/reports");
+      const responseData = await response.json();
+      const reportId = responseData.report.id;
+      const successMessage = "Report successfully created and saved!";
+
+      console.log("Inside handleLocalSave [new]: ", reportId);
+
+      router.push(`/reports/${reportId}`);
+
+      console.log("After router push");
+
+      return { success: true, message: successMessage, id: reportId };
     } catch (error) {
-      console.error("Failed to save tower report:", error);
+      const errorMessage = `Failed to save tower report: ${(error as Error).message}`;
+
+      console.error(errorMessage);
+
+      return { success: false, message: errorMessage };
     }
   };
 
@@ -59,7 +95,8 @@ export default function ReportFormPage() {
       <TowerReportForm
         report={report}
         onCancel={handleCancel}
-        onSave={handleSave}
+        onLocalSave={handleLocalSave}
+        onSave={handleSaveAndClose}
       />
     </div>
   );

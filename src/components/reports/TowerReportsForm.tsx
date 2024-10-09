@@ -227,12 +227,13 @@ export const TowerReportForm = ({
     setAntennaInventory((prev) => prev.filter((_, i) => i !== index));
   };
 
-  const handleChecklistForm4Change = (
+  const handleChecklistFormChange = (
+    setChecklistForm: React.Dispatch<React.SetStateAction<any[]>>,
     index: number,
     field: string,
     value: string | boolean | undefined,
   ) => {
-    setChecklistForm4((prev) => {
+    setChecklistForm((prev) => {
       const updatedChecklist = [...prev];
 
       updatedChecklist[index] = { ...updatedChecklist[index], [field]: value };
@@ -343,7 +344,8 @@ export const TowerReportForm = ({
         <DynamicForm
           checkListForm={checklistForm4}
           list={listForm4}
-          onFormChange={handleChecklistForm4Change}
+          setChecklistForm={setChecklistForm4}
+          onFormChange={handleChecklistFormChange}
         />
       </FormSectionAccordion>
 

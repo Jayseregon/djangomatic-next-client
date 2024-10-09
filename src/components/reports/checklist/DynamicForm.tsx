@@ -9,9 +9,11 @@ export interface ListItem {
 }
 
 interface DynamicFormProps {
+  setChecklistForm: React.Dispatch<React.SetStateAction<any[]>>;
   checkListForm: ChecklistRow[];
   list: ListItem[];
   onFormChange: (
+    setChecklistForm: React.Dispatch<React.SetStateAction<any[]>>,
     index: number,
     field: string,
     value: string | boolean | undefined,
@@ -19,6 +21,7 @@ interface DynamicFormProps {
 }
 
 const DynamicForm: React.FC<DynamicFormProps> = ({
+  setChecklistForm,
   checkListForm,
   list,
   onFormChange,
@@ -35,7 +38,7 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
     } else {
       parsedValue = value;
     }
-    onFormChange(index, field, parsedValue);
+    onFormChange(setChecklistForm, index, field, parsedValue);
   };
 
   return (

@@ -1,0 +1,106 @@
+[
+  {
+    "code": "4.00",
+    "item": "Tower acceptance post-erection inspection performed"
+  },
+  {
+    "code": "4.01",
+    "item": "Tower foundation as per drawings"
+  },
+  {
+    "code": "4.02",
+    "item": "Tower antenna feed bridge / cable trays as per drawings"
+  },
+  {
+    "code": "4.03",
+    "item": "RF and M/W antenna mounts installed as per Drawings."
+  },
+  {
+    "code": "4.04",
+    "item": "Rooftop anchors as per Drawings"
+  },
+  {
+    "code": "4.05",
+    "item": "Site grounding as per design and secured from trip hazards"
+  },
+  {
+    "code": "4.06",
+    "item": "Transmission line & hangers installed properly (incl. two supports on MW flexes)"
+  },
+  {
+    "code": "4.07",
+    "item": "Weatherproofing & Hoisting Grips installed as per Network Standards"
+  },
+  {
+    "code": "4.08",
+    "item": "Cellular antennas installed per Final Cell Design"
+  },
+  {
+    "code": "4.09",
+    "item": "Microwave antennas installed as per Final TX Design and Design Drawings"
+  },
+  {
+    "code": "4.10",
+    "item": "Microwave lines are labelled / tagged with Brass tags (at MW, and shelter bulkhead)"
+  },
+  {
+    "code": "4.11",
+    "item": "RF cables are appropriately labelled in the shelter/cabinet"
+  },
+  {
+    "code": "4.12",
+    "item": "DC power cables labelled are appropriately labelled in the shelter/cabinet"
+  },
+  {
+    "code": "4.13",
+    "item": "Kick plates and waveguide boots installed and the ports sealed inside/outside"
+  },
+  {
+    "code": "4.14",
+    "item": "Interior building finishes as per drawings (walls, floors, receptacles, lighting)"
+  },
+  {
+    "code": "4.15",
+    "item": "Exterior building finishes as per drawings (stairs, doors, locks, walkway)"
+  },
+  {
+    "code": "4.16",
+    "item": "Compound fencing and gate complete as per drawings and grounded (2 corner posts)"
+  },
+  {
+    "code": "4.17",
+    "item": "Anchor fencing and gate complete as per drawings"
+  },
+  {
+    "code": "4.18",
+    "item": "Access road and compound complete and as per drawings"
+  },
+  {
+    "code": "4.19",
+    "item": "Rooftop shelter support frame as per drawings and grounded"
+  },
+  {
+    "code": "4.20",
+    "item": "Walls, Ceiling, and Floors clean"
+  },
+  {
+    "code": "4.21",
+    "item": "All garbage from Installation work removed from Site/Compound"
+  },
+  {
+    "code": "4.22",
+    "item": "LOC CODE on the shelter / cabinet door"
+  },
+  {
+    "code": "4.23",
+    "item": "Antenna, MW and Feeder sweeps left on site and/or forwarded to Rogers for review and inclusion in As-Built package"
+  },
+  {
+    "code": "4.24",
+    "item": "Fiber OTDR and Scope results left on site and/or forwarded to Rogers for review and inclusion in As-Built package"
+  },
+  {
+    "code": "4.25",
+    "item": "As builts ready for review"
+  }
+]

@@ -11,6 +11,14 @@ export async function GET() {
         front_image: true,
         deficiency_images: true,
         antenna_inventory: true,
+        checklistForm4: true,
+        checklistForm5: true,
+        checklistForm6: true,
+        checklistForm7: true,
+        checklistForm8: true,
+        checklistForm9: true,
+        checklistForm10: true,
+        checklistForm11: true,
       },
     });
 

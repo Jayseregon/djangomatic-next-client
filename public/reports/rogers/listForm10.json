@@ -1,0 +1,22 @@
+[
+  {
+    "code": "10.00",
+    "item": "AC tech cable properly installed and connected to rectifiers and AC service panel or junction box (as per Canadian Electrical code)"
+  },
+  {
+    "code": "10.01",
+    "item": "AC panel breakers labelled"
+  },
+  {
+    "code": "10.02",
+    "item": "DC Fuse / Breaker layout as per IWO"
+  },
+  {
+    "code": "10.03",
+    "item": "Battery strings properly anchored / installed / labelled"
+  },
+  {
+    "code": "10.04",
+    "item": "Power bay test results and config files are left on site USB"
+  }
+]

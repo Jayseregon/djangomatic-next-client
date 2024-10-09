@@ -1,63 +1,81 @@
 import { NextResponse } from "next/server";
 import { PrismaClient } from "@prisma/client";
 
-import { TowerReportImage, AntennaTransmissionLine } from "@/src/types/reports";
+import {
+  TowerReportImage,
+  AntennaTransmissionLine,
+  ChecklistRow,
+} from "@/src/types/reports";
 const prisma = new PrismaClient();
+
+const createNestedData = (data: any) => {
+  const site_images = data.site_images || [];
+  const front_image = data.front_image || [];
+  const deficiency_images = data.deficiency_images || [];
+  const antenna_inventory = data.antenna_inventory || [];
+  const checklistForm4 = data.checklistForm4 || [];
+
+  return {
+    ...data,
+    antenna_inventory: {
+      create: antenna_inventory.map((antenna: AntennaTransmissionLine) => ({
+        elevation: antenna.elevation,
+        quantity: antenna.quantity,
+        equipment: antenna.equipment,
+        azimuth: antenna.azimuth,
+        tx_line: antenna.tx_line,
+        odu: antenna.odu,
+        carrier: antenna.carrier,
+      })),
+    },
+    site_images: {
+      create: site_images.map((image: TowerReportImage) => ({
+        url: image.url,
+        label: image.label,
+        azureId: image.azureId,
+        imgIndex: image.imgIndex,
+        deficiency_check_procedure: image.deficiency_check_procedure,
+        deficiency_recommendation: image.deficiency_recommendation,
+      })),
+    },
+    front_image: {
+      create: front_image.map((image: TowerReportImage) => ({
+        url: image.url,
+        label: image.label,
+        azureId: image.azureId,
+        imgIndex: image.imgIndex,
+        deficiency_check_procedure: image.deficiency_check_procedure,
+        deficiency_recommendation: image.deficiency_recommendation,
+      })),
+    },
+    deficiency_images: {
+      create: deficiency_images.map((image: TowerReportImage) => ({
+        url: image.url,
+        label: image.label,
+        azureId: image.azureId,
+        imgIndex: image.imgIndex,
+        deficiency_check_procedure: image.deficiency_check_procedure,
+        deficiency_recommendation: image.deficiency_recommendation,
+      })),
+    },
+    checklistForm4: {
+      create: checklistForm4.map((checklist: ChecklistRow) => ({
+        code: checklist.code,
+        isChecked: checklist.isChecked,
+        comments: checklist.comments,
+      })),
+    },
+  };
+};
 
 export async function POST(request: Request) {
   try {
     const data = await request.json();
-    const site_images = data.site_images || [];
-    const front_image = data.front_image || [];
-    const deficiency_images = data.deficiency_images || [];
-    const antenna_inventory = data.antenna_inventory || [];
+    const nestedData = createNestedData(data);
 
     // Create the report with nested images
     const newReport = await prisma.towerReport.create({
-      data: {
-        ...data,
-        antenna_inventory: {
-          create: antenna_inventory.map((antenna: AntennaTransmissionLine) => ({
-            elevation: antenna.elevation,
-            quantity: antenna.quantity,
-            equipment: antenna.equipment,
-            azimuth: antenna.azimuth,
-            tx_line: antenna.tx_line,
-            odu: antenna.odu,
-            carrier: antenna.carrier,
-          })),
-        },
-        site_images: {
-          create: site_images.map((image: TowerReportImage) => ({
-            url: image.url,
-            label: image.label,
-            azureId: image.azureId,
-            imgIndex: image.imgIndex,
-            deficiency_check_procedure: image.deficiency_check_procedure,
-            deficiency_recommendation: image.deficiency_recommendation,
-          })),
-        },
-        front_image: {
-          create: front_image.map((image: TowerReportImage) => ({
-            url: image.url,
-            label: image.label,
-            azureId: image.azureId,
-            imgIndex: image.imgIndex,
-            deficiency_check_procedure: image.deficiency_check_procedure,
-            deficiency_recommendation: image.deficiency_recommendation,
-          })),
-        },
-        deficiency_images: {
-          create: deficiency_images.map((image: TowerReportImage) => ({
-            url: image.url,
-            label: image.label,
-            azureId: image.azureId,
-            imgIndex: image.imgIndex,
-            deficiency_check_procedure: image.deficiency_check_procedure,
-            deficiency_recommendation: image.deficiency_recommendation,
-          })),
-        },
-      },
+      data: nestedData,
     });
 
     return NextResponse.json({ report: newReport }, { status: 201 });
@@ -80,60 +98,32 @@ export async function PUT(request: Request) {
 
   try {
     const data = await request.json();
-    const site_images = data.site_images || [];
-    const front_image = data.front_image || [];
-    const deficiency_images = data.deficiency_images || [];
-    const antenna_inventory = data.antenna_inventory || [];
+    const nestedData = createNestedData(data);
 
     // Update the report
     const updatedReport = await prisma.towerReport.update({
       where: { id },
       data: {
-        ...data,
+        ...nestedData,
         antenna_inventory: {
           deleteMany: {},
-          create: antenna_inventory.map((antenna: AntennaTransmissionLine) => ({
-            elevation: antenna.elevation,
-            quantity: antenna.quantity,
-            equipment: antenna.equipment,
-            azimuth: antenna.azimuth,
-            tx_line: antenna.tx_line,
-            odu: antenna.odu,
-            carrier: antenna.carrier,
-          })),
+          create: nestedData.antenna_inventory.create,
         },
         site_images: {
           deleteMany: {},
-          create: site_images.map((image: TowerReportImage) => ({
-            url: image.url,
-            label: image.label,
-            azureId: image.azureId,
-            imgIndex: image.imgIndex,
-            deficiency_check_procedure: image.deficiency_check_procedure,
-            deficiency_recommendation: image.deficiency_recommendation,
-          })),
+          create: nestedData.site_images.create,
         },
         front_image: {
           deleteMany: {},
-          create: front_image.map((image: TowerReportImage) => ({
-            url: image.url,
-            label: image.label,
-            azureId: image.azureId,
-            imgIndex: image.imgIndex,
-            deficiency_check_procedure: image.deficiency_check_procedure,
-            deficiency_recommendation: image.deficiency_recommendation,
-          })),
+          create: nestedData.front_image.create,
         },
         deficiency_images: {
           deleteMany: {},
-          create: deficiency_images.map((image: TowerReportImage) => ({
-            url: image.url,
-            label: image.label,
-            azureId: image.azureId,
-            imgIndex: image.imgIndex,
-            deficiency_check_procedure: image.deficiency_check_procedure,
-            deficiency_recommendation: image.deficiency_recommendation,
-          })),
+          create: nestedData.deficiency_images.create,
+        },
+        checklistForm4: {
+          deleteMany: {},
+          create: nestedData.checklistForm4.create,
         },
       },
     });

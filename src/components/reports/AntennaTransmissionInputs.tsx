@@ -91,7 +91,7 @@ export default function AntennaTransmissionInputs({
     <>
       <div className="items-end space-y-2">
         {antennaInventory.length > 0 ? (
-          <div className="grid grid-flow-col auto-cols-fr items-center mx-20 pe-10">
+          <div className="grid grid-flow-col auto-cols-fr items-center  pe-10">
             {Object.keys(inputsList).map((k, i) => {
               return (
                 <div
@@ -108,7 +108,7 @@ export default function AntennaTransmissionInputs({
         )}
 
         {antennaInventory.map((antenna, index) => (
-          <div key={index} className="grid grid-cols-[1fr_auto] mx-20">
+          <div key={index} className="grid grid-cols-[1fr_auto] ">
             <div
               key={index}
               className="grid grid-flow-col auto-cols-fr items-center gap-1 items-end"

@@ -191,7 +191,7 @@ export const TowerReportsDashboard = () => {
                   <div className="space-x-2 inline-block">
                     <Button
                       isIconOnly
-                      color="secondary"
+                      color="success"
                       size="sm"
                       variant="bordered"
                       onClick={() => handleEdit(report.id)}

@@ -1,0 +1,66 @@
+[
+  {
+    "code": "5.00",
+    "item": "Commercial Power service completed"
+  },
+  {
+    "code": "5.01",
+    "item": "AC Panel labelled and verified as per IWO"
+  },
+  {
+    "code": "5.02",
+    "item": "Emergency lighting installed & operational"
+  },
+  {
+    "code": "5.03",
+    "item": "HEAT DETECTOR, ALARM/SPEAKER AND PULL STATION WIRING COMPLETE (LEASEHOLD / WIC)"
+  },
+  {
+    "code": "5.04",
+    "item": "AC fail relay installed and labelled"
+  },
+  {
+    "code": "5.05",
+    "item": "High / Low temp sensors installed"
+  },
+  {
+    "code": "5.06",
+    "item": "Tower lights installed and operational. Alarms wired to BIX."
+  },
+  {
+    "code": "5.07",
+    "item": "Tower lights verified to work in day and night mode and left set to auto."
+  },
+  {
+    "code": "5.08",
+    "item": "Intrusion door contacts installed"
+  },
+  {
+    "code": "5.09",
+    "item": "DC Smoke detector installed"
+  },
+  {
+    "code": "5.10",
+    "item": "Fire extinguisher on site"
+  },
+  {
+    "code": "5.11",
+    "item": "First aid kit on site"
+  },
+  {
+    "code": "5.12",
+    "item": "Eye Wash and associated fluid on site"
+  },
+  {
+    "code": "5.13",
+    "item": "HVAC / FAC commissioned / Scheduled"
+  },
+  {
+    "code": "5.14",
+    "item": "Outside lights installed operational"
+  },
+  {
+    "code": "5.15",
+    "item": "TRACCESS installed #SERIAL NUMBER"
+  }
+]

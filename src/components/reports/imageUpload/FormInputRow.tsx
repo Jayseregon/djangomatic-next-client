@@ -25,8 +25,8 @@ const FormInputRow: React.FC<FormInputRowProps> = ({
   <div
     className={cn(
       isFrontcover
-        ? "grid grid-cols-[1fr_auto] items-center min-w-[50vw] px-20 gap-4"
-        : `grid ${isDeficiency ? "grid-cols-[1fr_1fr_1fr_1fr_auto]" : "grid-cols-[1fr_1fr_auto]"} min-w-full px-20 items-center gap-4`,
+        ? "grid grid-cols-[1fr_auto] items-center min-w-[50vw] gap-4"
+        : `grid ${isDeficiency ? "grid-cols-[1fr_1fr_1fr_1fr_auto]" : "grid-cols-[1fr_1fr_auto]"} min-w-full items-center gap-4`,
     )}
   >
     <DropArea

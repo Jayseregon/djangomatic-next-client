@@ -9,7 +9,7 @@ export default function QuickbaseInputs({
   return (
     <>
       {/* Client Data */}
-      <div className="grid grid-cols-3 mx-20 gap-8">
+      <div className="grid grid-cols-3 gap-8">
         <FormInput
           label="Job"
           name="jde_job"
@@ -34,7 +34,7 @@ export default function QuickbaseInputs({
       </div>
 
       {/* JDE Job, Job Description, Design Standard */}
-      <div className="grid grid-cols-3 mx-20 gap-8">
+      <div className="grid grid-cols-3 gap-8">
         <FormInput
           label="Job Revision"
           name="job_revision"
@@ -59,7 +59,7 @@ export default function QuickbaseInputs({
       </div>
 
       {/* Site Data */}
-      <div className="grid grid-cols-3 mx-20 gap-8">
+      <div className="grid grid-cols-3 gap-8">
         <FormInput
           label="Site Name"
           name="site_name"
@@ -84,7 +84,7 @@ export default function QuickbaseInputs({
       </div>
 
       {/* Tower Data */}
-      <div className="grid grid-cols-3 mx-20 gap-8">
+      <div className="grid grid-cols-3 gap-8">
         <FormInput
           label="Tower ID"
           name="tower_id"

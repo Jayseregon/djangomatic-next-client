@@ -14,7 +14,7 @@ const ImageRow: React.FC<ImageRowProps> = ({
   removeImageField,
 }) => (
   <div
-    className={`flex items-center justify-center mx-20 ${isFrontcover ?? "space-x-4"}`}
+    className={`flex items-center justify-center  ${isFrontcover ?? "space-x-4"}`}
   >
     {image.url ? (
       <>

@@ -93,7 +93,11 @@ const ReportDocument = ({
         <AppendixB tocSections={tocSections} willCaptureToc={willCaptureToc} />
 
         {/* New page Appendix C */}
-        <AppendixC tocSections={tocSections} willCaptureToc={willCaptureToc} />
+        <AppendixC
+          report={report}
+          tocSections={tocSections}
+          willCaptureToc={willCaptureToc}
+        />
 
         {/* Page Footer */}
         <PageFooter />
@@ -117,6 +121,14 @@ export async function GET(
       site_images: true,
       deficiency_images: true,
       antenna_inventory: true,
+      checklistForm4: true,
+      checklistForm5: true,
+      checklistForm6: true,
+      checklistForm7: true,
+      checklistForm8: true,
+      checklistForm9: true,
+      checklistForm10: true,
+      checklistForm11: true,
     },
   });
 
@@ -124,11 +136,30 @@ export async function GET(
     return new Response("Report not found", { status: 404 });
   }
 
+  // Transform the checklist forms to ensure isChecked is boolean | undefined >> prisma boolean? type defaults to null
+  const transformChecklistForm = (form: any[]) =>
+    form.map((item) => ({
+      ...item,
+      isChecked: item.isChecked === null ? undefined : item.isChecked,
+    }));
+
+  const transformedReport = {
+    ...report,
+    checklistForm4: transformChecklistForm(report.checklistForm4),
+    checklistForm5: transformChecklistForm(report.checklistForm5),
+    checklistForm6: transformChecklistForm(report.checklistForm6),
+    checklistForm7: transformChecklistForm(report.checklistForm7),
+    checklistForm8: transformChecklistForm(report.checklistForm8),
+    checklistForm9: transformChecklistForm(report.checklistForm9),
+    checklistForm10: transformChecklistForm(report.checklistForm10),
+    checklistForm11: transformChecklistForm(report.checklistForm11),
+  };
+
   const tocSections: TOCSections[] = [];
 
   await renderToStream(
     <ReportDocument
-      report={report}
+      report={transformedReport}
       tocSections={tocSections}
       willCaptureToc={true}
     />,
@@ -136,7 +167,7 @@ export async function GET(
 
   const stream = await renderToStream(
     <ReportDocument
-      report={report}
+      report={transformedReport}
       tocSections={tocSections}
       willCaptureToc={false}
     />,

@@ -1,0 +1,14 @@
+[
+  {
+    "code": "8.00",
+    "item": "RF equipment properly installed and labelled as per WO"
+  },
+  {
+    "code": "8.01",
+    "item": "Power cables properly installed, terminated and labelled"
+  },
+  {
+    "code": "8.02",
+    "item": "RF terminations are torqued as per specification (non-remote RU solution)"
+  }
+]

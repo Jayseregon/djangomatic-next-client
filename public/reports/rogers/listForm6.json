@@ -1,0 +1,58 @@
+[
+  {
+    "code": "6.00",
+    "item": "Commercial Power service complete"
+  },
+  {
+    "code": "6.01",
+    "item": "AC Panel labelled and verified as per IWO"
+  },
+  {
+    "code": "6.02",
+    "item": "Generator hook-up and transfer switch installed"
+  },
+  {
+    "code": "6.03",
+    "item": "Tower lighting controller wired and manual left on site"
+  },
+  {
+    "code": "6.04",
+    "item": "Interior Master Ground Bar installed and extended to external ground ring"
+  },
+  {
+    "code": "6.05",
+    "item": "AC ground installed and separate from other grounds"
+  },
+  {
+    "code": "6.06",
+    "item": "Transmission lines cables grounded as per Rogers Network Standards"
+  },
+  {
+    "code": "6.07",
+    "item": "Composite cables are grounded as per Rogers Network Standards"
+  },
+  {
+    "code": "6.08",
+    "item": "NO-OX applied on all ground / terminations. No loose connections"
+  },
+  {
+    "code": "6.09",
+    "item": "Spare fibres managed and label appropriately"
+  },
+  {
+    "code": "6.10",
+    "item": "AC Meter identified with Rogers label when not on Rogers owned shelter or cabinet."
+  },
+  {
+    "code": "6.11",
+    "item": "For remote AC Meter installations, location of meter identified in shelter."
+  },
+  {
+    "code": "6.12",
+    "item": "Urban Site grounding completed as per drawing"
+  },
+  {
+    "code": "6.13",
+    "item": "Transmission Line grounding completed as per drawing"
+  }
+]

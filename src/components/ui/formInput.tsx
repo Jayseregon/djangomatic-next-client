@@ -106,7 +106,7 @@ export const DisplayInputWithTooltip = ({
 
 export const FormSectionTitle = ({ title }: { title: string }) => {
   return (
-    <div className="mx-20 pt-8 pb-3">
+    <div className=" pt-8 pb-3">
       <p className="border-4 rounded-xl border-emerald-700 dark:border-emerald-400 border-double text-emerald-700 dark:text-emerald-400 uppercase font-semibold text-xl py-1">
         {title}
       </p>

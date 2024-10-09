@@ -1,0 +1,26 @@
+[
+  {
+    "code": "9.00",
+    "item": "Microwave equipment, fuse panel and DC converters, properly installed and labelled as per the IWO"
+  },
+  {
+    "code": "9.01",
+    "item": "Power, Rack Ground, Alarm, IF cables labelled end-to-end with flag tags properly connected"
+  },
+  {
+    "code": "9.02",
+    "item": "MW Hop configured with desired RSL and the MMU-H is labelled with RSL values"
+  },
+  {
+    "code": "9.03",
+    "item": "MW bulkhead labelled"
+  },
+  {
+    "code": "9.04",
+    "item": "Back of the MW Chassis labelled end-to-end hop identification. Only applies to standard shelter installation with rear frame access (not for WICs)"
+  },
+  {
+    "code": "9.05",
+    "item": "MW test results are left on site USB"
+  }
+]

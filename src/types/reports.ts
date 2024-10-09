@@ -19,6 +19,21 @@ export type TowerReport = {
   client_name: string;
   client_company: string;
   antenna_inventory: AntennaTransmissionLine[];
+  checklistForm4: ChecklistRow[];
+  checklistForm5: ChecklistRow[];
+  checklistForm6: ChecklistRow[];
+  checklistForm7: ChecklistRow[];
+  checklistForm8: ChecklistRow[];
+  checklistForm9: ChecklistRow[];
+  checklistForm10: ChecklistRow[];
+  checklistForm11: ChecklistRow[];
+};
+
+export type ChecklistRow = {
+  id: string;
+  code: string;
+  isChecked?: boolean;
+  comments: string;
 };
 
 export type TowerReportImage = {

@@ -1,0 +1,42 @@
+[
+  {
+    "code": "11.00",
+    "item": "Relay racks properly anchored to overhead / floor, grounded, and labelled top and bottom"
+  },
+  {
+    "code": "11.01",
+    "item": "Cable management and standoffs properly installed"
+  },
+  {
+    "code": "11.02",
+    "item": "As-Builds for all IWOs left on site USB"
+  },
+  {
+    "code": "11.03",
+    "item": "TLAN installed and labelled"
+  },
+  {
+    "code": "11.04",
+    "item": "Cisco installed and labelled"
+  },
+  {
+    "code": "11.05",
+    "item": "DSX installed and labelled"
+  },
+  {
+    "code": "11.06",
+    "item": "Ethernet Patch Panel installed and labelled"
+  },
+  {
+    "code": "11.07",
+    "item": "Fibre Patch Panel installed and labelled"
+  },
+  {
+    "code": "11.08",
+    "item": "BIX installed and labelled"
+  },
+  {
+    "code": "11.09",
+    "item": "Door Intrusion contacts installed"
+  }
+]

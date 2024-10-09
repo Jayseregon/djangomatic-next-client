@@ -44,26 +44,34 @@ model User {
 }
 
 model TowerReport {
-  id                String             @id @default(cuid())
-  createdAt         DateTime           @default(now())
-  updatedAt         DateTime           @updatedAt
-  front_image       TowerReportImage[] @relation("FrontImage")
-  site_images       TowerReportImage[] @relation("SiteImages")
-  deficiency_images TowerReportImage[] @relation("DeficiencyImages")
-  jde_work_order            String
-  jde_job                   String
-  site_name                 String
-  site_code                 String
-  site_region               String
-  tower_id                  String
-  tower_name                String
-  tower_site_name           String
-  job_description           String
-  job_revision              String
-  design_standard           String
-  client_name               String
-  client_company            String
-  antenna_inventory         AntennaTransmissionLine[] @relation("AntennaTransmissionLine")
+  id                String                    @id @default(cuid())
+  createdAt         DateTime                  @default(now())
+  updatedAt         DateTime                  @updatedAt
+  front_image       TowerReportImage[]        @relation("FrontImage")
+  site_images       TowerReportImage[]        @relation("SiteImages")
+  deficiency_images TowerReportImage[]        @relation("DeficiencyImages")
+  jde_work_order    String
+  jde_job           String
+  site_name         String
+  site_code         String
+  site_region       String
+  tower_id          String
+  tower_name        String
+  tower_site_name   String
+  job_description   String
+  job_revision      String
+  design_standard   String
+  client_name       String
+  client_company    String
+  antenna_inventory AntennaTransmissionLine[] @relation("AntennaTransmissionLine")
+  checklistForm4    ChecklistRow[]            @relation("ChecklistForm4Rows")
+  checklistForm5    ChecklistRow[]            @relation("ChecklistForm5Rows")
+  checklistForm6    ChecklistRow[]            @relation("ChecklistForm6Rows")
+  checklistForm7    ChecklistRow[]            @relation("ChecklistForm7Rows")
+  checklistForm8    ChecklistRow[]            @relation("ChecklistForm8Rows")
+  checklistForm9    ChecklistRow[]            @relation("ChecklistForm9Rows")
+  checklistForm10   ChecklistRow[]            @relation("ChecklistForm10Rows")
+  checklistForm11   ChecklistRow[]            @relation("ChecklistForm11Rows")
 }
 
 model TowerReportImage {
@@ -93,4 +101,27 @@ model AntennaTransmissionLine {
   carrier       String
   projectId     String
   reportProject TowerReport @relation(fields: [projectId], references: [id], name: "AntennaTransmissionLine", map: "AntennaTransmissionLine_projectId_fkey")
+}
+
+model ChecklistRow {
+  id        String       @id @default(cuid())
+  code      String
+  isChecked Boolean?
+  comments  String?
+  form4Id   String?
+  form5Id   String?
+  form6Id   String?
+  form7Id   String?
+  form8Id   String?
+  form9Id   String?
+  form10Id  String?
+  form11Id  String?
+  form4     TowerReport? @relation(fields: [form4Id], references: [id], name: "ChecklistForm4Rows", map: "ChecklistForm4Rows_form4Id_fkey")
+  form5     TowerReport? @relation(fields: [form5Id], references: [id], name: "ChecklistForm5Rows", map: "ChecklistForm5Rows_form5Id_fkey")
+  form6     TowerReport? @relation(fields: [form6Id], references: [id], name: "ChecklistForm6Rows", map: "ChecklistForm6Rows_form6Id_fkey")
+  form7     TowerReport? @relation(fields: [form7Id], references: [id], name: "ChecklistForm7Rows", map: "ChecklistForm7Rows_form7Id_fkey")
+  form8     TowerReport? @relation(fields: [form8Id], references: [id], name: "ChecklistForm8Rows", map: "ChecklistForm8Rows_form8Id_fkey")
+  form9     TowerReport? @relation(fields: [form9Id], references: [id], name: "ChecklistForm9Rows", map: "ChecklistForm9Rows_form9Id_fkey")
+  form10    TowerReport? @relation(fields: [form10Id], references: [id], name: "ChecklistForm10Rows", map: "ChecklistForm10Rows_form10Id_fkey")
+  form11    TowerReport? @relation(fields: [form11Id], references: [id], name: "ChecklistForm11Rows", map: "ChecklistForm11Rows_form11Id_fkey")
 }

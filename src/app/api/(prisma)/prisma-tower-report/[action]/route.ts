@@ -14,6 +14,13 @@ const createNestedData = (data: any) => {
   const deficiency_images = data.deficiency_images || [];
   const antenna_inventory = data.antenna_inventory || [];
   const checklistForm4 = data.checklistForm4 || [];
+  const checklistForm5 = data.checklistForm5 || [];
+  const checklistForm6 = data.checklistForm6 || [];
+  const checklistForm7 = data.checklistForm7 || [];
+  const checklistForm8 = data.checklistForm8 || [];
+  const checklistForm9 = data.checklistForm9 || [];
+  const checklistForm10 = data.checklistForm10 || [];
+  const checklistForm11 = data.checklistForm11 || [];
 
   return {
     ...data,
@@ -60,6 +67,55 @@ const createNestedData = (data: any) => {
     },
     checklistForm4: {
       create: checklistForm4.map((checklist: ChecklistRow) => ({
+        code: checklist.code,
+        isChecked: checklist.isChecked,
+        comments: checklist.comments,
+      })),
+    },
+    checklistForm5: {
+      create: checklistForm5.map((checklist: ChecklistRow) => ({
+        code: checklist.code,
+        isChecked: checklist.isChecked,
+        comments: checklist.comments,
+      })),
+    },
+    checklistForm6: {
+      create: checklistForm6.map((checklist: ChecklistRow) => ({
+        code: checklist.code,
+        isChecked: checklist.isChecked,
+        comments: checklist.comments,
+      })),
+    },
+    checklistForm7: {
+      create: checklistForm7.map((checklist: ChecklistRow) => ({
+        code: checklist.code,
+        isChecked: checklist.isChecked,
+        comments: checklist.comments,
+      })),
+    },
+    checklistForm8: {
+      create: checklistForm8.map((checklist: ChecklistRow) => ({
+        code: checklist.code,
+        isChecked: checklist.isChecked,
+        comments: checklist.comments,
+      })),
+    },
+    checklistForm9: {
+      create: checklistForm9.map((checklist: ChecklistRow) => ({
+        code: checklist.code,
+        isChecked: checklist.isChecked,
+        comments: checklist.comments,
+      })),
+    },
+    checklistForm10: {
+      create: checklistForm10.map((checklist: ChecklistRow) => ({
+        code: checklist.code,
+        isChecked: checklist.isChecked,
+        comments: checklist.comments,
+      })),
+    },
+    checklistForm11: {
+      create: checklistForm11.map((checklist: ChecklistRow) => ({
         code: checklist.code,
         isChecked: checklist.isChecked,
         comments: checklist.comments,
@@ -124,6 +180,34 @@ export async function PUT(request: Request) {
         checklistForm4: {
           deleteMany: {},
           create: nestedData.checklistForm4.create,
+        },
+        checklistForm5: {
+          deleteMany: {},
+          create: nestedData.checklistForm5.create,
+        },
+        checklistForm6: {
+          deleteMany: {},
+          create: nestedData.checklistForm6.create,
+        },
+        checklistForm7: {
+          deleteMany: {},
+          create: nestedData.checklistForm7.create,
+        },
+        checklistForm8: {
+          deleteMany: {},
+          create: nestedData.checklistForm8.create,
+        },
+        checklistForm9: {
+          deleteMany: {},
+          create: nestedData.checklistForm9.create,
+        },
+        checklistForm10: {
+          deleteMany: {},
+          create: nestedData.checklistForm10.create,
+        },
+        checklistForm11: {
+          deleteMany: {},
+          create: nestedData.checklistForm11.create,
         },
       },
     });

@@ -63,7 +63,7 @@ const AppendixC = ({
           type="Civil"
         />
       </View>
-      {/* New page */}
+      {/* 2 in 1 page */}
       <View break>
         <AppendixCTable
           formNb="6"
@@ -73,8 +73,7 @@ const AppendixC = ({
           type="Civil"
         />
       </View>
-      {/* New page */}
-      <View break>
+      <View style={{ paddingTop: 20 }}>
         <AppendixCTable
           formNb="7"
           items={report.checklistForm7}
@@ -93,7 +92,7 @@ const AppendixC = ({
           type="Technical Install & Commission"
         />
       </View>
-      <View>
+      <View style={{ paddingTop: 20 }}>
         <AppendixCTable
           formNb="9"
           items={report.checklistForm9}
@@ -112,7 +111,7 @@ const AppendixC = ({
           type="Technical Install & Commission"
         />
       </View>
-      <View>
+      <View style={{ paddingTop: 20 }}>
         <AppendixCTable
           formNb="11"
           items={report.checklistForm11}

@@ -4,6 +4,13 @@ import { CircleOff, Download, FileOutput, Save } from "lucide-react";
 
 import DynamicForm from "@/components/reports/checklist/DynamicForm";
 import listForm4 from "public/reports/rogers/listform4.json";
+import listForm5 from "public/reports/rogers/listform5.json";
+import listForm6 from "public/reports/rogers/listform6.json";
+import listForm7 from "public/reports/rogers/listform7.json";
+import listForm8 from "public/reports/rogers/listform8.json";
+import listForm9 from "public/reports/rogers/listform9.json";
+import listForm10 from "public/reports/rogers/listform10.json";
+import listForm11 from "public/reports/rogers/listform11.json";
 import siteImagesLabelOptionsData from "public/reports/rogers/siteImagesLabelOptions.json";
 import {
   TowerReport,
@@ -55,6 +62,13 @@ export const TowerReportForm = ({
     AntennaTransmissionLine[]
   >([]);
   const [checklistForm4, setChecklistForm4] = useState<ChecklistRow[]>([]);
+  const [checklistForm5, setChecklistForm5] = useState<ChecklistRow[]>([]);
+  const [checklistForm6, setChecklistForm6] = useState<ChecklistRow[]>([]);
+  const [checklistForm7, setChecklistForm7] = useState<ChecklistRow[]>([]);
+  const [checklistForm8, setChecklistForm8] = useState<ChecklistRow[]>([]);
+  const [checklistForm9, setChecklistForm9] = useState<ChecklistRow[]>([]);
+  const [checklistForm10, setChecklistForm10] = useState<ChecklistRow[]>([]);
+  const [checklistForm11, setChecklistForm11] = useState<ChecklistRow[]>([]);
 
   const subdir = `${formData.jde_job}-${formData.jde_work_order}` || "";
   const siteImagesLabelOptions: string[] = siteImagesLabelOptionsData;
@@ -64,6 +78,25 @@ export const TowerReportForm = ({
     id: "",
     updatedAt: new Date(),
   });
+
+  const initializeChecklistForm = (
+    reportForm: ChecklistRow[] | undefined,
+    listForm: { code: string }[],
+    setChecklistForm: React.Dispatch<React.SetStateAction<ChecklistRow[]>>,
+  ) => {
+    if (reportForm && reportForm.length > 0) {
+      setChecklistForm(reportForm);
+    } else {
+      const initialForm = listForm.map((listItem) => ({
+        id: "",
+        code: listItem.code,
+        isChecked: undefined,
+        comments: "",
+      }));
+
+      setChecklistForm(initialForm);
+    }
+  };
 
   useEffect(() => {
     if (report) {
@@ -86,19 +119,49 @@ export const TowerReportForm = ({
       setFrontImages(report.front_image || []);
       setDeficiencyImages(report.deficiency_images || []);
       setAntennaInventory(report.antenna_inventory || []);
-      if (report.checklistForm4 && report.checklistForm4.length > 0) {
-        setChecklistForm4(report.checklistForm4);
-      } else {
-        const initialForm = listForm4.map((listItem) => ({
-          id: "",
-          code: listItem.code,
-          isChecked: undefined,
-          comments: "",
-        }));
 
-        setChecklistForm4(initialForm);
-      }
+      initializeChecklistForm(
+        report.checklistForm4,
+        listForm4,
+        setChecklistForm4,
+      );
+      initializeChecklistForm(
+        report.checklistForm5,
+        listForm5,
+        setChecklistForm5,
+      );
+      initializeChecklistForm(
+        report.checklistForm6,
+        listForm6,
+        setChecklistForm6,
+      );
+      initializeChecklistForm(
+        report.checklistForm7,
+        listForm7,
+        setChecklistForm7,
+      );
+      initializeChecklistForm(
+        report.checklistForm8,
+        listForm8,
+        setChecklistForm8,
+      );
+      initializeChecklistForm(
+        report.checklistForm9,
+        listForm9,
+        setChecklistForm9,
+      );
+      initializeChecklistForm(
+        report.checklistForm10,
+        listForm10,
+        setChecklistForm10,
+      );
+      initializeChecklistForm(
+        report.checklistForm11,
+        listForm11,
+        setChecklistForm11,
+      );
     }
+
     const notification = localStorage.getItem("reportNotification");
 
     if (notification) {
@@ -119,6 +182,13 @@ export const TowerReportForm = ({
       deficiency_images: deficiencyImages,
       antenna_inventory: antennaInventory,
       checklistForm4: checklistForm4,
+      checklistForm5: checklistForm5,
+      checklistForm6: checklistForm6,
+      checklistForm7: checklistForm7,
+      checklistForm8: checklistForm8,
+      checklistForm9: checklistForm9,
+      checklistForm10: checklistForm10,
+      checklistForm11: checklistForm11,
     });
   };
 
@@ -130,6 +200,13 @@ export const TowerReportForm = ({
       deficiency_images: deficiencyImages,
       antenna_inventory: antennaInventory,
       checklistForm4: checklistForm4,
+      checklistForm5: checklistForm5,
+      checklistForm6: checklistForm6,
+      checklistForm7: checklistForm7,
+      checklistForm8: checklistForm8,
+      checklistForm9: checklistForm9,
+      checklistForm10: checklistForm10,
+      checklistForm11: checklistForm11,
     });
 
     if (result.success) {
@@ -340,11 +417,106 @@ export const TowerReportForm = ({
         )}
       </FormSectionAccordion>
 
-      <FormSectionAccordion menuKey="form4" title="PCI Itemized List - Form 4">
+      {/* Form 4 */}
+      <FormSectionAccordion
+        menuKey="form4"
+        title="FORM 4: Civil - Antenna Structure and Site Works"
+      >
         <DynamicForm
           checkListForm={checklistForm4}
           list={listForm4}
           setChecklistForm={setChecklistForm4}
+          onFormChange={handleChecklistFormChange}
+        />
+      </FormSectionAccordion>
+
+      {/* Form 5 */}
+      <FormSectionAccordion
+        menuKey="form5"
+        title="FORM 5: Civil - Electrical/Mechanical Alarm & Fire Protection Systems"
+      >
+        <DynamicForm
+          checkListForm={checklistForm5}
+          list={listForm5}
+          setChecklistForm={setChecklistForm5}
+          onFormChange={handleChecklistFormChange}
+        />
+      </FormSectionAccordion>
+
+      {/* Form 6 */}
+      <FormSectionAccordion
+        menuKey="form6"
+        title="FORM 6: Civil - AC Power and Grounding"
+      >
+        <DynamicForm
+          checkListForm={checklistForm6}
+          list={listForm6}
+          setChecklistForm={setChecklistForm6}
+          onFormChange={handleChecklistFormChange}
+        />
+      </FormSectionAccordion>
+
+      {/* Form 7 */}
+      <FormSectionAccordion
+        menuKey="form7"
+        title="FORM 7: Civil - Cable Tray and Overhead Support"
+      >
+        <DynamicForm
+          checkListForm={checklistForm7}
+          list={listForm7}
+          setChecklistForm={setChecklistForm7}
+          onFormChange={handleChecklistFormChange}
+        />
+      </FormSectionAccordion>
+
+      {/* Form 8 */}
+      <FormSectionAccordion
+        menuKey="form8"
+        title="FORM 8: Technical Install & Commission - Cellular Base Station"
+      >
+        <DynamicForm
+          checkListForm={checklistForm8}
+          list={listForm8}
+          setChecklistForm={setChecklistForm8}
+          onFormChange={handleChecklistFormChange}
+        />
+      </FormSectionAccordion>
+
+      {/* Form 9 */}
+      <FormSectionAccordion
+        menuKey="form9"
+        title="FORM 9: Technical Install & Commission - Microwave Radio"
+      >
+        <DynamicForm
+          checkListForm={checklistForm9}
+          list={listForm9}
+          setChecklistForm={setChecklistForm9}
+          onFormChange={handleChecklistFormChange}
+        />
+      </FormSectionAccordion>
+
+      {/* Form 10 */}
+      <FormSectionAccordion
+        menuKey="form10"
+        title="FORM 10: Technical Install & Commission - AC/DC Power"
+      >
+        <DynamicForm
+          checkListForm={checklistForm10}
+          list={listForm10}
+          setChecklistForm={setChecklistForm10}
+          onFormChange={handleChecklistFormChange}
+        />
+      </FormSectionAccordion>
+
+      {/* Form 11 */}
+      <FormSectionAccordion
+        menuKey="form11"
+        title="FORM 11: Technical Install & Commission - Miscellaneous Equipment"
+      >
+        <DynamicForm
+          checkListForm={checklistForm11}
+          list={listForm11}
+          setChecklistForm={setChecklistForm11}
           onFormChange={handleChecklistFormChange}
         />
       </FormSectionAccordion>

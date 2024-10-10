@@ -107,6 +107,7 @@ export default function ReportFormPage() {
     <div className="w-full">
       <h1 className={title()}>New Report</h1>
       <TowerReportForm
+        isNew
         report={report}
         onCancel={handleCancel}
         onLocalSave={handleLocalSave}

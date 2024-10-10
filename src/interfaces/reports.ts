@@ -14,6 +14,7 @@ export interface TowerReportFormProps {
     response: { message: string; id: string; updatedAt: Date };
   }>;
   onCancel: (newlyUploadedImages: TowerReportImage[], subdir: string) => void;
+  isNew?: boolean;
 }
 
 export interface QuickbaseInputsProps {

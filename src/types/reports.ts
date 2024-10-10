@@ -18,6 +18,7 @@ export type TowerReport = {
   design_standard: string;
   client_name: string;
   client_company: string;
+  assigned_peng: string;
   redline_pages: number;
   antenna_inventory: AntennaTransmissionLine[];
   checklistForm4: ChecklistRow[];

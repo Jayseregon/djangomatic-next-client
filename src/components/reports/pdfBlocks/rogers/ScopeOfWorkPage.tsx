@@ -46,6 +46,14 @@ const ScopeOfWorkPage = ({
       >
         Report approved by:
       </Text>
+      <Text
+        style={[
+          StylesPDF.PageContentSection,
+          { fontFamily: "Helvetica-Bold", paddingTop: 150 },
+        ]}
+      >
+        {report.assigned_peng}
+      </Text>
     </View>
   );
 };

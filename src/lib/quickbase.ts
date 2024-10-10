@@ -113,4 +113,53 @@ class QueryBuilderQB {
   }
 }
 
-export { QuickBaseAPI, GetRecordFromQueryQB, QueryOperatorQB, QueryBuilderQB };
+class QBHelper {
+  // query helper function
+  static async makeRequest(
+    queryBody: Record<string, any>,
+    errorName: string,
+    apiToken: string,
+  ): Promise<{ data: () => any }> {
+    const qbRequest = new GetRecordFromQueryQB(apiToken, queryBody);
+    const qbRequestRes = await qbRequest.execute();
+
+    if (qbRequestRes.status !== 200) {
+      return {
+        data: async () => {
+          throw new Error(`Error fetching ${errorName} data from QuickBase`);
+        },
+      };
+    }
+
+    return qbRequestRes;
+  }
+
+  // data cleanup helper function
+  static async dataCleanup(qbRecordRes: { data: () => any }) {
+    try {
+      const rawData = await qbRecordRes.data();
+      const refinedData = rawData.data.reduce(
+        (acc: Record<string, any>, record: Record<string, any>) => {
+          Object.keys(record).forEach((key) => {
+            acc[key] = record[key].value;
+          });
+
+          return acc;
+        },
+        {},
+      );
+
+      return refinedData;
+    } catch (error) {
+      throw new Error(`Data cleanup failed: ${(error as Error).message}`);
+    }
+  }
+}
+
+export {
+  QuickBaseAPI,
+  GetRecordFromQueryQB,
+  QueryOperatorQB,
+  QueryBuilderQB,
+  QBHelper,
+};

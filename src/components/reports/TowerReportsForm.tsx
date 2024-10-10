@@ -34,6 +34,7 @@ export const TowerReportForm = ({
   onSave,
   onLocalSave,
   onCancel,
+  isNew = false,
 }: TowerReportFormProps) => {
   const [formData, setFormData] = useState<Partial<TowerReport>>({
     jde_work_order: "",
@@ -50,6 +51,7 @@ export const TowerReportForm = ({
     client_company: "",
     client_name: "",
     redline_pages: 0,
+    assigned_peng: "",
   });
   const [siteImages, setSiteImages] = useState<TowerReportImage[]>([]);
   const [frontImages, setFrontImages] = useState<TowerReportImage[]>([]);
@@ -116,6 +118,7 @@ export const TowerReportForm = ({
         client_company: report.client_company || "",
         client_name: report.client_name || "",
         redline_pages: report.redline_pages || 0,
+        assigned_peng: report.assigned_peng || "",
       });
       setSiteImages(report.site_images || []);
       setFrontImages(report.front_image || []);
@@ -253,6 +256,7 @@ export const TowerReportForm = ({
         design_standard: String(data["1135"]),
         client_company: String(data["1137"]),
         client_name: String(data["1117"]),
+        assigned_peng: String(data["1048"]),
       }));
     }
   };
@@ -542,15 +546,17 @@ export const TowerReportForm = ({
         >
           <Save />
         </Button>
-        <Button
-          isIconOnly
-          color="primary"
-          type="button"
-          variant="bordered"
-          onClick={handleGeneratePDF}
-        >
-          <Download />
-        </Button>
+        {!isNew && (
+          <Button
+            isIconOnly
+            color="primary"
+            type="button"
+            variant="bordered"
+            onClick={handleGeneratePDF}
+          >
+            <Download />
+          </Button>
+        )}
         <Button
           isIconOnly
           color="danger"

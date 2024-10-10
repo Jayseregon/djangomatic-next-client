@@ -81,26 +81,32 @@ const ReportDocument = ({
         )}
 
         {/* Page Footer */}
-        <PageFooter />
+        <PageFooter redlinePages={report.redline_pages} />
       </Page>
 
       {/* New page for Appendices */}
       <Page size="LETTER" style={StylesPDF.page}>
-        {/* New page Appendix A */}
+        {/* Isolate Appendix A for readline page count */}
         <AppendixA tocSections={tocSections} willCaptureToc={willCaptureToc} />
-
+        {/* Page Footer */}
+        <PageFooter redlinePages={report.redline_pages} />
+      </Page>
+      {/* New page for Appendices */}
+      <Page size="LETTER" style={StylesPDF.page}>
         {/* New page Appendix B */}
-        <AppendixB tocSections={tocSections} willCaptureToc={willCaptureToc} />
-
+        <AppendixB
+          redlinePages={report.redline_pages}
+          tocSections={tocSections}
+          willCaptureToc={willCaptureToc}
+        />
         {/* New page Appendix C */}
         <AppendixC
           report={report}
           tocSections={tocSections}
           willCaptureToc={willCaptureToc}
         />
-
         {/* Page Footer */}
-        <PageFooter />
+        <PageFooter jumpRedlines redlinePages={report.redline_pages} />
       </Page>
     </Document>
   );

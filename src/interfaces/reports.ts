@@ -40,6 +40,8 @@ export interface TOCSectionProps {
   children: React.ReactNode;
   tocSections: TOCSections[];
   willCaptureToc: boolean;
+  redlinePages?: number;
+  jumpRedlines?: boolean;
 }
 
 export interface DropAreaProps {

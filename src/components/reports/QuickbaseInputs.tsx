@@ -107,6 +107,25 @@ export default function QuickbaseInputs({
           onChange={handleChange}
         />
       </div>
+
+      {/* Misc */}
+      <div className="grid grid-cols-3 gap-8">
+        <FormInput
+          label="Redline Pages Count"
+          name="redline_pages"
+          placeholder="XX"
+          type="number"
+          value={formData.redline_pages}
+          onChange={handleChange}
+        />
+        {/* <FormInput
+          label="Standard Tower Name"
+          name="tower_name"
+          placeholder="LRTXXXX"
+          value={formData.tower_name}
+          onChange={handleChange}
+        /> */}
+      </div>
     </>
   );
 }

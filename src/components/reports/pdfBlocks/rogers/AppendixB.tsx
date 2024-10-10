@@ -16,15 +16,19 @@ import TOCSectionPDF from "./TOCSection";
 const AppendixB = ({
   tocSections,
   willCaptureToc,
+  redlinePages,
 }: {
   tocSections: TOCSections[];
   willCaptureToc: boolean;
+  redlinePages: number;
 }) => {
   return (
     <>
       <View style={StylesPDF.sectionTitleContainer}>
         <TOCSectionPDF
+          jumpRedlines
           id="appendix-b"
+          redlinePages={redlinePages}
           style={StylesPDF.pageTitle}
           tocSections={tocSections}
           willCaptureToc={willCaptureToc}
@@ -32,7 +36,9 @@ const AppendixB = ({
           Appendix B
         </TOCSectionPDF>
         <TOCSectionPDF
+          jumpRedlines
           id="field-inspection-checking-procedures"
+          redlinePages={redlinePages}
           style={StylesPDF.pageTitle}
           tocSections={tocSections}
           willCaptureToc={willCaptureToc}

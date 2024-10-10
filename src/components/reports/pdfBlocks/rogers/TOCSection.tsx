@@ -9,6 +9,8 @@ const TOCSectionPDF = ({
   children,
   tocSections,
   willCaptureToc,
+  redlinePages = 0,
+  jumpRedlines = false,
 }: TOCSectionProps) => {
   if (!willCaptureToc) {
     return (
@@ -37,6 +39,7 @@ const TOCSectionPDF = ({
           }
 
           // Add the new entry with the current page number
+          pageNumber = jumpRedlines ? pageNumber + redlinePages : pageNumber;
           tocSections.push({ title, pageNumber });
 
           return children;

@@ -27,7 +27,9 @@ const AppendixC = ({
     <>
       <View break style={StylesPDF.sectionTitleContainer}>
         <TOCSectionPDF
+          jumpRedlines
           id="appendix-c"
+          redlinePages={report.redline_pages}
           style={StylesPDF.pageTitle}
           tocSections={tocSections}
           willCaptureToc={willCaptureToc}
@@ -35,7 +37,9 @@ const AppendixC = ({
           Appendix C
         </TOCSectionPDF>
         <TOCSectionPDF
+          jumpRedlines
           id="post-construction-itemized-checklist"
+          redlinePages={report.redline_pages}
           style={StylesPDF.pageTitle}
           tocSections={tocSections}
           willCaptureToc={willCaptureToc}

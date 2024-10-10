@@ -3,7 +3,13 @@ import { Text, Image as PdfImg } from "@react-pdf/renderer";
 
 import { StylesPDF } from "@/styles/stylesPDF";
 
-const PageFooter = () => {
+const PageFooter = ({
+  redlinePages,
+  jumpRedlines = false,
+}: {
+  redlinePages: number;
+  jumpRedlines?: boolean;
+}) => {
   return (
     <>
       <Text
@@ -11,8 +17,10 @@ const PageFooter = () => {
         render={({ pageNumber, totalPages }) => (
           <>
             Page{" "}
-            <Text style={{ fontFamily: "Helvetica-Bold" }}>{pageNumber}</Text>{" "}
-            of {totalPages}
+            <Text style={{ fontFamily: "Helvetica-Bold" }}>
+              {jumpRedlines ? pageNumber + redlinePages : pageNumber}
+            </Text>{" "}
+            of {totalPages + redlinePages}
           </>
         )}
         style={StylesPDF.pageCount}

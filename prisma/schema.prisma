@@ -63,6 +63,7 @@ model TowerReport {
   design_standard   String
   client_name       String
   client_company    String
+  redline_pages     Int                       @default(0)
   antenna_inventory AntennaTransmissionLine[] @relation("AntennaTransmissionLine")
   checklistForm4    ChecklistRow[]            @relation("ChecklistForm4Rows")
   checklistForm5    ChecklistRow[]            @relation("ChecklistForm5Rows")

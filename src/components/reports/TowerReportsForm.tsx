@@ -49,6 +49,7 @@ export const TowerReportForm = ({
     design_standard: "",
     client_company: "",
     client_name: "",
+    redline_pages: 0,
   });
   const [siteImages, setSiteImages] = useState<TowerReportImage[]>([]);
   const [frontImages, setFrontImages] = useState<TowerReportImage[]>([]);
@@ -114,6 +115,7 @@ export const TowerReportForm = ({
         design_standard: report.design_standard || "",
         client_company: report.client_company || "",
         client_name: report.client_name || "",
+        redline_pages: report.redline_pages || 0,
       });
       setSiteImages(report.site_images || []);
       setFrontImages(report.front_image || []);
@@ -265,8 +267,14 @@ export const TowerReportForm = ({
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
     const { name, value } = e.target;
+    let parsedValue;
 
-    setFormData((prev) => ({ ...prev, [name]: value }));
+    if (name === "redline_pages" && !isNaN(parseInt(value))) {
+      parsedValue = parseInt(value);
+    } else {
+      parsedValue = value;
+    }
+    setFormData((prev) => ({ ...prev, [name]: parsedValue }));
   };
 
   const handleAntennaInventoryChange = (

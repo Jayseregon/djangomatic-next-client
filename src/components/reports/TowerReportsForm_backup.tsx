@@ -2,16 +2,9 @@ import React, { useState, useEffect } from "react";
 import { Button } from "@nextui-org/react";
 import { CircleOff, Download, FileOutput, Save } from "lucide-react";
 
-import DynamicForm from "@/components/reports/checklist/DynamicForm";
-import listForm4 from "public/reports/rogers/listForm4.json";
-import listForm5 from "public/reports/rogers/listForm5.json";
-import listForm6 from "public/reports/rogers/listForm6.json";
-import listForm7 from "public/reports/rogers/listForm7.json";
-import listForm8 from "public/reports/rogers/listForm8.json";
-import listForm9 from "public/reports/rogers/listForm9.json";
-import listForm10 from "public/reports/rogers/listForm10.json";
-import listForm11 from "public/reports/rogers/listForm11.json";
-import siteImagesLabelOptionsData from "public/reports/rogers/siteImagesLabelOptions.json";
+import DynamicForm, {
+  ListItem,
+} from "@/components/reports/checklist/DynamicForm";
 import {
   TowerReport,
   TowerReportImage,
@@ -23,6 +16,7 @@ import ToastNotification, {
   ToastResponse,
 } from "@/components/ui/ToastNotification";
 import { FormInput } from "@/components/ui/formInput";
+import { fetchListForm, fetchGenericJson } from "@/src/lib/jsonUtils";
 
 import FormSectionAccordion from "./FormSectionAccordion";
 import QuickbaseInputs from "./QuickbaseInputs";
@@ -72,9 +66,20 @@ export const TowerReportForm = ({
   const [checklistForm9, setChecklistForm9] = useState<ChecklistRow[]>([]);
   const [checklistForm10, setChecklistForm10] = useState<ChecklistRow[]>([]);
   const [checklistForm11, setChecklistForm11] = useState<ChecklistRow[]>([]);
-
+  const [listForm4, setListForm4] = useState<ListItem[]>([]);
+  const [listForm5, setListForm5] = useState<ListItem[]>([]);
+  const [listForm6, setListForm6] = useState<ListItem[]>([]);
+  const [listForm7, setListForm7] = useState<ListItem[]>([]);
+  const [listForm8, setListForm8] = useState<ListItem[]>([]);
+  const [listForm9, setListForm9] = useState<ListItem[]>([]);
+  const [listForm10, setListForm10] = useState<ListItem[]>([]);
+  const [listForm11, setListForm11] = useState<ListItem[]>([]);
   const subdir = `${formData.jde_job}-${formData.jde_work_order}` || "";
-  const siteImagesLabelOptions: string[] = siteImagesLabelOptionsData;
+
+  const [siteImagesLabelOptions, setSiteImagesLabelOptions] = useState<
+    string[]
+  >([]);
+
   const [toastOpen, setToastOpen] = useState(false);
   const [toastMessage, setToastMessage] = useState<ToastResponse>({
     message: "",
@@ -84,7 +89,7 @@ export const TowerReportForm = ({
 
   const initializeChecklistForm = (
     reportForm: ChecklistRow[] | undefined,
-    listForm: { code: string }[],
+    listForm: ListItem[],
     setChecklistForm: React.Dispatch<React.SetStateAction<ChecklistRow[]>>,
   ) => {
     if (reportForm && reportForm.length > 0) {
@@ -100,6 +105,68 @@ export const TowerReportForm = ({
       setChecklistForm(initialForm);
     }
   };
+
+  useEffect(() => {
+    const fetchSiteImagesLabelOptions = async () => {
+      await fetchGenericJson(
+        "public/reports/rogers/siteImagesLabelOptions.json",
+        setSiteImagesLabelOptions,
+      );
+    };
+
+    fetchSiteImagesLabelOptions();
+  }, []);
+
+  useEffect(() => {
+    const fetchAndInitializeForms = async () => {
+      const listFormIds = ["4", "5", "6", "7", "8", "9", "10", "11"];
+      const setListFormFunctions = [
+        setListForm4,
+        setListForm5,
+        setListForm6,
+        setListForm7,
+        setListForm8,
+        setListForm9,
+        setListForm10,
+        setListForm11,
+      ];
+      const setChecklistFormFunctions = [
+        setChecklistForm4,
+        setChecklistForm5,
+        setChecklistForm6,
+        setChecklistForm7,
+        setChecklistForm8,
+        setChecklistForm9,
+        setChecklistForm10,
+        setChecklistForm11,
+      ];
+      const reportForms = [
+        report?.checklistForm4,
+        report?.checklistForm5,
+        report?.checklistForm6,
+        report?.checklistForm7,
+        report?.checklistForm8,
+        report?.checklistForm9,
+        report?.checklistForm10,
+        report?.checklistForm11,
+      ];
+
+      for (let i = 0; i < listFormIds.length; i++) {
+        const listFormId = listFormIds[i];
+        const setListForm = setListFormFunctions[i];
+        const setChecklistForm = setChecklistFormFunctions[i];
+        const reportForm = reportForms[i];
+
+        const listForm = await fetchListForm(listFormId, setListForm);
+
+        initializeChecklistForm(reportForm, listForm, setChecklistForm);
+      }
+    };
+
+    if (report) {
+      fetchAndInitializeForms();
+    }
+  }, [report]);
 
   useEffect(() => {
     if (report) {
@@ -124,47 +191,6 @@ export const TowerReportForm = ({
       setFrontImages(report.front_image || []);
       setDeficiencyImages(report.deficiency_images || []);
       setAntennaInventory(report.antenna_inventory || []);
-
-      initializeChecklistForm(
-        report.checklistForm4,
-        listForm4,
-        setChecklistForm4,
-      );
-      initializeChecklistForm(
-        report.checklistForm5,
-        listForm5,
-        setChecklistForm5,
-      );
-      initializeChecklistForm(
-        report.checklistForm6,
-        listForm6,
-        setChecklistForm6,
-      );
-      initializeChecklistForm(
-        report.checklistForm7,
-        listForm7,
-        setChecklistForm7,
-      );
-      initializeChecklistForm(
-        report.checklistForm8,
-        listForm8,
-        setChecklistForm8,
-      );
-      initializeChecklistForm(
-        report.checklistForm9,
-        listForm9,
-        setChecklistForm9,
-      );
-      initializeChecklistForm(
-        report.checklistForm10,
-        listForm10,
-        setChecklistForm10,
-      );
-      initializeChecklistForm(
-        report.checklistForm11,
-        listForm11,
-        setChecklistForm11,
-      );
     }
 
     const notification = localStorage.getItem("reportNotification");

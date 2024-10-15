@@ -96,16 +96,12 @@ export const getMiddlewareCsrfToken = async (): Promise<string> => {
 };
 
 export const makeServerLoginRequest = async () => {
-  const email = process.env.NEXT_PUBLIC_USER_EMAIL as string;
-  const password = process.env.NEXT_PUBLIC_USER_PASSWORD as string;
-
   try {
     const response = await fetch("/api/django-auth", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ email, password }),
     });
 
     if (!response.ok) {

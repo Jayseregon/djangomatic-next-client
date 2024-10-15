@@ -1,13 +1,13 @@
 import { View } from "@react-pdf/renderer";
 
-import listForm4 from "public/reports/rogers/listform4.json";
-import listForm5 from "public/reports/rogers/listform5.json";
-import listForm6 from "public/reports/rogers/listform6.json";
-import listForm7 from "public/reports/rogers/listform7.json";
-import listForm8 from "public/reports/rogers/listform8.json";
-import listForm9 from "public/reports/rogers/listform9.json";
-import listForm10 from "public/reports/rogers/listform10.json";
-import listForm11 from "public/reports/rogers/listform11.json";
+import listForm4 from "public/reports/rogers/listForm4.json";
+import listForm5 from "public/reports/rogers/listForm5.json";
+import listForm6 from "public/reports/rogers/listForm6.json";
+import listForm7 from "public/reports/rogers/listForm7.json";
+import listForm8 from "public/reports/rogers/listForm8.json";
+import listForm9 from "public/reports/rogers/listForm9.json";
+import listForm10 from "public/reports/rogers/listForm10.json";
+import listForm11 from "public/reports/rogers/listForm11.json";
 import { StylesPDF } from "@/styles/stylesPDF";
 import { TOCSections, TowerReport } from "@/src/types/reports";
 

@@ -4,8 +4,7 @@
 import { UnAuthenticated } from "@/components/auth/unAuthenticated";
 import { auth } from "@/auth";
 import { WithPermissionOverlay } from "@/src/components/auth/withPermissionOverlay";
-
-import PathInDev from "@/src/components/path-in-dev";
+import PathInDev from "@/src/components/_dev/path-in-dev";
 
 export default async function SaasPage() {
   const session = await auth();

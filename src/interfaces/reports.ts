@@ -117,3 +117,8 @@ export interface ImageRowProps {
   isFrontcover?: boolean;
   removeImageField: (index: number) => void;
 }
+
+export interface JsonListForm {
+  code: string;
+  item: string;
+}

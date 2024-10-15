@@ -2,35 +2,23 @@ import { NextResponse } from "next/server";
 import { getIronSession } from "iron-session";
 import { cookies } from "next/headers";
 
-// import axios from "axios";
 import { axiosInstance } from "@/src/lib/dbRequests";
 import { ironSessionOptions, IronSessionData } from "@/src/lib/session";
 
-export async function POST(request: Request) {
-  const { email, password } = await request.json();
+export async function POST() {
+  const email = process.env.USER_EMAIL as string;
+  const password = process.env.USER_PASSWORD as string;
+
   const ironSession = await getIronSession<IronSessionData>(
     cookies(),
     ironSessionOptions,
   );
 
-  // console.error("RECEIVED EMAIL:", email);
-  // console.error("RECEIVED PWD:", password);
-
   try {
-    // const response = await axios.post(
-    //   "https://docker-djangomatic.azurewebsites.net/api/dj-auth/login/",
-    //   {
-    //     email,
-    //     password,
-    //   }
-    // );
-
     const response = await axiosInstance.post("/api/dj-auth/login/", {
       email,
       password,
     });
-
-    // console.error("Route Login RESPONSE:", response);
 
     const { access, refresh } = response.data;
 
@@ -39,9 +27,6 @@ export async function POST(request: Request) {
     await ironSession.save();
 
     if (response.status !== 200) {
-      // throw new Error(
-      //   `Login failed... response status: ${response.status} - headers: ${JSON.stringify(response.headers)} - data: ${JSON.stringify(response.data)}`
-      // );
       throw new Error("Login failed");
     }
 
@@ -53,7 +38,6 @@ export async function POST(request: Request) {
   } catch (error: any) {
     console.error("Route Login FAILED:", error);
 
-    // console.error("Error details:", error.response?.data || error.message);
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }

@@ -29,9 +29,7 @@ export default async function SignInPage(): Promise<JSX.Element> {
 
         <div className="inline-block max-w-screen justify-center my-5">
           <h1 className={title({ color: "violet", size: "lg" })}>
-            {process.env.APP_ENV !== "production"
-              ? siteConfig.nameDev
-              : siteConfig.name}
+            {siteConfig.name}
           </h1>
         </div>
 

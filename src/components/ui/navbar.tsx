@@ -72,11 +72,7 @@ export const Navbar = ({ nonce, session }: NavbarProps): JSX.Element | null => {
             nonce={nonce}
           >
             <Logo nonce={nonce} />
-            <p className="font-bold text-inherit">
-              {process.env.APP_ENV !== "production"
-                ? siteConfig.nameDev
-                : siteConfig.name}
-            </p>
+            <p className="font-bold text-inherit">{siteConfig.name}</p>
           </Link>
         </NavbarBrand>
       </NavbarContent>

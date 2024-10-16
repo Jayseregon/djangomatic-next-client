@@ -3,7 +3,7 @@ import { useTranslations } from "next-intl";
 import { title, subtitle } from "@/components/primitives";
 import { auth } from "@/auth";
 import { UnAuthenticated } from "@/components/auth/unAuthenticated";
-import { UserAccessRnD } from "@/src/components/rnd/UserAccess";
+import UserAccessRnD from "@/src/components/rnd/UserAccess";
 
 export default async function RnDPage() {
   const session = await auth();
@@ -19,10 +19,11 @@ function RnDPageContent({ session }: { session: any }) {
   if (!session) return <UnAuthenticated />;
 
   return (
-    <div>
-      <h1 className={title()}>{t("title")}</h1>
-      <h2 className={subtitle({ class: "mt-4" })}>{t("subtitle")}</h2>
-      <UserAccessRnD email={session.user.email} />
-    </div>
+    <UserAccessRnD email={session.user.email}>
+      <div>
+        <h1 className={title()}>{t("title")}</h1>
+        <h2 className={subtitle({ class: "mt-4" })}>{t("subtitle")}</h2>
+      </div>
+    </UserAccessRnD>
   );
 }

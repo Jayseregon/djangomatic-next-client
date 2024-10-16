@@ -1,7 +1,8 @@
 export type SiteConfig = typeof siteConfig;
 
 export const siteConfig = {
-  name: "Djangomatic",
+  name: "Djangomatic Pro [beta]",
+  nameDev: "Djangomatic Pro [staging]",
   hero_descr: "Simplifying your Daily Tasks.",
   description: "Process Automation on the Cloud.",
   icon: "/favicon.ico",

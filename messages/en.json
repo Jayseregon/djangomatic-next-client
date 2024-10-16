@@ -2,7 +2,9 @@
   "HomePage": {
     "HeroTitle": "Simplifying your Daily Tasks",
     "HeroSubtitle": "Process Automation on the Cloud",
-    "code": "Currently in development"
+    "code": "Currently under active development",
+    "code2": "This is a beta RC version, open to all users",
+    "code3": "Please, report any bugs or issues to Jeremie Bitsch"
   },
   "UnAuthorized": {
     "access": "You do not have the required permissions to access this page.",

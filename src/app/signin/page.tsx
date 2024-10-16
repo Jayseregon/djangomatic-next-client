@@ -29,7 +29,9 @@ export default async function SignInPage(): Promise<JSX.Element> {
 
         <div className="inline-block max-w-screen justify-center my-5">
           <h1 className={title({ color: "violet", size: "lg" })}>
-            {siteConfig.name}
+            {process.env.APP_ENV !== "production"
+              ? siteConfig.nameDev
+              : siteConfig.name}
           </h1>
         </div>
 
@@ -58,7 +60,10 @@ export default async function SignInPage(): Promise<JSX.Element> {
               radius="full"
               type="submit"
             >
-              <span>Sign in with {provider.name}</span>
+              <span>
+                Sign in with{" "}
+                {provider.name === "Microsoft Entra ID" ? "SSO" : provider.name}
+              </span>
             </Button>
           </form>
         ))}

@@ -48,7 +48,9 @@ function HomeContent({ session }: { session: any }): JSX.Element {
     <section className="flex flex-col items-center justify-center gap-4 py-8 md:py-10">
       <div className="inline-block max-w-lg text-center justify-center">
         <h1 className={title({ color: "violet", size: "lg" })}>
-          {siteConfig.name}
+          {process.env.APP_ENV !== "production"
+            ? siteConfig.nameDev
+            : siteConfig.name}
         </h1>
         <br />
         <h1 className={title()}>{t("HeroTitle")}</h1>
@@ -57,7 +59,11 @@ function HomeContent({ session }: { session: any }): JSX.Element {
 
       <div className="mt-8">
         <Snippet hideCopyButton hideSymbol variant="flat">
-          <span>{t("code")}</span>
+          <p className="flex flex-col gap-2 text-center">
+            <span className="text-lg pb-2">{t("code")}</span>
+            <span>{t("code2")}</span>
+            <span className="text-red-500">{t("code3")}</span>
+          </p>
         </Snippet>
       </div>
 

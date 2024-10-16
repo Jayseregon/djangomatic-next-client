@@ -33,6 +33,7 @@ model User {
   canAccessAppsVistabeamSuper    Boolean  @default(false)
   canAccessAppsXploreAdmin       Boolean  @default(false)
   canAccessBoards                Boolean  @default(false)
+  canAccessReports               Boolean  @default(false)
   canAccessRnd                   Boolean  @default(false)
   canAccessDocsTDS               Boolean  @default(false)
   canAccessDocsCogeco            Boolean  @default(false)

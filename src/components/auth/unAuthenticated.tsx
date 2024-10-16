@@ -14,7 +14,9 @@ export const UnAuthenticated = (): JSX.Element => {
       <div className="inline-block max-w-lg text-center justify-center">
         {/* Display the site name */}
         <h1 className={title({ color: "violet", size: "lg" })}>
-          {siteConfig.name}
+          {process.env.APP_ENV !== "production"
+            ? siteConfig.nameDev
+            : siteConfig.name}
         </h1>
         <div className="mt-8">
           {/* Display a snippet indicating that the user is not authenticated */}

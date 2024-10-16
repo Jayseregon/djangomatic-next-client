@@ -6,6 +6,7 @@ import { type DefaultSession } from "next-auth";
 import NextAuth from "next-auth";
 import "next-auth/jwt";
 import GitHub from "next-auth/providers/github";
+import MicrosoftEntraID from "next-auth/providers/microsoft-entra-id";
 
 declare module "next-auth" {
   interface Session {
@@ -24,12 +25,25 @@ declare module "next-auth/jwt" {
 }
 
 const authorizedMembers = [
-  { name: "Jayseregon", email: "jayseregon@gmail.com" },
-  // { name: "User1", email: "user2@example.com" },
+  { email: "jayseregon@gmail.com" },
+  { email: "jeremie.bitsch@telecon.ca" },
+  { email: "m-l.betournay@telecon.ca" },
+  { email: "gabriel.prevost@telecon.ca" },
+  { email: "sebastien.janelle@telecon.ca" }
 ];
 
 const prisma = new PrismaClient();
-const providers: Provider[] = [GitHub];
+const microsoftEntraIDProvider = MicrosoftEntraID({
+  clientId: process.env.AUTH_MICROSOFT_ENTRA_ID_ID,
+  clientSecret: process.env.AUTH_MICROSOFT_ENTRA_ID_SECRET,
+  tenantId: process.env.AUTH_MICROSOFT_ENTRA_ID_TENANT_ID,
+});
+
+const providers: Provider[] = [microsoftEntraIDProvider];
+
+if (process.env.APP_ENV !== "production") {
+  providers.push(GitHub);
+}
 
 export const config = {
   providers: providers,
@@ -40,8 +54,12 @@ export const config = {
   callbacks: {
     async signIn({ user }) {
       // Check if the user's email is in the list of authorized members
-      const isAuthorized = authorizedMembers.some(
-        (member) => member.email === user.email,
+      const isAuthorized =
+        authorizedMembers.some((member) => member.email === user.email) ||
+        user.email?.endsWith("@telecon.ca");
+
+      const isAdmin = authorizedMembers.some(
+        (member) => member.email === user.email
       );
 
       if (isAuthorized) {
@@ -57,6 +75,7 @@ export const config = {
             data: {
               name: user.name!,
               email: user.email!,
+              isAdmin: isAdmin,
             },
           });
           // console.log("User created with:", user);

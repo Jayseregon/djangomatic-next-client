@@ -14,6 +14,7 @@ export interface UserSchema {
   canAccessAppsVistabeamSuper: boolean;
   canAccessAppsXploreAdmin: boolean;
   canAccessBoards: boolean;
+  canAccessReports: boolean;
   canAccessRnd: boolean;
   canAccessDocsTDS: boolean;
   canAccessDocsCogeco: boolean;

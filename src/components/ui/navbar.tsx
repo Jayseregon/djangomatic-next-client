@@ -72,7 +72,11 @@ export const Navbar = ({ nonce, session }: NavbarProps): JSX.Element | null => {
             nonce={nonce}
           >
             <Logo nonce={nonce} />
-            <p className="font-bold text-inherit">{siteConfig.name}</p>
+            <p className="font-bold text-inherit">
+              {process.env.APP_ENV !== "production"
+                ? siteConfig.nameDev
+                : siteConfig.name}
+            </p>
           </Link>
         </NavbarBrand>
       </NavbarContent>
@@ -126,7 +130,7 @@ export const Navbar = ({ nonce, session }: NavbarProps): JSX.Element | null => {
           <LocaleSwitcher nonce={nonce} />
         </NavbarItem>
 
-        <Dropdown nonce={nonce} placement="bottom-end">
+        <Dropdown backdrop="blur" nonce={nonce} placement="bottom-end">
           <DropdownTrigger nonce={nonce}>
             <Avatar
               as="button"
@@ -144,25 +148,31 @@ export const Navbar = ({ nonce, session }: NavbarProps): JSX.Element | null => {
           </DropdownTrigger>
           <DropdownMenu
             aria-label="Profile Actions"
+            disabledKeys={["settings"]}
             nonce={nonce}
             variant="flat"
           >
             <DropdownItem
               key="profile"
-              className="h-14 gap-2"
+              showDivider
               nonce={nonce}
               textValue="Signed In profile name"
             >
-              <p className="font-semibold">
-                {t("dItemSignedInTitle")}
-                {session?.user ? session?.user?.name : t("dItemUserName")}
+              <p className="font-semibold flex flex-col gap-2">
+                <span>{t("dItemSignedInTitle")}</span>
+                <span>
+                  {session?.user ? session?.user?.name : t("dItemUserName")}
+                </span>
               </p>
               <p className="italic font-thin">
                 {session?.user ? session?.user?.email : t("dItemUserEmail")}
               </p>
             </DropdownItem>
             <DropdownItem key="settings" nonce={nonce} textValue="My Settings">
-              {t("dItemSettings")}
+              <p className="flex flex-row space-x-2">
+                <span className="">{t("dItemSettings")}</span>
+                <span className="italic font-thin">Coming Soon</span>
+              </p>
             </DropdownItem>
             <DropdownItem
               key="logout"

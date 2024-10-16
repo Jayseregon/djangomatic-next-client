@@ -248,6 +248,21 @@ export async function DELETE(request: Request) {
       where: { projectId: id },
     });
 
+    await prisma.checklistRow.deleteMany({
+      where: {
+        OR: [
+          { form4Id: id },
+          { form5Id: id },
+          { form6Id: id },
+          { form7Id: id },
+          { form8Id: id },
+          { form9Id: id },
+          { form10Id: id },
+          { form11Id: id },
+        ],
+      },
+    });
+
     // Then delete the report
     await prisma.towerReport.delete({
       where: { id },

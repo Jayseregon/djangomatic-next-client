@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import { fetchUser, UserSchema } from "@/lib/getUserPermission";
 
@@ -15,7 +15,13 @@ import { UnAuthorized } from "../auth/unAuthorized";
  * @param {string} props.email - The email of the user to check permissions for.
  * @returns {JSX.Element} The rendered UserAccessRnD component.
  */
-export const UserAccessRnD = ({ email }: { email: string }): JSX.Element => {
+export default function UserAccessRnD({
+  email,
+  children,
+}: {
+  email: string;
+  children: React.ReactNode;
+}): JSX.Element {
   const [user, setUser] = useState<UserSchema | null>(null);
 
   useEffect(() => {
@@ -38,11 +44,6 @@ export const UserAccessRnD = ({ email }: { email: string }): JSX.Element => {
   if (user && !user.canAccessRnd) {
     return <UnAuthorized />;
   } else {
-    return (
-      <div>
-        {/* Display the user's R&D access permission */}
-        <div>Permission: {user?.canAccessRnd.toString()}</div>
-      </div>
-    );
+    return <>{children}</>;
   }
-};
+}

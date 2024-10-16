@@ -26,6 +26,7 @@ interface User {
   canAccessApps: boolean;
   canAccessBoards: boolean;
   canAccessRnd: boolean;
+  canAccessReports: boolean;
   canAccessDocs: boolean;
 }
 
@@ -204,6 +205,7 @@ export const UserTable = (): JSX.Element => {
         <TableColumn key="admin">admin</TableColumn>
         <TableColumn key="boards">boards</TableColumn>
         <TableColumn key="rnd">r&amp;d</TableColumn>
+        <TableColumn key="reports">reports</TableColumn>
       </TableHeader>
     );
   };
@@ -238,6 +240,13 @@ export const UserTable = (): JSX.Element => {
         <TableCell>
           <PermissionButton
             fieldName="canAccessRnd"
+            handleToggle={handleToggle}
+            user={user}
+          />
+        </TableCell>
+        <TableCell>
+          <PermissionButton
+            fieldName="canAccessReports"
             handleToggle={handleToggle}
             user={user}
           />

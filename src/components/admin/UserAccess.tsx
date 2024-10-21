@@ -17,7 +17,7 @@ import { BlobStorage } from "./BlobStorage";
  *
  * @returns {JSX.Element} The rendered AdminTabs component.
  */
-const AdminTabs = (): JSX.Element => {
+const AdminTabs = ({ sessionEmail }: { sessionEmail: string }): JSX.Element => {
   return (
     <div>
       <div className="flex w-full flex-col">
@@ -33,8 +33,11 @@ const AdminTabs = (): JSX.Element => {
           variant="underlined"
         >
           {/* User Permissions Tab */}
-          <Tab key="perms" title="User Permissions">
-            <UserTable />
+          <Tab key="user-perms" title="User Permissions">
+            <UserTable sessionEmail={sessionEmail} />
+          </Tab>
+          <Tab key="superuser-perms" title="Superuser Permissions">
+            <UserTable isAdmin sessionEmail={sessionEmail} />
           </Tab>
           {/* Azure Blobs Storage Tab */}
           <Tab key="blobs" title="Azure Blobs Storage">
@@ -85,7 +88,7 @@ export const UserAccessAdmin = ({ email }: { email: string }): JSX.Element => {
     return (
       <div>
         {/* Render the AdminTabs component if the user is an admin */}
-        <AdminTabs />
+        <AdminTabs sessionEmail={email} />
       </div>
     );
   }

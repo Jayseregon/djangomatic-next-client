@@ -1,7 +1,7 @@
 import React from "react";
 
 const Header = () => (
-  <div className="grid grid-flow-col justify-between overflow-hidden ms-[30%] me-[25%]">
+  <div className="grid grid-flow-col justify-between overflow-hidden ms-[25%] me-[20%]">
     <div className="text-nowrap text-ellipsis text-sm text-primary overflow-hidden w-fit">
       Deficiency
     </div>

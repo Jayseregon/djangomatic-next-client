@@ -1,6 +1,5 @@
 {
   "compilerOptions": {
-    
     "baseUrl": ".",
     "target": "es2015",
     "lib": ["dom", "dom.iterable", "esnext"],
@@ -32,6 +31,13 @@
       "#site/content": ["./.velite"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "**/*.mdx", "**/*.json"],
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts",
+    "**/*.mdx",
+    "**/*.json"
+  ],
   "exclude": ["node_modules"]
 }

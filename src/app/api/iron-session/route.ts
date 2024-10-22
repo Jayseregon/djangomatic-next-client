@@ -14,10 +14,11 @@ export async function GET() {
     return NextResponse.json({
       djAuthToken: ironSession.djAuthToken,
       djRefreshToken: ironSession.djRefreshToken,
+      usedBackendUser: ironSession.usedBackendUser,
     });
   } else {
     return NextResponse.json(
-      { djAuthToken: null, djRefreshToken: null },
+      { djAuthToken: null, djRefreshToken: null, usedBackendUser: null },
       { status: 404 },
     );
   }

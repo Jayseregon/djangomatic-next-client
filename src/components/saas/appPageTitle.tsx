@@ -5,11 +5,10 @@ import { usePathname } from "next/navigation";
 
 import { title } from "@/components/primitives";
 import { saasData } from "@/src/config/saasData";
-
-import { AppItem } from "../ui/sidebars";
+import { AppItem } from "@/components/ui/sidebars";
+import { InputDataProps } from "@/interfaces/lib";
 
 import { useAppName, useInputData } from "./inputDataProviders";
-import { InputDataProps } from "./serverDropdowns";
 
 /**
  * AppPageTitle component automatically detects and displays the app name.
@@ -51,6 +50,7 @@ export const AppPageTitle = ({
       willOverride: willOverride,
       dbClass: dbClass || "",
       appType: appType || "",
+      clientName: clientName,
     }));
   }, [appName, setAppName]);
 

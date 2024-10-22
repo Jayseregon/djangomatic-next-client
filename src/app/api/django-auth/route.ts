@@ -5,9 +5,40 @@ import { cookies } from "next/headers";
 import { axiosInstance } from "@/src/lib/dbRequests";
 import { ironSessionOptions, IronSessionData } from "@/src/lib/session";
 
-export async function POST() {
-  const email = process.env.USER_EMAIL as string;
-  const password = process.env.USER_PASSWORD as string;
+const backendCredentialsMap: Record<
+  string,
+  { email: string | undefined; password: string | undefined }
+> = {
+  tds: {
+    email: process.env.APP_TDS_USER_EMAIL,
+    password: process.env.APP_TDS_USER_PASSWORD,
+  },
+  cogeco: {
+    email: process.env.APP_COGECO_USER_EMAIL,
+    password: process.env.APP_COGECO_USER_PASSWORD,
+  },
+  vistabeam: {
+    email: process.env.APP_VISTABEAM_USER_EMAIL,
+    password: process.env.APP_VISTABEAM_USER_PASSWORD,
+  },
+  xplore: {
+    email: process.env.APP_XPLORE_USER_EMAIL,
+    password: process.env.APP_XPLORE_USER_PASSWORD,
+  },
+};
+
+const getBackendCredentials = (backendUser: string) => {
+  return (
+    backendCredentialsMap[backendUser] || {
+      email: undefined,
+      password: undefined,
+    }
+  );
+};
+
+export async function POST(request: Request) {
+  const { backendUser } = await request.json();
+  const { email, password } = getBackendCredentials(backendUser);
 
   const ironSession = await getIronSession<IronSessionData>(
     cookies(),
@@ -24,6 +55,7 @@ export async function POST() {
 
     ironSession.djAuthToken = access;
     ironSession.djRefreshToken = refresh;
+    ironSession.usedBackendUser = backendUser;
     await ironSession.save();
 
     if (response.status !== 200) {

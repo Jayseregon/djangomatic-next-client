@@ -4,10 +4,10 @@ import { Button, Spinner } from "@nextui-org/react";
 import React, { useEffect } from "react";
 import { useTranslations } from "next-intl";
 
-import { startTask, checkTaskStatus, startTaskProps } from "@/lib/dbRequests";
+import { startTask, checkTaskStatus } from "@/lib/dbRequests";
+import { startTaskProps, TaskDataProps } from "@/interfaces/lib";
 
 import { useInputData, useTaskData } from "./inputDataProviders";
-import { TaskDataProps } from "./serverDropdowns";
 import { DownloadButton } from "./serverDropdowns";
 import { useConsoleData } from "./inputDataProviders";
 
@@ -28,6 +28,7 @@ export const StartTaskButton = (): JSX.Element => {
     schema_choice: inputData.schemaChoice || "",
     dbClass: inputData.dbClass,
     endpoint: inputData.taskEndpoint,
+    backendUser: inputData.clientName,
   };
 
   if (inputData.file) {
@@ -108,6 +109,7 @@ export const StartTaskButton = (): JSX.Element => {
         setTaskData: setTaskData,
         taskOptions: taskOptions,
         accessDownload: inputData.asDownloadable,
+        backendUser: inputData.clientName,
       });
     }
   }, [taskData.taskId]);

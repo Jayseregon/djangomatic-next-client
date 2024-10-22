@@ -11,10 +11,10 @@ import {
 } from "@nextui-org/react";
 import DOMPurify from "dompurify";
 
-import { ThumbsUpIcon, ThumbsDownIcon } from "../icons";
+import { ThumbsUpIcon, ThumbsDownIcon } from "@/components/icons";
+import { InputDataProps } from "@/interfaces/lib";
 
 import { useInputData } from "./inputDataProviders";
-import { InputDataProps } from "./serverDropdowns";
 import {
   DatabaseDropdown,
   SchemasDropdown,
@@ -418,7 +418,7 @@ export const DropdownOperationSelector = (): JSX.Element => {
    */
   const handleSelectionChange = (selected: string) => {
     setSelectedLabel(selected);
-    setInputData((prevDataChoices) => ({
+    setInputData((prevDataChoices: InputDataProps) => ({
       ...prevDataChoices,
       operationChoice: selected,
     }));

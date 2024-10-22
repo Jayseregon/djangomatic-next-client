@@ -3,7 +3,7 @@
 import React, { useEffect, useRef } from "react";
 import { useTranslations } from "next-intl";
 
-import { SaveIcon } from "../icons";
+import { SaveIcon } from "@/components/icons";
 
 import { useConsoleData } from "./inputDataProviders";
 

@@ -4,6 +4,7 @@ export interface IronSessionData {
   djAuthToken?: string | null;
   djRefreshToken?: string | null;
   clientAuthToken?: string | null;
+  usedBackendUser?: string | null;
 }
 
 /**
@@ -13,6 +14,7 @@ export const defaultIronSession: IronSessionData = {
   djAuthToken: "",
   djRefreshToken: "",
   clientAuthToken: "",
+  usedBackendUser: "",
 };
 
 /**

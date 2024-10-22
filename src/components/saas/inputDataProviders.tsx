@@ -9,8 +9,7 @@ import React, {
 } from "react";
 
 import { stripHtmlTags, maskPassword } from "@/src/lib/utils";
-
-import { InputDataProps, TaskDataProps } from "./serverDropdowns";
+import { InputDataProps, TaskDataProps } from "@/interfaces/lib";
 
 /**
  * Interface for the InputDataContext properties.
@@ -139,6 +138,7 @@ export const InputDataProvider = ({
     tableChoice: null,
     appType: "",
     dbClass: "",
+    clientName: "",
     taskEndpoint: "",
     asDownloadable: false,
     willOverride: false,

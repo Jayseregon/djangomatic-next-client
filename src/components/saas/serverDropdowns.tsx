@@ -14,91 +14,21 @@ import { availableDatabases } from "@/src/config/saasDatabases";
 import { cn } from "@/lib/utils";
 import { fetchDbSchemas, fetchSchemaTables } from "@/lib/dbRequests";
 import { stripHtmlTags } from "@/lib/utils";
+import {
+  DatabaseDropdownProps,
+  DefaultButtonSelectorProps,
+  DisplayFieldChoiceProps,
+  DisplayFieldGuidelineProps,
+  DownloadButtonProps,
+  DropDownSelectorProps,
+  InputDataProps,
+  SchemaDropdownData,
+  SchemasDropdownProps,
+  TableDropdownData,
+  TablesDropdownProps,
+} from "@/interfaces/lib";
 
 import { TxtPlaceholder } from "../pulsePlaceholder";
-
-export interface InputDataProps {
-  dbChoice: string | null;
-  schemaChoice: string | null;
-  tableChoice: string | null;
-  dbClass: string;
-  appType?: string;
-  taskEndpoint: string;
-  asDownloadable?: boolean;
-  willOverride?: boolean;
-  operationChoice?: string;
-  uuidPole?: string;
-  file?: File;
-  fileName?: string | null;
-  tdsUsername?: string | null;
-  tdsPassword?: string | null;
-  arcgisErase?: boolean;
-  arcgisSnapshot?: boolean;
-}
-
-export interface TaskDataProps {
-  taskId: string | null;
-  taskStatus: string | null;
-  taskResult: any;
-  downloadUrl: string | null;
-  isLoading: boolean;
-}
-
-export interface DatabaseDropdownProps {
-  appType?: string;
-  dbClass: string;
-  setInputData: React.Dispatch<React.SetStateAction<InputDataProps>>;
-}
-
-export interface SchemasDropdownProps {
-  inputData: InputDataProps;
-  setInputData: React.Dispatch<React.SetStateAction<InputDataProps>>;
-}
-
-export interface SchemaDropdownData {
-  value: string;
-  label: string;
-}
-
-export interface TablesDropdownProps {
-  inputData: InputDataProps;
-  setInputData: React.Dispatch<React.SetStateAction<InputDataProps>>;
-  pattern: string;
-  endpoint?: string;
-}
-
-export interface TableDropdownData {
-  value: string;
-  label: string;
-}
-
-export interface DisplayFieldChoiceProps {
-  fieldChoice: string | null;
-  nonce?: string;
-}
-
-export interface DisplayFieldGuidelineProps {
-  guideline: string;
-}
-
-export interface DownloadButtonProps {
-  downloadUrl: string | null;
-  nonce?: string;
-}
-
-export interface DropDownSelectorProps {
-  items: SchemaDropdownData[] | TableDropdownData[];
-  selectedKey: string;
-  setSelectedKey: React.Dispatch<React.SetStateAction<string>>;
-  selectedLabel: string;
-  handleSelect: (key: string) => void;
-}
-
-export interface DefaultButtonSelectorProps {
-  label: string;
-  isDisabled?: boolean;
-  type?: "default" | "danger";
-}
 
 /**
  * Default button selector component.
@@ -308,6 +238,7 @@ export const SchemasDropdown = ({
       if (inputData.dbChoice) {
         const schemas = await fetchDbSchemas({
           target_db: inputData.dbChoice,
+          backendUser: inputData.clientName ?? "",
         });
 
         setDbSchemas(schemas);
@@ -397,6 +328,7 @@ export const TablesDropdown = ({
           schema_choice: inputData.schemaChoice,
           user_pattern: pattern,
           endpoint: endpoint,
+          backendUser: inputData.clientName ?? "",
         });
         // Sort the tables array before setting it
         const sortedTables = tables.sort(

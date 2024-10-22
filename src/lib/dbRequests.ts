@@ -4,8 +4,15 @@ import { LRUCache } from "lru-cache";
 import DOMPurify from "isomorphic-dompurify";
 import { jwtDecode } from "jwt-decode";
 
+import {
+  checkTaskStatusProps,
+  fetchDbSchemasProps,
+  fetchSchemaTablesProps,
+  startTaskProps,
+  TaskDataProps,
+} from "@/interfaces/lib";
+
 // import { useConsoleData } from "../components/saas/inputDataProviders";
-import { TaskDataProps } from "@/components/saas/serverDropdowns";
 
 const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
 // const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
@@ -26,42 +33,6 @@ export const axiosInstance = axios.create({
   baseURL: baseUrl,
   withCredentials: true,
 });
-
-// types
-interface fetchDbSchemasProps {
-  target_db: string;
-}
-
-interface fetchSchemaTablesProps {
-  target_db: string;
-  schema_choice: string;
-  user_pattern: string;
-  endpoint?: string;
-}
-
-export interface startTaskProps {
-  db_choice: string;
-  schema_choice: string;
-  table_choice?: string;
-  dbClass: string;
-  endpoint: string;
-  file?: File;
-  operationChoice?: string;
-  uuidPole?: string;
-  tdsUsername?: string;
-  tdsPassword?: string;
-  arcgisErase?: boolean;
-  arcgisSnapshot?: boolean;
-  is_override?: boolean;
-}
-
-interface checkTaskStatusProps {
-  task_id: string;
-  waitTime: number;
-  setTaskData: React.Dispatch<React.SetStateAction<TaskDataProps>>;
-  taskOptions?: startTaskProps;
-  accessDownload?: boolean;
-}
 
 export const getServerCsrfToken = async () => {
   try {
@@ -95,13 +66,14 @@ export const getMiddlewareCsrfToken = async (): Promise<string> => {
   return data.csrfToken || "missing";
 };
 
-export const makeServerLoginRequest = async () => {
+export const makeServerLoginRequest = async (backendUser: string) => {
   try {
     const response = await fetch("/api/django-auth", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
+      body: JSON.stringify({ backendUser }),
     });
 
     if (!response.ok) {
@@ -116,12 +88,12 @@ export const makeServerLoginRequest = async () => {
   }
 };
 
-const fetchTokens = async () => {
+const fetchTokens = async (backendUser: string) => {
   const endpoint = "/api/iron-session";
   let response = await fetch(endpoint);
 
   if (response.status === 404) {
-    await makeServerLoginRequest();
+    await makeServerLoginRequest(backendUser);
     response = await fetch(endpoint);
   }
 
@@ -157,13 +129,19 @@ const isTokenExpired = (token: string) => {
   }
 };
 
-export const getServerTokens = async () => {
+export const getServerTokens = async (backendUser: string) => {
   try {
-    let tokens = await fetchTokens();
+    let tokens = await fetchTokens(backendUser);
+    const usedBackendUser = tokens.usedBackendUser;
+
+    if (usedBackendUser !== backendUser) {
+      await makeServerLoginRequest(backendUser);
+      tokens = await fetchTokens(backendUser);
+    }
 
     if (!validateTokens(tokens.djAuthToken)) {
-      await makeServerLoginRequest();
-      tokens = await fetchTokens();
+      await makeServerLoginRequest(backendUser);
+      tokens = await fetchTokens(backendUser);
     }
 
     return tokens;
@@ -174,10 +152,13 @@ export const getServerTokens = async () => {
   }
 };
 
-export const fetchDbSchemas = async ({ target_db }: fetchDbSchemasProps) => {
+export const fetchDbSchemas = async ({
+  target_db,
+  backendUser,
+}: fetchDbSchemasProps) => {
   const cacheKey = `${target_db}`;
   const cachedData = schemasCache.get(cacheKey);
-  const { djAuthToken } = await getServerTokens();
+  const { djAuthToken } = await getServerTokens(backendUser);
 
   if (cachedData) {
     return cachedData;
@@ -228,11 +209,12 @@ export const fetchSchemaTables = async ({
   target_db,
   schema_choice,
   user_pattern,
+  backendUser,
   endpoint = "/saas/tds/ajax/query-poles-tables-from-schema/",
 }: fetchSchemaTablesProps) => {
   const cacheKey = `${target_db}-${schema_choice}-${user_pattern}`;
   const cachedData = tablesCache.get(cacheKey);
-  const { djAuthToken } = await getServerTokens();
+  const { djAuthToken } = await getServerTokens(backendUser);
 
   if (cachedData) {
     return cachedData;
@@ -291,6 +273,7 @@ export const startTask = async ({
   endpoint,
   uuidPole,
   file,
+  backendUser,
   operationChoice,
   tdsUsername,
   tdsPassword,
@@ -298,7 +281,10 @@ export const startTask = async ({
   arcgisSnapshot,
   is_override,
 }: startTaskProps) => {
-  const { djAuthToken } = await getServerTokens();
+  if (!backendUser) {
+    throw new Error("backendUser is required");
+  }
+  const { djAuthToken } = await getServerTokens(backendUser);
 
   try {
     // get the csrf token from server
@@ -420,8 +406,12 @@ export const checkTaskStatus = async ({
   setTaskData,
   taskOptions,
   accessDownload = false,
+  backendUser,
 }: checkTaskStatusProps) => {
-  const { djAuthToken } = await getServerTokens();
+  if (!backendUser) {
+    throw new Error("backendUser is required");
+  }
+  const { djAuthToken } = await getServerTokens(backendUser);
   // const { appendToConsole } = useConsoleData();
 
   try {
@@ -461,6 +451,7 @@ export const checkTaskStatus = async ({
             waitTime,
             setTaskData,
             accessDownload,
+            backendUser,
           }),
         waitTime,
       );
@@ -498,6 +489,7 @@ export const checkTaskStatus = async ({
             setTaskData: setTaskData,
             taskOptions: updatedTaskOptions,
             accessDownload: false,
+            backendUser,
           });
         } catch (error) {
           console.error("Error during snapshot task restart:", error);

@@ -15,33 +15,35 @@ datasource db {
 }
 
 model User {
-  id                             String   @id @default(cuid())
-  email                          String   @unique
+  id                             String        @id @default(cuid())
+  email                          String        @unique
   name                           String
-  createdAt                      DateTime @default(now())
-  lastLogin                      DateTime @updatedAt
-  isAdmin                        Boolean  @default(false)
-  canAccessAppsTdsHLD            Boolean  @default(false)
-  canAccessAppsTdsLLD            Boolean  @default(false)
-  canAccessAppsTdsArcGIS         Boolean  @default(false)
-  canAccessAppsTdsOverride       Boolean  @default(false)
-  canAccessAppsTdsAdmin          Boolean  @default(false)
-  canAccessAppsTdsSuper          Boolean  @default(false)
-  canAccessAppsCogecoHLD         Boolean  @default(false)
-  canAccessAppsVistabeamHLD      Boolean  @default(false)
-  canAccessAppsVistabeamOverride Boolean  @default(false)
-  canAccessAppsVistabeamSuper    Boolean  @default(false)
-  canAccessAppsXploreAdmin       Boolean  @default(false)
-  canAccessBoards                Boolean  @default(false)
-  canAccessReports               Boolean  @default(false)
-  canAccessRnd                   Boolean  @default(false)
-  canAccessDocsTDS               Boolean  @default(false)
-  canAccessDocsCogeco            Boolean  @default(false)
-  canAccessDocsVistabeam         Boolean  @default(false)
-  canAccessDocsXplore            Boolean  @default(false)
-  canAccessVideoDefault          Boolean  @default(false)
-  canAccessVideoQGIS             Boolean  @default(false)
-  canAccessVideoSttar            Boolean  @default(false)
+  createdAt                      DateTime      @default(now())
+  lastLogin                      DateTime      @updatedAt
+  isAdmin                        Boolean       @default(false)
+  isRnDTeam                      Boolean       @default(false)
+  canAccessAppsTdsHLD            Boolean       @default(false)
+  canAccessAppsTdsLLD            Boolean       @default(false)
+  canAccessAppsTdsArcGIS         Boolean       @default(false)
+  canAccessAppsTdsOverride       Boolean       @default(false)
+  canAccessAppsTdsAdmin          Boolean       @default(false)
+  canAccessAppsTdsSuper          Boolean       @default(false)
+  canAccessAppsCogecoHLD         Boolean       @default(false)
+  canAccessAppsVistabeamHLD      Boolean       @default(false)
+  canAccessAppsVistabeamOverride Boolean       @default(false)
+  canAccessAppsVistabeamSuper    Boolean       @default(false)
+  canAccessAppsXploreAdmin       Boolean       @default(false)
+  canAccessBoards                Boolean       @default(false)
+  canAccessReports               Boolean       @default(false)
+  canAccessRnd                   Boolean       @default(false)
+  canAccessDocsTDS               Boolean       @default(false)
+  canAccessDocsCogeco            Boolean       @default(false)
+  canAccessDocsVistabeam         Boolean       @default(false)
+  canAccessDocsXplore            Boolean       @default(false)
+  canAccessVideoDefault          Boolean       @default(false)
+  canAccessVideoQGIS             Boolean       @default(false)
+  canAccessVideoSttar            Boolean       @default(false)
+  rndTasks                       RnDTeamTask[]
 }
 
 model TowerReport {
@@ -127,4 +129,27 @@ model ChecklistRow {
   form9     TowerReport? @relation(fields: [form9Id], references: [id], name: "ChecklistForm9Rows", map: "ChecklistForm9Rows_form9Id_fkey")
   form10    TowerReport? @relation(fields: [form10Id], references: [id], name: "ChecklistForm10Rows", map: "ChecklistForm10Rows_form10Id_fkey")
   form11    TowerReport? @relation(fields: [form11Id], references: [id], name: "ChecklistForm11Rows", map: "ChecklistForm11Rows_form11Id_fkey")
+}
+
+model RnDTeamTask {
+  id             String    @id @default(cuid())
+  createdAt      DateTime  @default(now())
+  ownerId        String?
+  owner          User?     @relation(fields: [ownerId], references: [id])
+  task           String
+  priority       Int
+  impactedPeople String
+  comment        String?
+  status         Status    @default(CREATED)
+  dueDate        DateTime?
+  startedAt      DateTime?
+  completedAt    DateTime?
+}
+
+enum Status {
+  CREATED
+  PENDING
+  BLOCKED
+  COMPLETED
+  CANCELLED
 }

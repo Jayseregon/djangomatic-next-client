@@ -5,7 +5,32 @@ import { TableHeader, TableColumn } from "@nextui-org/react";
  *
  * @returns {JSX.Element} The rendered default table header.
  */
-export const defaultHeader = (): JSX.Element => {
+export const defaultHeader = ({
+  isAdmin,
+}: {
+  isAdmin: boolean;
+}): JSX.Element => {
+  if (isAdmin) {
+    return (
+      <TableHeader>
+        <TableColumn key="email" className="w-56">
+          email
+        </TableColumn>
+        <TableColumn key="username" className="w-56">
+          username
+        </TableColumn>
+        <TableColumn key="log" className="w-56">
+          last login
+        </TableColumn>
+        <TableColumn key="admin">admin</TableColumn>
+        <TableColumn key="rndTeam">r&amp;d team</TableColumn>
+        <TableColumn key="boards">boards</TableColumn>
+        <TableColumn key="rnd">r&amp;d</TableColumn>
+        <TableColumn key="reports">reports</TableColumn>
+      </TableHeader>
+    );
+  }
+
   return (
     <TableHeader>
       <TableColumn key="email" className="w-56">
@@ -151,7 +176,7 @@ export const appsXploreHeader = (): JSX.Element => {
   );
 };
 
-export const renderTableHeader = (selectedMenu: string) => {
+export const renderTableHeader = (selectedMenu: string, isAdmin: boolean) => {
   switch (selectedMenu) {
     case "docs":
       return docsHeader();
@@ -166,6 +191,6 @@ export const renderTableHeader = (selectedMenu: string) => {
     case "apps-xplore":
       return appsXploreHeader();
     default:
-      return defaultHeader();
+      return defaultHeader({ isAdmin });
   }
 };

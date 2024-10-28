@@ -3,7 +3,8 @@
 import React, { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
 
-import { fetchUser, UserSchema } from "@/lib/getUserPermission";
+import { fetchUser } from "@/lib/getUserPermission";
+import { UserSchema } from "@/interfaces/lib";
 
 interface WithPermissionOverlayProps {
   email: string;

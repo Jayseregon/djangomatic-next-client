@@ -10,8 +10,8 @@ import { siteConfig } from "@/config/site";
 import { saasData } from "@/config/saasData";
 import { docsData } from "@/config/docsData";
 import { videosData } from "@/config/videosData";
-
-import { BlobProps } from "../admin/BlobStorage";
+import { BlobProps } from "@/components/admin/BlobStorage";
+import { UserSchema } from "@/interfaces/lib";
 
 // define the types for the Sidebar component
 export interface SidebarProps {
@@ -331,7 +331,9 @@ export const SidebarSaas: React.FC<SidebarProps> = ({
  * @param {string} [props.nonce] - An optional nonce for the Link component.
  * @returns {JSX.Element} The rendered SidebarDocs component.
  */
-export const SidebarDocs: React.FC<SidebarProps> = ({ nonce }) => {
+export const SidebarDocs: React.FC<SidebarProps> = ({
+  nonce,
+}: SidebarProps): JSX.Element => {
   const t = useTranslations("SaasSidebar");
   const currentPath = usePathname();
   const docsPath = siteConfig.navItems.filter(
@@ -475,6 +477,79 @@ export const SidebarDocs: React.FC<SidebarProps> = ({ nonce }) => {
             }
           >
             <SidebarVideosSection />
+          </AccordionItem>
+        </Accordion>
+      </div>
+    </div>
+  );
+};
+
+export const SidebarRnD = ({ nonce }: { nonce?: string }): JSX.Element => {
+  const [users, setUsers] = useState<UserSchema[]>([]);
+
+  useEffect(() => {
+    async function fetchUsers() {
+      try {
+        const response = await fetch("/api/rnd-all-users");
+        const data = await response.json();
+
+        setUsers(data);
+      } catch (error) {
+        console.error("Failed to fetch users:", error);
+      }
+    }
+    fetchUsers();
+  }, []);
+
+  return (
+    <div className="flex flex-col gap-2">
+      <div className="section">
+        <Accordion
+          defaultExpandedKeys={["rnd-team", "rnd-home"]}
+          variant="bordered"
+        >
+          <AccordionItem
+            key="rnd-home"
+            aria-label="rnd-home"
+            title={
+              <h2 className="text-xl font-black text-foreground indent-2 mt-3 mb-1">
+                Home
+              </h2>
+            }
+          >
+            <Link
+              className={`${linkTagStyling("/rnd", "/rnd")}`}
+              href={"/rnd"}
+              nonce={nonce}
+            >
+              Main Dashboard
+            </Link>
+          </AccordionItem>
+
+          {/* RnD Team Section */}
+          <AccordionItem
+            key="rnd-team"
+            aria-label="rnd-team"
+            title={
+              <h2 className="text-xl font-black text-foreground indent-2 mt-3 mb-1">
+                RnD Team
+              </h2>
+            }
+          >
+            <ul>
+              {users.map((user) => (
+                <li key={user.id} className="py-1">
+                  {/* Render the link for each user */}
+                  <Link
+                    className={`${linkTagStyling(`/rnd/${user.id}`, `/rnd/${user.id}`)}`}
+                    href={`/rnd/${user.id}`}
+                    nonce={nonce}
+                  >
+                    {user.name}
+                  </Link>
+                </li>
+              ))}
+            </ul>
           </AccordionItem>
         </Accordion>
       </div>

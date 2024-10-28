@@ -2,9 +2,11 @@
 
 import React, { useEffect, useState } from "react";
 
-import { fetchUser, UserSchema } from "@/lib/getUserPermission";
+import { fetchUser } from "@/lib/getUserPermission";
+import { UserSchema } from "@/interfaces/lib";
+import { UnAuthorized } from "@/components/auth/unAuthorized";
 
-import { UnAuthorized } from "../auth/unAuthorized";
+import { TaskManager } from "./TaskManager";
 
 /**
  * UserAccessRnD component checks if a user has access to R&D and renders the appropriate content.
@@ -15,13 +17,7 @@ import { UnAuthorized } from "../auth/unAuthorized";
  * @param {string} props.email - The email of the user to check permissions for.
  * @returns {JSX.Element} The rendered UserAccessRnD component.
  */
-export default function UserAccessRnD({
-  email,
-  children,
-}: {
-  email: string;
-  children: React.ReactNode;
-}): JSX.Element {
+export function UserAccessRnD({ email }: { email: string }): JSX.Element {
   const [user, setUser] = useState<UserSchema | null>(null);
 
   useEffect(() => {
@@ -44,6 +40,32 @@ export default function UserAccessRnD({
   if (user && !user.canAccessRnd) {
     return <UnAuthorized />;
   } else {
-    return <>{children}</>;
+    return <UsersTasksBoards />;
   }
 }
+
+const UsersTasksBoards = () => {
+  const [users, setUsers] = useState<UserSchema[]>([]);
+
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const response = await fetch("/api/rnd-all-users");
+        const data = await response.json();
+
+        setUsers(data);
+      } catch (error) {
+        console.error("Failed to fetch users:", error);
+      }
+    }
+    fetchData();
+  }, []);
+
+  return (
+    <div className="grid grid-cols-2 space-x-5 space-y-10 w-full">
+      {users.map((user) => (
+        <TaskManager key={user.id} user={user} />
+      ))}
+    </div>
+  );
+};

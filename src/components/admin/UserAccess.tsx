@@ -3,9 +3,9 @@
 import { useEffect, useState } from "react";
 import { Tabs, Tab } from "@nextui-org/react";
 
-import { fetchUser, UserSchema } from "@/lib/getUserPermission";
-
-import { UnAuthorized } from "../auth/unAuthorized";
+import { fetchUser } from "@/lib/getUserPermission";
+import { UnAuthorized } from "@/components/auth/unAuthorized";
+import { UserSchema } from "@/interfaces/lib";
 
 import { UserTable } from "./UserTable";
 import { BlobStorage } from "./BlobStorage";
@@ -85,11 +85,6 @@ export const UserAccessAdmin = ({ email }: { email: string }): JSX.Element => {
   if (user && !user.isAdmin) {
     return <UnAuthorized />;
   } else {
-    return (
-      <div>
-        {/* Render the AdminTabs component if the user is an admin */}
-        <AdminTabs sessionEmail={email} />
-      </div>
-    );
+    return <AdminTabs sessionEmail={email} />;
   }
 };

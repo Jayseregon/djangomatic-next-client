@@ -2,10 +2,10 @@ import { redirect } from "next/navigation";
 // import { headers } from "next/headers";
 import { Button } from "@nextui-org/react";
 
-import { siteConfig } from "@/config/site";
 import { title } from "@/components/primitives";
 import { signIn, auth, providerMap } from "@/auth";
 import { Logo } from "@/src/components/icons";
+import AppName from "@/src/components/ui/AppName";
 
 /**
  * SignInPage component renders the sign-in page.
@@ -27,13 +27,11 @@ export default async function SignInPage(): Promise<JSX.Element> {
       <div className="flex flex-col items-center justify-center flex-grow gap-2">
         <Logo size={100} />
 
-        <div className="inline-block max-w-screen justify-center my-5">
-          <h1 className={title({ color: "violet", size: "lg" })}>
-            {siteConfig.name}
-          </h1>
+        <div className="inline-block max-w-screen my-5">
+          <AppName />
         </div>
 
-        <div className="inline-block justify-center">
+        <div className="inline-block">
           <h2 className={title({ color: "cyan", size: "md" })}>
             Please sign in to continue.
           </h2>

@@ -1,6 +1,8 @@
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 
+import { RnDTeamTask, Status } from "@/interfaces/lib";
+
 /**
  * Merge Tailwind CSS classes with clsx.
  *
@@ -105,4 +107,24 @@ export const stripHtmlTags = (html: string): string => {
 
 export const maskPassword = (password: string): string => {
   return "*".repeat(password.length);
+};
+
+// utils/dateUtils.ts
+export const convertTaskDates = (task: any): RnDTeamTask => ({
+  ...task,
+  createdAt: task.createdAt ? new Date(task.createdAt) : undefined,
+  dueDate: task.dueDate ? new Date(task.dueDate) : undefined,
+  startedAt: task.startedAt ? new Date(task.startedAt) : undefined,
+  completedAt: task.completedAt ? new Date(task.completedAt) : undefined,
+});
+
+export const statusColorMap: Record<
+  Status,
+  "primary" | "secondary" | "success" | "warning" | "danger"
+> = {
+  [Status.CREATED]: "secondary",
+  [Status.PENDING]: "primary",
+  [Status.BLOCKED]: "warning",
+  [Status.COMPLETED]: "success",
+  [Status.CANCELLED]: "danger",
 };

@@ -32,13 +32,13 @@ const config = {
           to: { transform: "translateX(0)" },
         },
         slideDown: {
-					from: { height: "0px" },
-					to: { height: "var(--radix-accordion-content-height)" },
-				},
-				slideUp: {
-					from: { height: "var(--radix-accordion-content-height)" },
-					to: { height: "0px" },
-				},
+          from: { height: "0px" },
+          to: { height: "var(--radix-accordion-content-height)" },
+        },
+        slideUp: {
+          from: { height: "var(--radix-accordion-content-height)" },
+          to: { height: "0px" },
+        },
         swipeOut: {
           from: { transform: "translateX(var(--radix-toast-swipe-end-x))" },
           to: { transform: "translateX(calc(100% + var(--viewport-padding)))" },
@@ -49,7 +49,7 @@ const config = {
         slideIn: "slideIn 150ms cubic-bezier(0.16, 1, 0.3, 1)",
         swipeOut: "swipeOut 100ms ease-out",
         slideDown: "slideDown 300ms cubic-bezier(0.87, 0, 0.13, 1)",
-				slideUp: "slideUp 300ms cubic-bezier(0.87, 0, 0.13, 1)",
+        slideUp: "slideUp 300ms cubic-bezier(0.87, 0, 0.13, 1)",
       },
       typography: () => ({
         // ({ theme }: { theme: any }) => ({

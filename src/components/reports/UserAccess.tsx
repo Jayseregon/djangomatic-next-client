@@ -2,7 +2,8 @@
 
 import React, { useEffect, useState } from "react";
 
-import { fetchUser, UserSchema } from "@/lib/getUserPermission";
+import { fetchUser } from "@/lib/getUserPermission";
+import { UserSchema } from "@/interfaces/lib";
 
 import { UnAuthorized } from "../auth/unAuthorized";
 

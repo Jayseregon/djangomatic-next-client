@@ -1,29 +1,24 @@
-import { useTranslations } from "next-intl";
-
-import { title, subtitle } from "@/components/primitives";
+import { title } from "@/components/primitives";
 import { auth } from "@/auth";
 import { UnAuthenticated } from "@/components/auth/unAuthenticated";
-import UserAccessRnD from "@/src/components/rnd/UserAccess";
+import { UserAccessRnD } from "@/src/components/rnd/UserAccess";
 
-export default async function RnDPage() {
+export default async function UserPage() {
   const session = await auth();
 
   if (!session) return <UnAuthenticated />;
 
-  return <RnDPageContent session={session} />;
+  return <UserPageContent session={session} />;
 }
 
-function RnDPageContent({ session }: { session: any }) {
-  const t = useTranslations("RnD");
-
+function UserPageContent({ session }: { session: any }) {
   if (!session) return <UnAuthenticated />;
 
   return (
-    <UserAccessRnD email={session.user.email}>
-      <div>
-        <h1 className={title()}>{t("title")}</h1>
-        <h2 className={subtitle({ class: "mt-4" })}>{t("subtitle")}</h2>
-      </div>
-    </UserAccessRnD>
+    <div className="mx-auto space-y-16">
+      <h1 className={title()}>R&amp;D Tasks Dashboard</h1>
+      <UserAccessRnD email={session.user.email} />
+      {/* <SkeletonDashboard size="large" /> */}
+    </div>
   );
 }

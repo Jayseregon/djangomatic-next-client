@@ -1,30 +1,3 @@
-export interface UserSchema {
-  email: string;
-  name: string;
-  isAdmin: boolean;
-  canAccessAppsTdsHLD: boolean;
-  canAccessAppsTdsLLD: boolean;
-  canAccessAppsTdsArcGIS: boolean;
-  canAccessAppsTdsOverride: boolean;
-  canAccessAppsTdsAdmin: boolean;
-  canAccessAppsTdsSuper: boolean;
-  canAccessAppsCogecoHLD: boolean;
-  canAccessAppsVistabeamHLD: boolean;
-  canAccessAppsVistabeamOverride: boolean;
-  canAccessAppsVistabeamSuper: boolean;
-  canAccessAppsXploreAdmin: boolean;
-  canAccessBoards: boolean;
-  canAccessReports: boolean;
-  canAccessRnd: boolean;
-  canAccessDocsTDS: boolean;
-  canAccessDocsCogeco: boolean;
-  canAccessDocsVistabeam: boolean;
-  canAccessDocsXplore: boolean;
-  canAccessVideoDefault: boolean;
-  canAccessVideoQGIS: boolean;
-  canAccessVideoSttar: boolean;
-}
-
 /**
  * Fetch user data based on email.
  *

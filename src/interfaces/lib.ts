@@ -1,3 +1,57 @@
+export interface UserSchema {
+  id: string;
+  email: string;
+  name: string;
+  createdAt: Date;
+  lastLogin: Date;
+  isAdmin: boolean;
+  isRnDTeam: boolean;
+  canAccessAppsTdsHLD: boolean;
+  canAccessAppsTdsLLD: boolean;
+  canAccessAppsTdsArcGIS: boolean;
+  canAccessAppsTdsOverride: boolean;
+  canAccessAppsTdsAdmin: boolean;
+  canAccessAppsTdsSuper: boolean;
+  canAccessAppsCogecoHLD: boolean;
+  canAccessAppsVistabeamHLD: boolean;
+  canAccessAppsVistabeamOverride: boolean;
+  canAccessAppsVistabeamSuper: boolean;
+  canAccessAppsXploreAdmin: boolean;
+  canAccessBoards: boolean;
+  canAccessReports: boolean;
+  canAccessRnd: boolean;
+  canAccessDocsTDS: boolean;
+  canAccessDocsCogeco: boolean;
+  canAccessDocsVistabeam: boolean;
+  canAccessDocsXplore: boolean;
+  canAccessVideoDefault: boolean;
+  canAccessVideoQGIS: boolean;
+  canAccessVideoSttar: boolean;
+  rndTasks: RnDTeamTask[];
+}
+
+export interface RnDTeamTask {
+  id: string;
+  createdAt: Date;
+  owner: UserSchema;
+  task: string;
+  priority: number;
+  impactedPeople: string;
+  comment?: string;
+  status: Status;
+  dueDate?: Date | null;
+  startedAt?: Date | null;
+  completedAt?: Date | null;
+}
+
+export enum Status {
+  CREATED = "CREATED",
+  PENDING = "PENDING",
+  BLOCKED = "BLOCKED",
+  COMPLETED = "COMPLETED",
+  CANCELLED = "CANCELLED",
+}
+
 export interface fetchDbSchemasProps {
   target_db: string;
   backendUser: string;

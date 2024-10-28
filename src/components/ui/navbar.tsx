@@ -48,6 +48,13 @@ export const Navbar = ({ nonce, session }: NavbarProps): JSX.Element | null => {
   const t = useTranslations("UserProfile");
   const pathname = usePathname();
   const isUnAuth = pathname === "/signin";
+  const appEnv = process.env.NEXT_PUBLIC_APP_ENV;
+  const appName =
+    appEnv === "production"
+      ? siteConfig.name + " [beta]"
+      : appEnv === "staging"
+        ? siteConfig.name + " [staging]"
+        : siteConfig.name + " [local]";
 
   if (isUnAuth) {
     return null;
@@ -72,7 +79,7 @@ export const Navbar = ({ nonce, session }: NavbarProps): JSX.Element | null => {
             nonce={nonce}
           >
             <Logo nonce={nonce} />
-            <p className="font-bold text-inherit">{siteConfig.name}</p>
+            <p className="font-bold text-inherit">{appName}</p>
           </Link>
         </NavbarBrand>
       </NavbarContent>

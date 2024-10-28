@@ -4,24 +4,10 @@ import React, { useEffect, useState } from "react";
 import { Table, TableBody, Button, RadioGroup, Radio } from "@nextui-org/react";
 
 import { CheckIcon, UncheckIcon } from "@/components/icons";
+import { UserSchema } from "@/interfaces/lib";
 
 import { renderTableBody } from "./UserTableBodies";
 import { renderTableHeader } from "./UserTableHeaders";
-
-export interface User {
-  id: string;
-  email: string;
-  name: string;
-  createdAt: Date;
-  lastLogin: Date;
-  isAdmin: boolean;
-  isUser: boolean;
-  canAccessApps: boolean;
-  canAccessBoards: boolean;
-  canAccessRnd: boolean;
-  canAccessReports: boolean;
-  canAccessDocs: boolean;
-}
 
 interface PermissionSwitchProps {
   user: any;
@@ -37,7 +23,7 @@ const superUserEmails = ["jayseregon@gmail.com", "jeremie.bitsch@telecon.ca"];
  * The button's color and icon change based on the user's current permission state.
  *
  * @param {Object} props - The props for the PermissionButton component.
- * @param {User} props.user - The user object containing permission data.
+ * @param {UserSchema} props.user - The user object containing permission data.
  * @param {string} props.fieldName - The name of the permission field to toggle.
  * @param {Function} props.handleToggle - The function to handle the toggle action.
  * @returns {JSX.Element} The rendered PermissionButton component.
@@ -52,7 +38,7 @@ export const PermissionButton = ({
       isIconOnly
       className="ps-0.5 pt-0.5"
       color={user[fieldName] ? "success" : "danger"}
-      disabled={!superUserEmails.includes(user.email)}
+      // disabled={!superUserEmails.includes(user.email)}
       radius="full"
       size="sm"
       variant="light"
@@ -97,13 +83,13 @@ export const UserTable = ({
   sessionEmail: string;
   isAdmin?: boolean;
 }): JSX.Element => {
-  const [users, setUsers] = useState<User[]>([]);
+  const [users, setUsers] = useState<UserSchema[]>([]);
   const [selectedMenu, setSelectedMenu] = useState<string>("default");
-  // If the session email is one of the superuser emails, allow editing own permissions
-  // Otherwise, disable editing for superuser emails
-  const disabledKeys = superUserEmails.includes(sessionEmail)
-    ? undefined
-    : superUserEmails;
+  // // If the session email is one of the superuser emails, allow editing own permissions
+  // // Otherwise, disable editing for superuser emails
+  // const disabledKeys = superUserEmails.includes(sessionEmail)
+  //   ? undefined
+  //   : superUserEmails;
 
   useEffect(() => {
     /**
@@ -113,13 +99,13 @@ export const UserTable = ({
       try {
         const response = await fetch("/api/prisma-users");
         const data = await response.json();
-        const sortedData = data.sort((a: User, b: User) => {
+        const sortedData = data.sort((a: UserSchema, b: UserSchema) => {
           return a.name.localeCompare(b.name);
         });
-        // const filteredData = sortedData.filter((user: User) => user.isAdmin);
+        // const filteredData = sortedData.filter((user: UserSchema) => user.isAdmin);
         const filteredData = isAdmin
-          ? sortedData.filter((user: User) => user.isAdmin)
-          : sortedData.filter((user: User) => !user.isAdmin);
+          ? sortedData.filter((user: UserSchema) => user.isAdmin)
+          : sortedData.filter((user: UserSchema) => !user.isAdmin);
 
         setUsers(filteredData);
       } catch (error) {
@@ -211,14 +197,16 @@ export const UserTable = ({
             th: "uppercase bg-foreground text-background",
           }}
           color="primary"
-          disabledKeys={disabledKeys}
+          // disabledKeys={disabledKeys}
           selectionMode="single"
           topContent={topContent()}
         >
           {/* Render the appropriate table header based on the selected menu */}
-          {renderTableHeader(selectedMenu)}
+          {renderTableHeader(selectedMenu, isAdmin)}
           <TableBody emptyContent="No entries found" items={users}>
-            {(user) => renderTableBody(user, selectedMenu, handleToggle)}
+            {(user) =>
+              renderTableBody(user, selectedMenu, isAdmin, handleToggle)
+            }
           </TableBody>
         </Table>
       </div>

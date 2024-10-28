@@ -6,7 +6,7 @@ import { useTranslations } from "next-intl";
 
 import { videosData } from "@/src/config/videosData";
 import { WithPermissionOverlayDocs } from "@/src/components/auth/withPermissionOverlay";
-import { UserSchema } from "@/src/lib/getUserPermission";
+import { UserSchema } from "@/interfaces/lib";
 
 import { title } from "../primitives";
 

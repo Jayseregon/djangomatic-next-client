@@ -29,7 +29,7 @@ const authorizedMembers = [
   { email: "jeremie.bitsch@telecon.ca" },
   { email: "m-l.betournay@telecon.ca" },
   { email: "gabriel.prevost@telecon.ca" },
-  { email: "sebastien.janelle@telecon.ca" }
+  { email: "sebastien.janelle@telecon.ca" },
 ];
 
 const prisma = new PrismaClient();
@@ -59,7 +59,7 @@ export const config = {
         user.email?.endsWith("@telecon.ca");
 
       const isAdmin = authorizedMembers.some(
-        (member) => member.email === user.email
+        (member) => member.email === user.email,
       );
 
       if (isAuthorized) {

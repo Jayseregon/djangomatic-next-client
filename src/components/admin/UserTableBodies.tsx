@@ -1,21 +1,70 @@
 import { TableRow, TableCell } from "@nextui-org/react";
 
-import { User, PermissionButton } from "./UserTable";
+import { UserSchema } from "@/interfaces/lib";
+
+import { PermissionButton } from "./UserTable";
 
 /**
  * Renders the default table body.
  *
  * @param {Object} params - The parameters for the default table body.
- * @param {User} params.user - The user object.
+ * @param {UserSchema} params.user - The user object.
  * @returns {JSX.Element} The rendered default table body.
  */
 export const defaultBody = ({
   user,
   handleToggle,
+  isAdmin,
 }: {
-  user: User;
+  user: UserSchema;
   handleToggle: (id: string, field: string, value: boolean) => void;
+  isAdmin: boolean;
 }): JSX.Element => {
+  if (isAdmin) {
+    return (
+      <TableRow key={user.email}>
+        <TableCell>{user.email}</TableCell>
+        <TableCell>{user.name}</TableCell>
+        <TableCell>{new Date(user.lastLogin).toLocaleString()}</TableCell>
+        <TableCell>
+          <PermissionButton
+            fieldName="isAdmin"
+            handleToggle={handleToggle}
+            user={user}
+          />
+        </TableCell>
+        <TableCell>
+          <PermissionButton
+            fieldName="isRnDTeam"
+            handleToggle={handleToggle}
+            user={user}
+          />
+        </TableCell>
+        <TableCell>
+          <PermissionButton
+            fieldName="canAccessBoards"
+            handleToggle={handleToggle}
+            user={user}
+          />
+        </TableCell>
+        <TableCell>
+          <PermissionButton
+            fieldName="canAccessRnd"
+            handleToggle={handleToggle}
+            user={user}
+          />
+        </TableCell>
+        <TableCell>
+          <PermissionButton
+            fieldName="canAccessReports"
+            handleToggle={handleToggle}
+            user={user}
+          />
+        </TableCell>
+      </TableRow>
+    );
+  }
+
   return (
     <TableRow key={user.email}>
       <TableCell>{user.email}</TableCell>
@@ -57,14 +106,14 @@ export const defaultBody = ({
  * Renders the docs table body.
  *
  * @param {Object} params - The parameters for the docs table body.
- * @param {User} params.user - The user object.
+ * @param {UserSchema} params.user - The user object.
  * @returns {JSX.Element} The rendered docs table body.
  */
 export const docsBody = ({
   user,
   handleToggle,
 }: {
-  user: User;
+  user: UserSchema;
   handleToggle: (id: string, field: string, value: boolean) => void;
 }): JSX.Element => {
   return (
@@ -107,14 +156,14 @@ export const docsBody = ({
  * Renders the videos table body.
  *
  * @param {Object} params - The parameters for the videos table body.
- * @param {User} params.user - The user object.
+ * @param {UserSchema} params.user - The user object.
  * @returns {JSX.Element} The rendered videos table body.
  */
 export const videosBody = ({
   user,
   handleToggle,
 }: {
-  user: User;
+  user: UserSchema;
   handleToggle: (id: string, field: string, value: boolean) => void;
 }): JSX.Element => {
   return (
@@ -150,14 +199,14 @@ export const videosBody = ({
  * Renders the apps TDS table body.
  *
  * @param {Object} params - The parameters for the apps TDS table body.
- * @param {User} params.user - The user object.
+ * @param {UserSchema} params.user - The user object.
  * @returns {JSX.Element} The rendered apps TDS table body.
  */
 export const appsTdsBody = ({
   user,
   handleToggle,
 }: {
-  user: User;
+  user: UserSchema;
   handleToggle: (id: string, field: string, value: boolean) => void;
 }): JSX.Element => {
   return (
@@ -214,14 +263,14 @@ export const appsTdsBody = ({
  * Renders the apps COGECO table body.
  *
  * @param {Object} params - The parameters for the apps COGECO table body.
- * @param {User} params.user - The user object.
+ * @param {UserSchema} params.user - The user object.
  * @returns {JSX.Element} The rendered apps COGECO table body.
  */
 export const appsCogecoBody = ({
   user,
   handleToggle,
 }: {
-  user: User;
+  user: UserSchema;
   handleToggle: (id: string, field: string, value: boolean) => void;
 }): JSX.Element => {
   return (
@@ -243,14 +292,14 @@ export const appsCogecoBody = ({
  * Renders the apps Vistabeam table body.
  *
  * @param {Object} params - The parameters for the apps Vistabeam table body.
- * @param {User} params.user - The user object.
+ * @param {UserSchema} params.user - The user object.
  * @returns {JSX.Element} The rendered apps Vistabeam table body.
  */
 export const appsVistabeamBody = ({
   user,
   handleToggle,
 }: {
-  user: User;
+  user: UserSchema;
   handleToggle: (id: string, field: string, value: boolean) => void;
 }): JSX.Element => {
   return (
@@ -286,14 +335,14 @@ export const appsVistabeamBody = ({
  * Renders the apps Xplore table body.
  *
  * @param {Object} params - The parameters for the apps Xplore table body.
- * @param {User} params.user - The user object.
+ * @param {UserSchema} params.user - The user object.
  * @returns {JSX.Element} The rendered apps Xplore table body.
  */
 export const appsXploreBody = ({
   user,
   handleToggle,
 }: {
-  user: User;
+  user: UserSchema;
   handleToggle: (id: string, field: string, value: boolean) => void;
 }): JSX.Element => {
   return (
@@ -312,8 +361,9 @@ export const appsXploreBody = ({
 };
 
 export const renderTableBody = (
-  user: User,
+  user: UserSchema,
   selectedMenu: string,
+  isAdmin: boolean,
   handleToggle: (id: string, field: string, value: boolean) => void,
 ) => {
   switch (selectedMenu) {
@@ -330,6 +380,6 @@ export const renderTableBody = (
     case "apps-xplore":
       return appsXploreBody({ user, handleToggle });
     default:
-      return defaultBody({ user, handleToggle });
+      return defaultBody({ user, handleToggle, isAdmin });
   }
 };

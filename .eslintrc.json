@@ -36,13 +36,23 @@
     "jsx-a11y/interactive-supports-focus": "warn",
     "prettier/prettier": "warn",
     "no-unused-vars": "off",
-    "unused-imports/no-unused-vars": "warn",
+    "unused-imports/no-unused-vars": [
+      "warn",
+      {
+        "vars": "all",
+        "varsIgnorePattern": "^_.*?$",
+        "args": "after-used",
+        "argsIgnorePattern": "^_.*?$"
+      }
+    ],
     "unused-imports/no-unused-imports": "warn",
     "@typescript-eslint/no-unused-vars": [
       "warn",
       {
+        "vars": "all", // Check all variables
         "args": "after-used",
         "ignoreRestSiblings": false,
+        "varsIgnorePattern": "^_.*?$", // Ignore variables starting with '_'
         "argsIgnorePattern": "^_.*?$"
       }
     ],

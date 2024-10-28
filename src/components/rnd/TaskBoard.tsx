@@ -11,7 +11,9 @@ import {
   Chip,
 } from "@nextui-org/react";
 
-import { RnDTeamTask, UserSchema } from "@/interfaces/lib";
+import { useSortTasksList } from "@/hooks/useSortTasksList";
+import { LoadingContent } from "@/components/ui/LoadingContent";
+import { UserSchema } from "@/interfaces/lib";
 import { title } from "@/components/primitives";
 import { statusColorMap } from "@/lib/utils";
 
@@ -26,30 +28,10 @@ export const TaskBoardShort = ({
   topContent: React.ReactNode;
   handleRowAction: (taskId: string) => void;
 }) => {
-  const [tasks, setTasks] = useState<RnDTeamTask[]>([]);
+  const tasksList = useSortTasksList(`/api/rnd-task?id=${user.id}`);
 
   useEffect(() => {
-    async function fetchTasks() {
-      try {
-        const response = await fetch(`/api/rnd-task?id=${user.id}`);
-        const data = await response.json();
-        const tasksWithDates = data.map((task: RnDTeamTask) => ({
-          ...task,
-          createdAt: new Date(task.createdAt),
-          dueDate: task.dueDate ? new Date(task.dueDate) : undefined,
-          startedAt: task.startedAt ? new Date(task.startedAt) : undefined,
-          completedAt: task.completedAt
-            ? new Date(task.completedAt)
-            : undefined,
-        }));
-
-        setTasks(tasksWithDates);
-      } catch (error) {
-        console.error("Failed to fetch tasks:", error);
-      }
-    }
-
-    fetchTasks();
+    tasksList.reload();
   }, [user, taskUpdated]);
 
   return (
@@ -65,6 +47,7 @@ export const TaskBoardShort = ({
           }}
           color="primary"
           selectionMode="single"
+          sortDescriptor={tasksList.sortDescriptor}
           topContent={
             <div className="flex justify-between items-center w-full text-xl font-semibold">
               <p>{user.name}</p>
@@ -72,23 +55,29 @@ export const TaskBoardShort = ({
             </div>
           }
           onRowAction={(key) => handleRowAction(key.toString())}
+          onSortChange={tasksList.sort}
         >
           <TableHeader>
-            <TableColumn key="task" className="text-center">
+            <TableColumn key="task" allowsSorting className="text-center">
               task
             </TableColumn>
-            <TableColumn key="status" className="text-center">
+            <TableColumn key="status" allowsSorting className="text-center">
               status
             </TableColumn>
-            <TableColumn key="priority" className="text-center">
+            <TableColumn key="priority" allowsSorting className="text-center">
               priority
             </TableColumn>
-            <TableColumn key="dueDate" className="text-center">
+            <TableColumn key="dueDate" allowsSorting className="text-center">
               due date
             </TableColumn>
           </TableHeader>
-          <TableBody emptyContent="No entries found" items={tasks}>
-            {tasks.map((task) => (
+          <TableBody
+            emptyContent="No entries found"
+            isLoading={tasksList.isLoading}
+            items={tasksList.items}
+            loadingContent={<LoadingContent />}
+          >
+            {tasksList.items.map((task) => (
               <TableRow key={task.id}>
                 <TableCell className="text-start">
                   <div className="max-w-xs text-wrap break-words">
@@ -133,7 +122,6 @@ export const TaskBoardFull = ({
   topContent: React.ReactNode;
   handleRowAction: (taskId: string) => void;
 }) => {
-  const [tasks, setTasks] = useState<RnDTeamTask[]>([]);
   const [user, setUser] = useState<UserSchema>({} as UserSchema);
 
   useEffect(() => {
@@ -150,33 +138,18 @@ export const TaskBoardFull = ({
     fetchData();
   }, [id]);
 
+  const tasksList = useSortTasksList(`/api/rnd-task?id=${id}`);
+
   useEffect(() => {
-    async function fetchTasks() {
-      try {
-        const response = await fetch(`/api/rnd-task?id=${id}`);
-        const data = await response.json();
-        const tasksWithDates = data.map((task: RnDTeamTask) => ({
-          ...task,
-          createdAt: new Date(task.createdAt),
-          dueDate: task.dueDate ? new Date(task.dueDate) : undefined,
-          startedAt: task.startedAt ? new Date(task.startedAt) : undefined,
-          completedAt: task.completedAt
-            ? new Date(task.completedAt)
-            : undefined,
-        }));
-
-        setTasks(tasksWithDates);
-      } catch (error) {
-        console.error("Failed to fetch tasks:", error);
-      }
-    }
-
-    fetchTasks();
+    tasksList.reload();
   }, [id, taskUpdated]);
 
   return (
     <>
-      <h1 className={title()}>{user.name} Tasks</h1>
+      <div className="flex flex-col">
+        <h1 className={title()}>{user.name}</h1>
+        <h2 className={title({ size: "xs" })}>Tasks</h2>
+      </div>
 
       <div className="mt-10 w-full">
         <div className="overflow-x-auto">
@@ -190,42 +163,61 @@ export const TaskBoardFull = ({
             }}
             color="primary"
             selectionMode="single"
+            sortDescriptor={tasksList.sortDescriptor}
             topContent={
               <div className="flex justify-end w-full">{topContent}</div>
             }
             onRowAction={(key) => handleRowAction(key.toString())}
+            onSortChange={tasksList.sort}
           >
             <TableHeader>
-              <TableColumn key="created" className="text-center">
+              <TableColumn key="created" allowsSorting className="text-center">
                 created
               </TableColumn>
-              <TableColumn key="task" className="text-center">
+              <TableColumn key="task" allowsSorting className="text-center">
                 task
               </TableColumn>
-              <TableColumn key="status" className="text-center">
+              <TableColumn key="status" allowsSorting className="text-center">
                 status
               </TableColumn>
-              <TableColumn key="priority" className="text-center">
+              <TableColumn key="priority" allowsSorting className="text-center">
                 priority
               </TableColumn>
-              <TableColumn key="impactedPeople" className="text-center">
+              <TableColumn
+                key="impactedPeople"
+                allowsSorting
+                className="text-center"
+              >
                 impacted
               </TableColumn>
               <TableColumn key="comment" className="text-center">
                 comment
               </TableColumn>
-              <TableColumn key="dueDate" className="text-center">
+              <TableColumn key="dueDate" allowsSorting className="text-center">
                 due date
               </TableColumn>
-              <TableColumn key="startedAt" className="text-center">
+              <TableColumn
+                key="startedAt"
+                allowsSorting
+                className="text-center"
+              >
                 started at
               </TableColumn>
-              <TableColumn key="completedAt" className="text-center">
+              <TableColumn
+                key="completedAt"
+                allowsSorting
+                className="text-center"
+              >
                 completed at
               </TableColumn>
             </TableHeader>
-            <TableBody emptyContent="No entries found" items={tasks}>
-              {tasks.map((task) => (
+            <TableBody
+              emptyContent="No entries found"
+              isLoading={tasksList.isLoading}
+              items={tasksList.items}
+              loadingContent={<LoadingContent />}
+            >
+              {tasksList.items.map((task) => (
                 <TableRow key={task.id}>
                   <TableCell className="text-center text-nowrap">
                     {task.createdAt?.toLocaleDateString("en-CA", {

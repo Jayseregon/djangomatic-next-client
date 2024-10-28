@@ -21,6 +21,7 @@ import {
   extractAzureFileData,
   formatAzureDate,
 } from "@/src/lib/utils";
+import { LoadingContent } from "@/components/ui/LoadingContent";
 
 import { TrashIcon, GearIcon } from "../icons";
 
@@ -198,19 +199,6 @@ export const BlobStorage = (): JSX.Element => {
   };
 
   /**
-   * Render loading content.
-   *
-   * @returns {JSX.Element} The loading content.
-   */
-  const loadingContent = (): JSX.Element => {
-    return (
-      <div className="flex flex-col items-center justify-center pt-24">
-        <Spinner color="primary" label="Loading..." />
-      </div>
-    );
-  };
-
-  /**
    * Render the top content for file upload and category/client selection.
    *
    * @returns {JSX.Element} The top content.
@@ -347,7 +335,7 @@ export const BlobStorage = (): JSX.Element => {
             emptyContent={"No blobs to display."}
             isLoading={blobsList.isLoading}
             items={blobsList.items}
-            loadingContent={loadingContent()}
+            loadingContent={<LoadingContent />}
           >
             {(item) => {
               const [baseName, extension, dir] = extractAzureFileData(

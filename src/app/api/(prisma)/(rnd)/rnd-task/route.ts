@@ -21,7 +21,7 @@ export async function GET(request: Request) {
       return new NextResponse("Tasks not found", { status: 404 });
     }
 
-    console.log("Found tasks:", tasks);
+    // console.log("Found tasks:", tasks);
 
     return NextResponse.json(tasks);
   } catch (error) {

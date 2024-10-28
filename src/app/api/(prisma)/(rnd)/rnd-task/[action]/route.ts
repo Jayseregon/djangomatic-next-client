@@ -13,8 +13,6 @@ export async function GET(request: Request) {
     return new NextResponse("Task ID is required", { status: 400 });
   }
 
-  console.log("Fetching task for ID:", id);
-
   try {
     const task = await prisma.rnDTeamTask.findUnique({
       where: { id: id },
@@ -25,7 +23,7 @@ export async function GET(request: Request) {
       return new NextResponse("Task not found", { status: 404 });
     }
 
-    console.log("Found task:", task);
+    // console.log("Found task:", task);
 
     return NextResponse.json(task);
   } catch (error: any) {
@@ -38,8 +36,6 @@ export async function GET(request: Request) {
 export async function POST(request: Request) {
   try {
     const data = await request.json();
-
-    console.log("Received data:", data);
     const { owner, ...taskData } = data;
 
     const newTask = await prisma.rnDTeamTask.create({
@@ -62,8 +58,6 @@ export async function POST(request: Request) {
 export async function PUT(request: Request) {
   try {
     const data = await request.json();
-
-    console.log("Updating data:", data);
 
     // Destructure to exclude 'ownerId' from updateData
     const { id, owner, ownerId: _ownerId, ...updateData } = data;
@@ -100,13 +94,9 @@ export async function DELETE(request: Request) {
   try {
     const { id } = await request.json();
 
-    console.log("Deleting task with ID:", id);
-
-    const deletedTask = await prisma.rnDTeamTask.delete({
+    const _ = await prisma.rnDTeamTask.delete({
       where: { id },
     });
-
-    console.log("Deleted task:", deletedTask);
 
     return new NextResponse("Task deleted", { status: 200 });
   } catch (error: any) {

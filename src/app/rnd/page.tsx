@@ -18,7 +18,6 @@ function UserPageContent({ session }: { session: any }) {
     <div className="mx-auto space-y-16">
       <h1 className={title()}>R&amp;D Tasks Dashboard</h1>
       <UserAccessRnD email={session.user.email} />
-      {/* <SkeletonDashboard size="large" /> */}
     </div>
   );
 }

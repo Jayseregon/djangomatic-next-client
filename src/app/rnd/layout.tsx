@@ -1,7 +1,7 @@
 import { headers } from "next/headers";
 
 import { SearchInput } from "@/components/ui/SearchInput";
-import { SidebarRnD } from "@/src/components/ui/sidebars";
+import { SidebarRnD } from "@/components/ui/sidebars";
 
 export default function RnDLayout({ children }: { children: React.ReactNode }) {
   const nonce = headers().get("x-nonce");

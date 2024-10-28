@@ -41,7 +41,7 @@ const microsoftEntraIDProvider = MicrosoftEntraID({
 
 const providers: Provider[] = [microsoftEntraIDProvider];
 
-if (process.env.APP_ENV !== "production") {
+if (process.env.NEXT_PUBLIC_APP_ENV !== "production") {
   providers.push(GitHub);
 }
 

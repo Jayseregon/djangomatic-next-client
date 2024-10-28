@@ -1,8 +1,9 @@
 import { TableRow, TableCell } from "@nextui-org/react";
 
 import { UserSchema } from "@/interfaces/lib";
+import { superUserEmails } from "@/config/superUser";
 
-import { PermissionButton } from "./UserTable";
+import { PermissionButton } from "./PermissionButton";
 
 /**
  * Renders the default table body.
@@ -15,11 +16,16 @@ export const defaultBody = ({
   user,
   handleToggle,
   isAdmin,
+  isSessionSuperUser,
 }: {
   user: UserSchema;
   handleToggle: (id: string, field: string, value: boolean) => void;
   isAdmin: boolean;
+  isSessionSuperUser: boolean;
 }): JSX.Element => {
+  const isUserSuperUser = superUserEmails.includes(user.email);
+  const disabled = !isSessionSuperUser && isUserSuperUser;
+
   if (isAdmin) {
     return (
       <TableRow key={user.email}>
@@ -28,6 +34,7 @@ export const defaultBody = ({
         <TableCell>{new Date(user.lastLogin).toLocaleString()}</TableCell>
         <TableCell>
           <PermissionButton
+            disabled={disabled}
             fieldName="isAdmin"
             handleToggle={handleToggle}
             user={user}
@@ -35,6 +42,7 @@ export const defaultBody = ({
         </TableCell>
         <TableCell>
           <PermissionButton
+            disabled={disabled}
             fieldName="isRnDTeam"
             handleToggle={handleToggle}
             user={user}
@@ -42,6 +50,7 @@ export const defaultBody = ({
         </TableCell>
         <TableCell>
           <PermissionButton
+            disabled={disabled}
             fieldName="canAccessBoards"
             handleToggle={handleToggle}
             user={user}
@@ -49,6 +58,7 @@ export const defaultBody = ({
         </TableCell>
         <TableCell>
           <PermissionButton
+            disabled={disabled}
             fieldName="canAccessRnd"
             handleToggle={handleToggle}
             user={user}
@@ -56,6 +66,7 @@ export const defaultBody = ({
         </TableCell>
         <TableCell>
           <PermissionButton
+            disabled={disabled}
             fieldName="canAccessReports"
             handleToggle={handleToggle}
             user={user}
@@ -72,6 +83,7 @@ export const defaultBody = ({
       <TableCell>{new Date(user.lastLogin).toLocaleString()}</TableCell>
       <TableCell>
         <PermissionButton
+          disabled={disabled}
           fieldName="isAdmin"
           handleToggle={handleToggle}
           user={user}
@@ -79,6 +91,7 @@ export const defaultBody = ({
       </TableCell>
       <TableCell>
         <PermissionButton
+          disabled={disabled}
           fieldName="canAccessBoards"
           handleToggle={handleToggle}
           user={user}
@@ -86,6 +99,7 @@ export const defaultBody = ({
       </TableCell>
       <TableCell>
         <PermissionButton
+          disabled={disabled}
           fieldName="canAccessRnd"
           handleToggle={handleToggle}
           user={user}
@@ -93,6 +107,7 @@ export const defaultBody = ({
       </TableCell>
       <TableCell>
         <PermissionButton
+          disabled={disabled}
           fieldName="canAccessReports"
           handleToggle={handleToggle}
           user={user}
@@ -112,16 +127,22 @@ export const defaultBody = ({
 export const docsBody = ({
   user,
   handleToggle,
+  isSessionSuperUser,
 }: {
   user: UserSchema;
   handleToggle: (id: string, field: string, value: boolean) => void;
+  isSessionSuperUser: boolean;
 }): JSX.Element => {
+  const isUserSuperUser = superUserEmails.includes(user.email);
+  const disabled = !isSessionSuperUser && isUserSuperUser;
+
   return (
     <TableRow key={user.email}>
       <TableCell>{user.email}</TableCell>
       <TableCell>{user.name}</TableCell>
       <TableCell>
         <PermissionButton
+          disabled={disabled}
           fieldName="canAccessDocsTDS"
           handleToggle={handleToggle}
           user={user}
@@ -129,6 +150,7 @@ export const docsBody = ({
       </TableCell>
       <TableCell>
         <PermissionButton
+          disabled={disabled}
           fieldName="canAccessDocsCogeco"
           handleToggle={handleToggle}
           user={user}
@@ -136,6 +158,7 @@ export const docsBody = ({
       </TableCell>
       <TableCell>
         <PermissionButton
+          disabled={disabled}
           fieldName="canAccessDocsVistabeam"
           handleToggle={handleToggle}
           user={user}
@@ -143,6 +166,7 @@ export const docsBody = ({
       </TableCell>
       <TableCell>
         <PermissionButton
+          disabled={disabled}
           fieldName="canAccessDocsXplore"
           handleToggle={handleToggle}
           user={user}
@@ -162,16 +186,22 @@ export const docsBody = ({
 export const videosBody = ({
   user,
   handleToggle,
+  isSessionSuperUser,
 }: {
   user: UserSchema;
   handleToggle: (id: string, field: string, value: boolean) => void;
+  isSessionSuperUser: boolean;
 }): JSX.Element => {
+  const isUserSuperUser = superUserEmails.includes(user.email);
+  const disabled = !isSessionSuperUser && isUserSuperUser;
+
   return (
     <TableRow key={user.email}>
       <TableCell>{user.email}</TableCell>
       <TableCell>{user.name}</TableCell>
       <TableCell>
         <PermissionButton
+          disabled={disabled}
           fieldName="canAccessVideoDefault"
           handleToggle={handleToggle}
           user={user}
@@ -179,6 +209,7 @@ export const videosBody = ({
       </TableCell>
       <TableCell>
         <PermissionButton
+          disabled={disabled}
           fieldName="canAccessVideoQGIS"
           handleToggle={handleToggle}
           user={user}
@@ -186,6 +217,7 @@ export const videosBody = ({
       </TableCell>
       <TableCell>
         <PermissionButton
+          disabled={disabled}
           fieldName="canAccessVideoSttar"
           handleToggle={handleToggle}
           user={user}
@@ -205,16 +237,22 @@ export const videosBody = ({
 export const appsTdsBody = ({
   user,
   handleToggle,
+  isSessionSuperUser,
 }: {
   user: UserSchema;
   handleToggle: (id: string, field: string, value: boolean) => void;
+  isSessionSuperUser: boolean;
 }): JSX.Element => {
+  const isUserSuperUser = superUserEmails.includes(user.email);
+  const disabled = !isSessionSuperUser && isUserSuperUser;
+
   return (
     <TableRow key={user.email}>
       <TableCell>{user.email}</TableCell>
       <TableCell>{user.name}</TableCell>
       <TableCell>
         <PermissionButton
+          disabled={disabled}
           fieldName="canAccessAppsTdsHLD"
           handleToggle={handleToggle}
           user={user}
@@ -222,6 +260,7 @@ export const appsTdsBody = ({
       </TableCell>
       <TableCell>
         <PermissionButton
+          disabled={disabled}
           fieldName="canAccessAppsTdsLLD"
           handleToggle={handleToggle}
           user={user}
@@ -229,6 +268,7 @@ export const appsTdsBody = ({
       </TableCell>
       <TableCell>
         <PermissionButton
+          disabled={disabled}
           fieldName="canAccessAppsTdsArcGIS"
           handleToggle={handleToggle}
           user={user}
@@ -236,6 +276,7 @@ export const appsTdsBody = ({
       </TableCell>
       <TableCell>
         <PermissionButton
+          disabled={disabled}
           fieldName="canAccessAppsTdsOverride"
           handleToggle={handleToggle}
           user={user}
@@ -243,6 +284,7 @@ export const appsTdsBody = ({
       </TableCell>
       <TableCell>
         <PermissionButton
+          disabled={disabled}
           fieldName="canAccessAppsTdsAdmin"
           handleToggle={handleToggle}
           user={user}
@@ -250,6 +292,7 @@ export const appsTdsBody = ({
       </TableCell>
       <TableCell>
         <PermissionButton
+          disabled={disabled}
           fieldName="canAccessAppsTdsSuper"
           handleToggle={handleToggle}
           user={user}
@@ -269,16 +312,22 @@ export const appsTdsBody = ({
 export const appsCogecoBody = ({
   user,
   handleToggle,
+  isSessionSuperUser,
 }: {
   user: UserSchema;
   handleToggle: (id: string, field: string, value: boolean) => void;
+  isSessionSuperUser: boolean;
 }): JSX.Element => {
+  const isUserSuperUser = superUserEmails.includes(user.email);
+  const disabled = !isSessionSuperUser && isUserSuperUser;
+
   return (
     <TableRow key={user.email}>
       <TableCell>{user.email}</TableCell>
       <TableCell>{user.name}</TableCell>
       <TableCell>
         <PermissionButton
+          disabled={disabled}
           fieldName="canAccessAppsCogecoHLD"
           handleToggle={handleToggle}
           user={user}
@@ -298,16 +347,22 @@ export const appsCogecoBody = ({
 export const appsVistabeamBody = ({
   user,
   handleToggle,
+  isSessionSuperUser,
 }: {
   user: UserSchema;
   handleToggle: (id: string, field: string, value: boolean) => void;
+  isSessionSuperUser: boolean;
 }): JSX.Element => {
+  const isUserSuperUser = superUserEmails.includes(user.email);
+  const disabled = !isSessionSuperUser && isUserSuperUser;
+
   return (
     <TableRow key={user.email}>
       <TableCell>{user.email}</TableCell>
       <TableCell>{user.name}</TableCell>
       <TableCell>
         <PermissionButton
+          disabled={disabled}
           fieldName="canAccessAppsVistabeamHLD"
           handleToggle={handleToggle}
           user={user}
@@ -315,6 +370,7 @@ export const appsVistabeamBody = ({
       </TableCell>
       <TableCell>
         <PermissionButton
+          disabled={disabled}
           fieldName="canAccessAppsVistabeamOverride"
           handleToggle={handleToggle}
           user={user}
@@ -322,6 +378,7 @@ export const appsVistabeamBody = ({
       </TableCell>
       <TableCell>
         <PermissionButton
+          disabled={disabled}
           fieldName="canAccessAppsVistabeamSuper"
           handleToggle={handleToggle}
           user={user}
@@ -341,16 +398,22 @@ export const appsVistabeamBody = ({
 export const appsXploreBody = ({
   user,
   handleToggle,
+  isSessionSuperUser,
 }: {
   user: UserSchema;
   handleToggle: (id: string, field: string, value: boolean) => void;
+  isSessionSuperUser: boolean;
 }): JSX.Element => {
+  const isUserSuperUser = superUserEmails.includes(user.email);
+  const disabled = !isSessionSuperUser && isUserSuperUser;
+
   return (
     <TableRow key={user.email}>
       <TableCell>{user.email}</TableCell>
       <TableCell>{user.name}</TableCell>
       <TableCell>
         <PermissionButton
+          disabled={disabled}
           fieldName="canAccessAppsXploreAdmin"
           handleToggle={handleToggle}
           user={user}
@@ -364,22 +427,23 @@ export const renderTableBody = (
   user: UserSchema,
   selectedMenu: string,
   isAdmin: boolean,
+  isSessionSuperUser: boolean,
   handleToggle: (id: string, field: string, value: boolean) => void,
 ) => {
   switch (selectedMenu) {
     case "docs":
-      return docsBody({ user, handleToggle });
+      return docsBody({ user, handleToggle, isSessionSuperUser });
     case "videos":
-      return videosBody({ user, handleToggle });
+      return videosBody({ user, handleToggle, isSessionSuperUser });
     case "apps-tds":
-      return appsTdsBody({ user, handleToggle });
+      return appsTdsBody({ user, handleToggle, isSessionSuperUser });
     case "apps-cogeco":
-      return appsCogecoBody({ user, handleToggle });
+      return appsCogecoBody({ user, handleToggle, isSessionSuperUser });
     case "apps-vistabeam":
-      return appsVistabeamBody({ user, handleToggle });
+      return appsVistabeamBody({ user, handleToggle, isSessionSuperUser });
     case "apps-xplore":
-      return appsXploreBody({ user, handleToggle });
+      return appsXploreBody({ user, handleToggle, isSessionSuperUser });
     default:
-      return defaultBody({ user, handleToggle, isAdmin });
+      return defaultBody({ user, handleToggle, isAdmin, isSessionSuperUser });
   }
 };

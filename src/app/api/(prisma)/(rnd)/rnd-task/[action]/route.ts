@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { PrismaClient } from "@prisma/client";
 
-import { handlePrismaError } from "@/src/lib/prismaErrorHandler";
+import { handlePrismaError } from "@/lib/prismaErrorHandler";
 
 const prisma = new PrismaClient();
 

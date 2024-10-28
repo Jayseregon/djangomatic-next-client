@@ -1,73 +1,14 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { Table, TableBody, Button, RadioGroup, Radio } from "@nextui-org/react";
+import { Table, TableBody, RadioGroup, Radio } from "@nextui-org/react";
 
-import { CheckIcon, UncheckIcon } from "@/components/icons";
 import { UserSchema } from "@/interfaces/lib";
+import { superUserEmails } from "@/config/superUser";
+import { LoadingContent } from "@/components/ui/LoadingContent";
 
 import { renderTableBody } from "./UserTableBodies";
 import { renderTableHeader } from "./UserTableHeaders";
-
-interface PermissionSwitchProps {
-  user: any;
-  fieldName: string;
-  borderType?: string;
-  handleToggle: (id: string, field: string, value: boolean) => void;
-}
-
-const superUserEmails = ["jayseregon@gmail.com", "jeremie.bitsch@telecon.ca"];
-
-/**
- * PermissionButton component renders a button to toggle user permissions.
- * The button's color and icon change based on the user's current permission state.
- *
- * @param {Object} props - The props for the PermissionButton component.
- * @param {UserSchema} props.user - The user object containing permission data.
- * @param {string} props.fieldName - The name of the permission field to toggle.
- * @param {Function} props.handleToggle - The function to handle the toggle action.
- * @returns {JSX.Element} The rendered PermissionButton component.
- */
-export const PermissionButton = ({
-  user,
-  fieldName,
-  handleToggle,
-}: PermissionSwitchProps): JSX.Element => {
-  return (
-    <Button
-      isIconOnly
-      className="ps-0.5 pt-0.5"
-      color={user[fieldName] ? "success" : "danger"}
-      // disabled={!superUserEmails.includes(user.email)}
-      radius="full"
-      size="sm"
-      variant="light"
-      onClick={() => handleToggle(user.id, fieldName, !user[fieldName])}
-    >
-      {/* Render the appropriate icon based on the user's permission state */}
-      {user[fieldName] ? <CheckIcon size={24} /> : <UncheckIcon size={24} />}
-    </Button>
-  );
-};
-
-/**
- * VerticalText component renders a given text vertically.
- * Each character of the text is displayed in a separate line.
- *
- * @param {Object} props - The props for the VerticalText component.
- * @param {string} props.text - The text to be displayed vertically.
- * @returns {JSX.Element} The rendered VerticalText component.
- */
-export const VerticalText = ({ text }: { text: string }): JSX.Element => {
-  return (
-    <div className="flex flex-col items-center justify-center h-full px-2">
-      {/* Split the text into individual characters and render each character in a separate line */}
-      {text.split("").map((char, index) => (
-        <div key={index}>{char}</div>
-      ))}
-    </div>
-  );
-};
 
 /**
  * UserTable component renders a table of users with various permission settings.
@@ -85,24 +26,18 @@ export const UserTable = ({
 }): JSX.Element => {
   const [users, setUsers] = useState<UserSchema[]>([]);
   const [selectedMenu, setSelectedMenu] = useState<string>("default");
-  // // If the session email is one of the superuser emails, allow editing own permissions
-  // // Otherwise, disable editing for superuser emails
-  // const disabledKeys = superUserEmails.includes(sessionEmail)
-  //   ? undefined
-  //   : superUserEmails;
+
+  // Determine if the session user is a superuser
+  const isSessionSuperUser = superUserEmails.includes(sessionEmail);
 
   useEffect(() => {
-    /**
-     * Fetches user data from the API and sets the users state.
-     */
     async function fetchData() {
       try {
-        const response = await fetch("/api/prisma-users");
+        const response = await fetch("/api/prisma-user");
         const data = await response.json();
         const sortedData = data.sort((a: UserSchema, b: UserSchema) => {
           return a.name.localeCompare(b.name);
         });
-        // const filteredData = sortedData.filter((user: UserSchema) => user.isAdmin);
         const filteredData = isAdmin
           ? sortedData.filter((user: UserSchema) => user.isAdmin)
           : sortedData.filter((user: UserSchema) => !user.isAdmin);
@@ -113,7 +48,7 @@ export const UserTable = ({
       }
     }
     fetchData();
-  }, []);
+  }, [isAdmin]);
 
   /**
    * Handles toggling of user permissions.
@@ -124,7 +59,7 @@ export const UserTable = ({
    */
   const handleToggle = async (id: string, field: string, value: boolean) => {
     try {
-      const response = await fetch("/api/prisma-user-update", {
+      const response = await fetch("/api/prisma-user/update", {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
@@ -197,15 +132,24 @@ export const UserTable = ({
             th: "uppercase bg-foreground text-background",
           }}
           color="primary"
-          // disabledKeys={disabledKeys}
           selectionMode="single"
           topContent={topContent()}
         >
           {/* Render the appropriate table header based on the selected menu */}
           {renderTableHeader(selectedMenu, isAdmin)}
-          <TableBody emptyContent="No entries found" items={users}>
+          <TableBody
+            emptyContent="No entries found"
+            items={users}
+            loadingContent={<LoadingContent />}
+          >
             {(user) =>
-              renderTableBody(user, selectedMenu, isAdmin, handleToggle)
+              renderTableBody(
+                user,
+                selectedMenu,
+                isAdmin,
+                isSessionSuperUser,
+                handleToggle,
+              )
             }
           </TableBody>
         </Table>

@@ -28,6 +28,14 @@ import { SignOut } from "./sign-in";
 import LocaleSwitcher from "./LocaleSwitcher";
 // import { SearchInput } from "@/components/SearchInput";
 
+const appEnv = process.env.NEXT_PUBLIC_APP_ENV;
+const appName =
+  appEnv === "production"
+    ? siteConfig.name_beta
+    : appEnv === "staging"
+      ? siteConfig.name_staging
+      : siteConfig.name_local;
+
 interface NavbarProps {
   nonce?: string;
   session?: any;
@@ -48,13 +56,6 @@ export const Navbar = ({ nonce, session }: NavbarProps): JSX.Element | null => {
   const t = useTranslations("UserProfile");
   const pathname = usePathname();
   const isUnAuth = pathname === "/signin";
-  const appEnv = process.env.NEXT_PUBLIC_APP_ENV;
-  const appName =
-    appEnv === "production"
-      ? siteConfig.name + " [beta]"
-      : appEnv === "staging"
-        ? siteConfig.name + " [staging]"
-        : siteConfig.name + " [local]";
 
   if (isUnAuth) {
     return null;

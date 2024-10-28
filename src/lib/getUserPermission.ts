@@ -6,7 +6,7 @@
  * @throws Will throw an error if the fetch operation fails.
  */
 export async function fetchUser(email: string): Promise<any> {
-  const response = await fetch("/api/prisma-user-perms", {
+  const response = await fetch("/api/prisma-user/find", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

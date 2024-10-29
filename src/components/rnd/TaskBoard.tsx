@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
+import { useTranslations } from "next-intl";
 import {
   Table,
   TableBody,
@@ -29,6 +30,7 @@ export const TaskBoardShort = ({
   handleRowAction: (taskId: string) => void;
 }) => {
   const tasksList = useSortTasksList(`/api/rnd-task?id=${user.id}`);
+  const t = useTranslations("RnD");
 
   useEffect(() => {
     tasksList.reload();
@@ -59,16 +61,16 @@ export const TaskBoardShort = ({
         >
           <TableHeader>
             <TableColumn key="task" allowsSorting className="text-center">
-              task
+              {t("taskBoardColumns.task")}
             </TableColumn>
             <TableColumn key="status" allowsSorting className="text-center">
-              status
+              {t("taskBoardColumns.status")}
             </TableColumn>
             <TableColumn key="priority" allowsSorting className="text-center">
-              priority
+              {t("taskBoardColumns.priority")}
             </TableColumn>
             <TableColumn key="dueDate" allowsSorting className="text-center">
-              due date
+              {t("taskBoardColumns.dueDate")}
             </TableColumn>
           </TableHeader>
           <TableBody
@@ -123,6 +125,7 @@ export const TaskBoardFull = ({
   handleRowAction: (taskId: string) => void;
 }) => {
   const [user, setUser] = useState<UserSchema>({} as UserSchema);
+  const t = useTranslations("RnD");
 
   useEffect(() => {
     async function fetchData() {
@@ -148,7 +151,7 @@ export const TaskBoardFull = ({
     <>
       <div className="flex flex-col">
         <h1 className={title()}>{user.name}</h1>
-        <h2 className={title({ size: "xs" })}>Tasks</h2>
+        <h2 className={title({ size: "xs" })}>{t("taskExtension")}</h2>
       </div>
 
       <div className="mt-10 w-full">
@@ -158,7 +161,7 @@ export const TaskBoardFull = ({
             removeWrapper
             aria-label="rnd-task-board"
             classNames={{
-              base: "text-left",
+              base: "text-center",
               th: "uppercase bg-foreground text-background",
             }}
             color="primary"
@@ -172,43 +175,43 @@ export const TaskBoardFull = ({
           >
             <TableHeader>
               <TableColumn key="created" allowsSorting className="text-center">
-                created
+                {t("taskBoardColumns.created")}
               </TableColumn>
               <TableColumn key="task" allowsSorting className="text-center">
-                task
+                {t("taskBoardColumns.task")}
               </TableColumn>
               <TableColumn key="status" allowsSorting className="text-center">
-                status
+                {t("taskBoardColumns.status")}
               </TableColumn>
               <TableColumn key="priority" allowsSorting className="text-center">
-                priority
+                {t("taskBoardColumns.priority")}
               </TableColumn>
               <TableColumn
                 key="impactedPeople"
                 allowsSorting
                 className="text-center"
               >
-                impacted
+                {t("taskBoardColumns.impacted")}
               </TableColumn>
               <TableColumn key="comment" className="text-center">
-                comment
+                {t("taskBoardColumns.comments")}
               </TableColumn>
               <TableColumn key="dueDate" allowsSorting className="text-center">
-                due date
+                {t("taskBoardColumns.dueDate")}
               </TableColumn>
               <TableColumn
                 key="startedAt"
                 allowsSorting
                 className="text-center"
               >
-                started at
+                {t("taskBoardColumns.startedAt")}
               </TableColumn>
               <TableColumn
                 key="completedAt"
                 allowsSorting
                 className="text-center"
               >
-                completed at
+                {t("taskBoardColumns.completedAt")}
               </TableColumn>
             </TableHeader>
             <TableBody

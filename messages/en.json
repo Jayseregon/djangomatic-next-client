@@ -40,8 +40,32 @@
     }
   },
   "RnD": {
-    "title": "R&D",
-    "subtitle": "Research & Development Team access page"
+    "title": "Tasks Dashboard",
+    "subtitle": "R&D",
+    "sidebar": {
+      "homeSection": {
+        "title": "Home",
+        "dashboardLink": "All Dashboards"
+      },
+      "teamSection": "Team Dashboards"
+    }, 
+    "taskExtension": "Tasks",
+    "taskBoardColumns": {
+      "created": "Created",
+      "task": "Task",
+      "owner": "Prime",
+      "status": "Status",
+      "priority": "Priority",
+      "impacted": "Impacted",
+      "comments": "Comments",
+      "dueDate": "Due Date",
+      "startedAt": "Started At",
+      "completedAt": "Completed At"
+    }, 
+    "taskModal" : {
+      "addNew": "Add New Task",
+      "editTask": "Edit Task"
+    }
   },
   "SaasSidebar": {
     "link_title": "Usage Guidelines"

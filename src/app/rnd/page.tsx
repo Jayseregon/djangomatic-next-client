@@ -1,3 +1,5 @@
+import { useTranslations } from "next-intl";
+
 import { title } from "@/components/primitives";
 import { auth } from "@/auth";
 import { UnAuthenticated } from "@/components/auth/unAuthenticated";
@@ -12,11 +14,16 @@ export default async function UserPage() {
 }
 
 function UserPageContent({ session }: { session: any }) {
+  const t = useTranslations("RnD");
+
   if (!session) return <UnAuthenticated />;
 
   return (
     <div className="mx-auto space-y-16">
-      <h1 className={title()}>R&amp;D Tasks Dashboard</h1>
+      <div className="flex flex-col">
+        <h1 className={title()}>{t("title")}</h1>
+        <h2 className={title({ size: "xs" })}>{t("subtitle")}</h2>
+      </div>
       <UserAccessRnD email={session.user.email} />
     </div>
   );

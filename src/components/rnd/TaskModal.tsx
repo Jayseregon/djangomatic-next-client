@@ -1,5 +1,6 @@
 "use client";
 import React, { useState, useEffect, useMemo } from "react";
+import { useTranslations } from "next-intl";
 import {
   Modal,
   ModalContent,
@@ -44,6 +45,7 @@ export const TaskModal: React.FC<TaskModalProps> = ({
   onTaskChange,
 }) => {
   const [users, setUsers] = useState<UserSchema[]>([]);
+  const t = useTranslations("RnD");
   const defaultTask: Partial<RnDTeamTask> = {
     task: "",
     priority: 0,
@@ -193,7 +195,7 @@ export const TaskModal: React.FC<TaskModalProps> = ({
     >
       <ModalContent>
         <ModalHeader className="flex flex-row justify-between items-center w-full">
-          {mode === "add" ? "Add New Task" : "Edit Task"}
+          {mode === "add" ? t("taskModal.addNew") : t("taskModal.editTask")}
           {mode !== "add" ? (
             <Button
               isIconOnly
@@ -215,7 +217,7 @@ export const TaskModal: React.FC<TaskModalProps> = ({
                 input: "border-0 focus:ring-0",
                 inputWrapper: "border-foreground/50 hover:!border-foreground",
               }}
-              label="Task"
+              label={t("taskBoardColumns.task")}
               labelPlacement="outside"
               placeholder="..."
               value={task.task || ""}
@@ -230,7 +232,7 @@ export const TaskModal: React.FC<TaskModalProps> = ({
                 label: "text-center w-full",
                 popoverContent: "bg-background",
               }}
-              label="Status"
+              label={t("taskBoardColumns.status")}
               labelPlacement="outside"
               placeholder="..."
               renderValue={(selected) => {
@@ -284,7 +286,7 @@ export const TaskModal: React.FC<TaskModalProps> = ({
                 trigger:
                   "border-foreground/50 rounded-full hover:!border-foreground",
               }}
-              label="Owner"
+              label={t("taskBoardColumns.owner")}
               labelPlacement="outside"
               placeholder="..."
               selectedKeys={task.owner ? new Set([task.owner.id]) : new Set()}
@@ -311,7 +313,7 @@ export const TaskModal: React.FC<TaskModalProps> = ({
                 trigger:
                   "border-foreground/50 rounded-full hover:!border-foreground",
               }}
-              label="Priority"
+              label={t("taskBoardColumns.priority")}
               labelPlacement="outside"
               placeholder="..."
               selectedKeys={
@@ -342,7 +344,7 @@ export const TaskModal: React.FC<TaskModalProps> = ({
                 trigger:
                   "border-foreground/50 rounded-full hover:!border-foreground",
               }}
-              label="Impacted People"
+              label={t("taskBoardColumns.impacted")}
               labelPlacement="outside"
               placeholder="..."
               selectedKeys={
@@ -371,7 +373,7 @@ export const TaskModal: React.FC<TaskModalProps> = ({
               input: "border-0 focus:ring-0",
               inputWrapper: "border-foreground/50 hover:!border-foreground",
             }}
-            label="Comment"
+            label={t("taskBoardColumns.comments")}
             labelPlacement="outside"
             maxRows={10}
             minRows={5}
@@ -391,7 +393,7 @@ export const TaskModal: React.FC<TaskModalProps> = ({
                 inputWrapper:
                   "border-foreground/50 rounded-full hover:border-foreground",
               }}
-              label="Due Date"
+              label={t("taskBoardColumns.dueDate")}
               labelPlacement="outside"
               name="dueDate"
               value={
@@ -411,7 +413,7 @@ export const TaskModal: React.FC<TaskModalProps> = ({
                 inputWrapper:
                   "border-foreground/50 rounded-full hover:border-foreground",
               }}
-              label="Started At"
+              label={t("taskBoardColumns.startedAt")}
               labelPlacement="outside"
               name="startedAt"
               value={
@@ -431,7 +433,7 @@ export const TaskModal: React.FC<TaskModalProps> = ({
                 inputWrapper:
                   "border-foreground/50 rounded-full hover:border-foreground",
               }}
-              label="Completed At"
+              label={t("taskBoardColumns.completedAt")}
               labelPlacement="outside"
               name="completedAt"
               value={

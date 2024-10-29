@@ -40,8 +40,32 @@
     }
   },
   "RnD": {
-    "title": "R&D",
-    "subtitle": "Page d'accès pour l'équipe de recherche & développement"
+    "title": "Tableau des tâches",
+    "subtitle": "R&D",
+    "sidebar": {
+      "homeSection": {
+        "title": "Accueil",
+        "dashboardLink": "Tous les tableaux"
+      },
+      "teamSection": "Tableaux des membres"
+    },
+    "taskExtension": "Tâches",
+    "taskBoardColumns": {
+      "created": "Créée",
+      "task": "Tâche",
+      "owner": "Prime",
+      "status": "Statut",
+      "priority": "Priorité",
+      "impacted": "Impact",
+      "comments": "Commentaires",
+      "dueDate": "Échéance",
+      "startedAt": "Commencée",
+      "completedAt": "Terminée"
+    },
+    "taskModal" : {
+      "addNew": "Ajouter une nouvelle tâche",
+      "editTask": "Modifier la tâche"
+    }
   },
   "SaasSidebar": {
     "link_title": "Guide d'utilisation"

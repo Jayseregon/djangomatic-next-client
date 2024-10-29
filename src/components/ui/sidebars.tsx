@@ -486,6 +486,7 @@ export const SidebarDocs: React.FC<SidebarProps> = ({
 
 export const SidebarRnD = ({ nonce }: { nonce?: string }): JSX.Element => {
   const [users, setUsers] = useState<UserSchema[]>([]);
+  const t = useTranslations("RnD");
 
   useEffect(() => {
     async function fetchUsers() {
@@ -513,7 +514,7 @@ export const SidebarRnD = ({ nonce }: { nonce?: string }): JSX.Element => {
             aria-label="rnd-home"
             title={
               <h2 className="text-xl font-black text-foreground indent-2 mt-3 mb-1">
-                Home
+                {t("sidebar.homeSection.title")}
               </h2>
             }
           >
@@ -522,7 +523,7 @@ export const SidebarRnD = ({ nonce }: { nonce?: string }): JSX.Element => {
               href={"/rnd"}
               nonce={nonce}
             >
-              Main Dashboard
+              {t("sidebar.homeSection.dashboardLink")}
             </Link>
           </AccordionItem>
 
@@ -532,7 +533,7 @@ export const SidebarRnD = ({ nonce }: { nonce?: string }): JSX.Element => {
             aria-label="rnd-team"
             title={
               <h2 className="text-xl font-black text-foreground indent-2 mt-3 mb-1">
-                RnD Team
+                {t("sidebar.teamSection")}
               </h2>
             }
           >

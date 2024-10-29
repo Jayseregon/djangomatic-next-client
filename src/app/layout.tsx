@@ -6,7 +6,7 @@ import clsx from "clsx";
 import { ReactNode } from "react";
 import { getLocale, getMessages } from "next-intl/server";
 import { headers } from "next/headers";
-import { unstable_setRequestLocale } from "next-intl/server";
+import { setRequestLocale } from "next-intl/server";
 
 import { siteConfig } from "@/config/site";
 import { fontSans, fontMono } from "@/config/fonts";
@@ -55,7 +55,7 @@ export default async function RootLayout({ children }: Props) {
   const messages = await getMessages();
   const session = await auth();
 
-  unstable_setRequestLocale(locale);
+  setRequestLocale(locale);
 
   return (
     <html suppressHydrationWarning lang={locale} nonce={nonce || undefined}>

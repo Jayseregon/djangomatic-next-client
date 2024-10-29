@@ -36,7 +36,7 @@ const prisma = new PrismaClient();
 const microsoftEntraIDProvider = MicrosoftEntraID({
   clientId: process.env.AUTH_MICROSOFT_ENTRA_ID_ID,
   clientSecret: process.env.AUTH_MICROSOFT_ENTRA_ID_SECRET,
-  tenantId: process.env.AUTH_MICROSOFT_ENTRA_ID_TENANT_ID,
+  issuer: process.env.AUTH_MICROSOFT_ENTRA_ID_ISSUER,
 });
 
 const providers: Provider[] = [microsoftEntraIDProvider];

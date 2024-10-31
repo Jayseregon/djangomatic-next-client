@@ -4,7 +4,6 @@
  */
 
 import type { Config } from "jest";
-
 import nextJest from "next/jest";
 
 const createJestConfig = nextJest({
@@ -38,9 +37,20 @@ const config: Config = {
     "^@/lib/(.*)$": "<rootDir>/src/lib/$1",
     "^#site/content$": "<rootDir>/.velite",
   },
-  testMatch: ["**/__tests__/**/*.[jt]s?(x)", "**/?(*.)+(spec|test).[tj]s?(x)"],
+  testMatch: [
+    "**/__tests__/**/*.[jt]s?(x)",
+    "**/?(*.)+(spec|test).[tj]s?(x)",
+  ],
   testPathIgnorePatterns: ["/node_modules/"],
+  watchPathIgnorePatterns: [
+    "<rootDir>/node_modules/",
+    "<rootDir>/.next/",
+    "<rootDir>/out/",
+    "<rootDir>/public/",
+    "<rootDir>/coverage/",
+  ],
+  // Uncomment the next line to limit workers if needed
+  // maxWorkers: 2,
 };
 
-// createJestConfig is exported this way to ensure that next/jest can load the Next.js config which is async
 export default createJestConfig(config);

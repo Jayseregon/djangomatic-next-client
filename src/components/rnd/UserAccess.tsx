@@ -53,7 +53,11 @@ const UsersTasksBoards = () => {
         const response = await fetch("/api/rnd-all-users");
         const data = await response.json();
 
-        setUsers(data);
+        const sortedData = data.sort((a: UserSchema, b: UserSchema) => {
+          return a.name.localeCompare(b.name);
+        });
+
+        setUsers(sortedData);
       } catch (error) {
         console.error("Failed to fetch users:", error);
       }

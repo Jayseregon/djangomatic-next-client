@@ -1,9 +1,10 @@
 import { useAsyncList } from "@react-stately/data";
 
-import { RnDTeamTask } from "@/interfaces/lib";
+import { RnDTeamTask, Status } from "@/interfaces/lib";
 
 export const useSortTasksList = (
   apiEndpoint: string,
+  showCompleted: boolean,
 ): ReturnType<typeof useAsyncList<RnDTeamTask>> =>
   useAsyncList<RnDTeamTask>({
     async load({ signal }) {
@@ -21,9 +22,19 @@ export const useSortTasksList = (
         completedAt: task.completedAt ? new Date(task.completedAt) : undefined,
       }));
 
-      return {
-        items: tasksWithDates,
-      };
+      if (showCompleted) {
+        return {
+          items: tasksWithDates.filter(
+            (task: RnDTeamTask) => task.status === Status.COMPLETED,
+          ),
+        };
+      } else {
+        return {
+          items: tasksWithDates.filter(
+            (task: RnDTeamTask) => task.status !== Status.COMPLETED,
+          ),
+        };
+      }
     },
     async sort({ items, sortDescriptor }) {
       if (!sortDescriptor) {

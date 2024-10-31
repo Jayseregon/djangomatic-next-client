@@ -16,20 +16,25 @@ import { useSortTasksList } from "@/hooks/useSortTasksList";
 import { LoadingContent } from "@/components/ui/LoadingContent";
 import { UserSchema } from "@/interfaces/lib";
 import { title } from "@/components/primitives";
-import { statusColorMap } from "@/lib/utils";
+import { statusColorMap, taskDueDateColor } from "@/lib/utils";
 
 export const TaskBoardShort = ({
   user,
   taskUpdated,
   topContent,
   handleRowAction,
+  showCompleted = false,
 }: {
   user: UserSchema;
   taskUpdated: boolean;
   topContent: React.ReactNode;
   handleRowAction: (taskId: string) => void;
+  showCompleted?: boolean;
 }) => {
-  const tasksList = useSortTasksList(`/api/rnd-task?id=${user.id}`);
+  const tasksList = useSortTasksList(
+    `/api/rnd-task?id=${user.id}`,
+    showCompleted,
+  );
   const t = useTranslations("RnD");
 
   useEffect(() => {
@@ -79,33 +84,41 @@ export const TaskBoardShort = ({
             items={tasksList.items}
             loadingContent={<LoadingContent />}
           >
-            {tasksList.items.map((task) => (
-              <TableRow key={task.id}>
-                <TableCell className="text-start">
-                  <div className="max-w-xs text-wrap break-words">
-                    {task.task}
-                  </div>
-                </TableCell>
-                <TableCell className="text-center">
-                  <Chip
-                    className="capitalize"
-                    color={statusColorMap[task.status]}
-                    size="sm"
-                    variant="flat"
-                  >
-                    {task.status.toLowerCase()}
-                  </Chip>
-                </TableCell>
-                <TableCell className="text-center">{task.priority}</TableCell>
-                <TableCell className="text-center text-nowrap">
-                  {task.dueDate?.toLocaleDateString("en-CA", {
-                    day: "2-digit",
-                    month: "2-digit",
-                    year: "2-digit",
-                  })}
-                </TableCell>
-              </TableRow>
-            ))}
+            {tasksList.items.map((task) => {
+              // Determine background color based on dueDate
+              const rowBgColor =
+                task.dueDate && !showCompleted
+                  ? taskDueDateColor(task.dueDate)
+                  : "";
+
+              return (
+                <TableRow key={task.id} className={rowBgColor}>
+                  <TableCell className="text-start">
+                    <div className="max-w-xs text-wrap break-words">
+                      {task.task}
+                    </div>
+                  </TableCell>
+                  <TableCell className="text-center">
+                    <Chip
+                      className="capitalize"
+                      color={statusColorMap[task.status]}
+                      size="sm"
+                      variant="flat"
+                    >
+                      {task.status.toLowerCase()}
+                    </Chip>
+                  </TableCell>
+                  <TableCell className="text-center">{task.priority}</TableCell>
+                  <TableCell className="text-center text-nowrap">
+                    {task.dueDate?.toLocaleDateString("en-CA", {
+                      day: "2-digit",
+                      month: "2-digit",
+                      year: "2-digit",
+                    })}
+                  </TableCell>
+                </TableRow>
+              );
+            })}
           </TableBody>
         </Table>
       </div>
@@ -118,11 +131,13 @@ export const TaskBoardFull = ({
   taskUpdated,
   topContent,
   handleRowAction,
+  showCompleted = false,
 }: {
   id: string;
   taskUpdated: boolean;
   topContent: React.ReactNode;
   handleRowAction: (taskId: string) => void;
+  showCompleted?: boolean;
 }) => {
   const [user, setUser] = useState<UserSchema>({} as UserSchema);
   const t = useTranslations("RnD");
@@ -141,7 +156,7 @@ export const TaskBoardFull = ({
     fetchData();
   }, [id]);
 
-  const tasksList = useSortTasksList(`/api/rnd-task?id=${id}`);
+  const tasksList = useSortTasksList(`/api/rnd-task?id=${id}`, showCompleted);
 
   useEffect(() => {
     tasksList.reload();
@@ -149,10 +164,12 @@ export const TaskBoardFull = ({
 
   return (
     <>
-      <div className="flex flex-col">
-        <h1 className={title()}>{user.name}</h1>
-        <h2 className={title({ size: "xs" })}>{t("taskExtension")}</h2>
-      </div>
+      {!showCompleted ? (
+        <div className="flex flex-col">
+          <h1 className={title()}>{user.name}</h1>
+          <h2 className={title({ size: "xs" })}>{t("taskExtension")}</h2>
+        </div>
+      ) : null}
 
       <div className="mt-10 w-full">
         <div className="overflow-x-auto">
@@ -220,62 +237,72 @@ export const TaskBoardFull = ({
               items={tasksList.items}
               loadingContent={<LoadingContent />}
             >
-              {tasksList.items.map((task) => (
-                <TableRow key={task.id}>
-                  <TableCell className="text-center text-nowrap">
-                    {task.createdAt?.toLocaleDateString("en-CA", {
-                      day: "2-digit",
-                      month: "2-digit",
-                      year: "2-digit",
-                    })}
-                  </TableCell>
-                  <TableCell className="text-start">
-                    <div className="max-w-xs text-wrap break-words">
-                      {task.task}
-                    </div>
-                  </TableCell>
-                  <TableCell className="text-center">
-                    <Chip
-                      className="capitalize"
-                      color={statusColorMap[task.status]}
-                      size="sm"
-                      variant="flat"
-                    >
-                      {task.status.toLowerCase()}
-                    </Chip>
-                  </TableCell>
-                  <TableCell className="text-center">{task.priority}</TableCell>
-                  <TableCell className="text-center">
-                    {task.impactedPeople}
-                  </TableCell>
-                  <TableCell className="text-start">
-                    <div className="max-w-xs text-wrap break-words">
-                      {task.comment}
-                    </div>
-                  </TableCell>
-                  <TableCell className="text-center text-nowrap">
-                    {task.dueDate?.toLocaleDateString("en-CA", {
-                      day: "2-digit",
-                      month: "2-digit",
-                      year: "2-digit",
-                    })}
-                  </TableCell>
-                  <TableCell className="text-center text-nowrap">
-                    {task.startedAt?.toLocaleDateString("en-CA", {
-                      day: "2-digit",
-                      month: "2-digit",
-                      year: "2-digit",
-                    })}
-                  </TableCell>
-                  <TableCell className="text-center text-nowrap">
-                    {task.completedAt?.toLocaleDateString("en-CA", {
-                      day: "2-digit",
-                      month: "2-digit",
-                      year: "2-digit",
-                    })}
-                  </TableCell>
-                </TableRow>
-              ))}
+              {tasksList.items.map((task) => {
+                // Determine background color based on dueDate
+                const rowBgColor =
+                  task.dueDate && !showCompleted
+                    ? taskDueDateColor(task.dueDate)
+                    : "";
+
+                return (
+                  <TableRow key={task.id} className={rowBgColor}>
+                    <TableCell className="text-center text-nowrap">
+                      {task.createdAt?.toLocaleDateString("en-CA", {
+                        day: "2-digit",
+                        month: "2-digit",
+                        year: "2-digit",
+                      })}
+                    </TableCell>
+                    <TableCell className="text-start">
+                      <div className="max-w-xs text-wrap break-words">
+                        {task.task}
+                      </div>
+                    </TableCell>
+                    <TableCell className="text-center">
+                      <Chip
+                        className="capitalize"
+                        color={statusColorMap[task.status]}
+                        size="sm"
+                        variant="flat"
+                      >
+                        {task.status.toLowerCase()}
+                      </Chip>
+                    </TableCell>
+                    <TableCell className="text-center">
+                      {task.priority}
+                    </TableCell>
+                    <TableCell className="text-center">
+                      {task.impactedPeople}
+                    </TableCell>
+                    <TableCell className="text-start">
+                      <div className="max-w-xs text-wrap break-words">
+                        {task.comment}
+                      </div>
+                    </TableCell>
+                    <TableCell className="text-center text-nowrap">
+                      {task.dueDate?.toLocaleDateString("en-CA", {
+                        day: "2-digit",
+                        month: "2-digit",
+                        year: "2-digit",
+                      })}
+                    </TableCell>
+                    <TableCell className="text-center text-nowrap">
+                      {task.startedAt?.toLocaleDateString("en-CA", {
+                        day: "2-digit",
+                        month: "2-digit",
+                        year: "2-digit",
+                      })}
+                    </TableCell>
+                    <TableCell className="text-center text-nowrap">
+                      {task.completedAt?.toLocaleDateString("en-CA", {
+                        day: "2-digit",
+                        month: "2-digit",
+                        year: "2-digit",
+                      })}
+                    </TableCell>
+                  </TableRow>
+                );
+              })}
             </TableBody>
           </Table>
         </div>

@@ -46,6 +46,8 @@ export interface RnDTeamTask {
 
 export enum Status {
   CREATED = "CREATED",
+  NEXT_UP = "NEXT_UP",
+  IN_PROGRESS = "IN_PROGRESS",
   PENDING = "PENDING",
   BLOCKED = "BLOCKED",
   COMPLETED = "COMPLETED",

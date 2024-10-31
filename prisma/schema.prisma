@@ -149,6 +149,8 @@ model RnDTeamTask {
 enum Status {
   CREATED
   PENDING
+  NEXT_UP
+  IN_PROGRESS
   BLOCKED
   COMPLETED
   CANCELLED

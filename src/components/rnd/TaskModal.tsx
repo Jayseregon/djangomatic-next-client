@@ -135,10 +135,35 @@ export const TaskModal: React.FC<TaskModalProps> = ({
   const handleStatusChange = (keys: any) => {
     const selectedKey = keys.currentKey as Status;
 
-    setTask((prevTask) => ({
-      ...prevTask,
-      status: selectedKey,
-    }));
+    setTask((prevTask) => {
+      const newTask = { ...prevTask, status: selectedKey };
+
+      if (selectedKey === Status.COMPLETED) {
+        if (!prevTask.completedAt) {
+          newTask.completedAt = new Date();
+        }
+        if (!prevTask.startedAt) {
+          newTask.startedAt = newTask.completedAt;
+        }
+      } else if (
+        selectedKey === Status.CREATED ||
+        selectedKey === Status.NEXT_UP
+      ) {
+        newTask.startedAt = null;
+        newTask.completedAt = null;
+      } else if (
+        (selectedKey === Status.IN_PROGRESS ||
+          selectedKey === Status.PENDING ||
+          selectedKey === Status.BLOCKED) &&
+        (prevTask.status === Status.CREATED ||
+          prevTask.status === Status.NEXT_UP) &&
+        !prevTask.startedAt
+      ) {
+        newTask.startedAt = new Date();
+      }
+
+      return newTask;
+    });
   };
 
   const priorityOptions = [...Array.from({ length: 11 }, (_, i) => i), 99];

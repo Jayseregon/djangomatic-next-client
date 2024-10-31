@@ -8,6 +8,7 @@ import { convertTaskDates } from "@/lib/utils";
 import { TaskBoardFull, TaskBoardShort } from "./TaskBoard";
 import { AddTaskButton } from "./AddTaskButton";
 import { TaskModal } from "./TaskModal";
+import SimpleAccordion from "./SimpleAccordion";
 
 export const TaskManager = ({
   id,
@@ -97,14 +98,28 @@ export const TaskManager = ({
   return (
     <>
       {id ? (
-        <TaskBoardFull
-          handleRowAction={handleRowAction}
-          id={id}
-          taskUpdated={taskUpdated}
-          topContent={
-            <AddTaskButton user={currentUser} onTaskChange={handleTaskChange} />
-          }
-        />
+        <>
+          <TaskBoardFull
+            handleRowAction={handleRowAction}
+            id={id}
+            taskUpdated={taskUpdated}
+            topContent={
+              <AddTaskButton
+                user={currentUser}
+                onTaskChange={handleTaskChange}
+              />
+            }
+          />
+          <SimpleAccordion menuKey="archives" title="archives">
+            <TaskBoardFull
+              showCompleted
+              handleRowAction={handleRowAction}
+              id={id}
+              taskUpdated={taskUpdated}
+              topContent={null}
+            />
+          </SimpleAccordion>
+        </>
       ) : (
         <TaskBoardShort
           handleRowAction={handleRowAction}

@@ -120,11 +120,31 @@ export const convertTaskDates = (task: any): RnDTeamTask => ({
 
 export const statusColorMap: Record<
   Status,
-  "primary" | "secondary" | "success" | "warning" | "danger"
+  "primary" | "secondary" | "success" | "warning" | "danger" | "default"
 > = {
-  [Status.CREATED]: "secondary",
-  [Status.PENDING]: "primary",
+  [Status.CREATED]: "default",
+  [Status.NEXT_UP]: "secondary",
+  [Status.IN_PROGRESS]: "primary",
+  [Status.PENDING]: "warning",
   [Status.BLOCKED]: "warning",
   [Status.COMPLETED]: "success",
   [Status.CANCELLED]: "danger",
+};
+
+export const taskDueDateColor = (taskDueDate: Date): string => {
+  if (taskDueDate) {
+    const today = new Date();
+    const dueDate = new Date(taskDueDate);
+
+    today.setHours(0, 0, 0, 0);
+    dueDate.setHours(0, 0, 0, 0);
+
+    if (dueDate < today) {
+      return "bg-red-500/15";
+    } else if (dueDate.getTime() === today.getTime()) {
+      return "bg-yellow-500/15";
+    }
+  }
+
+  return "";
 };

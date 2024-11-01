@@ -10,6 +10,7 @@ import {
   TableCell,
   TableRow,
   Chip,
+  Pagination,
 } from "@nextui-org/react";
 
 import { useSortTasksList } from "@/hooks/useSortTasksList";
@@ -41,6 +42,20 @@ export const TaskBoardShort = ({
     tasksList.reload();
   }, [user, taskUpdated]);
 
+  {
+    /* Pagination */
+  }
+  const [page, setPage] = React.useState(1);
+  const itemsPerPage = 5;
+  const totalPages = Math.ceil(tasksList.items.length / itemsPerPage);
+
+  const items = React.useMemo(() => {
+    const start = (page - 1) * itemsPerPage;
+    const end = start + itemsPerPage;
+
+    return tasksList.items.slice(start, end);
+  }, [page, tasksList.items]);
+
   return (
     <div className="mt-10 w-11/12">
       <div className="overflow-x-auto">
@@ -48,6 +63,24 @@ export const TaskBoardShort = ({
           isHeaderSticky
           removeWrapper
           aria-label="rnd-task-board"
+          bottomContent={
+            <div className="flex w-full justify-center">
+              <Pagination
+                isCompact
+                showControls
+                showShadow
+                classNames={{
+                  cursor: "bg-foreground text-background",
+                  item: "bg-background text-foreground hover:!bg-foreground/50",
+                  prev: "bg-background text-foreground hover:!bg-foreground/50",
+                  next: "bg-background text-foreground hover:!bg-foreground/50",
+                }}
+                page={page}
+                total={totalPages}
+                onChange={setPage}
+              />
+            </div>
+          }
           classNames={{
             base: "text-left",
             th: "uppercase bg-foreground text-background",
@@ -81,10 +114,12 @@ export const TaskBoardShort = ({
           <TableBody
             emptyContent="No entries found"
             isLoading={tasksList.isLoading}
-            items={tasksList.items}
+            // items={tasksList.items}
+            items={items}
             loadingContent={<LoadingContent />}
           >
-            {tasksList.items.map((task) => {
+            {/* {tasksList.items.map((task) => { */}
+            {items.map((task) => {
               // Determine background color based on dueDate
               const rowBgColor =
                 task.dueDate && !showCompleted
@@ -162,6 +197,20 @@ export const TaskBoardFull = ({
     tasksList.reload();
   }, [id, taskUpdated]);
 
+  {
+    /* Pagination */
+  }
+  const [page, setPage] = React.useState(1);
+  const itemsPerPage = 5;
+  const totalPages = Math.ceil(tasksList.items.length / itemsPerPage);
+
+  const items = React.useMemo(() => {
+    const start = (page - 1) * itemsPerPage;
+    const end = start + itemsPerPage;
+
+    return tasksList.items.slice(start, end);
+  }, [page, tasksList.items]);
+
   return (
     <>
       {!showCompleted ? (
@@ -177,6 +226,24 @@ export const TaskBoardFull = ({
             isHeaderSticky
             removeWrapper
             aria-label="rnd-task-board"
+            bottomContent={
+              <div className="flex w-full justify-center">
+                <Pagination
+                  isCompact
+                  showControls
+                  showShadow
+                  classNames={{
+                    cursor: "bg-foreground text-background",
+                    item: "bg-background text-foreground hover:!bg-foreground/50",
+                    prev: "bg-background text-foreground hover:!bg-foreground/50",
+                    next: "bg-background text-foreground hover:!bg-foreground/50",
+                  }}
+                  page={page}
+                  total={totalPages}
+                  onChange={setPage}
+                />
+              </div>
+            }
             classNames={{
               base: "text-center",
               th: "uppercase bg-foreground text-background",
@@ -234,10 +301,12 @@ export const TaskBoardFull = ({
             <TableBody
               emptyContent="No entries found"
               isLoading={tasksList.isLoading}
-              items={tasksList.items}
+              items={items}
+              // items={tasksList.items}
               loadingContent={<LoadingContent />}
             >
-              {tasksList.items.map((task) => {
+              {/* {tasksList.items.map((task) => { */}
+              {items.map((task) => {
                 // Determine background color based on dueDate
                 const rowBgColor =
                   task.dueDate && !showCompleted

@@ -1,5 +1,4 @@
 import axios from "axios";
-import { getCookie, setCookie, hasCookie } from "cookies-next";
 import { LRUCache } from "lru-cache";
 import DOMPurify from "isomorphic-dompurify";
 import { jwtDecode } from "jwt-decode";
@@ -11,8 +10,6 @@ import {
   startTaskProps,
   TaskDataProps,
 } from "@/interfaces/lib";
-
-// import { useConsoleData } from "../components/saas/inputDataProviders";
 
 const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
 // const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
@@ -33,31 +30,6 @@ export const axiosInstance = axios.create({
   baseURL: baseUrl,
   withCredentials: true,
 });
-
-export const getServerCsrfToken = async () => {
-  try {
-    // get CSRF token from server
-    if (!hasCookie("csrftoken")) {
-      await axiosInstance.get("/saas/tds/ajax/get-csrf-token/");
-    }
-    // retrieve token from cookies
-    const csrfToken = getCookie("csrftoken");
-
-    setCookie("csrftoken", csrfToken, { path: "/", maxAge: 60 * 60 * 1 });
-
-    // check errors/if token exists
-    if (!csrfToken) {
-      throw new Error("CSRF token not found in cookies");
-    }
-
-    // return token
-    return csrfToken;
-  } catch (error) {
-    console.error("Error getting CSRF token.");
-
-    return null;
-  }
-};
 
 export const getMiddlewareCsrfToken = async (): Promise<string> => {
   const response = await fetch("/api/csrf-token");
@@ -89,7 +61,7 @@ export const makeServerLoginRequest = async (backendUser: string) => {
 };
 
 const fetchTokens = async (backendUser: string) => {
-  const endpoint = "/api/iron-session";
+  const endpoint = "/api/django-jwt";
   let response = await fetch(endpoint);
 
   if (response.status === 404) {

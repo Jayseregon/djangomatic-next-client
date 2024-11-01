@@ -1,20 +1,17 @@
 import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
-import { getIronSession } from "iron-session";
-
-import { ironSessionOptions, IronSessionData } from "@/src/lib/session";
 
 export async function GET() {
-  const ironSession = await getIronSession<IronSessionData>(
-    cookies(),
-    ironSessionOptions,
-  );
+  const cookieStore = cookies();
+  const djAuthToken = cookieStore.get("djAuthToken")?.value;
+  const djRefreshToken = cookieStore.get("djRefreshToken")?.value;
+  const usedBackendUser = cookieStore.get("usedBackendUser")?.value;
 
-  if (ironSession.djAuthToken || ironSession.djRefreshToken) {
+  if (djAuthToken || djRefreshToken) {
     return NextResponse.json({
-      djAuthToken: ironSession.djAuthToken,
-      djRefreshToken: ironSession.djRefreshToken,
-      usedBackendUser: ironSession.usedBackendUser,
+      djAuthToken: djAuthToken,
+      djRefreshToken: djRefreshToken,
+      usedBackendUser: usedBackendUser,
     });
   } else {
     return NextResponse.json(

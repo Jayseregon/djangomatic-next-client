@@ -1,9 +1,6 @@
 import { NextResponse } from "next/server";
-import { getIronSession } from "iron-session";
-import { cookies } from "next/headers";
 
 import { axiosInstance } from "@/src/lib/dbRequests";
-import { ironSessionOptions, IronSessionData } from "@/src/lib/session";
 
 const backendCredentialsMap: Record<
   string,
@@ -40,33 +37,47 @@ export async function POST(request: Request) {
   const { backendUser } = await request.json();
   const { email, password } = getBackendCredentials(backendUser);
 
-  const ironSession = await getIronSession<IronSessionData>(
-    cookies(),
-    ironSessionOptions,
-  );
-
   try {
-    const response = await axiosInstance.post("/api/dj-auth/login/", {
+    const res = await axiosInstance.post("/api/dj-auth/login/", {
       email,
       password,
     });
 
-    const { access, refresh } = response.data;
-
-    ironSession.djAuthToken = access;
-    ironSession.djRefreshToken = refresh;
-    ironSession.usedBackendUser = backendUser;
-    await ironSession.save();
-
-    if (response.status !== 200) {
+    if (res.status !== 200) {
       throw new Error("Login failed");
     }
 
-    return NextResponse.json({
+    const response = NextResponse.json({
       message: "Login successful",
-      headers: response.headers,
-      data: response.data,
     });
+    const djAuthToken = res.data.access;
+    const djRefreshToken = res.data.refresh;
+
+    response.cookies.set("djAuthToken", djAuthToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
+      path: "/",
+      maxAge: 60 * 15, // 15 minutes
+    });
+
+    response.cookies.set("djRefreshToken", djRefreshToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
+      path: "/",
+      maxAge: 60 * 15, // 15 minutes
+    });
+
+    response.cookies.set("usedBackendUser", backendUser, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
+      path: "/",
+      maxAge: 60 * 15, // 15 minutes
+    });
+
+    return response;
   } catch (error: any) {
     console.error("Route Login FAILED:", error);
 

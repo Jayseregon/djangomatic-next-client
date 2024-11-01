@@ -1,6 +1,6 @@
 import { Snippet } from "@nextui-org/snippet";
 import { useTranslations } from "next-intl";
-import { unstable_setRequestLocale } from "next-intl/server";
+import { setRequestLocale } from "next-intl/server";
 
 import { title, subtitle } from "@/components/primitives";
 import { UnAuthenticated } from "@/components/auth/unAuthenticated";
@@ -25,7 +25,7 @@ export default async function RootPage({
 }): Promise<JSX.Element> {
   const session = await auth();
 
-  unstable_setRequestLocale(locale);
+  setRequestLocale(locale);
 
   return <HomeContent session={session} />;
 }

@@ -316,6 +316,20 @@ export const TowerReportForm = ({
     setAntennaInventory((prev) => prev.filter((_, i) => i !== index));
   };
 
+  const handleDuplicateAntenna = (index: number) => {
+    setAntennaInventory((prev) => {
+      const antennaToDuplicate = prev[index];
+      const duplicatedAntenna = { ...antennaToDuplicate };
+      const updatedInventory = [
+        ...prev.slice(0, index + 1),
+        duplicatedAntenna,
+        ...prev.slice(index + 1),
+      ];
+
+      return updatedInventory;
+    });
+  };
+
   const handleChecklistFormChange = (
     setChecklistForm: React.Dispatch<React.SetStateAction<any[]>>,
     index: number,
@@ -391,6 +405,7 @@ export const TowerReportForm = ({
             antennaInventory={antennaInventory}
             onAddAntenna={handleAddAntenna}
             onAntennaChange={handleAntennaInventoryChange}
+            onDuplicateAntenna={handleDuplicateAntenna}
             onRemoveAntenna={handleRemoveAntenna}
           />
         )}

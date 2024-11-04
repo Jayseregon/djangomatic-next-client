@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Button, Tooltip } from "@nextui-org/react";
-import { CircleMinus } from "lucide-react";
+import { CircleMinus, Copy } from "lucide-react";
 
 import { FormInputProps, LabelInputProps } from "@/interfaces/reports";
 import { cn } from "@/src/lib/utils";
@@ -171,6 +171,27 @@ export const TrashButton = ({
       onClick={onClick}
     >
       <CircleMinus />
+    </Button>
+  );
+};
+
+export const CopyButton = ({
+  onClick,
+  className,
+}: {
+  onClick: () => void;
+  className?: string;
+}) => {
+  return (
+    <Button
+      isIconOnly
+      className={className}
+      color="primary"
+      radius="full"
+      variant="light"
+      onClick={onClick}
+    >
+      <Copy />
     </Button>
   );
 };

@@ -80,6 +80,7 @@ export interface AntennaTransmissionInputsProps {
   ) => void;
   onAddAntenna: () => void;
   onRemoveAntenna: (index: number) => void;
+  onDuplicateAntenna: (index: number) => void;
 }
 
 export interface LocalImages {

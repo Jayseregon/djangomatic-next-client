@@ -1,0 +1,20 @@
+name: Assign New Issues
+
+on:
+  issues:
+    types: [opened]
+
+jobs:
+  assign:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Assign issue to creator
+        uses: actions/github-script@v6
+        with:
+          script: |
+            github.issues.addAssignees({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.payload.issue.number,
+              assignees: [context.actor]
+            })

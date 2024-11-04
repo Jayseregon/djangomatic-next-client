@@ -1,24 +1,18 @@
-name: Assign New Issues
+name: Issue assignment
 
 on:
-  issues:
-    types: [opened]
+    issues:
+        types: [opened]
 
 jobs:
-  assign:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Assign issue to creator
-        uses: actions/github-script@v6
-        with:
-          script: |
-            const { owner, repo } = context.repo;
-            const issue_number = context.payload.issue.number;
-            const assignees = [context.actor];
-
-            await github.rest.issues.addAssignees({
-              owner,
-              repo,
-              issue_number,
-              assignees
-            });
+    auto-assign:
+        runs-on: ubuntu-latest
+        permissions:
+            issues: write
+        steps:
+            - name: 'Auto-assign issue'
+              uses: pozil/auto-assign-issue@v2
+              with:
+                  assignees: Jayseregon
+                  numOfAssignee: 1
+                  allowSelfAssign: true

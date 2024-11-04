@@ -91,21 +91,29 @@ export async function GET(request: Request) {
     // task #8
     const refinedTask8Data = await QBHelper.dataCleanup(qbTask8RecordRes);
 
-    let pEng =
-      refinedTask8Data["1048"].length > 0
-        ? refinedTask8Data["1048"][0]["name"]
-        : refinedTask6Data["1048"][0]["name"];
+    // initialize assigned eng. variable
+    let pEng: string = "N/A";
 
-    if (pEng === "Elahe Mohammadi") {
-      pEng = "Eli Mohammadi, P. Eng.";
-    } else {
-      pEng = pEng + ", P. Eng.";
+    if (refinedTask8Data["1048"] && refinedTask8Data["1048"].length > 0) {
+      pEng = refinedTask8Data["1048"][0]["name"];
+    } else if (
+      refinedTask6Data["1048"] &&
+      refinedTask6Data["1048"].length > 0
+    ) {
+      pEng = refinedTask6Data["1048"][0]["name"];
+    }
+
+    if (pEng !== "N/A") {
+      if (pEng === "Elahe Mohammadi") {
+        pEng = "Eli Mohammadi, P. Eng.";
+      } else {
+        pEng = pEng + ", P. Eng.";
+      }
     }
 
     refinedRecordData["1048"] = pEng;
 
-    // Add assigned eng. to report data
-    console.log("Record Data: ", refinedRecordData);
+    // console.log("Record Data: ", refinedRecordData);
 
     return NextResponse.json(refinedRecordData);
   } catch (error) {

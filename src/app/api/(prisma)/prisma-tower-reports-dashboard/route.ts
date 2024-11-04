@@ -22,11 +22,11 @@ export async function GET() {
       },
     });
 
-    console.log("Find all reports:", reports);
+    // console.log("Find all reports:", reports);
 
     return NextResponse.json(reports);
   } catch (error) {
-    console.error("Error fetching reports:", error);
+    // console.error("Error fetching reports:", error);
 
     return new NextResponse("Error fetching reports", { status: 500 });
   } finally {

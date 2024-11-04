@@ -75,7 +75,7 @@ export default function QuickbaseInputs({
           onChange={handleChange}
         />
         <FormInput
-          label="Site Region"
+          label="Province"
           name="site_region"
           placeholder="Westeros"
           value={formData.site_region}

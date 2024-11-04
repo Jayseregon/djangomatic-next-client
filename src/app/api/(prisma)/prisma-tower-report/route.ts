@@ -34,7 +34,7 @@ export async function GET(request: Request) {
       return new NextResponse("Report not found", { status: 404 });
     }
 
-    console.log("Find unique report:", report);
+    // console.log("Find unique report:", report);
 
     return NextResponse.json(report);
   } catch (error) {

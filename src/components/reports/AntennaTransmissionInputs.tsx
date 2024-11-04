@@ -2,8 +2,12 @@ import React from "react";
 
 import { AntennaTransmissionInputsProps } from "@/src/interfaces/reports";
 import { AntennaTransmissionLine } from "@/src/types/reports";
-
-import { FormInput, TrashButton, AddButtom } from "../ui/formInput";
+import {
+  FormInput,
+  TrashButton,
+  AddButtom,
+  CopyButton,
+} from "@/components/ui/formInput";
 
 const inputsList: {
   [key: string]: {
@@ -70,6 +74,7 @@ export default function AntennaTransmissionInputs({
   onAntennaChange,
   onAddAntenna,
   onRemoveAntenna,
+  onDuplicateAntenna, // Added this line
 }: AntennaTransmissionInputsProps) {
   const handleChange = (
     index: number,
@@ -91,7 +96,7 @@ export default function AntennaTransmissionInputs({
     <>
       <div className="items-end space-y-2">
         {antennaInventory.length > 0 ? (
-          <div className="grid grid-flow-col auto-cols-fr items-center  pe-10">
+          <div className="grid grid-flow-col auto-cols-fr items-center pe-20">
             {Object.keys(inputsList).map((k, i) => {
               return (
                 <div
@@ -136,7 +141,8 @@ export default function AntennaTransmissionInputs({
                 );
               })}
             </div>
-            <div className="h-full w-fit content-end">
+            <div className="h-full w-fit content-end flex">
+              <CopyButton onClick={() => onDuplicateAntenna(index)} />
               <TrashButton onClick={() => onRemoveAntenna(index)} />
             </div>
           </div>

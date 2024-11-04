@@ -3,7 +3,6 @@ import React, { useState, useEffect, useRef } from "react";
 import { ImageUploadProps, LocalImages } from "@/src/interfaces/reports";
 import { AddButtom } from "@/src/components/ui/formInput";
 
-import Header from "./Header";
 import ImageRow from "./ImageRow";
 import FormInputRow from "./FormInputRow";
 
@@ -249,7 +248,7 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({
 
   return (
     <>
-      {isDeficiency && localImages.length > 0 && <Header />}
+      {/* {isDeficiency && localImages.length > 0 && <Header />} */}
       {localImages
         .sort((a, b) => a.imgIndex - b.imgIndex)
         .map((image, index) =>

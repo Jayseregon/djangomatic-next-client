@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Button } from "@nextui-org/react";
-import { CircleOff, Download, FileOutput, Save } from "lucide-react";
+import { CircleOff, Download, Save, SaveAll } from "lucide-react";
 
 import DynamicForm from "@/components/reports/checklist/DynamicForm";
 import listForm4 from "public/reports/rogers/listForm4.json";
@@ -535,7 +535,7 @@ export const TowerReportForm = ({
 
       <div className="space-x-4 mt-4 mx-auto">
         <Button isIconOnly color="success" type="submit">
-          <FileOutput />
+          <SaveAll />
         </Button>
         <Button
           isIconOnly

@@ -55,10 +55,10 @@ export type TOCSections = {
 
 export type AntennaTransmissionLine = {
   id: string;
-  elevation: number;
-  quantity: number;
+  elevation: string;
+  quantity: string;
   equipment: string;
-  azimuth: number;
+  azimuth: string;
   tx_line: string;
   odu: string;
   carrier: string;

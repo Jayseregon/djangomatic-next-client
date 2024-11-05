@@ -97,10 +97,10 @@ model TowerReportImage {
 
 model AntennaTransmissionLine {
   id            String      @id @default(cuid())
-  elevation     Float
-  quantity      Int
+  elevation     String
+  quantity      String
   equipment     String
-  azimuth       Float
+  azimuth       String
   tx_line       String
   odu           String
   carrier       String

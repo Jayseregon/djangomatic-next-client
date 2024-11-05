@@ -284,7 +284,7 @@ export const TowerReportForm = ({
   const handleAntennaInventoryChange = (
     index: number,
     field: string,
-    value: string | number,
+    value: string,
   ) => {
     setAntennaInventory((prev) => {
       const updatedInventory = [...prev];
@@ -300,10 +300,10 @@ export const TowerReportForm = ({
       ...prev,
       {
         id: "",
-        elevation: 0,
-        quantity: 0,
+        elevation: "",
+        quantity: "",
         equipment: "",
-        azimuth: 0,
+        azimuth: "",
         tx_line: "",
         odu: "",
         carrier: "",

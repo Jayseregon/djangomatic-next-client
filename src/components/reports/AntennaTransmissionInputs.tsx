@@ -21,15 +21,15 @@ const inputsList: {
   elevation: {
     label: "Elevation",
     field: "elevation",
-    placeholder: "0.00",
-    type: "number",
+    placeholder: "0.0",
+    type: "text",
     withTooltip: false,
   },
   quantity: {
     label: "Quantity",
     field: "quantity",
     placeholder: "0",
-    type: "number",
+    type: "text",
     withTooltip: false,
   },
   equipment: {
@@ -42,8 +42,8 @@ const inputsList: {
   azimuth: {
     label: "Azimuth",
     field: "azimuth",
-    placeholder: "0.0",
-    type: "number",
+    placeholder: "0",
+    type: "text",
     withTooltip: false,
   },
   tx_line: {
@@ -74,22 +74,16 @@ export default function AntennaTransmissionInputs({
   onAntennaChange,
   onAddAntenna,
   onRemoveAntenna,
-  onDuplicateAntenna, // Added this line
+  onDuplicateAntenna,
 }: AntennaTransmissionInputsProps) {
   const handleChange = (
     index: number,
     field: string,
-    type: string,
     event: React.ChangeEvent<HTMLInputElement>,
   ) => {
     const { value } = event.target;
-    let parsedValue: string | number = value;
 
-    if (type === "number") {
-      parsedValue = value === "" ? "" : parseFloat(value);
-    }
-
-    onAntennaChange(index, field, parsedValue);
+    onAntennaChange(index, field, value);
   };
 
   return (
@@ -129,14 +123,7 @@ export default function AntennaTransmissionInputs({
                     type={inputConfig.type}
                     value={antenna[inputConfig.field]}
                     withTooltip={inputConfig.withTooltip}
-                    onChange={(e) =>
-                      handleChange(
-                        index,
-                        inputConfig.field,
-                        inputConfig.type,
-                        e,
-                      )
-                    }
+                    onChange={(e) => handleChange(index, inputConfig.field, e)}
                   />
                 );
               })}

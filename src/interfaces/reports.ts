@@ -73,11 +73,7 @@ export interface LabelInputProps {
 
 export interface AntennaTransmissionInputsProps {
   antennaInventory: AntennaTransmissionLine[];
-  onAntennaChange: (
-    index: number,
-    field: string,
-    value: string | number,
-  ) => void;
+  onAntennaChange: (index: number, field: string, value: string) => void;
   onAddAntenna: () => void;
   onRemoveAntenna: (index: number) => void;
   onDuplicateAntenna: (index: number) => void;

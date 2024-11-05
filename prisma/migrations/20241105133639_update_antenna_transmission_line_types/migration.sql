@@ -1,0 +1,4 @@
+-- AlterTable
+ALTER TABLE "AntennaTransmissionLine" ALTER COLUMN "elevation" SET DATA TYPE TEXT,
+ALTER COLUMN "quantity" SET DATA TYPE TEXT,
+ALTER COLUMN "azimuth" SET DATA TYPE TEXT;

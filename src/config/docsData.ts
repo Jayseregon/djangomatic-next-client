@@ -95,7 +95,7 @@ export const docsData = {
     // temp doc placeholder, qgis doc: FALSE
     {
       label: "Cogeco Doc Placeholder",
-      href: "/docs/cogeco/cogeco-placeholder-not-qgis",
+      href: "/docs/cogeco/cogeco-doc-placeholder",
       version: "0.0.1",
       date_upd: "2024-08-28",
       desc_upd_en: "Placeholder initialization.",
@@ -106,7 +106,7 @@ export const docsData = {
     // temp doc placeholder, qgis doc: TRUE
     {
       label: "Cogeco Doc Placeholder",
-      href: "/docs/cogeco/cogeco-placeholder-qgis",
+      href: "/docs/cogeco/cogeco-qgis-placeholder",
       version: "0.0.1",
       date_upd: "2024-08-28",
       desc_upd_en: "Placeholder initialization.",
@@ -119,7 +119,7 @@ export const docsData = {
     // temp doc placeholder, qgis doc: FALSE
     {
       label: "Vistabeam Doc Placeholder",
-      href: "/docs/vistabeam/vistabeam-placeholder-not-qgis",
+      href: "/docs/vistabeam/vistabeam-doc-placeholder",
       version: "0.0.1",
       date_upd: "2024-08-28",
       desc_upd_en: "Placeholder initialization.",
@@ -130,7 +130,7 @@ export const docsData = {
     // temp doc placeholder, qgis doc: TRUE
     {
       label: "Vistabeam Doc Placeholder",
-      href: "/docs/vistabeam/vistabeam-placeholder-qgis",
+      href: "/docs/vistabeam/vistabeam-qgis-placeholder",
       version: "0.0.1",
       date_upd: "2024-08-28",
       desc_upd_en: "Placeholder initialization.",
@@ -143,7 +143,7 @@ export const docsData = {
     // temp doc placeholder, qgis doc: FALSE
     {
       label: "Xplore Doc Placeholder",
-      href: "/docs/xplore/xplore-placeholder-not-qgis",
+      href: "/docs/xplore/xplore-doc-placeholder",
       version: "0.0.1",
       date_upd: "2024-08-28",
       desc_upd_en: "Placeholder initialization.",
@@ -154,7 +154,7 @@ export const docsData = {
     // temp doc placeholder, qgis doc: TRUE
     {
       label: "Xplore Doc Placeholder",
-      href: "/docs/xplore/xplore-placeholder-qgis",
+      href: "/docs/xplore/xplore-qgis-placeholder",
       version: "0.0.1",
       date_upd: "2024-08-28",
       desc_upd_en: "Placeholder initialization.",

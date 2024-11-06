@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 
 import { ImageUploadProps, LocalImages } from "@/src/interfaces/reports";
-import { AddButtom } from "@/src/components/ui/formInput";
+import { AddButton } from "@/src/components/ui/formInput";
 
 import ImageRow from "./ImageRow";
 import FormInputRow from "./FormInputRow";
@@ -299,7 +299,7 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({
       {((isFrontcover && localImages.length === 0) ||
         (!isFrontcover &&
           (maxImages === undefined || localImages.length < maxImages))) && (
-        <AddButtom label={newImageButtonName} onClick={addImageField} />
+        <AddButton label={newImageButtonName} onClick={addImageField} />
       )}
     </>
   );

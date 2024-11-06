@@ -2,7 +2,11 @@ import React, { useState, useEffect } from "react";
 import { Button, Tooltip } from "@nextui-org/react";
 import { CircleMinus, Copy } from "lucide-react";
 
-import { FormInputProps, LabelInputProps } from "@/interfaces/reports";
+import {
+  FormInputProps,
+  LabelInputProps,
+  AntennaFormInputProps,
+} from "@/interfaces/reports";
 import { cn } from "@/src/lib/utils";
 
 import CustomTooltip from "./CustomTooltip";
@@ -60,6 +64,30 @@ export const FormInput: React.FC<FormInputProps> = ({
           />
         </div>
       )}
+    </div>
+  );
+};
+
+export const AntennaFormInput = ({
+  value,
+  name,
+  width,
+  placeholder,
+  onChange,
+}: AntennaFormInputProps) => {
+  return (
+    <div className={`relative ${width}`}>
+      <input
+        required
+        className="border-0 border-b-2 border-primary w-full focus:ring-0 focus:ring-inset text-foreground bg-transparent text-center text-ellipsis overflow-hidden"
+        id={name}
+        name={name}
+        placeholder={placeholder}
+        type="text"
+        value={value}
+        onChange={onChange}
+        onFocus={(e) => e.stopPropagation()}
+      />
     </div>
   );
 };
@@ -196,7 +224,7 @@ export const CopyButton = ({
   );
 };
 
-export const AddButtom = ({
+export const AddButton = ({
   onClick,
   label,
   className,

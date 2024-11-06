@@ -63,6 +63,14 @@ export interface FormInputProps {
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
+export interface AntennaFormInputProps {
+  value: string | undefined;
+  name: string;
+  width?: string;
+  placeholder?: string;
+  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+}
+
 export interface LabelInputProps {
   value: string | undefined;
   name: string;

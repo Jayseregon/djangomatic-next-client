@@ -6,7 +6,7 @@ import {
   LabelInput,
   DisplayInput,
   TrashButton,
-  AddButtom,
+  AddButton,
   FormInput,
   DisplayInputWithTooltip,
 } from "@/src/components/ui/formInput";
@@ -356,7 +356,7 @@ export default function ImageUpload({
       {((isFrontcover && localImages.length === 0) ||
         (!isFrontcover &&
           (maxImages === undefined || localImages.length < maxImages))) && (
-        <AddButtom label={newImageButtonName} onClick={addImageField} />
+        <AddButton label={newImageButtonName} onClick={addImageField} />
       )}
     </>
   );

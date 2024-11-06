@@ -3,9 +3,9 @@ import React from "react";
 import { AntennaTransmissionInputsProps } from "@/src/interfaces/reports";
 import { AntennaTransmissionLine } from "@/src/types/reports";
 import {
-  FormInput,
+  AntennaFormInput,
   TrashButton,
-  AddButtom,
+  AddButton,
   CopyButton,
 } from "@/components/ui/formInput";
 
@@ -14,7 +14,7 @@ const inputsList: {
     label?: string;
     field: keyof AntennaTransmissionLine;
     placeholder: string;
-    type: string;
+    width: string;
     withTooltip?: boolean;
   };
 } = {
@@ -22,49 +22,49 @@ const inputsList: {
     label: "Elevation",
     field: "elevation",
     placeholder: "0.0",
-    type: "text",
+    width: "w-20",
     withTooltip: false,
   },
   quantity: {
     label: "Quantity",
     field: "quantity",
     placeholder: "0",
-    type: "text",
+    width: "w-20",
     withTooltip: false,
   },
   equipment: {
     label: "Equipment",
     field: "equipment",
     placeholder: "Equipment",
-    type: "text",
+    width: "w-full",
     withTooltip: true,
   },
   azimuth: {
     label: "Azimuth",
     field: "azimuth",
     placeholder: "0",
-    type: "text",
+    width: "w-20",
     withTooltip: false,
   },
   tx_line: {
     label: "TX Line",
     field: "tx_line",
     placeholder: "TX Line",
-    type: "text",
+    width: "w-full",
     withTooltip: true,
   },
   odu: {
     label: "ODU",
     field: "odu",
     placeholder: "ODU",
-    type: "text",
+    width: "w-full",
     withTooltip: true,
   },
   carrier: {
     label: "Carrier",
     field: "carrier",
     placeholder: "Carrier",
-    type: "text",
+    width: "w-32",
     withTooltip: false,
   },
 };
@@ -86,56 +86,73 @@ export default function AntennaTransmissionInputs({
     onAntennaChange(index, field, value);
   };
 
+  const inputKeys = Object.keys(inputsList);
+
+  // Map input widths to fixed sizes or fractions
+  const gridTemplateColumns = inputKeys
+    .map((key) => {
+      const widthClass = inputsList[key].width;
+
+      switch (widthClass) {
+        case "w-20":
+          return "4rem";
+        case "w-32":
+          return "8rem";
+        case "w-full":
+          return "1fr";
+        default:
+          return "auto";
+      }
+    })
+    .join(" ");
+
   return (
-    <>
-      <div className="items-end space-y-2">
-        {antennaInventory.length > 0 ? (
-          <div className="grid grid-flow-col auto-cols-fr items-center pe-20">
-            {Object.keys(inputsList).map((k, i) => {
+    <div className="space-y-10">
+      <div className="items-end space-y-5">
+        {antennaInventory.length > 0 && (
+          <div
+            className="grid items-center gap-1 pe-[5.5rem]"
+            style={{ gridTemplateColumns }}
+          >
+            {inputKeys.map((k, i) => {
+              const inputConfig = inputsList[k];
+
               return (
-                <div
-                  key={i}
-                  className="text-nowrap text-ellipsis text-sm text-primary overflow-hidden"
-                >
-                  {inputsList[k].label}
+                <div key={i} className="text-center text-sm text-primary">
+                  {inputConfig.label}
                 </div>
               );
             })}
           </div>
-        ) : (
-          <></>
         )}
 
         {antennaInventory.map((antenna, index) => (
-          <div key={index} className="grid grid-cols-[1fr_auto] ">
-            <div
-              key={index}
-              className="grid grid-flow-col auto-cols-fr items-center gap-1 items-end"
-            >
-              {Object.keys(inputsList).map((key) => {
-                const inputConfig = inputsList[key];
+          <div
+            key={index}
+            className="grid items-center gap-1"
+            style={{ gridTemplateColumns: `${gridTemplateColumns} auto` }}
+          >
+            {inputKeys.map((key) => {
+              const inputConfig = inputsList[key];
 
-                return (
-                  <FormInput
-                    key={inputConfig.field}
-                    name={inputConfig.field}
-                    placeholder={inputConfig.placeholder}
-                    type={inputConfig.type}
-                    value={antenna[inputConfig.field]}
-                    withTooltip={inputConfig.withTooltip}
-                    onChange={(e) => handleChange(index, inputConfig.field, e)}
-                  />
-                );
-              })}
-            </div>
-            <div className="h-full w-fit content-end flex">
+              return (
+                <AntennaFormInput
+                  key={inputConfig.field}
+                  name={inputConfig.field}
+                  placeholder={inputConfig.placeholder}
+                  value={antenna[inputConfig.field]}
+                  onChange={(e) => handleChange(index, inputConfig.field, e)}
+                />
+              );
+            })}
+            <div className="flex">
               <CopyButton onClick={() => onDuplicateAntenna(index)} />
               <TrashButton onClick={() => onRemoveAntenna(index)} />
             </div>
           </div>
         ))}
       </div>
-      <AddButtom label="Add New Inventory" onClick={onAddAntenna} />
-    </>
+      <AddButton label="Add New Inventory" onClick={onAddAntenna} />
+    </div>
   );
 }

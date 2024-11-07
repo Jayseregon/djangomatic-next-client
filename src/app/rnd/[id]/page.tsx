@@ -8,12 +8,7 @@ export default async function UserPage({ params }: { params: { id: string } }) {
 
   if (!session) return <UnAuthenticated />;
 
-  return (
-    <UserPageContent
-      id={params.id}
-      session={session}
-    />
-  );
+  return <UserPageContent id={params.id} session={session} />;
 }
 
 function UserPageContent({ id, session }: { id: string; session: any }) {

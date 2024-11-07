@@ -117,10 +117,7 @@ const UsersTasksBoards = () => {
   return (
     <div className="grid grid-cols-2 space-x-5 space-y-10 w-full">
       {users.map((user) => (
-        <TaskManager
-          key={user.id}
-          user={user}
-        />
+        <TaskManager key={user.id} user={user} />
       ))}
     </div>
   );

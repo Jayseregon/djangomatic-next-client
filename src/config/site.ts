@@ -2,13 +2,12 @@ export type SiteConfig = typeof siteConfig;
 
 export const siteConfig = {
   name: "Djangomatic Pro",
-  name_beta: "Djangomatic Pro [beta]",
   name_staging: "Djangomatic Pro [staging]",
   name_local: "Djangomatic Pro [local]",
   hero_descr: "Simplifying your Daily Tasks.",
   description: "Process Automation on the Cloud.",
   icon: "/favicon.ico",
-  navItems: [
+  navItemsBase: [
     {
       label: "Apps",
       href: "/saas",
@@ -25,6 +24,8 @@ export const siteConfig = {
       label: "Boards",
       href: "/boards",
     },
+  ],
+  navItemsAdmin: [
     {
       label: "R&D",
       href: "/rnd",

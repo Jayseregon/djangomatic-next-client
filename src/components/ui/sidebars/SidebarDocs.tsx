@@ -28,7 +28,7 @@ export const SidebarDocs: React.FC<SidebarProps> = ({
 }: SidebarProps): JSX.Element => {
   const t = useTranslations("SaasSidebar");
   const currentPath = usePathname();
-  const docsPath = siteConfig.navItems.filter(
+  const docsPath = siteConfig.navItemsBase.filter(
     (item) => item.label === "Docs",
   )[0].href;
 

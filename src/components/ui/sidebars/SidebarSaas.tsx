@@ -27,7 +27,7 @@ export const SidebarSaas: React.FC<SidebarProps> = ({
 }: SidebarProps): JSX.Element => {
   const t = useTranslations("SaasSidebar");
   const currentPath = usePathname();
-  const saasPath = siteConfig.navItems.filter(
+  const saasPath = siteConfig.navItemsBase.filter(
     (item) => item.label === "Apps",
   )[0].href;
 

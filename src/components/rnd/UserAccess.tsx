@@ -17,7 +17,7 @@ import { TaskManager } from "./TaskManager";
  * @param {string} props.email - The email of the user to check permissions for.
  * @returns {JSX.Element} The rendered UserAccessRnD component.
  */
-export function UserAccessRnD({ email }: { email: string }): JSX.Element {
+export function UserAccessRnDBoard({ email }: { email: string }): JSX.Element {
   const [user, setUser] = useState<UserSchema | null>(null);
 
   useEffect(() => {
@@ -41,6 +41,55 @@ export function UserAccessRnD({ email }: { email: string }): JSX.Element {
     return <UnAuthorized />;
   } else {
     return <UsersTasksBoards />;
+  }
+}
+
+export function UserAccessRnDSection({
+  email,
+  children,
+}: {
+  email: string;
+  children: React.ReactNode;
+}): JSX.Element {
+  const [user, setUser] = useState<UserSchema | null>(null);
+
+  useEffect(() => {
+    /**
+     * Fetches user data based on the provided email.
+     */
+    async function fetchData() {
+      try {
+        const data = await fetchUser(email);
+
+        setUser(data);
+      } catch (error) {
+        console.error("Failed to fetch user:", error);
+      }
+    }
+    fetchData();
+  }, [email]);
+
+  // Check if the user does not have R&D access
+  if (user && !user.canAccessRnd) {
+    return <UnAuthorized />;
+  } else {
+    return <>{children}</>;
+  }
+}
+
+export function UserAccessRnDLayout({
+  user,
+  childrenPerms,
+  childrenNoPerms,
+}: {
+  user: UserSchema;
+  childrenPerms: React.ReactNode;
+  childrenNoPerms: React.ReactNode;
+}): JSX.Element {
+  if (!user.canAccessRnd) {
+    return <>{childrenNoPerms}</>;
+  } else {
+    return <>{childrenPerms}</>;
   }
 }
 
@@ -68,7 +117,10 @@ const UsersTasksBoards = () => {
   return (
     <div className="grid grid-cols-2 space-x-5 space-y-10 w-full">
       {users.map((user) => (
-        <TaskManager key={user.id} user={user} />
+        <TaskManager
+          key={user.id}
+          user={user}
+        />
       ))}
     </div>
   );

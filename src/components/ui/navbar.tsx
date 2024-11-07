@@ -15,9 +15,11 @@ import {
   Avatar,
   Link,
 } from "@nextui-org/react";
-import { useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { useTranslations } from "next-intl";
 import { usePathname } from "next/navigation";
+import { fetchUser } from "@/lib/getUserPermission";
+import { UserSchema } from "@/interfaces/lib";
 
 import { siteConfig } from "@/config/site";
 import { ThemeSwitch } from "@/components/ui/ThemeSwitch";
@@ -31,7 +33,7 @@ import LocaleSwitcher from "./LocaleSwitcher";
 const appEnv = process.env.NEXT_PUBLIC_APP_ENV;
 const appName =
   appEnv === "production"
-    ? siteConfig.name_beta
+    ? siteConfig.name
     : appEnv === "staging"
       ? siteConfig.name_staging
       : siteConfig.name_local;
@@ -56,6 +58,26 @@ export const Navbar = ({ nonce, session }: NavbarProps): JSX.Element | null => {
   const t = useTranslations("UserProfile");
   const pathname = usePathname();
   const isUnAuth = pathname === "/signin";
+  const [user, setUser] = useState<UserSchema | null>(null);
+
+  const navItems = useMemo(() => {
+    return user?.isAdmin
+      ? siteConfig.navItemsBase.concat(siteConfig.navItemsAdmin)
+      : siteConfig.navItemsBase;
+  }, [user?.isAdmin]);
+
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const data = await fetchUser(session.user.email as string);
+
+        setUser(data);
+      } catch (error) {
+        console.error("Failed to fetch user:", error);
+      }
+    }
+    fetchData();
+  }, []);
 
   if (isUnAuth) {
     return null;
@@ -69,16 +91,17 @@ export const Navbar = ({ nonce, session }: NavbarProps): JSX.Element | null => {
       maxWidth="2xl"
       nonce={nonce}
       position="sticky"
-      onMenuOpenChange={setIsMenuOpen}
-    >
+      onMenuOpenChange={setIsMenuOpen}>
       <NavbarContent nonce={nonce}>
-        <NavbarBrand as="li" className="gap-3 max-w-fit" nonce={nonce}>
+        <NavbarBrand
+          as="li"
+          className="gap-3 max-w-fit"
+          nonce={nonce}>
           <Link
             className="flex justify-start items-center gap-4"
             color="foreground"
             href="/"
-            nonce={nonce}
-          >
+            nonce={nonce}>
             <Logo nonce={nonce} />
             <p className="font-bold text-inherit">{appName}</p>
           </Link>
@@ -86,7 +109,9 @@ export const Navbar = ({ nonce, session }: NavbarProps): JSX.Element | null => {
       </NavbarContent>
 
       {/* navbar menu  */}
-      <NavbarContent justify="center" nonce={nonce}>
+      <NavbarContent
+        justify="center"
+        nonce={nonce}>
         {/* toggle menu */}
         <NavbarMenuToggle
           aria-label={isMenuOpen ? "Close Menu" : "Open Menu"}
@@ -96,18 +121,19 @@ export const Navbar = ({ nonce, session }: NavbarProps): JSX.Element | null => {
 
         {/* or list items menu */}
         <ul className="hidden md:flex items-start justify-start gap-16">
-          {siteConfig.navItems.map((item, index) => (
-            <NavbarItem key={`${item}-${index}-navbar`} nonce={nonce}>
+          {navItems.map((item, index) => (
+            <NavbarItem
+              key={`${item}-${index}-navbar`}
+              nonce={nonce}>
               <Link
                 className={cn(
                   pathname.includes(item.href) &&
-                    "underline decoration-foreground",
+                    "underline decoration-foreground"
                 )}
                 color="foreground"
                 href={item.href}
                 nonce={nonce}
-                underline="hover"
-              >
+                underline="hover">
                 {item.label}
               </Link>
             </NavbarItem>
@@ -116,7 +142,9 @@ export const Navbar = ({ nonce, session }: NavbarProps): JSX.Element | null => {
       </NavbarContent>
 
       {/* avatar menu with theme switch and search */}
-      <NavbarContent justify="end" nonce={nonce}>
+      <NavbarContent
+        justify="end"
+        nonce={nonce}>
         {/* <NavbarItem
           className="hidden md:flex"
           nonce={nonce}>
@@ -134,7 +162,10 @@ export const Navbar = ({ nonce, session }: NavbarProps): JSX.Element | null => {
           <LocaleSwitcher nonce={nonce} />
         </NavbarItem>
 
-        <Dropdown backdrop="blur" nonce={nonce} placement="bottom-end">
+        <Dropdown
+          backdrop="blur"
+          nonce={nonce}
+          placement="bottom-end">
           <DropdownTrigger nonce={nonce}>
             <Avatar
               as="button"
@@ -154,14 +185,12 @@ export const Navbar = ({ nonce, session }: NavbarProps): JSX.Element | null => {
             aria-label="Profile Actions"
             disabledKeys={["settings"]}
             nonce={nonce}
-            variant="flat"
-          >
+            variant="flat">
             <DropdownItem
               key="profile"
               showDivider
               nonce={nonce}
-              textValue="Signed In profile name"
-            >
+              textValue="Signed In profile name">
               <p className="font-semibold flex flex-col gap-2">
                 <span>{t("dItemSignedInTitle")}</span>
                 <span>
@@ -172,7 +201,10 @@ export const Navbar = ({ nonce, session }: NavbarProps): JSX.Element | null => {
                 {session?.user ? session?.user?.email : t("dItemUserEmail")}
               </p>
             </DropdownItem>
-            <DropdownItem key="settings" nonce={nonce} textValue="My Settings">
+            <DropdownItem
+              key="settings"
+              nonce={nonce}
+              textValue="My Settings">
               <p className="flex flex-row space-x-2">
                 <span className="">{t("dItemSettings")}</span>
                 <span className="italic font-thin">Coming Soon</span>
@@ -182,8 +214,7 @@ export const Navbar = ({ nonce, session }: NavbarProps): JSX.Element | null => {
               key="logout"
               color="danger"
               nonce={nonce}
-              textValue="Log Out"
-            >
+              textValue="Log Out">
               <SignOut buttonName={t("dItemLogOut")} />
             </DropdownItem>
           </DropdownMenu>
@@ -194,8 +225,10 @@ export const Navbar = ({ nonce, session }: NavbarProps): JSX.Element | null => {
       <NavbarMenu nonce={nonce}>
         {/* <SearchInput alwaysExpanded={true} /> */}
         <div className="mx-4 mt-2 flex flex-col gap-3">
-          {siteConfig.navItems.map((item, index) => (
-            <NavbarMenuItem key={`${item}-${index}-dropdown`} nonce={nonce}>
+          {navItems.map((item, index) => (
+            <NavbarMenuItem
+              key={`${item}-${index}-dropdown`}
+              nonce={nonce}>
               <Link
                 className="w-full"
                 color="foreground"
@@ -204,8 +237,7 @@ export const Navbar = ({ nonce, session }: NavbarProps): JSX.Element | null => {
                 size="lg"
                 onPress={() => {
                   setIsMenuOpen((prev) => !prev);
-                }}
-              >
+                }}>
                 {item.label}
               </Link>
             </NavbarMenuItem>

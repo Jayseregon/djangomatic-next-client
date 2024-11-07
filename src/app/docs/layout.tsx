@@ -1,7 +1,7 @@
 import { headers } from "next/headers";
 import { setRequestLocale } from "next-intl/server";
 
-import { SidebarDocs } from "@/src/components/ui/sidebars";
+import { SidebarDocs } from "@/src/components/ui/sidebars/SidebarDocs";
 import { SearchInput } from "@/src/components/ui/SearchInput";
 
 export default function DocsLayout({

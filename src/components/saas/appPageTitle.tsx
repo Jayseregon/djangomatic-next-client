@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 
 import { title } from "@/components/primitives";
 import { saasData } from "@/src/config/saasData";
-import { AppItem } from "@/components/ui/sidebars";
+import { AppItem } from "@/interfaces/ui";
 import { InputDataProps } from "@/interfaces/lib";
 
 import { useAppName, useInputData } from "./inputDataProviders";

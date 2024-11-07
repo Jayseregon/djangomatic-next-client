@@ -5,8 +5,7 @@ import { useTranslations } from "next-intl";
 
 import { title } from "@/components/primitives";
 import { saasData } from "@/src/config/saasData";
-
-import { AppItem } from "../ui/sidebars";
+import { AppItem } from "@/interfaces/ui";
 
 interface PillVersioningProps {
   version: string | undefined;

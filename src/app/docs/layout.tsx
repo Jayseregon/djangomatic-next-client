@@ -1,5 +1,5 @@
 import { headers } from "next/headers";
-import { unstable_setRequestLocale } from "next-intl/server";
+import { setRequestLocale } from "next-intl/server";
 
 import { SidebarDocs } from "@/src/components/ui/sidebars";
 import { SearchInput } from "@/src/components/ui/SearchInput";
@@ -13,7 +13,7 @@ export default function DocsLayout({
 }) {
   const nonce = headers().get("x-nonce");
 
-  unstable_setRequestLocale(locale);
+  setRequestLocale(locale);
 
   return (
     <div className="flex min-h-screen">

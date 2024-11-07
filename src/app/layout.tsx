@@ -50,7 +50,7 @@ export function generateStaticParams() {
 }
 
 export default async function RootLayout({ children }: Props) {
-  const nonce = headers().get("x-nonce");
+  const nonce = headers().get("x-nonce") || "";
   const locale = await getLocale();
   const messages = await getMessages();
   const session = await auth();
@@ -58,35 +58,32 @@ export default async function RootLayout({ children }: Props) {
   setRequestLocale(locale);
 
   return (
-    <html suppressHydrationWarning lang={locale} nonce={nonce || undefined}>
-      <head nonce={nonce || undefined} />
+    <html suppressHydrationWarning lang={locale} nonce={nonce}>
+      <head nonce={nonce} />
       <body
         className={clsx(
           "min-h-max bg-background font-sans antialiased",
           fontSans.variable,
           fontMono.variable,
         )}
-        nonce={nonce || undefined}
+        nonce={nonce}
       >
         <Providers
-          nonce={nonce || undefined}
+          nonce={nonce}
           themeProps={{ attribute: "class", defaultTheme: "dark", children }}
         >
           <NextIntlClientProvider messages={messages}>
-            <div
-              className="relative flex flex-col h-screen"
-              nonce={nonce || undefined}
-            >
-              <Navbar nonce={nonce || undefined} session={session} />
+            <div className="relative flex flex-col h-screen" nonce={nonce}>
+              <Navbar nonce={nonce} session={session} />
 
               <main
                 className="container mx-auto max-w-full pt-24 px-6 flex-grow"
-                nonce={nonce || undefined}
+                nonce={nonce}
               >
                 {children}
               </main>
 
-              <Footer nonce={nonce || undefined} />
+              <Footer nonce={nonce} />
             </div>
           </NextIntlClientProvider>
         </Providers>

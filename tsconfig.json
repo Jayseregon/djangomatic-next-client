@@ -26,10 +26,8 @@
       "@/config/*": ["src/config/*"],
       "@/types/*": ["src/types/*"],
       "@/interfaces/*": ["src/interfaces/*"],
-      "@/contexts/*": ["src/contexts/*"],
       "@/lib/*": ["src/lib/*"],
       "@/hooks/*": ["src/hooks/*"],
-      "#site/content": ["./.velite"]
     }
   },
   "include": [

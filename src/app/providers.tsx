@@ -6,6 +6,11 @@ import { useRouter } from "next/navigation";
 import { ThemeProvider as NextThemesProvider } from "next-themes";
 import { ThemeProviderProps } from "next-themes/dist/types";
 
+// Create the NonceContext
+const NonceContext = React.createContext<string | undefined>(undefined);
+
+export { NonceContext };
+
 export interface ProvidersProps {
   children: React.ReactNode;
   themeProps?: ThemeProviderProps;
@@ -30,10 +35,12 @@ export function Providers({
   const router = useRouter();
 
   return (
-    <NextUIProvider navigate={router.push}>
-      <NextThemesProvider {...themeProps} nonce={nonce}>
-        {children}
-      </NextThemesProvider>
-    </NextUIProvider>
+    <NonceContext.Provider value={nonce}>
+      <NextUIProvider navigate={router.push}>
+        <NextThemesProvider {...themeProps} nonce={nonce}>
+          {children}
+        </NextThemesProvider>
+      </NextUIProvider>
+    </NonceContext.Provider>
   );
 }

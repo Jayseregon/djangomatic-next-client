@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
 // import { headers } from "next/headers";
-import { Button } from "@nextui-org/react";
+// import { Button } from "@nextui-org/react";
 
 import { title } from "@/components/primitives";
 import { signIn, auth, providerMap } from "@/auth";
@@ -51,16 +51,15 @@ export default async function SignInPage(): Promise<JSX.Element> {
               }
             }}
           >
-            <Button
-              className="bg-gradient-to-tr from-[#b249f8] to-[#01cfea] text-white shadow-lg"
-              radius="full"
+            <button
+              className="bg-gradient-to-tr from-[#b249f8] to-[#01cfea] text-white shadow-lg rounded-full px-4 py-2"
               type="submit"
             >
               <span>
                 Sign in with{" "}
                 {provider.name === "Microsoft Entra ID" ? "SSO" : provider.name}
               </span>
-            </Button>
+            </button>
           </form>
         ))}
       </div>

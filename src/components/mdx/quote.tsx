@@ -1,4 +1,7 @@
-import { ReactNode } from "react";
+"use client";
+import { ReactNode, useContext } from "react";
+
+import { NonceContext } from "@/src/app/providers";
 
 interface QuoteProps {
   children?: ReactNode;
@@ -12,8 +15,13 @@ interface QuoteProps {
  * @returns {JSX.Element} The rendered Quote component.
  */
 export default function Quote({ children }: QuoteProps): JSX.Element {
+  const nonce = useContext(NonceContext);
+
   return (
-    <span className="inline-block text-gray-600 dark:text-gray-50 italic font-mono text-sm">
+    <span
+      className="inline-block text-gray-600 dark:text-gray-50 italic font-mono text-sm"
+      nonce={nonce}
+    >
       {children}
     </span>
   );

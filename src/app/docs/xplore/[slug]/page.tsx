@@ -6,6 +6,8 @@ import DynamicDocTemplate, {
   generateStaticParamsTemplate,
 } from "@/components/mdx/DynamicDocTemplate";
 
+const docType = "xplore";
+
 export default async function MdPage({ params }: { params: { slug: string } }) {
   const session = await auth();
 
@@ -17,7 +19,7 @@ export default async function MdPage({ params }: { params: { slug: string } }) {
 function MdPageContent({ params, session }: MdPageContentProps) {
   return (
     <DynamicDocTemplate
-      docType="xplore"
+      docType={docType}
       params={params}
       permission="canAccessDocsXplore"
       session={session}
@@ -26,6 +28,6 @@ function MdPageContent({ params, session }: MdPageContentProps) {
 }
 
 export const generateMetadata = (props: { params: { slug: string } }) =>
-  generateMetadataTemplate({ ...props, docType: "tds" });
+  generateMetadataTemplate({ ...props, docType: docType });
 
-export const generateStaticParams = () => generateStaticParamsTemplate("tds");
+export const generateStaticParams = () => generateStaticParamsTemplate(docType);

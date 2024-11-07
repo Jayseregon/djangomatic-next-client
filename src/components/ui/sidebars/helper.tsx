@@ -95,16 +95,21 @@ export const SidebarVideosSection = (): JSX.Element => {
   }, []);
 
   /**
-   * Filters categories based on the tags of the blobs.
+   * Filters and sorts categories based on the tags of the blobs.
    *
-   * @returns {Array} An array of filtered categories.
+   * @returns {Array} An array of sorted categories.
    */
   const getCategories = (): Array<any> => {
     const categoriesInBlobs = blobs.map((blob) => blob.tags.categoryName);
 
-    return category_labels.filter((category) =>
+    const filteredCategories = category_labels.filter((category) =>
       categoriesInBlobs.includes(category.key),
     );
+
+    // Sort the filtered categories by 'mapping'
+    filteredCategories.sort((a, b) => a.mapping.localeCompare(b.mapping));
+
+    return filteredCategories;
   };
 
   return (

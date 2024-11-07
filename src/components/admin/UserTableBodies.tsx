@@ -202,7 +202,7 @@ export const videosBody = ({
       <TableCell>
         <PermissionButton
           disabled={disabled}
-          fieldName="canAccessVideoDefault"
+          fieldName="canAccessVideoAdmin"
           handleToggle={handleToggle}
           user={user}
         />
@@ -210,7 +210,31 @@ export const videosBody = ({
       <TableCell>
         <PermissionButton
           disabled={disabled}
-          fieldName="canAccessVideoQGIS"
+          fieldName="canAccessVideoGIS"
+          handleToggle={handleToggle}
+          user={user}
+        />
+      </TableCell>
+      <TableCell>
+        <PermissionButton
+          disabled={disabled}
+          fieldName="canAccessVideoCAD"
+          handleToggle={handleToggle}
+          user={user}
+        />
+      </TableCell>
+      <TableCell>
+        <PermissionButton
+          disabled={disabled}
+          fieldName="canAccessVideoLiDAR"
+          handleToggle={handleToggle}
+          user={user}
+        />
+      </TableCell>
+      <TableCell>
+        <PermissionButton
+          disabled={disabled}
+          fieldName="canAccessVideoEng"
           handleToggle={handleToggle}
           user={user}
         />

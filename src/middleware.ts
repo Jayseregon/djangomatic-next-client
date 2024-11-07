@@ -27,7 +27,7 @@ function cspMiddleware(req: NextRequest): NextResponse {
   frame-ancestors 'none';
   frame-src https://github.com;
   connect-src 'self' https://github.com https://api.github.com https://docker-djangomatic.azurewebsites.net https://staging-djangomatic.azurewebsites.net https://djangomatic-pro.azurewebsites.net;
-  media-src 'self' https://djangomaticstorage.blob.core.windows.net;
+  media-src 'self' blob: https://djangomaticstorage.blob.core.windows.net;
   upgrade-insecure-requests;
   `
     .replace(/\s{2,}/g, " ")

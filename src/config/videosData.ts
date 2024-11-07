@@ -3,16 +3,34 @@ export type VideosData = typeof videosData;
 export const videosData = {
   category_labels: [
     {
-      key: "default",
-      label: "default",
-      mapping: "Default",
-      perms: "canAccessVideoDefault",
+      key: "admin",
+      label: "admin",
+      mapping: "Admin",
+      perms: "canAccessVideoAdmin",
     },
     {
-      key: "qgis",
-      label: "qgis",
-      mapping: "QGIS",
-      perms: "canAccessVideoQGIS",
+      key: "gis",
+      label: "gis",
+      mapping: "GIS",
+      perms: "canAccessVideoGIS",
+    },
+    {
+      key: "autocad",
+      label: "autocad",
+      mapping: "AutoCAD",
+      perms: "canAccessVideoCAD",
+    },
+    {
+      key: "lidar",
+      label: "lidar",
+      mapping: "LiDAR",
+      perms: "canAccessVideoLiDAR",
+    },
+    {
+      key: "engineering",
+      label: "engineering",
+      mapping: "Engineering",
+      perms: "canAccessVideoEng",
     },
     {
       key: "sttar",

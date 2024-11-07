@@ -86,9 +86,12 @@ export const videosHeader = (): JSX.Element => {
       <TableColumn key="username" className="w-56">
         username
       </TableColumn>
-      <TableColumn key="videos1">default</TableColumn>
-      <TableColumn key="videos2">qgis</TableColumn>
-      <TableColumn key="videos3">sttar</TableColumn>
+      <TableColumn key="videos1">admin</TableColumn>
+      <TableColumn key="videos2">gis</TableColumn>
+      <TableColumn key="videos3">cad</TableColumn>
+      <TableColumn key="videos4">lidar</TableColumn>
+      <TableColumn key="videos5">eng</TableColumn>
+      <TableColumn key="videos6">sttar</TableColumn>
     </TableHeader>
   );
 };

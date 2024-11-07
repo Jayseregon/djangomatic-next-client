@@ -24,8 +24,11 @@ export interface UserSchema {
   canAccessDocsCogeco: boolean;
   canAccessDocsVistabeam: boolean;
   canAccessDocsXplore: boolean;
-  canAccessVideoDefault: boolean;
-  canAccessVideoQGIS: boolean;
+  canAccessVideoAdmin: boolean;
+  canAccessVideoGIS: boolean;
+  canAccessVideoCAD: boolean;
+  canAccessVideoLiDAR: boolean;
+  canAccessVideoEng: boolean;
   canAccessVideoSttar: boolean;
   rndTasks: RnDTeamTask[];
 }

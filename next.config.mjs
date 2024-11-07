@@ -1,6 +1,4 @@
 import createNextIntlPlugin from 'next-intl/plugin';
-import path from 'path';
-import { fileURLToPath } from 'url';
 
 const withNextIntl = createNextIntlPlugin();
 const isLocalDev = process.env.NODE_ENV === 'development';
@@ -14,7 +12,7 @@ const permissionsPolicy = `
   display-capture=(), 
   document-domain=(), 
   encrypted-media=(), 
-  fullscreen=(), 
+  fullscreen=(self), 
   geolocation=(), 
   gyroscope=(), 
   layout-animations=(), 
@@ -24,7 +22,7 @@ const permissionsPolicy = `
   midi=(), 
   navigation-override=(), 
   payment=(), 
-  picture-in-picture=(), 
+  picture-in-picture=(self), 
   publickey-credentials-get=(), 
   sync-xhr=(), 
   usb=(), 
@@ -32,8 +30,6 @@ const permissionsPolicy = `
   web-share=(), 
   xr-spatial-tracking=()
 `.replace(/\n/g, '');
-
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 /**
  * @type {import('next').NextConfig}
@@ -61,13 +57,6 @@ const nextConfig = {
       },
     ];
   },
-  // webpack: (config, { buildId, dev, isServer, defaultLoaders, webpack }) => {
-  //   config.resolve.alias['@'] = path.resolve(__dirname);
-  //   config.resolve.alias['@/components'] = path.resolve(__dirname, 'src/components');
-  //   config.resolve.alias['@/config'] = path.resolve(__dirname, 'src/config');
-  //   config.resolve.alias['@/lib'] = path.resolve(__dirname, 'src/lib');
-  //   return config;
-  // },
 };
 
 export default withNextIntl(nextConfig);

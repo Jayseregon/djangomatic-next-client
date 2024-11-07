@@ -40,8 +40,11 @@ model User {
   canAccessDocsCogeco            Boolean       @default(false)
   canAccessDocsVistabeam         Boolean       @default(false)
   canAccessDocsXplore            Boolean       @default(false)
-  canAccessVideoDefault          Boolean       @default(false)
-  canAccessVideoQGIS             Boolean       @default(false)
+  canAccessVideoAdmin            Boolean       @default(true)
+  canAccessVideoGIS              Boolean       @default(true)
+  canAccessVideoCAD              Boolean       @default(true)
+  canAccessVideoLiDAR            Boolean       @default(true)
+  canAccessVideoEng              Boolean       @default(true)
   canAccessVideoSttar            Boolean       @default(false)
   rndTasks                       RnDTeamTask[]
 }

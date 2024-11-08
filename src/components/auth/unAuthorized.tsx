@@ -1,6 +1,8 @@
+"use client";
+
 import { useTranslations } from "next-intl";
 
-import { StopSignIcon } from "../icons";
+import { StopSignIcon } from "@/components/icons";
 
 /**
  * UnAuthorized component displays an unauthorized access message with an icon.

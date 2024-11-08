@@ -1,13 +1,15 @@
 import { Snippet } from "@nextui-org/snippet";
 import { useTranslations } from "next-intl";
 import { setRequestLocale } from "next-intl/server";
+import Link from "next/link";
+import { Bug, SquareArrowOutUpRight } from "lucide-react";
 
+import { siteConfig } from "@/config/site";
 import { title, subtitle } from "@/components/primitives";
 import { UnAuthenticated } from "@/components/auth/unAuthenticated";
 import { auth } from "@/auth";
 import AppName from "@/components/ui/AppName";
-// import { DisplaySemanticColors } from "@/components/_dev/ColorCard";
-// import { UserData } from "@/src/components/UserData";
+import LottieAnimation from "@/components/ui/LottieAnimation";
 
 /**
  * RootPage component sets the request locale and renders the HomeContent component.
@@ -32,7 +34,7 @@ export default async function RootPage({
 
 /**
  * HomeContent component renders the main content of the home page.
- * It displays the site name, hero title, hero subtitle, a code snippet, and semantic colors.
+ * It displays the site name, introduction, description, features, bug report info, and a call to action.
  * If the user is not authenticated, it displays the UnAuthenticated component.
  *
  * @param {Object} props - The props for the HomeContent component.
@@ -44,29 +46,45 @@ function HomeContent({ session }: { session: any }): JSX.Element {
 
   if (!session) return <UnAuthenticated />;
 
+  // Retrieve the href for 'Boards' from navItemsBase
+  const boardsHref = siteConfig.navItemsBase.find(
+    (item) => item.label === "Boards",
+  )!.href;
+
   return (
-    <section className="flex flex-col items-center justify-center gap-4 py-8 md:py-10">
-      <div className="max-w-xl text-center justify-center space-y-5">
+    <section className="flex flex-col items-center justify-center gap-6 py-8 md:py-10">
+      <div className="max-w-3xl text-center space-y-4">
         <AppName />
         <div>
           <h1 className={title()}>{t("HeroTitle")}</h1>
-          <h2 className={subtitle({ class: "mt-4" })}>{t("HeroSubtitle")}</h2>
         </div>
       </div>
 
-      <div className="mt-8">
-        <Snippet hideCopyButton hideSymbol variant="flat">
-          <p className="flex flex-col gap-2 text-center">
-            <span className="text-lg pb-2">{t("code")}</span>
-            <span>{t("code2")}</span>
-            <span className="text-red-500">{t("code3")}</span>
-          </p>
-        </Snippet>
+      <LottieAnimation
+        className="max-w-3xl"
+        src="/lottie/animation.lottie" // Ensure the path starts with '/'
+      />
+
+      <div className="max-w-3xl text-justify space-y-4">
+        <h2 className={subtitle({ class: "text-foreground" })}>
+          {t("Description1")}
+        </h2>
+        <h2 className={subtitle({ class: "text-foreground" })}>
+          {t("Description2")}
+        </h2>
       </div>
 
-      {/* <UserData session={session} /> */}
-
-      {/* <DisplaySemanticColors /> */}
+      <Snippet hideCopyButton hideSymbol variant="flat">
+        <div className="inline-flex space-x-2 items-center">
+          <Bug color="#dc2626" />
+          <p className="text-center pt-1 text-red-800 dark:text-red-300 flex items-center">
+            {t("BugReport")}
+          </p>
+          <Link className="flex items-center" href={boardsHref}>
+            <SquareArrowOutUpRight color="#dc2626" />
+          </Link>
+        </div>
+      </Snippet>
     </section>
   );
 }

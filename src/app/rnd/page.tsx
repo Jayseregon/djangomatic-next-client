@@ -3,7 +3,7 @@ import { useTranslations } from "next-intl";
 import { title } from "@/components/primitives";
 import { auth } from "@/auth";
 import { UnAuthenticated } from "@/components/auth/unAuthenticated";
-import { UserAccessRnD } from "@/components/rnd/UserAccess";
+import { UserAccessRnDBoard } from "@/components/rnd/UserAccess";
 
 export default async function UserPage() {
   const session = await auth();
@@ -24,7 +24,7 @@ function UserPageContent({ session }: { session: any }) {
         <h1 className={title()}>{t("title")}</h1>
         <h2 className={title({ size: "xs" })}>{t("subtitle")}</h2>
       </div>
-      <UserAccessRnD email={session.user.email} />
+      <UserAccessRnDBoard email={session.user.email} />
     </div>
   );
 }

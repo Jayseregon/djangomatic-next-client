@@ -1,96 +1,106 @@
+import { useTranslations } from "next-intl";
+
 import { ExclamationTriangleIcon } from "../icons";
 import { subtitle } from "../primitives";
 
 const AppsUsageGuidelines = () => {
+  const t = useTranslations("AppsUsageGuidelines");
+
   return (
     <div className="text-justify">
       <p className={subtitle({ className: "text-foreground" })}>
-        This guide will help you navigate and utilize our web apps effectively
-        to maximize their potential.
+        {t("guidanceParagraph")}
       </p>
 
       <section className="mt-8">
-        <h2 className="text-2xl font-bold">Getting Started with the Apps</h2>
-        <p>
-          Our web apps are designed to be user-friendly, providing you with all
-          the tools needed to manage your tasks efficiently. Here&apos;s how to
-          get started:
-        </p>
+        <h2 className="text-2xl font-bold">
+          {t("sections.gettingStarted.title")}
+        </h2>
+        <p>{t("sections.gettingStarted.paragraph")}</p>
         <ul className="list-disc pl-5">
           <li>
-            <strong>Navigation:</strong> Use the sidebar to navigate between
-            different apps. Each section represents a specific client or project
-            and is further organized by platform type and tool for easy access.
+            <strong>
+              {t("sections.gettingStarted.list.navigation.title")}:
+            </strong>{" "}
+            {t("sections.gettingStarted.list.navigation.description")}
           </li>
           <li>
-            <strong>Examples and Tutorials:</strong> Look for examples and
-            tutorials within each app. When available, examples and video
-            tutorials will present the tool in action.
-          </li>
-        </ul>
-      </section>
-
-      <section className="mt-8">
-        <h2 className="text-2xl font-bold">Permissions and Access</h2>
-        <p className="flex inline-block gap-2">
-          <ExclamationTriangleIcon />
-          Access to specific apps is controlled by permissions.
-        </p>
-        <p>
-          Without the proper permissions, the app will still be accessible but
-          deactivated. This approach serves multiple purposes:
-        </p>
-        <ul className="list-disc pl-5">
-          <li>
-            <strong>Hint of Functionality:</strong> Users can see what the app
-            does, which can spark curiosity and interest.
-          </li>
-          <li>
-            <strong>Idea Generation:</strong> Users can explore existing apps to
-            see if their ideas are already implemented or if there is room for
-            new suggestions.
-          </li>
-          <li>
-            <strong>Feedback and Suggestions:</strong> Users are encouraged to
-            provide feedback or propose new ideas based on their exploration of
-            the app.
+            <strong>
+              {t("sections.gettingStarted.list.examplesTutorials.title")}:
+            </strong>{" "}
+            {t("sections.gettingStarted.list.examplesTutorials.description")}
           </li>
         </ul>
       </section>
 
       <section className="mt-8">
         <h2 className="text-2xl font-bold">
-          Maximizing the Benefits of Our Apps
+          {t("sections.permissionsAccess.title")}
         </h2>
-        <p>To get the most out of our web apps, consider the following tips:</p>
+        <p className="flex inline-block gap-2">
+          <ExclamationTriangleIcon />
+          {t("sections.permissionsAccess.paragraph1")}
+        </p>
+        <p>{t("sections.permissionsAccess.paragraph2")}</p>
         <ul className="list-disc pl-5">
           <li>
-            <strong>Start with the Basics:</strong> Familiarize yourself with
-            the basic features before exploring advanced functionalities.
+            <strong>
+              {t("sections.permissionsAccess.list.hintFunctionality.title")}:
+            </strong>{" "}
+            {t("sections.permissionsAccess.list.hintFunctionality.description")}
           </li>
           <li>
-            <strong>Utilize Integrations:</strong> Take advantage of
-            integrations with other tools and services to streamline your
-            workflows.
+            <strong>
+              {t("sections.permissionsAccess.list.ideaGeneration.title")}:
+            </strong>{" "}
+            {t("sections.permissionsAccess.list.ideaGeneration.description")}
           </li>
           <li>
-            <strong>Stay Updated:</strong> Keep an eye on updates and new
-            features to continuously improve your experience.
+            <strong>
+              {t("sections.permissionsAccess.list.feedbackSuggestions.title")}:
+            </strong>{" "}
+            {t(
+              "sections.permissionsAccess.list.feedbackSuggestions.description",
+            )}
           </li>
         </ul>
       </section>
 
       <section className="mt-8">
-        <h2 className="text-2xl font-bold">Feedback and Contributions</h2>
-        <p>
-          Your feedback is invaluable to us. If you have suggestions on how we
-          can improve our web apps, please let us know.
-        </p>
-        <p>
-          Additionally, if you&apos;ve created workflows or solutions that could
-          benefit others, consider sharing them with us. We could add them to
-          the platform, making them available to all users.
-        </p>
+        <h2 className="text-2xl font-bold">
+          {t("sections.maximizingBenefits.title")}
+        </h2>
+        <p>{t("sections.maximizingBenefits.paragraph")}</p>
+        <ul className="list-disc pl-5">
+          <li>
+            <strong>
+              {t("sections.maximizingBenefits.list.startBasics.title")}:
+            </strong>{" "}
+            {t("sections.maximizingBenefits.list.startBasics.description")}
+          </li>
+          <li>
+            <strong>
+              {t("sections.maximizingBenefits.list.utilizeIntegrations.title")}:
+            </strong>{" "}
+            {t(
+              "sections.maximizingBenefits.list.utilizeIntegrations.description",
+            )}
+          </li>
+          <li>
+            <strong>
+              {t("sections.maximizingBenefits.list.stayUpdated.title")}:
+            </strong>{" "}
+            {t("sections.maximizingBenefits.list.stayUpdated.description")}
+          </li>
+        </ul>
+      </section>
+
+      <section className="mt-8">
+        <h2 className="text-2xl font-bold">
+          {t("sections.feedbackContributions.title")}
+        </h2>
+        <p>{t("sections.feedbackContributions.paragraph1")}</p>
+        <p>{t("sections.feedbackContributions.paragraph2")}</p>
       </section>
     </div>
   );

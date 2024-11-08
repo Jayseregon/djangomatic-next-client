@@ -1,10 +1,9 @@
 {
   "HomePage": {
     "HeroTitle": "Simplifier vos tâches quotidiennes",
-    "HeroSubtitle": "Automatisation des processus sur le Cloud",
-    "code": "Actuellement en développement actif",
-    "code2": "Il s'agit d'une version bêta RC, ouverte à tous les utilisateurs", 
-    "code3": "SVP, veuillez signaler tout bogue ou problème à Jeremie Bitsch"
+    "Description1": "Des solutions basées sur le cloud pour rationaliser vos flux de travail et vos activités quotidiennes grâce à nos outils d’automatisation avancés.",
+    "Description2": "Accédez facilement à la documentation pour tous les processus organisationnels et les outils personnalisés, accompagnée de tutoriels vidéo complets.", 
+    "BugReport": "Signalez tout problème ou bug via notre tableau de rapport de bugs, pour une résolution rapide"
   },
   "UnAuthorized": {
     "access": "Vous n'avez pas les permissions requises pour accéder à cette page.",
@@ -62,7 +61,7 @@
       "startedAt": "Commencée",
       "completedAt": "Terminée"
     },
-    "taskModal" : {
+    "taskModal": {
       "addNew": "Ajouter une nouvelle tâche",
       "editTask": "Modifier la tâche"
     }
@@ -237,6 +236,128 @@
     "extract_bom_summary": {
       "description": "Cette application produit un résumé BOM à partir d'un fichier zip contenant des shapefiles extraits d'AutoCAD.",
       "update": "Implémentation de l'outil Xplore."
+    }
+  },
+  "DocsUsageGuidelines": {
+    "guidanceParagraph": "Ce guide vous aidera à naviguer et à utiliser la documentation efficacement pour tirer le meilleur parti de nos outils automatisés.",
+    "sections": {
+      "understandingDocumentation": {
+        "title": "Comprendre la Documentation",
+        "paragraph": "Notre documentation est conçue pour être conviviale, vous fournissant toutes les informations nécessaires pour utiliser nos outils efficacement. Voici comment commencer :",
+        "list": {
+          "searchFunctionality": {
+            "title": "Fonctionnalité de Recherche",
+            "description": "Utilisez la barre de recherche en haut de la page de documentation pour trouver rapidement des sujets ou des outils spécifiques."
+          },
+          "navigation": {
+            "title": "Navigation",
+            "description": "Utilisez la barre latérale pour naviguer entre les différentes sections de la documentation. Chaque section représente un client ou un projet spécifique et est organisée par type de plateforme et outil pour un accès facile."
+          },
+          "examplesTutorials": {
+            "title": "Exemples et Tutoriels",
+            "description": "Recherchez des exemples et des tutoriels dans la documentation de chaque outil pour voir l'outil en action."
+          }
+        }
+      },
+      "permissionsAccess": {
+        "title": "Permissions et Accès",
+        "paragraph1": "L'accès à une documentation spécifique est contrôlé par des permissions.",
+        "paragraph2": "Sans les permissions appropriées, la page de documentation restera accessible mais désactivée, avec le contenu flouté pour protéger les informations client restreintes et respecter les politiques de confidentialité. Cette approche sert plusieurs objectifs :",
+        "list": {
+          "confidentiality": {
+            "title": "Confidentialité",
+            "description": "Garantit que les informations sensibles restent protégées et uniquement accessibles aux utilisateurs autorisés."
+          },
+          "controlledAccess": {
+            "title": "Accès Contrôlé",
+            "description": "Maintient un contrôle strict sur qui peut voir et interagir avec le contenu de l'application."
+          }
+        }
+      },
+      "gettingMostOutTools": {
+        "title": "Maximiser l'Utilisation de Nos Outils",
+        "paragraph": "Pour maximiser les avantages de nos outils automatisés, considérez les conseils suivants :",
+        "list": {
+          "startBasics": {
+            "title": "Commencer par les Bases",
+            "description": "Si vous êtes nouveau dans l'automatisation, commencez par nos guides d'introduction pour comprendre les fondamentaux."
+          },
+          "exploreAdvanced": {
+            "title": "Explorer les Fonctionnalités Avancées",
+            "description": "Une fois à l'aise, explorez des fonctionnalités plus avancées pour améliorer vos flux de travail."
+          },
+          "useSupport": {
+            "title": "Utiliser les Ressources de Support",
+            "description": "Si vous rencontrez des problèmes ou avez des questions, consultez notre section FAQ ou contactez notre équipe de support."
+          }
+        }
+      },
+      "feedbackContributions": {
+        "title": "Feedback et Contributions",
+        "paragraph1": "Vos retours sont inestimables pour nous. Si vous avez des suggestions sur la manière dont nous pouvons améliorer notre documentation ou nos outils, veuillez nous en informer.",
+        "paragraph2": "De plus, si vous avez créé des flux de travail ou des solutions qui pourraient bénéficier à d'autres, envisagez de les partager avec nous. Nous pourrions être en mesure de les ajouter à la plateforme, les rendant disponibles à tous les utilisateurs."
+      }
+    }
+  },
+  "AppsUsageGuidelines": {
+    "guidanceParagraph": "Ce guide vous aidera à naviguer et à utiliser nos applications web efficacement pour maximiser leur potentiel.",
+    "sections": {
+      "gettingStarted": {
+        "title": "Commencer avec les Applications",
+        "paragraph": "Nos applications web sont conçues pour être conviviales, vous fournissant tous les outils nécessaires pour gérer vos tâches efficacement. Voici comment commencer :",
+        "list": {
+          "navigation": {
+            "title": "Navigation",
+            "description": "Utilisez la barre latérale pour naviguer entre les différentes applications. Chaque section représente un client ou un projet spécifique et est organisée par type de plateforme et outil pour un accès facile."
+          },
+          "examplesTutorials": {
+            "title": "Exemples et Tutoriels",
+            "description": "Recherchez des exemples et des tutoriels dans chaque application. Lorsqu'ils sont disponibles, les exemples et les tutoriels vidéo présenteront l'outil en action."
+          }
+        }
+      },
+      "permissionsAccess": {
+        "title": "Permissions et Accès",
+        "paragraph1": "L'accès à des applications spécifiques est contrôlé par des permissions.",
+        "paragraph2": "Sans les permissions appropriées, l'application restera accessible mais désactivée. Cette approche sert plusieurs objectifs :",
+        "list": {
+          "hintFunctionality": {
+            "title": "Aperçu des Fonctionnalités",
+            "description": "Les utilisateurs peuvent voir ce que fait l'application, ce qui peut susciter curiosité et intérêt."
+          },
+          "ideaGeneration": {
+            "title": "Génération d'Idées",
+            "description": "Les utilisateurs peuvent explorer les applications existantes pour voir si leurs idées sont déjà mises en œuvre ou s'il y a de la place pour de nouvelles suggestions."
+          },
+          "feedbackSuggestions": {
+            "title": "Feedback et Suggestions",
+            "description": "Les utilisateurs sont encouragés à fournir des feedbacks ou à proposer de nouvelles idées basées sur leur exploration de l'application."
+          }
+        }
+      },
+      "maximizingBenefits": {
+        "title": "Maximiser les Avantages de Nos Applications",
+        "paragraph": "Pour tirer le meilleur parti de nos applications web, considérez les conseils suivants :",
+        "list": {
+          "startBasics": {
+            "title": "Commencer par les Bases",
+            "description": "Familiarisez-vous avec les fonctionnalités de base avant d'explorer des fonctionnalités avancées."
+          },
+          "utilizeIntegrations": {
+            "title": "Utiliser les Intégrations",
+            "description": "Profitez des intégrations avec d'autres outils et services pour rationaliser vos flux de travail."
+          },
+          "stayUpdated": {
+            "title": "Rester Informé",
+            "description": "Gardez un œil sur les mises à jour et les nouvelles fonctionnalités pour améliorer continuellement votre expérience."
+          }
+        }
+      },
+      "feedbackContributions": {
+        "title": "Feedback et Contributions",
+        "paragraph1": "Vos retours sont inestimables pour nous. Si vous avez des suggestions sur la manière dont nous pouvons améliorer nos applications web, veuillez nous en informer.",
+        "paragraph2": "De plus, si vous avez créé des flux de travail ou des solutions qui pourraient bénéficier à d'autres, envisagez de les partager avec nous. Nous pourrions les ajouter à la plateforme, les rendant disponibles à tous les utilisateurs."
+      }
     }
   }
 }

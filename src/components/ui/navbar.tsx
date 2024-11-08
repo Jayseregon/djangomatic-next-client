@@ -15,10 +15,12 @@ import {
   Avatar,
   Link,
 } from "@nextui-org/react";
-import { useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { useTranslations } from "next-intl";
 import { usePathname } from "next/navigation";
 
+import { fetchUser } from "@/lib/getUserPermission";
+import { UserSchema } from "@/interfaces/lib";
 import { siteConfig } from "@/config/site";
 import { ThemeSwitch } from "@/components/ui/ThemeSwitch";
 import { Logo } from "@/components/icons";
@@ -31,7 +33,7 @@ import LocaleSwitcher from "./LocaleSwitcher";
 const appEnv = process.env.NEXT_PUBLIC_APP_ENV;
 const appName =
   appEnv === "production"
-    ? siteConfig.name_beta
+    ? siteConfig.name
     : appEnv === "staging"
       ? siteConfig.name_staging
       : siteConfig.name_local;
@@ -56,6 +58,26 @@ export const Navbar = ({ nonce, session }: NavbarProps): JSX.Element | null => {
   const t = useTranslations("UserProfile");
   const pathname = usePathname();
   const isUnAuth = pathname === "/signin";
+  const [user, setUser] = useState<UserSchema | null>(null);
+
+  const navItems = useMemo(() => {
+    return user?.isAdmin
+      ? siteConfig.navItemsBase.concat(siteConfig.navItemsAdmin)
+      : siteConfig.navItemsBase;
+  }, [user?.isAdmin]);
+
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const data = await fetchUser(session.user.email as string);
+
+        setUser(data);
+      } catch (error) {
+        console.error("Failed to fetch user:", error);
+      }
+    }
+    fetchData();
+  }, []);
 
   if (isUnAuth) {
     return null;
@@ -96,7 +118,7 @@ export const Navbar = ({ nonce, session }: NavbarProps): JSX.Element | null => {
 
         {/* or list items menu */}
         <ul className="hidden md:flex items-start justify-start gap-16">
-          {siteConfig.navItems.map((item, index) => (
+          {navItems.map((item, index) => (
             <NavbarItem key={`${item}-${index}-navbar`} nonce={nonce}>
               <Link
                 className={cn(
@@ -194,7 +216,7 @@ export const Navbar = ({ nonce, session }: NavbarProps): JSX.Element | null => {
       <NavbarMenu nonce={nonce}>
         {/* <SearchInput alwaysExpanded={true} /> */}
         <div className="mx-4 mt-2 flex flex-col gap-3">
-          {siteConfig.navItems.map((item, index) => (
+          {navItems.map((item, index) => (
             <NavbarMenuItem key={`${item}-${index}-dropdown`} nonce={nonce}>
               <Link
                 className="w-full"

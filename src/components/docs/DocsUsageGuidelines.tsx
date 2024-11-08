@@ -1,101 +1,114 @@
+import { useTranslations } from "next-intl";
+
 import { ExclamationTriangleIcon } from "../icons";
 import { subtitle } from "../primitives";
 
 const DocsUsageGuidelines = () => {
+  const t = useTranslations("DocsUsageGuidelines");
+
   return (
     <div className="text-justify">
       <p className={subtitle({ className: "text-foreground" })}>
-        This guide will help you navigate and utilize the documentation
-        effectively to make the most out of our automated tools.
+        {t("guidanceParagraph")}
       </p>
 
       <section className="mt-8">
-        <h2 className="text-2xl font-bold">Understanding the Documentation</h2>
-        <p>
-          Our documentation is designed to be user-friendly, providing you with
-          all the information needed to use our tools efficiently. Here&apos;s
-          how to get started:
-        </p>
+        <h2 className="text-2xl font-bold">
+          {t("sections.understandingDocumentation.title")}
+        </h2>
+        <p>{t("sections.understandingDocumentation.paragraph")}</p>
         <ul className="list-disc pl-5">
           <li>
-            <strong>Search Functionality:</strong> Use the search bar at the top
-            of the documentation page to quickly find specific topics or tools.
+            <strong>
+              {t(
+                "sections.understandingDocumentation.list.searchFunctionality.title",
+              )}
+              :
+            </strong>{" "}
+            {t(
+              "sections.understandingDocumentation.list.searchFunctionality.description",
+            )}
           </li>
           <li>
-            <strong>Navigation:</strong> Use the sidebar to navigate between
-            different sections of the documentation. Each section represents a
-            specific client or project and is further organized by platform type
-            and tool for easy access.
+            <strong>
+              {t("sections.understandingDocumentation.list.navigation.title")}:
+            </strong>{" "}
+            {t(
+              "sections.understandingDocumentation.list.navigation.description",
+            )}
           </li>
           <li>
-            <strong>Examples and Tutorials:</strong> Look for examples and
-            tutorials within each tool&apos;s documentation to see the tool in
-            action.
-          </li>
-        </ul>
-      </section>
-
-      <section className="mt-8">
-        <h2 className="text-2xl font-bold">Permissions and Access</h2>
-        <p className="flex inline-block gap-2">
-          <ExclamationTriangleIcon />
-          Access to specific documentation is controlled by permissions.
-        </p>
-        <p>
-          Without the proper permissions, the documentation page will still be
-          accessible but deactivated, with content blurred out to protect
-          restricted client information and adhere to confidentiality policies.
-          This approach serves multiple purposes:
-        </p>
-        <ul className="list-disc pl-5">
-          <li>
-            <strong>Confidentiality:</strong> Ensures that sensitive information
-            remains protected and only accessible to authorized users.
-          </li>
-          <li>
-            <strong>Controlled Access:</strong> Maintains strict control over
-            who can view and interact with the app&apos;s content.
+            <strong>
+              {t(
+                "sections.understandingDocumentation.list.examplesTutorials.title",
+              )}
+              :
+            </strong>{" "}
+            {t(
+              "sections.understandingDocumentation.list.examplesTutorials.description",
+            )}
           </li>
         </ul>
       </section>
 
       <section className="mt-8">
         <h2 className="text-2xl font-bold">
-          Getting the Most Out of Our Tools
+          {t("sections.permissionsAccess.title")}
         </h2>
-        <p>
-          To maximize the benefits of our automated tools, consider the
-          following tips:
+        <p className="flex inline-block gap-2">
+          <ExclamationTriangleIcon />
+          {t("sections.permissionsAccess.paragraph1")}
         </p>
+        <p>{t("sections.permissionsAccess.paragraph2")}</p>
         <ul className="list-disc pl-5">
           <li>
-            <strong>Start with the Basics:</strong> If you are new to
-            automation, begin with our introductory guides to understand the
-            fundamentals.
+            <strong>
+              {t("sections.permissionsAccess.list.confidentiality.title")}:
+            </strong>{" "}
+            {t("sections.permissionsAccess.list.confidentiality.description")}
           </li>
           <li>
-            <strong>Explore Advanced Features:</strong> Once comfortable,
-            explore more advanced features to enhance your workflows.
-          </li>
-          <li>
-            <strong>Use Support Resources:</strong> If you encounter any issues
-            or have questions, consult our FAQ section or reach out to our
-            support team.
+            <strong>
+              {t("sections.permissionsAccess.list.controlledAccess.title")}:
+            </strong>{" "}
+            {t("sections.permissionsAccess.list.controlledAccess.description")}
           </li>
         </ul>
       </section>
 
       <section className="mt-8">
-        <h2 className="text-2xl font-bold">Feedback and Contributions</h2>
-        <p>
-          Your feedback is invaluable to us. If you have suggestions on how we
-          can improve our documentation or tools, please let us know.
-        </p>
-        <p>
-          Additionally, if you&apos;ve created workflows or solutions that could
-          benefit others, consider sharing them with us. We could be able to add
-          them to the platform, making them available to all users.
-        </p>
+        <h2 className="text-2xl font-bold">
+          {t("sections.gettingMostOutTools.title")}
+        </h2>
+        <p>{t("sections.gettingMostOutTools.paragraph")}</p>
+        <ul className="list-disc pl-5">
+          <li>
+            <strong>
+              {t("sections.gettingMostOutTools.list.startBasics.title")}:
+            </strong>{" "}
+            {t("sections.gettingMostOutTools.list.startBasics.description")}
+          </li>
+          <li>
+            <strong>
+              {t("sections.gettingMostOutTools.list.exploreAdvanced.title")}:
+            </strong>{" "}
+            {t("sections.gettingMostOutTools.list.exploreAdvanced.description")}
+          </li>
+          <li>
+            <strong>
+              {t("sections.gettingMostOutTools.list.useSupport.title")}:
+            </strong>{" "}
+            {t("sections.gettingMostOutTools.list.useSupport.description")}
+          </li>
+        </ul>
+      </section>
+
+      <section className="mt-8">
+        <h2 className="text-2xl font-bold">
+          {t("sections.feedbackContributions.title")}
+        </h2>
+        <p>{t("sections.feedbackContributions.paragraph1")}</p>
+        <p>{t("sections.feedbackContributions.paragraph2")}</p>
       </section>
     </div>
   );

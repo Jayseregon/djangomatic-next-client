@@ -5,9 +5,10 @@ import { NextUIProvider } from "@nextui-org/system";
 import { useRouter } from "next/navigation";
 import { ThemeProvider as NextThemesProvider } from "next-themes";
 import { ThemeProviderProps } from "next-themes/dist/types";
+import { createContext } from "react";
 
 // Create the NonceContext
-const NonceContext = React.createContext<string | undefined>(undefined);
+const NonceContext = createContext<string | undefined>(undefined);
 
 export { NonceContext };
 

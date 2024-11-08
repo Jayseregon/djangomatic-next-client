@@ -13,8 +13,7 @@ import { fontSans, fontMono } from "@/config/fonts";
 import { auth } from "@/auth";
 import { Navbar } from "@/src/components/ui/navbar";
 import { Footer } from "@/src/components/ui/footer";
-
-import { Providers } from "./providers";
+import { Providers } from "@/src/app/providers";
 
 type Props = {
   children: ReactNode;

@@ -1,10 +1,9 @@
 {
   "HomePage": {
     "HeroTitle": "Simplifying your Daily Tasks",
-    "HeroSubtitle": "Process Automation on the Cloud",
-    "code": "Currently under active development",
-    "code2": "This is a beta RC version, open to all users",
-    "code3": "Please, report any bugs or issues to Jeremie Bitsch"
+    "Description1": "Cloud-based solutions to streamline your workflows and day-to-day activities with our advanced automation tools.",
+    "Description2": "Easily access documentation for all organizational processes and custom-built tools, complete with comprehensive video tutorials.",
+    "BugReport": "Report any issues or bugs through our Bug Report board, for prompt resolution"
   },
   "UnAuthorized": {
     "access": "You do not have the required permissions to access this page.",
@@ -237,6 +236,128 @@
     "extract_bom_summary": {
       "description": "This app creates a BOM summary from a zip file containing AutoCAD extracted shapefiles.",
       "update": "Xplore tools implementation."
+    }
+  },
+  "DocsUsageGuidelines": {
+    "guidanceParagraph": "This guide will help you navigate and utilize the documentation effectively to make the most out of our automated tools.",
+    "sections": {
+      "understandingDocumentation": {
+        "title": "Understanding the Documentation",
+        "paragraph": "Our documentation is designed to be user-friendly, providing you with all the information needed to use our tools efficiently. Here's how to get started:",
+        "list": {
+          "searchFunctionality": {
+            "title": "Search Functionality",
+            "description": "Use the search bar at the top of the documentation page to quickly find specific topics or tools."
+          },
+          "navigation": {
+            "title": "Navigation",
+            "description": "Use the sidebar to navigate between different sections of the documentation. Each section represents a specific client or project and is further organized by platform type and tool for easy access."
+          },
+          "examplesTutorials": {
+            "title": "Examples and Tutorials",
+            "description": "Look for examples and tutorials within each tool's documentation to see the tool in action."
+          }
+        }
+      },
+      "permissionsAccess": {
+        "title": "Permissions and Access",
+        "paragraph1": "Access to specific documentation is controlled by permissions.",
+        "paragraph2": "Without the proper permissions, the documentation page will still be accessible but deactivated, with content blurred out to protect restricted client information and adhere to confidentiality policies. This approach serves multiple purposes:",
+        "list": {
+          "confidentiality": {
+            "title": "Confidentiality",
+            "description": "Ensures that sensitive information remains protected and only accessible to authorized users."
+          },
+          "controlledAccess": {
+            "title": "Controlled Access",
+            "description": "Maintains strict control over who can view and interact with the app's content."
+          }
+        }
+      },
+      "gettingMostOutTools": {
+        "title": "Getting the Most Out of Our Tools",
+        "paragraph": "To maximize the benefits of our automated tools, consider the following tips:",
+        "list": {
+          "startBasics": {
+            "title": "Start with the Basics",
+            "description": "If you are new to automation, begin with our introductory guides to understand the fundamentals."
+          },
+          "exploreAdvanced": {
+            "title": "Explore Advanced Features",
+            "description": "Once comfortable, explore more advanced features to enhance your workflows."
+          },
+          "useSupport": {
+            "title": "Use Support Resources",
+            "description": "If you encounter any issues or have questions, consult our FAQ section or reach out to our support team."
+          }
+        }
+      },
+      "feedbackContributions": {
+        "title": "Feedback and Contributions",
+        "paragraph1": "Your feedback is invaluable to us. If you have suggestions on how we can improve our documentation or tools, please let us know.",
+        "paragraph2": "Additionally, if you've created workflows or solutions that could benefit others, consider sharing them with us. We could be able to add them to the platform, making them available to all users."
+      }
+    }
+  },
+  "AppsUsageGuidelines": {
+    "guidanceParagraph": "This guide will help you navigate and utilize our web apps effectively to maximize their potential.",
+    "sections": {
+      "gettingStarted": {
+        "title": "Getting Started with the Apps",
+        "paragraph": "Our web apps are designed to be user-friendly, providing you with all the tools needed to manage your tasks efficiently. Here's how to get started:",
+        "list": {
+          "navigation": {
+            "title": "Navigation",
+            "description": "Use the sidebar to navigate between different apps. Each section represents a specific client or project and is further organized by platform type and tool for easy access."
+          },
+          "examplesTutorials": {
+            "title": "Examples and Tutorials",
+            "description": "Look for examples and tutorials within each app. When available, examples and video tutorials will present the tool in action."
+          }
+        }
+      },
+      "permissionsAccess": {
+        "title": "Permissions and Access",
+        "paragraph1": "Access to specific apps is controlled by permissions.",
+        "paragraph2": "Without the proper permissions, the app will still be accessible but deactivated. This approach serves multiple purposes:",
+        "list": {
+          "hintFunctionality": {
+            "title": "Hint of Functionality",
+            "description": "Users can see what the app does, which can spark curiosity and interest."
+          },
+          "ideaGeneration": {
+            "title": "Idea Generation",
+            "description": "Users can explore existing apps to see if their ideas are already implemented or if there is room for new suggestions."
+          },
+          "feedbackSuggestions": {
+            "title": "Feedback and Suggestions",
+            "description": "Users are encouraged to provide feedback or propose new ideas based on their exploration of the app."
+          }
+        }
+      },
+      "maximizingBenefits": {
+        "title": "Maximizing the Benefits of Our Apps",
+        "paragraph": "To get the most out of our web apps, consider the following tips:",
+        "list": {
+          "startBasics": {
+            "title": "Start with the Basics",
+            "description": "Familiarize yourself with the basic features before exploring advanced functionalities."
+          },
+          "utilizeIntegrations": {
+            "title": "Utilize Integrations",
+            "description": "Take advantage of integrations with other tools and services to streamline your workflows."
+          },
+          "stayUpdated": {
+            "title": "Stay Updated",
+            "description": "Keep an eye on updates and new features to continuously improve your experience."
+          }
+        }
+      },
+      "feedbackContributions": {
+        "title": "Feedback and Contributions",
+        "paragraph1": "Your feedback is invaluable to us. If you have suggestions on how we can improve our web apps, please let us know.",
+        "paragraph2": "Additionally, if you've created workflows or solutions that could benefit others, consider sharing them with us. We could add them to the platform, making them available to all users."
+      }
     }
   }
 }

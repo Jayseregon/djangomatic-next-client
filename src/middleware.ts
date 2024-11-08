@@ -17,7 +17,7 @@ function cspMiddleware(req: NextRequest): NextResponse {
   // Define the Content Security Policy header
   const cspHeader = `
   default-src 'self';
-  script-src 'self' 'nonce-${nonce}' https://github.com https://staging-djangomatic.azurewebsites.net https://djangomatic-pro.azurewebsites.net;
+  script-src 'self' 'nonce-${nonce}' 'unsafe-eval' https://github.com https://staging-djangomatic.azurewebsites.net https://djangomatic-pro.azurewebsites.net;
   style-src 'self' 'nonce-${nonce}' https://staging-djangomatic.azurewebsites.net https://djangomatic-pro.azurewebsites.net;
   img-src 'self' blob: data: https://i.pravatar.cc https://github.com https://avatars.githubusercontent.com https://*.githubusercontent.com https://djangomaticstorage.blob.core.windows.net;
   font-src 'self';
@@ -26,7 +26,7 @@ function cspMiddleware(req: NextRequest): NextResponse {
   form-action 'self';
   frame-ancestors 'none';
   frame-src https://github.com;
-  connect-src 'self' https://github.com https://api.github.com https://docker-djangomatic.azurewebsites.net https://staging-djangomatic.azurewebsites.net https://djangomatic-pro.azurewebsites.net;
+  connect-src 'self' https://github.com https://api.github.com https://docker-djangomatic.azurewebsites.net https://staging-djangomatic.azurewebsites.net https://djangomatic-pro.azurewebsites.net https://cdn.jsdelivr.net https://unpkg.com;
   media-src 'self' blob: https://djangomaticstorage.blob.core.windows.net;
   upgrade-insecure-requests;
   `

@@ -28,7 +28,43 @@
   },
   "Boards": {
     "title": "Boards",
-    "subtitle": "Tables & trackings access page"
+    "subtitle": "Plan, track & manage projects",
+    "bugReport": {
+      "title": "Bug Report",
+      "subtitle": "Report any issues or bugs through our Bug Report board, for prompt resolution",
+      "tableColumns": {
+        "created": "Created",
+        "title": "Title",
+        "description": "Description",
+        "status": "Status",
+        "priority": "Priority",
+        "owner": "Owner",
+        "dueDate": "Due Date",
+        "completedAt": "Completed At"
+      },
+      "modal": {
+        "addNew": "Add New Bug Report",
+        "editBug": "Edit Bug Report"
+      }
+    },
+    "roadmap": {
+      "title": "Roadmap",
+      "subtitle": "Track the progress of our projects and upcoming features",
+      "tableColumns": {
+        "created": "Created",
+        "title": "Title",
+        "description": "Description",
+        "status": "Status",
+        "priority": "Priority",
+        "owner": "Owner",
+        "dueDate": "Due Date",
+        "completedAt": "Completed At"
+      },
+      "modal": {
+        "addNew": "Add New Roadmap Item",
+        "editRoadmap": "Edit Roadmap Item"
+      }
+    }
   },
   "Docs": {
     "title": "Docs",
@@ -47,7 +83,7 @@
         "dashboardLink": "All Dashboards"
       },
       "teamSection": "Team Dashboards"
-    }, 
+    },
     "taskExtension": "Tasks",
     "taskBoardColumns": {
       "created": "Created",
@@ -60,8 +96,8 @@
       "dueDate": "Due Date",
       "startedAt": "Started At",
       "completedAt": "Completed At"
-    }, 
-    "taskModal" : {
+    },
+    "taskModal": {
       "addNew": "Add New Task",
       "editTask": "Edit Task"
     }

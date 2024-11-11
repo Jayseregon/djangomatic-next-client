@@ -2,7 +2,7 @@
   "HomePage": {
     "HeroTitle": "Simplifier vos tâches quotidiennes",
     "Description1": "Des solutions basées sur le cloud pour rationaliser vos flux de travail et vos activités quotidiennes grâce à nos outils d’automatisation avancés.",
-    "Description2": "Accédez facilement à la documentation pour tous les processus organisationnels et les outils personnalisés, accompagnée de tutoriels vidéo complets.", 
+    "Description2": "Accédez facilement à la documentation pour tous les processus organisationnels et les outils personnalisés, accompagnée de tutoriels vidéo complets.",
     "BugReport": "Signalez tout problème ou bug via notre tableau de rapport de bugs, pour une résolution rapide"
   },
   "UnAuthorized": {
@@ -28,7 +28,43 @@
   },
   "Boards": {
     "title": "Boards",
-    "subtitle": "Page d'accès aux tableaux et suivis"
+    "subtitle": "Planifiez, suivez & gérez les projets",
+    "bugReport": {
+      "title": "Rapport de Bug",
+      "subtitle": "Signalez tout problème ou bug via notre tableau de rapport de bug, pour une résolution rapide",
+      "tableColumns": {
+        "created": "Créé",
+        "title": "Titre",
+        "description": "Description",
+        "status": "Statut",
+        "priority": "Priorité",
+        "owner": "Propriétaire",
+        "dueDate": "Date d'échéance",
+        "completedAt": "Terminé le"
+      },
+      "modal": {
+        "addNew": "Ajouter un nouveau rapport de bug",
+        "editBug": "Modifier le rapport de bug"
+      }
+    },
+    "roadmap": {
+      "title": "Feuille de route",
+      "subtitle": "Suivez la progression de nos projets et des fonctionnalités à venir",
+      "tableColumns": {
+        "created": "Créé",
+        "title": "Titre",
+        "description": "Description",
+        "status": "Statut",
+        "priority": "Priorité",
+        "owner": "Propriétaire",
+        "dueDate": "Date d'échéance",
+        "completedAt": "Terminé le"
+      },
+      "modal": {
+        "addNew": "Ajouter un nouvel élément à la feuille de route",
+        "editRoadmap": "Modifier l'élément de la feuille de route"
+      }
+    }
   },
   "Docs": {
     "title": "Docs",

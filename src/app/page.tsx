@@ -60,10 +60,7 @@ function HomeContent({ session }: { session: any }): JSX.Element {
         </div>
       </div>
 
-      <LottieAnimation
-        className="max-w-3xl"
-        src="/lottie/animation.lottie" // Ensure the path starts with '/'
-      />
+      <LottieAnimation className="max-w-3xl" src="/lottie/animation.lottie" />
 
       <div className="max-w-3xl text-justify space-y-4">
         <h2 className={subtitle({ class: "text-foreground" })}>

@@ -1,10 +1,54 @@
 ---
-title: Dynamic Pole Tables
+title: Utilisation Avancée de la Couche de Poteaux
 slug: dynamic-pole-tables
 ---
 <div>
-  ## Utilisation Avancée de la Couche de Poteaux
+  Ce guide présente les nouvelles méthodes pour éditer efficacement les données des poteaux en utilisant les outils intégrés au nouveau <Quote>Styling</Quote> de la couche. L'utilisation de tableaux dynamiques pour la saisie des informations et l'ajustement de l'orientation du <Quote>Ground</Quote> permettent aux concepteurs de rentrer les données pour chaque poteau de manière plus rapide et intuitive. Cela optimise le flux de travail en éliminant le besoin de passer par la table d'attributs.
 
-  <Snippet>Coming Soon...</Snippet>
+  ## Étape 1 : Sélection de la Couche de Poteaux
 
+  - Sélectionnez la couche correspondant aux poteaux dans le <Quote>Layers Panel</Quote> de votre projet QGIS.
+  - Assurez-vous d'avoir appliqué le dernier <Quote>Styling</Quote> à la couche de poteaux pour une visualisation correcte.
+
+  ## Étape 2 : Utilisation des Outils pour la Couche de Poteaux
+
+  Deux outils sont disponibles pour éditer les données de la couche de poteaux : <Quote>Tableau</Quote> pour la saisie des données et <Quote>Ground</Quote> pour la modification de l'orientation.
+
+  ### Outil Tableau Dynamique
+
+  - Allez dans la <Quote>Toolbar</Quote> et cliquez sur le menu déroulant de l'outil <Quote>Run Feature Action</Quote>.
+  - Choisissez l'option <Quote>Tableau</Quote> pour saisir ou modifier les données des poteaux via un tableau dynamique.
+
+  <LoadDynamicImage imageName="dynamic-pole-tables/outil_tableau" />
+
+
+  - Avec l'outil activé, cliquez sur le poteau que vous souhaitez éditer sur la carte. Un tableau dynamique apparaîtra à l'écran.
+
+  <LoadDynamicImage imageName="dynamic-pole-tables/tableau_dynamique" />
+
+  - Entrez ou modifiez les données directement dans ce tableau pour le poteau sélectionné.
+  - Observez le menu déroulant contenant divers 'templates' de phrases types fréquemment utilisées. Sélectionnez l'option appropriée et cliquez sur <Quote>Ajouter</Quote> pour insérer les phrases requises. Remplacez ensuite les <Quote>Placeholder</Quote> par les valeurs spécifiques.
+
+  <LoadDynamicImage imageName="dynamic-pole-tables/menu_deroulant" />
+  <LoadDynamicImage imageName="dynamic-pole-tables/menu_deroulant_options" />
+
+  - Pour sauvegarder les changements, cliquez sur le bouton <Quote>Appliquer</Quote> et ensuite <Quote>Fermer</Quote>.
+
+  ### Outil Ground
+
+  - Dans la <Quote>Toolbar</Quote>, sélectionnez à nouveau <Quote>Run Feature Action</Quote> mais cette fois, choisissez l'option <Quote>Ground</Quote>.
+
+  <LoadDynamicImage imageName="dynamic-pole-tables/outil_ground" />
+
+  - Cliquez sur le poteau dont vous souhaitez modifier l'orientation pour faire apparaître le menu de modification de l'angle du <Quote>Ground</Quote>.
+
+  <LoadDynamicImage imageName="dynamic-pole-tables/outil_angle_ground" />
+
+  - Après avoir ajusté l'angle, cliquez sur <Quote>OK</Quote> pour sauvegarder la modification.
+
+  ## Conseils Utiles
+
+  - Assurez-vous que le code EPSG de votre projet est bien réglé sur <Quote>EPSG:3857</Quote>, sinon les outils ne fonctionneront pas.
+  - L'outil <Quote>Ground</Quote> modifie l'angle du ground associé à un poteau. Notez cependant que si aucun ground n'est initialement présent au poteau, l'outil ne créera pas de ground. Pour ajouter un ground, utilisez d'abord l'outil <Quote>Tableau Dynamique</Quote> pour le créer, puis modifiez son angle avec l'outil <Quote>Ground</Quote>.
+  - Si vous rencontrez des problèmes avec l'un de ces outils, contactez un membre de l'équipe d'amélioration.
 </div>

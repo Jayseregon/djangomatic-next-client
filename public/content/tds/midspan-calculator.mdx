@@ -1,10 +1,60 @@
 ---
-title: Midspan Calculation
+title: Création et Mise-à-jour des mi-portées
 slug: midspan-calculator
 ---
 <div>
-  ## Création et mise-à-jour des mi-portées au sein d'un DFN
+  ## Étape 1 : Se connecter à Djangomatic
 
-  <Snippet>Coming Soon...</Snippet>
+  - Accédez à [Djangomatic](https://djangomatic-pro.azurewebsites.net)
+
+  ## Étape 2 : Naviguer vers la section _Apps_
+
+  - Aller dans la section [Apps](https://djangomatic-pro.azurewebsites.net/saas/) se trouvant en haut à droite de l'écran, dans le menu de navigation. 
+
+  <LoadDynamicImage imageName="pole-numbering/selection_apps" />
+
+  ## Étape 3 : Accéder à Midspan Calculation
+
+  - Dans la section <Snippet>LLD</Snippet>, repérez l'onglet [Midspan Calculation](https://djangomatic-pro.azurewebsites.net/saas/tds/lld/midspan_auto_calc) et cliquez dessus. 
+
+  ## Étape 4 : Sélectionner votre schéma
+
+  - Choisissez le schéma approprié pour votre projet
+
+  ## Étape 5 : Sélectionner une table
+
+    <Callout type="warning"> 
+    Veillez à respecter la nomenclature standardisée obligatoire
+    </Callout>
+
+  <LoadDynamicImage imageName="midspan-calculator/schema_table" />
+
+  <Callout type="warning"> 
+  **Error Warning**
+
+  Validez la nomenclature de la table et assurez-vous qu'il s'agisse bien d'un layer unique dans QGIS/Postgres. Auquel cas, un message d'erreur apparaîtra en rouge, et l'app ne pourra pas démarrer.
+  </Callout>
+
+  ## Étape 6 : Calculer les mi-portées
+
+  - Cliquez sur le bouton **Démarrer tâche** pour générer les mi-portées. Un message de complétion avec description des actions devrait alors apparaître en dessous du bouton
+
+  <LoadDynamicImage imageName="midspan-calculator/resultat_midspan_calculation" />
+
+  <Callout type="warning">
+  **Missing Calibration**
+
+  Si l'un des deux poteaux associés à une mi-portée n'a pas de hauteur dans les données de sa table attributaire, une icône apparaîtra dans le projet QGIS pour indiquer le ou les mi-portées concernés.
+
+  <LoadDynamicImage imageName="midspan-calculator/missing_calibration" />
+
+  </Callout>
+
+  ## Étape 7 : Vérifier les mi-portées calculées
+
+  - Une fois les mi-portées calculées, une nouvelle couche est créée dans QGIS/Postgres, comportant notamment la colonne <Snippet>&lt;name&gt;</Snippet> et permettant automatiquement d'identifier les mi-portées sous le seuil des 17 pieds.
+
+  <LoadDynamicImage imageName="midspan-calculator/midspan_ok" />
+  <LoadDynamicImage imageName="midspan-calculator/midspan_nok" />
 
 </div>

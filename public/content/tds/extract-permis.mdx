@@ -3,8 +3,78 @@ title: Extraction Permis
 slug: extract-permis
 ---
 <div>
-  ## Extraire des données à l'aide de la macro QGIS 'Spokane_Tool_Permit_Extract.model3' nécessaire pour les demandes de permis
+  ## Objectif
 
-  <Snippet>Coming Soon...</Snippet>
+  Extraire des données à l'aide de la macro QGIS <Quote>Spokane_Tool_Permit_Extract.model3</Quote> nécessaire pour les demandes de permis.
+
+  ## Étape 1 : Préparation des données dans la table attributaire
+
+  - Avant de débuter la procédure d'extraction, le concepteur doit s'assurer que tous les poteaux présents dans les feuillets, **mais qui ne sont pas utilisés pour l'installation de câble**, sont correctement marqués comme <Quote>POLE NOT USED</Quote> dans le champ <Quote>MR_CODE</Quote> de la table attributaire. Cette étape est cruciale pour permettre à la macro d'exclure ces poteaux du décompte des propriétaires pour les demandes de permis.
+
+  ## Étape 2 : Préparation du dossier de sortie
+
+  - Rendez-vous dans le dossier <Quote>DEMANDE</Quote> du DFN correspondant :
+
+    <Snippet>L:\Locataire\FTTH USA\TDS - Spokane Valley\0869AQ\DEMANDE</Snippet>
+
+  - Créez un nouveau dossier nommé en fonction du DFN. Par exemple, pour le **DFN 10**, créez un dossier nommé <Quote>DFN_10</Quote>.
+
+  <LoadDynamicImage imageName="extract-permis/exemple_dossier_dfn_10" />
+
+  ## Étape 3 : Ajouter la macro à _Processing Toolbox_
+
+  - Ouvrez QGIS.
+
+  - Dirigez-vous vers _Processing Toolbox_.
+
+  - Cliquez sur la petite icône d'engrenage située à gauche.
+
+  - Sélectionnez _Add Model To Toolbox_.
+
+  <LoadDynamicImage imageName="extract-permis/add_model_to_toolbox" />
+
+  - Dans la fenêtre qui s'ouvre, naviguez jusqu'à :
+
+    <Snippet>L:\Locataire\FTTH USA\TDS - Spokane Valley\GLOBAL\Formation QGIS\Tools_QGIS</Snippet>
+
+  - Sélectionnez <Quote>Spokane_Tool_Permit_Extract.model3</Quote> pour _Ouvrir_ ou _Ajouter_.
+
+  ## Étape 4 : Lancer la macro
+
+  - Dans _Processing Toolbox_, dirigez-vous vers l'onglet _Models_.
+
+  - Double-cliquez sur <Quote>Spokane_Tool_Permit_Extract.model3</Quote> pour lancer.
+
+  ## Étape 5 : Configurer l'extraction
+
+  - Remplissez les champs en suivant la photo de référence.
+
+  <LoadDynamicImage imageName="extract-permis/model_reference" />
+
+  - Lorsque vous êtes invité à choisir un emplacement pour sauvegarder les fichiers Excel extraits, naviguez jusqu'au dossier que vous venez de créer à l'étape 2 (ex : **DFN_10**).
+
+  ## Étape 6 : Nommer les fichiers extraits
+
+  - Veuillez nommer les fichiers : <Snippet>anchors.xlsx</Snippet> et <Snippet>poles.xlsx</Snippet>.
+
+  ## Étape 7 : Vérification
+
+  - Une fois l'extraction terminée, allez à l'emplacement spécifié précédemment pour vérifier si les fichiers ont été correctement sauvegardés.
+
+  ## Étape 8 : Ajout de colonnes dans le fichier <Snippet>poles.xlsx</Snippet>
+
+  - Après avoir vérifié que les fichiers ont été correctement extraits, ouvrez le fichier <Snippet>poles.xlsx</Snippet>.
+
+  - À la suite de la liste des propriétaires, ajoutez deux nouvelles colonnes intitulées **RISER** et **POLE REPLACEMENT**.
+
+  <LoadDynamicImage imageName="extract-permis/riser_pole_replacement" />
+
+  - Indiquez, pour chaque DFN, le nombre de **riser** et de **poteaux à remplacer** présents dans les plans.
+
+  <Callout type="warning"> 
+  **N'oubliez pas**
+
+  Assurez-vous de bien sauvegarder le fichier <Snippet>poles.xlsx</Snippet> après avoir fait ces ajouts.
+  </Callout>
 
 </div>

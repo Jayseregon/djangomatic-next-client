@@ -1,10 +1,59 @@
 ---
-title: Automatisation de l'Ajout de Boucles dans QGIS
+title: Estimation des Classes & Hauteurs manquantes
 slug: pole-class-length-estimator
 ---
 <div>
-  ## Estimer les classes et hauteurs manquantes des poteaux dans les données GPS d'un DFN
+  ## Étape 1 : Se connecter à Djangomatic
 
-  <Snippet>Coming Soon...</Snippet>
+  - Accédez à [Djangomatic](https://djangomatic-pro.azurewebsites.net)
 
+  ## Étape 2 : Naviguer vers la section _Apps_
+
+  - Aller dans la section [Apps](https://djangomatic-pro.azurewebsites.net/saas/) se trouvant en haut à droite de l'écran, dans le menu de navigation
+
+  <LoadDynamicImage imageName="pole-numbering/selection_apps" />
+
+  ## Étape 3 : Accéder à Pole Class-Length Estimator
+
+  - Dans la section <Snippet>LLD</Snippet>, repérez la carte [Pole Class-Length Estimator](https://djangomatic-pro.azurewebsites.net/saas/tds/lld/pole_class_length_est) et cliquez dessus
+
+  ## Étape 4 : Sélectionner votre base de données
+
+  - Choisissez la base de données appropriée pour votre projet
+
+  ## Étape 5 : Sélectionner votre schéma
+
+  - Choisissez le schéma approprié pour votre projet
+
+  ## Étape 6 : Sélectionner une table
+
+    <Callout type="warning"> 
+    Veillez à respecter la nomenclature standardisée obligatoire
+    </Callout>
+
+  <LoadDynamicImage imageName="pole-class-length-estimator/database_schema_table" />
+
+  <Callout type="warning">
+  **Error Warning**
+
+  Validez la nomenclature de la table et assurez-vous qu'il s'agisse bien d'un layer unique dans QGIS/Postgres. Auquel cas, un message d'erreur apparaîtra en rouge, et l'app ne pourra pas démarrer.
+  </Callout>
+
+  ## Étape 7 : Lancer le calcul
+
+  - Cliquez sur le bouton **Démarrer tâche** pour estimer les classes et les hauteurs manquantes des poteaux dans les données GPS d'un DFN.
+
+  - Un message de complétion avec description des actions devrait alors apparaître en dessous du bouton.
+
+  <LoadDynamicImage imageName="pole-class-length-estimator/resultat" />
+
+  <Callout type="warning">
+  **Dans QGIS**
+
+  - Les poteaux estimés seront marqués <Snippet>_EST</Snippet> à droite de la hauteur/classe estimée. Dans le cas où l'information est déjà existante, il n'y aura pas d'ajout de l'indication <Snippet>_EST</Snippet>.
+
+  - Les poteaux n'auront pas de calcul d'estimation pour la hauteur si le champ <Snippet>pole_top</Snippet> est vide.
+
+  - L'estimation de la classe ne fonctionnera pas sans un minimum de 3 poteaux similaires dans un rayon de 3 km. Si tel est le cas, il faudra estimer manuellement.
+  </Callout>
 </div>

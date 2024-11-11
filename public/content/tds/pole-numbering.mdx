@@ -1,10 +1,48 @@
 ---
-title: Poles Numbering
+title: Numérotation des Poteaux
 slug: pole-numbering
 ---
 <div>
-  ## Création des numéros de poteaux suivant l'ordre des feuillets, à l'intérieur d'une couche QGIS spécifique
+  ## Objectif
 
-  <Snippet>Coming Soon...</Snippet>
+  La création des numéros de poteaux suivant l'ordre des feuillets, à l'intérieur d'une couche QGIS spécifique.
+
+  ## Étape 1 : Se connecter à Djangomatic
+
+  - Accédez à [Djangomatic](https://djangomatic-pro.azurewebsites.net)
+
+  ## Étape 2 : Naviguer vers la section _Apps_
+
+  - Aller dans la section [Apps](https://djangomatic-pro.azurewebsites.net/saas/) se trouvant en haut à droite de l'écran, dans le menu de navigation
+
+  <LoadDynamicImage imageName="pole-numbering/selection_apps" />
+
+  ## Étape 3 : Accéder à Poles Numbering
+
+  - Dans la section <Snippet>LLD</Snippet>, repérez la carte [Poles Numbering](https://djangomatic-pro.azurewebsites.net/saas/tds/lld/poles_numbering) et cliquez dessus
+
+  ## Étape 4 : Sélectionner votre schéma
+
+  - Choisissez le schéma approprié pour votre projet
+
+  ## Étape 5 : Sélectionner une table
+
+    <Callout type="warning"> 
+    Veillez à respecter la nomenclature standardisée obligatoire
+    </Callout>
+
+  <LoadDynamicImage imageName="pole-numbering/schema_table" />
+
+  <Callout type="warning">
+  **Error Warning**
+
+  Validez la nomenclature de la table et assurez-vous qu'il s'agisse bien d'un layer unique dans QGIS/Postgres. Auquel cas, un message d'erreur apparaîtra en rouge, et l'app ne pourra pas démarrer.
+  </Callout>
+
+  ## Étape 6 : Créer les IDs
+
+  - Cliquez sur le bouton **Démarrer tâche** pour générer les IDs. Un message de complétion avec description des actions devrait alors apparaître en dessous du bouton
+
+  <LoadDynamicImage imageName="pole-numbering/resultat_positif_creation" />
 
 </div>

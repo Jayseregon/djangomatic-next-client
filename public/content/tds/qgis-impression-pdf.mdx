@@ -3,8 +3,183 @@ title: QGIS Impression PDF
 slug: qgis-impression-pdf
 ---
 <div>
-  ## Imprimer en PDF les plans sur QGIS
+  ## Objectif
 
-  <Snippet>Coming Soon...</Snippet>
+  Imprimer en PDF les plans sur QGIS.
 
+  <Callout type="warning">
+    **Prendre note**
+
+    Les exemples utilisés pour cette procédure ont été basés par l'impression d'un PDF en plan <Snippet>BUILD</Snippet>. Les exemples seront donc toujours en <Snippet>_BUILD</Snippet>, veuillez ajuster selon vos besoins d'impression.
+  </Callout>
+
+  ## Étape 1 : Ouvrir QGIS
+
+  ## Étape 2 : Vérifier les variables
+
+  - Lorsque vous êtes dans votre projet, allez dans la section <Snippet>Propriétés</Snippet> et assurez-vous d'avoir les variables suivantes, puis appliquez :
+
+  <LoadDynamicImage imageName="qgis-impression-pdf/variables_tds" />
+
+  ## Étape 3 : Sélectionner les feuillets
+
+  - Selon vos besoins d'impression, sélectionnez au choix :
+    - Feuillets_Permis
+    - Feuillets_Build
+
+  <LoadDynamicImage imageName="qgis-impression-pdf/types_feuillets" />
+
+  <Callout type="warning">
+    Cette sélection changera la numérotation du nombre de pages total du plan ainsi que l'ajustement des retours des feuillets en Frontispiece.
+  </Callout>
+
+  ## Étape 4 : Monter le PDF
+
+  - Toujours dans le projet, cliquez sur <Snippet>New Report</Snippet> et sélectionnez votre projet selon le type de plan précédemment choisi, puis faites OK.
+  - <Snippet>projet_##_BUILD ou PERMIS</Snippet>
+
+  <LoadDynamicImage imageName="qgis-impression-pdf/create_report" />
+
+  ## Étape 5 : Inclure le <Snippet>Report</Snippet> header
+
+  - Sélectionnez <Snippet>Report</Snippet>, cochez <Snippet>Inclure report header</Snippet>, puis, cliquez sur Edit.
+
+  <LoadDynamicImage imageName="qgis-impression-pdf/include_report_header" />
+
+  ## Étape 6 : Changer le format de la page
+
+  - Cliquez sur la page qui apparaît au milieu du champ gris puis allez sur le menu de droite et changez le format de la page pour <Snippet>ANSI B</Snippet>.
+
+  <LoadDynamicImage imageName="qgis-impression-pdf/ansi_b" />
+
+  ## Étape 7 : Ajouter des pages
+
+  - En haut à gauche, cliquez sur <Snippet>Add pages...</Snippet>
+
+  <LoadDynamicImage imageName="qgis-impression-pdf/add_pages" />
+
+  ## Étape 8 : Remplir le champ Insert
+
+  - Remplissez le champ <Snippet>Insert</Snippet> avec le nombre de pages requis <Snippet>At End</Snippet>, changez le format des pages pour <Snippet>ANSI B</Snippet>, et cliquez sur OK.
+
+  <LoadDynamicImage imageName="qgis-impression-pdf/nombres_pages_format" />
+
+  ## Étape 9 : Ajouter des items depuis le template
+
+  - En haut à gauche, cliquez sur <Snippet>Add items from template</Snippet>.
+
+  <LoadDynamicImage imageName="qgis-impression-pdf/add_items_from_template" />
+
+  ## Étape 10 : Sélectionner le template
+
+  - Une fois dans la fenêtre réseau, selon votre type de plan, sélectionnez le template terminant par <Snippet>frontpage_v1.qpt</Snippet>.
+
+  <LoadDynamicImage imageName="qgis-impression-pdf/templates_reseau" />
+
+  <Snippet>L:\Locataire\FTTH USA\TDS - Spokane Valley\GLOBAL\Formation QGIS\Layouts_Templates_QGIS</Snippet>
+
+  ## Étape 11 : Ajouter une section Field Group
+
+  - Cliquez à nouveau sur <Snippet>Report</Snippet> et cliquez sur le bouton <Snippet>+</Snippet> en bas pour sélectionner <Snippet>Field Group Section</Snippet>.
+
+  <LoadDynamicImage imageName="qgis-impression-pdf/field_group_section" />
+
+  ## Étape 12 : Inclure le body
+
+  - Cliquez sur <Snippet>Group</Snippet>, se trouvant maintenant sous <Snippet>Report</Snippet>, sélectionnez ensuite <Snippet>Include body</Snippet>, et cliquez sur Edit.
+
+  <LoadDynamicImage imageName="qgis-impression-pdf/include_body" />
+
+  ## Étape 13 : Répéter l'étape 6
+
+  - Une nouvelle page sera alors créée, répétez l'étape 6.
+
+  ## Étape 14 : Ajouter des items depuis le template
+
+  - En haut à gauche, cliquez sur <Snippet>Add items from template</Snippet>, et choisissez cette fois-ci le template terminant par <Snippet>atlas_v1.qpt</Snippet>.
+
+  <LoadDynamicImage imageName="qgis-impression-pdf/template_reseau_2" />
+
+  ## Étape 15 : Sélectionner le layer
+
+  - Suivant l'apparition de la nouvelle page, cliquez sur le menu <Snippet>Layer</Snippet> dans le menu de gauche et sélectionnez <Snippet>#projet_##_Feuillets_Atlas</Snippet>.
+
+  <LoadDynamicImage imageName="qgis-impression-pdf/layer_feuillet_atlas" />
+
+  ## Étape 16 : Sélectionner le field
+
+  - Cliquez sur le menu de <Snippet>Field</Snippet> et sélectionnez <Snippet>id_cadre_build</Snippet>.
+
+  <LoadDynamicImage imageName="qgis-impression-pdf/id_cadre_build" />
+
+  ## Étape 17 : Sélectionner la page
+
+  - Dans le menu de gauche, sélectionnez <Snippet>Report</Snippet> et sélectionnez la page ci-dessous.
+
+  <LoadDynamicImage imageName="qgis-impression-pdf/frontispiece_sans_feuillet" />
+
+  ## Étape 18 : Ajuster la carte
+
+  - Dans le menu de droite, sélectionnez <Snippet>MAP_OVERVIEW</Snippet> puis cliquez sur <Snippet>Set Map to Extent to Match Main Canvas Extent</Snippet>.
+
+  <LoadDynamicImage imageName="qgis-impression-pdf/map_overview" />
+
+  Nous devrions alors voir apparaître sur la Frontispiece les éléments suivants :
+  - Feuillets
+  - Câbles
+  - Hauban poteau à poteau
+  - Noms des rues
+  - Etc
+
+  ## Étape 19 : Ajouter une section Static_layout
+
+  - Sélectionnez à nouveau <Snippet>Report</Snippet>, cliquez sur <b>+</b> pour sélectionner <Snippet>Static_layout Section</Snippet>.
+
+  ## Étape 20 : Inclure la section
+
+  - Cliquez sur la section créée. En bas de page, l'option <Snippet>include section</Snippet> devrait toujours être cochée.
+
+  <LoadDynamicImage imageName="qgis-impression-pdf/include_section" />
+
+  ## Étape 21 : Répéter les étapes 6 à 8
+
+  - Suivant la création de la nouvelle page, cliquez sur Edit et répétez les actions des étapes 6 à 8.
+
+  ## Étape 22 : Ajouter des items depuis le template
+
+  - En haut à gauche, cliquez sur <Snippet>Add items from template</Snippet> et choisissez cette fois-ci le template terminant par <Snippet>backpage_v1.qpt</Snippet>.
+
+  ## Étape 23 : Imprimer le PDF
+
+  - Imprimez votre PDF en cliquant sur l'icône <Snippet>Export Report as PDF</Snippet> en haut à gauche.
+
+  <LoadDynamicImage imageName="qgis-impression-pdf/export_report_to_pdf" />
+
+  <Callout type="warning">
+    **Checking Layout**
+
+    Si ce message d'erreur apparaît, vous pouvez l'ignorer et cliquer sur OK.
+
+    <LoadDynamicImage imageName="qgis-impression-pdf/message_erreur" />
+  </Callout>
+
+  ## Étape 24 : Sélectionner le dossier de votre projet
+
+  - Lors de l'impression, sélectionnez le dossier de votre projet puis le dossier dessin associé. Dans ce dernier, créé, si non existant, un dossier DFN numéroté selon votre plan en cours d'impression.
+
+  <Callout type="warning">
+    N'oubliez pas votre nomenclature standardisée
+  </Callout>
+
+  <LoadDynamicImage imageName="qgis-impression-pdf/dossier_dfn" />
+
+  <Snippet>L:\Laval\Locataire\FTTH USA\TDS - Spokane Valley</Snippet>
+
+  ## Étape 25 : Vérifier les options d'exportation
+
+  - Assurez-vous que les options suivantes soient bien celles que vous avez.
+
+  <LoadDynamicImage imageName="qgis-impression-pdf/pdf_export_options" />
+
+  ## Étape 26 : Sauvegarder
 </div>

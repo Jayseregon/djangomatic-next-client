@@ -3,13 +3,14 @@ import { useTranslations } from "next-intl";
 import { setRequestLocale } from "next-intl/server";
 import Link from "next/link";
 import { Bug, SquareArrowOutUpRight } from "lucide-react";
+import { Suspense } from "react";
 
-import { siteConfig } from "@/config/site";
 import { title, subtitle } from "@/components/primitives";
 import { UnAuthenticated } from "@/components/auth/unAuthenticated";
 import { auth } from "@/auth";
 import AppName from "@/components/ui/AppName";
 import LottieAnimation from "@/components/ui/LottieAnimation";
+import { LoadingContent } from "@/components/ui/LoadingContent";
 
 /**
  * RootPage component sets the request locale and renders the HomeContent component.
@@ -47,9 +48,7 @@ function HomeContent({ session }: { session: any }): JSX.Element {
   if (!session) return <UnAuthenticated />;
 
   // Retrieve the href for 'Boards' from navItemsBase
-  const boardsHref = siteConfig.navItemsBase.find(
-    (item) => item.label === "Boards",
-  )!.href;
+  const boardsHref = "/boards/bug-report";
 
   return (
     <section className="flex flex-col items-center justify-center gap-6 py-8 md:py-10">
@@ -60,7 +59,9 @@ function HomeContent({ session }: { session: any }): JSX.Element {
         </div>
       </div>
 
-      <LottieAnimation className="max-w-3xl" src="/lottie/animation.lottie" />
+      <Suspense fallback={<LoadingContent />}>
+        <LottieAnimation className="max-w-3xl" src="/lottie/animation.lottie" />
+      </Suspense>
 
       <div className="max-w-3xl text-justify space-y-4">
         <h2 className={subtitle({ class: "text-foreground" })}>

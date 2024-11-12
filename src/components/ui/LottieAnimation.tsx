@@ -1,15 +1,11 @@
 "use client";
 
-import dynamic from "next/dynamic";
-import { useContext } from "react";
+import { useContext, useState, useEffect } from "react";
+import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 
 import { NonceContext } from "@/src/app/providers";
 
-const DotLottieReact = dynamic(
-  () =>
-    import("@lottiefiles/dotlottie-react").then((mod) => mod.DotLottieReact),
-  { ssr: false },
-);
+import { LoadingContent } from "./LoadingContent";
 
 interface LottiePlayerProps {
   src: string;
@@ -27,11 +23,27 @@ export default function LottieAnimation({
   loop = true,
 }: LottiePlayerProps): JSX.Element {
   const nonce = useContext(NonceContext);
+  const [error, setError] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   const handleError = (error: any) => {
     console.error("Lottie Animation Error:", error);
-    // Optionally, render a fallback UI
+    setError(true);
+    setLoading(false);
   };
+
+  useEffect(() => {
+    // Simulate loading completion
+    setLoading(false);
+  }, []);
+
+  if (loading) {
+    return <LoadingContent />;
+  }
+
+  if (error) {
+    return <LoadingContent />;
+  }
 
   return (
     <DotLottieReact

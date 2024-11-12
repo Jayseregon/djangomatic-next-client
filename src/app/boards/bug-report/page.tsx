@@ -4,7 +4,7 @@ import { title, subtitle } from "@/components/primitives";
 import { auth } from "@/auth";
 import { UnAuthenticated } from "@/components/auth/unAuthenticated";
 import { BugsManager } from "@/src/components/boards/BugsManager";
-// import UserAccessBoards from "@/src/components/boards/UserAccess";
+import UserAccessBoards from "@/src/components/boards/UserAccess";
 
 export default async function BoardsPage() {
   const session = await auth();
@@ -20,12 +20,15 @@ function BoardsPageContent({ session }: { session: any }) {
   if (!session) return <UnAuthenticated />;
 
   return (
-    // <UserAccessBoards email={session.user.email}>
-    <div>
-      <h1 className={title()}>{t("title")}</h1>
-      <h2 className={subtitle({ class: "mt-4" })}>{t("subtitle")}</h2>
-      <BugsManager sessionUsername={session.user.name} />
-    </div>
-    // </UserAccessBoards>
+    <UserAccessBoards
+      boardType="canAccessBugReportBoard"
+      email={session.user.email}
+    >
+      <div>
+        <h1 className={title()}>{t("title")}</h1>
+        <h2 className={subtitle({ class: "mt-4" })}>{t("subtitle")}</h2>
+        <BugsManager sessionUsername={session.user.name} />
+      </div>
+    </UserAccessBoards>
   );
 }

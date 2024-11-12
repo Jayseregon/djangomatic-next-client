@@ -19,7 +19,10 @@ function BoardsPageContent({ session }: { session: any }) {
   if (!session) return <UnAuthenticated />;
 
   return (
-    <UserAccessBoards email={session.user.email}>
+    <UserAccessBoards
+      boardType="canAccessRoadmapBoard"
+      email={session.user.email}
+    >
       <div>
         <h1 className={title()}>{t("title")}</h1>
         <h2 className={subtitle({ class: "mt-4" })}>{t("subtitle")}</h2>

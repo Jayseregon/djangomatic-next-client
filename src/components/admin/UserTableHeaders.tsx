@@ -24,7 +24,8 @@ export const defaultHeader = ({
         </TableColumn>
         <TableColumn key="admin">admin</TableColumn>
         <TableColumn key="rndTeam">r&amp;d team</TableColumn>
-        <TableColumn key="boards">boards</TableColumn>
+        <TableColumn key="Roadmap">Roadmap</TableColumn>
+        <TableColumn key="Bugs">Bugs</TableColumn>
         <TableColumn key="rnd">r&amp;d</TableColumn>
         <TableColumn key="reports">reports</TableColumn>
       </TableHeader>
@@ -43,7 +44,8 @@ export const defaultHeader = ({
         last login
       </TableColumn>
       <TableColumn key="admin">admin</TableColumn>
-      <TableColumn key="boards">boards</TableColumn>
+      <TableColumn key="Roadmap">Roadmap</TableColumn>
+      <TableColumn key="Bugs">Bugs</TableColumn>
       <TableColumn key="rnd">r&amp;d</TableColumn>
       <TableColumn key="reports">reports</TableColumn>
     </TableHeader>

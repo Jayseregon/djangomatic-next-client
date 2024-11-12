@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from "react";
 
-import { BugReport } from "@/interfaces/bugs";
+import { AddBugButtonProps, BugReport } from "@/interfaces/bugs";
 import { TriggerButton } from "@/components/rnd/TriggerButton";
 
 import { BugsModal } from "./BugsModal";
@@ -9,10 +9,8 @@ import { BugsModal } from "./BugsModal";
 export const AddBugButton = ({
   onBugChange,
   sessionUsername,
-}: {
-  onBugChange: () => void;
-  sessionUsername: string;
-}) => {
+  isAdminSide,
+}: AddBugButtonProps) => {
   const [visible, setVisible] = useState(false);
 
   const handleSave = async (bug: Partial<BugReport>) => {
@@ -39,6 +37,7 @@ export const AddBugButton = ({
     <>
       <TriggerButton onClick={() => setVisible(true)} />
       <BugsModal
+        isAdminSide={isAdminSide}
         mode="add"
         sessionUsername={sessionUsername}
         visible={visible}

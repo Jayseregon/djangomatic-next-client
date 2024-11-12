@@ -21,7 +21,10 @@ export default function UserAccessBoards({
 }: {
   email: string;
   children: React.ReactNode;
-  boardType: "canAccessRoadmapBoard" | "canAccessBugReportBoard";
+  boardType:
+    | "canAccessRoadmapBoard"
+    | "canAccessBugReportBoard"
+    | "canAccessRnd";
 }): JSX.Element {
   const [user, setUser] = useState<UserSchema | null>(null);
 

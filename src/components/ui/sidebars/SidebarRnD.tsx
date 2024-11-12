@@ -8,6 +8,7 @@ import { Accordion, AccordionItem } from "@nextui-org/react";
 import { UnAuthorized } from "@/components/auth/unAuthorized";
 import { UserSchema } from "@/interfaces/lib";
 import { linkTagStyling } from "@/components/ui/sidebars/helper";
+import { BugReport } from "@/interfaces/bugs";
 
 export const SidebarRnD = ({
   nonce,
@@ -17,20 +18,30 @@ export const SidebarRnD = ({
   email: string;
 }): JSX.Element => {
   const [users, setUsers] = useState<UserSchema[]>([]);
+  const [bugCount, setBugCount] = useState<number>(0);
   const t = useTranslations("RnD");
 
   useEffect(() => {
-    async function fetchUsers() {
+    async function fetchData() {
       try {
-        const response = await fetch("/api/rnd-all-users");
-        const data = await response.json();
+        const resUsers = await fetch("/api/rnd-all-users");
+        const dataUsers = await resUsers.json();
 
-        setUsers(data);
+        setUsers(dataUsers);
+
+        const resBugs = await fetch("/api/bug-report");
+        const dataBugs = await resBugs.json();
+        const filteredBugs = dataBugs.filter(
+          (bug: BugReport) => !bug.completedDate,
+        );
+        const count = filteredBugs.length;
+
+        setBugCount(count);
       } catch (error) {
         console.error("Failed to fetch users:", error);
       }
     }
-    fetchUsers();
+    fetchData();
   }, []);
 
   const user = users.find((user) => user.email === email);
@@ -40,7 +51,7 @@ export const SidebarRnD = ({
       <div className="flex flex-col gap-2">
         <div className="section">
           <Accordion
-            defaultExpandedKeys={["rnd-team", "rnd-home"]}
+            defaultExpandedKeys={["rnd-team", "rnd-home", "bug-report"]}
             variant="bordered"
           >
             <AccordionItem
@@ -85,6 +96,32 @@ export const SidebarRnD = ({
                   </li>
                 ))}
               </ul>
+            </AccordionItem>
+
+            {/* RnD Bug reports access */}
+            <AccordionItem
+              key="bug-report"
+              aria-label="bug-report"
+              title={
+                <h2 className="text-xl font-black text-foreground indent-2 mt-3 mb-1">
+                  {t("sidebar.reportsSection.title")}
+                </h2>
+              }
+            >
+              <Link
+                className={`${linkTagStyling("/rnd/bugs", "/rnd/bugs")} w-full`}
+                href={"/rnd/bugs"}
+                nonce={nonce}
+              >
+                <div className="flex w-full justify-between">
+                  {t("sidebar.reportsSection.bugDashboardLink")}
+                  <div
+                    className={`flex items-center justify-center ps-1 pe-3 font-bold text-background ${bugCount !== 0 ? "bg-red-500" : "bg-green-500"} rounded-full`}
+                  >
+                    {bugCount}
+                  </div>
+                </div>
+              </Link>
             </AccordionItem>
           </Accordion>
         </div>

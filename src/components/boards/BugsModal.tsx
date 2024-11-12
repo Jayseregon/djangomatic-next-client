@@ -22,18 +22,14 @@ import {
 } from "@internationalized/date";
 import { CircleOff, Save, Trash2 } from "lucide-react";
 
-import { BugReport, BugStatus, BugPriority } from "@/interfaces/bugs";
+import {
+  BugReport,
+  BugStatus,
+  BugPriority,
+  BugsModalProps,
+} from "@/interfaces/bugs";
 import { bugStatusColorMap, bugPriorityColorMap } from "@/lib/utils";
-
-interface BugsModalProps {
-  visible: boolean;
-  onClose: () => void;
-  onSave: (task: Partial<BugReport>) => void;
-  initialBug?: Partial<BugReport>;
-  mode: "add" | "edit";
-  onBugChange: () => void;
-  sessionUsername: string;
-}
+import { UserSchema } from "@/interfaces/lib";
 
 export const BugsModal = ({
   visible,
@@ -43,6 +39,7 @@ export const BugsModal = ({
   mode,
   onBugChange,
   sessionUsername,
+  isAdminSide,
 }: BugsModalProps) => {
   const t = useTranslations("Boards.bugReport");
   const defaultBug: Partial<BugReport> = {
@@ -66,12 +63,26 @@ export const BugsModal = ({
   }, [initialBug, mode]);
 
   const [bug, setBug] = useState<Partial<BugReport>>(initialState);
+  const [devUsers, setDevUsers] = useState<UserSchema[]>([]);
 
   useEffect(() => {
     if (visible) {
       setBug(initialState);
+      fetchDevUsers();
     }
   }, [visible, initialState]);
+
+  async function fetchDevUsers() {
+    try {
+      const response = await fetch("/api/rnd-all-users");
+      const data: UserSchema[] = await response.json();
+      const filteredData = data.filter((user: UserSchema) => user.canAccessRnd);
+
+      setDevUsers(filteredData);
+    } catch (error) {
+      console.error("Failed to fetch users:", error);
+    }
+  }
 
   const handleInputChange = (field: string, value: string) => {
     setBug((prevBug) => ({
@@ -111,6 +122,15 @@ export const BugsModal = ({
     });
   };
 
+  const handleAssignedToChange = (keys: any) => {
+    const selectedKey = keys.currentKey as string;
+
+    setBug((prevBug) => ({
+      ...prevBug,
+      assignedTo: selectedKey,
+    }));
+  };
+
   const statusOptions = useMemo(() => Object.values(BugStatus), []);
   const priorityOptions = useMemo(() => Object.values(BugPriority), []);
 
@@ -141,6 +161,20 @@ export const BugsModal = ({
       console.error("Error deleting bug:", error);
     }
   };
+
+  const options = useMemo(() => {
+    if (bug.assignedTo) {
+      const isAssignedToInUsers = devUsers.some(
+        (user) => user.name === bug.assignedTo,
+      );
+
+      if (!isAssignedToInUsers) {
+        return [{ name: bug.assignedTo }, ...devUsers];
+      }
+    }
+
+    return devUsers;
+  }, [devUsers, bug.assignedTo]);
 
   return (
     <Modal
@@ -313,20 +347,52 @@ export const BugsModal = ({
               value={bug.createdBy || sessionUsername}
               variant="bordered"
             />
-            <Input
-              isReadOnly
-              aria-label="assignedTo"
-              className="basis-1/2"
-              classNames={{
-                input: "border-0 focus:ring-0",
-                inputWrapper: "border-foreground/50 hover:!border-foreground",
-              }}
-              label={t("tableColumns.assignedTo")}
-              labelPlacement="outside"
-              placeholder="None"
-              value={bug.assignedTo || ""}
-              variant="bordered"
-            />
+
+            {isAdminSide ? (
+              <Select
+                aria-label="Assigned To"
+                className="basis-1/2"
+                classNames={{
+                  trigger: "border-foreground/50 hover:!border-foreground",
+                }}
+                label={t("tableColumns.assignedTo")}
+                labelPlacement="outside"
+                placeholder="None"
+                selectedKeys={
+                  bug.assignedTo ? new Set([bug.assignedTo]) : new Set()
+                }
+                variant="bordered"
+                onSelectionChange={handleAssignedToChange}
+              >
+                {options.map((user) => (
+                  <SelectItem
+                    key={user.name}
+                    classNames={{
+                      base: "hover:!bg-foreground/30 focus:!bg-foreground/30",
+                    }}
+                    textValue={user.name}
+                    value={user.name}
+                  >
+                    {user.name}
+                  </SelectItem>
+                ))}
+              </Select>
+            ) : (
+              <Input
+                isReadOnly
+                aria-label="assignedTo"
+                className="basis-1/2"
+                classNames={{
+                  input: "border-0 focus:ring-0",
+                  inputWrapper: "border-foreground/50 hover:!border-foreground",
+                }}
+                label={t("tableColumns.assignedTo")}
+                labelPlacement="outside"
+                placeholder="None"
+                value={bug.assignedTo || ""}
+                variant="bordered"
+              />
+            )}
           </div>
 
           <Textarea

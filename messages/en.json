@@ -84,7 +84,11 @@
         "title": "Home",
         "dashboardLink": "All Dashboards"
       },
-      "teamSection": "Team Dashboards"
+      "teamSection": "Team Dashboards", 
+      "reportsSection" : {
+        "title": "Reports",
+        "bugDashboardLink": "Bug Report"
+      }
     },
     "taskExtension": "Tasks",
     "taskBoardColumns": {

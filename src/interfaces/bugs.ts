@@ -25,3 +25,25 @@ export enum BugPriority {
   HIGH = "HIGH",
   CRITICAL = "CRITICAL",
 }
+
+export interface BugsModalProps {
+  visible: boolean;
+  onClose: () => void;
+  onSave: (task: Partial<BugReport>) => void;
+  initialBug?: Partial<BugReport>;
+  mode: "add" | "edit";
+  onBugChange: () => void;
+  sessionUsername: string;
+  isAdminSide: boolean;
+}
+
+export interface BugsManagerProps {
+  sessionUsername: string;
+  isAdminSide?: boolean;
+}
+
+export interface AddBugButtonProps {
+  onBugChange: () => void;
+  sessionUsername: string;
+  isAdminSide: boolean;
+}

@@ -84,7 +84,11 @@
         "title": "Accueil",
         "dashboardLink": "Tous les tableaux"
       },
-      "teamSection": "Tableaux des membres"
+      "teamSection": "Tableaux des membres", 
+      "reportsSection" : {
+        "title": "Rapports",
+        "bugDashboardLink": "Rapport de bug"
+      }
     },
     "taskExtension": "Tâches",
     "taskBoardColumns": {

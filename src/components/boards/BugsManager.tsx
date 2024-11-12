@@ -4,7 +4,7 @@ import React, { useState } from "react";
 
 import { convertBugsDates } from "@/lib/utils";
 import SimpleAccordion from "@/components/rnd/SimpleAccordion";
-import { BugReport } from "@/interfaces/bugs";
+import { BugReport, BugsManagerProps } from "@/interfaces/bugs";
 
 import { BugsModal } from "./BugsModal";
 import { BugsBoard } from "./BugsBoard";
@@ -12,9 +12,8 @@ import { AddBugButton } from "./AddBugButton";
 
 export const BugsManager = ({
   sessionUsername,
-}: {
-  sessionUsername: string;
-}) => {
+  isAdminSide = false,
+}: BugsManagerProps) => {
   const [bugUpdated, setBugUpdated] = useState(false);
   const [editModalVisible, setEditModalVisible] = useState(false);
   const [bugToEdit, setBugToEdit] = useState<Partial<BugReport> | null>(null);
@@ -75,6 +74,7 @@ export const BugsManager = ({
           handleRowAction={handleRowAction}
           topContent={
             <AddBugButton
+              isAdminSide={isAdminSide}
               sessionUsername={sessionUsername}
               onBugChange={handleBugChange}
             />
@@ -92,6 +92,7 @@ export const BugsManager = ({
       {bugToEdit && (
         <BugsModal
           initialBug={bugToEdit}
+          isAdminSide={isAdminSide}
           mode="edit"
           sessionUsername={sessionUsername}
           visible={editModalVisible}

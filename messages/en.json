@@ -33,14 +33,16 @@
       "title": "Bug Report",
       "subtitle": "Report any issues or bugs through our Bug Report board, for prompt resolution",
       "tableColumns": {
-        "created": "Created",
         "title": "Title",
         "description": "Description",
-        "status": "Status",
+        "createdDate": "Created At",
+        "createdBy": "Created By",
+        "assignedTo": "Assigned To",
         "priority": "Priority",
-        "owner": "Owner",
-        "dueDate": "Due Date",
-        "completedAt": "Completed At"
+        "status": "Status",
+        "assignedDate": "Assigned At",
+        "completedDate": "Completed At",
+        "comments": "Comments"
       },
       "modal": {
         "addNew": "Add New Bug Report",

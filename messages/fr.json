@@ -33,14 +33,16 @@
       "title": "Rapport de Bug",
       "subtitle": "Signalez tout problème ou bug via notre tableau de rapport de bug, pour une résolution rapide",
       "tableColumns": {
-        "created": "Créé",
         "title": "Titre",
         "description": "Description",
-        "status": "Statut",
+        "createdDate": "Créé le",
+        "createdBy": "Créé par",
+        "assignedTo": "Assigné à",
         "priority": "Priorité",
-        "owner": "Propriétaire",
-        "dueDate": "Date d'échéance",
-        "completedAt": "Terminé le"
+        "status": "Statut",
+        "assignedDate": "Assigné le",
+        "completedDate": "Terminé le",
+        "comments": "Commentaires"
       },
       "modal": {
         "addNew": "Ajouter un nouveau rapport de bug",

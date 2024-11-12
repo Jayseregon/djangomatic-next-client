@@ -158,3 +158,31 @@ enum Status {
   COMPLETED
   CANCELLED
 }
+
+model BugReport {
+  id            String      @id @default(cuid())
+  title         String
+  description   String
+  createdDate   DateTime    @default(now())
+  createdBy     String
+  assignedTo    String?
+  priority      BugPriority @default(LOW)
+  status        BugStatus   @default(OPEN)
+  assignedDate  DateTime?
+  completedDate DateTime?
+  comments      String?
+}
+
+enum BugStatus {
+  OPEN
+  IN_PROGRESS
+  RESOLVED
+  CLOSED
+}
+
+enum BugPriority {
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
+}

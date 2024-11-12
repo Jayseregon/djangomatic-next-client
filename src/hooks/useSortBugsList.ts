@@ -1,13 +1,13 @@
 import { useAsyncList } from "@react-stately/data";
 
-import { RnDTeamTask, Status } from "@/interfaces/lib";
-import { convertTaskDates } from "@/lib/utils"; // Added import
+import { BugReport, BugStatus } from "@/interfaces/bugs";
+import { convertBugsDates } from "@/lib/utils";
 
-export const useSortTasksList = (
+export const useSortBugsList = (
   apiEndpoint: string,
   showCompleted: boolean,
-): ReturnType<typeof useAsyncList<RnDTeamTask>> =>
-  useAsyncList<RnDTeamTask>({
+): ReturnType<typeof useAsyncList<BugReport>> =>
+  useAsyncList<BugReport>({
     async load({ signal }) {
       const res = await fetch(apiEndpoint, {
         method: "GET",
@@ -15,20 +15,18 @@ export const useSortTasksList = (
       });
       const data = await res.json();
 
-      const tasksWithDates = data.map((task: RnDTeamTask) =>
-        convertTaskDates(task),
-      );
+      const bugsWithDates = data.map((bug: BugReport) => convertBugsDates(bug));
 
       if (showCompleted) {
         return {
-          items: tasksWithDates.filter(
-            (task: RnDTeamTask) => task.status === Status.COMPLETED,
+          items: bugsWithDates.filter(
+            (bug: BugReport) => bug.status === BugStatus.CLOSED,
           ),
         };
       } else {
         return {
-          items: tasksWithDates.filter(
-            (task: RnDTeamTask) => task.status !== Status.COMPLETED,
+          items: bugsWithDates.filter(
+            (bug: BugReport) => bug.status !== BugStatus.CLOSED,
           ),
         };
       }
@@ -40,8 +38,8 @@ export const useSortTasksList = (
 
       return {
         items: items.sort((a, b) => {
-          const aValue = a[sortDescriptor.column as keyof RnDTeamTask];
-          const bValue = b[sortDescriptor.column as keyof RnDTeamTask];
+          const aValue = a[sortDescriptor.column as keyof BugReport];
+          const bValue = b[sortDescriptor.column as keyof BugReport];
 
           if (aValue == null || bValue == null) {
             return 0;

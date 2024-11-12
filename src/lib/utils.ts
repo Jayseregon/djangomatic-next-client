@@ -2,6 +2,7 @@ import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 
 import { RnDTeamTask, Status } from "@/interfaces/lib";
+import { BugStatus, BugReport, BugPriority } from "@/interfaces/bugs";
 
 /**
  * Merge Tailwind CSS classes with clsx.
@@ -109,13 +110,19 @@ export const maskPassword = (password: string): string => {
   return "*".repeat(password.length);
 };
 
-// utils/dateUtils.ts
 export const convertTaskDates = (task: any): RnDTeamTask => ({
   ...task,
   createdAt: task.createdAt ? new Date(task.createdAt) : undefined,
   dueDate: task.dueDate ? new Date(task.dueDate) : undefined,
   startedAt: task.startedAt ? new Date(task.startedAt) : undefined,
   completedAt: task.completedAt ? new Date(task.completedAt) : undefined,
+});
+
+export const convertBugsDates = (bug: any): BugReport => ({
+  ...bug,
+  createdDate: bug.createdDate ? new Date(bug.createdDate) : undefined,
+  assignedDate: bug.assignedDate ? new Date(bug.assignedDate) : undefined,
+  completedDate: bug.completedDate ? new Date(bug.completedDate) : undefined,
 });
 
 export const statusColorMap: Record<
@@ -129,6 +136,26 @@ export const statusColorMap: Record<
   [Status.BLOCKED]: "warning",
   [Status.COMPLETED]: "success",
   [Status.CANCELLED]: "danger",
+};
+
+export const bugStatusColorMap: Record<
+  BugStatus,
+  "success" | "warning" | "danger" | "default"
+> = {
+  [BugStatus.OPEN]: "danger",
+  [BugStatus.IN_PROGRESS]: "warning",
+  [BugStatus.RESOLVED]: "success",
+  [BugStatus.CLOSED]: "default",
+};
+
+export const bugPriorityColorMap: Record<
+  BugPriority,
+  "primary" | "warning" | "danger" | "secondary"
+> = {
+  [BugPriority.LOW]: "primary",
+  [BugPriority.MEDIUM]: "warning",
+  [BugPriority.HIGH]: "secondary",
+  [BugPriority.CRITICAL]: "danger",
 };
 
 export const taskDueDateColor = (taskDueDate: Date): string => {

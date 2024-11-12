@@ -35,4 +35,16 @@ export const siteConfig = {
       href: "/admin",
     },
   ],
+  boardsNavItems: [
+    {
+      label: "Roadmap",
+      target: "roadmap",
+      href: "/boards/roadmap",
+    },
+    {
+      label: "Bug Report",
+      target: "bugReport",
+      href: "/boards/bug-report",
+    },
+  ],
 };

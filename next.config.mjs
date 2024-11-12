@@ -55,6 +55,16 @@ const nextConfig = {
           // { key: 'Expect-CT', value: 'max-age=86400, enforce, report-uri="https://yourdomain.com/report"' },
         ],
       },
+      // Add the following header configuration for .lottie files
+      {
+        source: '/lottie/:all*',
+        headers: [
+          {
+            key: 'Content-Type',
+            value: 'application/json', // Set to 'application/json' for .lottie files
+          },
+        ],
+      },
     ];
   },
 };

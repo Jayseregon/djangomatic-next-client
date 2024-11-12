@@ -17,9 +17,14 @@ import { UnAuthorized } from "../auth/unAuthorized";
 export default function UserAccessBoards({
   email,
   children,
+  boardType,
 }: {
   email: string;
   children: React.ReactNode;
+  boardType:
+    | "canAccessRoadmapBoard"
+    | "canAccessBugReportBoard"
+    | "canAccessRnd";
 }): JSX.Element {
   const [user, setUser] = useState<UserSchema | null>(null);
 
@@ -38,7 +43,7 @@ export default function UserAccessBoards({
   }, [email]);
 
   // Check if the user does not have access to boards
-  if (user && !user.canAccessBoards) {
+  if (user && !user[boardType]) {
     return <UnAuthorized />;
   } else {
     return <>{children}</>;

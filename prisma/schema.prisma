@@ -33,7 +33,8 @@ model User {
   canAccessAppsVistabeamOverride Boolean       @default(false)
   canAccessAppsVistabeamSuper    Boolean       @default(false)
   canAccessAppsXploreAdmin       Boolean       @default(false)
-  canAccessBoards                Boolean       @default(true)
+  canAccessBugReportBoard        Boolean       @default(true)
+  canAccessRoadmapBoard          Boolean       @default(false)
   canAccessReports               Boolean       @default(false)
   canAccessRnd                   Boolean       @default(false)
   canAccessDocsTDS               Boolean       @default(false)
@@ -157,4 +158,32 @@ enum Status {
   BLOCKED
   COMPLETED
   CANCELLED
+}
+
+model BugReport {
+  id            String      @id @default(cuid())
+  title         String
+  description   String
+  createdDate   DateTime    @default(now())
+  createdBy     String
+  assignedTo    String?
+  priority      BugPriority @default(LOW)
+  status        BugStatus   @default(OPEN)
+  assignedDate  DateTime?
+  completedDate DateTime?
+  comments      String?
+}
+
+enum BugStatus {
+  OPEN
+  IN_PROGRESS
+  RESOLVED
+  CLOSED
+}
+
+enum BugPriority {
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
 }

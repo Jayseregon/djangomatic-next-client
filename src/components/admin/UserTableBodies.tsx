@@ -51,7 +51,15 @@ export const defaultBody = ({
         <TableCell>
           <PermissionButton
             disabled={disabled}
-            fieldName="canAccessBoards"
+            fieldName="canAccessRoadmapBoard"
+            handleToggle={handleToggle}
+            user={user}
+          />
+        </TableCell>
+        <TableCell>
+          <PermissionButton
+            disabled={disabled}
+            fieldName="canAccessBugReportBoard"
             handleToggle={handleToggle}
             user={user}
           />
@@ -92,7 +100,15 @@ export const defaultBody = ({
       <TableCell>
         <PermissionButton
           disabled={disabled}
-          fieldName="canAccessBoards"
+          fieldName="canAccessRoadmapBoard"
+          handleToggle={handleToggle}
+          user={user}
+        />
+      </TableCell>
+      <TableCell>
+        <PermissionButton
+          disabled={disabled}
+          fieldName="canAccessBugReportBoard"
           handleToggle={handleToggle}
           user={user}
         />

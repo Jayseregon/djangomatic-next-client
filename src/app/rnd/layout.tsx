@@ -10,7 +10,7 @@ export default async function RnDLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const nonce = headers().get("x-nonce") || "";
+  const nonce = (await headers()).get("x-nonce") || "";
   const session = await auth();
 
   if (!session) {

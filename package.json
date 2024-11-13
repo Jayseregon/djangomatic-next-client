@@ -1,10 +1,10 @@
 {
   "name": "djangomatic-next-client",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "next dev --turbo",
+    "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
     "lint": "next lint --fix",
@@ -55,7 +55,7 @@
     "leaflet-geosearch": "^4.0.0",
     "lru-cache": "^11.0.2",
     "lucide-react": "^0.453.0",
-    "next": "^14.2.15",
+    "next": "15.0.3",
     "next-auth": "^5.0.0-beta.25",
     "next-intl": "^3.24.0",
     "next-mdx-remote-client": "^1.0.3",
@@ -74,7 +74,7 @@
     "zod": "^3.23.8"
   },
   "devDependencies": {
-    "@next/eslint-plugin-next": "^14.2.15",
+    "@next/eslint-plugin-next": "15.0.3",
     "@prisma/client": "^5.22.0",
     "@tailwindcss/forms": "^0.5.9",
     "@tailwindcss/typography": "^0.5.15",
@@ -93,7 +93,7 @@
     "concurrently": "^9.1.0",
     "dotenv-cli": "^7.4.2",
     "eslint": "^8.57.1",
-    "eslint-config-next": "^14.2.15",
+    "eslint-config-next": "15.0.3",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-import": "^2.31.0",
     "eslint-plugin-jsx-a11y": "^6.10.2",

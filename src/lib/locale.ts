@@ -12,7 +12,7 @@ const COOKIE_NAME = "NEXT_LOCALE";
  * @returns {Promise<string>} The user's locale or the default locale if not set.
  */
 export async function getUserLocale(): Promise<string> {
-  return cookies().get(COOKIE_NAME)?.value || defaultLocale;
+  return (await cookies()).get(COOKIE_NAME)?.value || defaultLocale;
 }
 
 /**
@@ -21,5 +21,5 @@ export async function getUserLocale(): Promise<string> {
  * @param {Locale} locale - The locale to set.
  */
 export async function setUserLocale(locale: Locale): Promise<void> {
-  cookies().set(COOKIE_NAME, locale);
+  (await cookies()).set(COOKIE_NAME, locale);
 }

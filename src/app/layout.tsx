@@ -49,7 +49,7 @@ export function generateStaticParams() {
 }
 
 export default async function RootLayout({ children }: Props) {
-  const nonce = headers().get("x-nonce") || "";
+  const nonce = (await headers()).get("x-nonce") || "";
   const locale = await getLocale();
   const messages = await getMessages();
   const session = await auth();

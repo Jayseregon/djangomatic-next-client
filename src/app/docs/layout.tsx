@@ -4,14 +4,17 @@ import { setRequestLocale } from "next-intl/server";
 import { SidebarDocs } from "@/src/components/ui/sidebars/SidebarDocs";
 import { SearchInput } from "@/src/components/ui/SearchInput";
 
-export default function DocsLayout({
-  children,
-  params: { locale },
-}: {
+export default async function DocsLayout(props: {
   children: React.ReactNode;
-  params: { locale: string };
+  params: Promise<{ locale: string }>;
 }) {
-  const nonce = headers().get("x-nonce");
+  const params = await props.params;
+
+  const { locale } = params;
+
+  const { children } = props;
+
+  const nonce = (await headers()).get("x-nonce");
 
   setRequestLocale(locale);
 

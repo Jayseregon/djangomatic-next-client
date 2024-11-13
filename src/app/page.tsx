@@ -21,11 +21,13 @@ import { LoadingContent } from "@/components/ui/LoadingContent";
  * @param {string} props.params.locale - The locale to be set for the request.
  * @returns {JSX.Element} The rendered RootPage component.
  */
-export default async function RootPage({
-  params: { locale },
-}: {
-  params: { locale: string };
+export default async function RootPage(props: {
+  params: Promise<{ locale: string }>;
 }): Promise<JSX.Element> {
+  const params = await props.params;
+
+  const { locale } = params;
+
   const session = await auth();
 
   setRequestLocale(locale);

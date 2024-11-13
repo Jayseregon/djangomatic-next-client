@@ -1,6 +1,5 @@
 import { auth } from "@/auth";
 import { UnAuthenticated } from "@/components/auth/unAuthenticated";
-import { MdPageContentProps } from "@/interfaces/mdx";
 import DynamicDocTemplate, {
   generateMetadataTemplate,
   generateStaticParamsTemplate,
@@ -8,26 +7,30 @@ import DynamicDocTemplate, {
 
 const docType = "xplore";
 
-export default async function MdPage({ params }: { params: { slug: string } }) {
+export default async function MdPage(props: {
+  params: Promise<{ slug: string }>;
+}) {
   const session = await auth();
+  const { slug } = await props.params;
 
   if (!session) return <UnAuthenticated />;
 
-  return <MdPageContent params={params} session={session} />;
-}
-
-function MdPageContent({ params, session }: MdPageContentProps) {
   return (
     <DynamicDocTemplate
       docType={docType}
-      params={params}
       permission="canAccessDocsXplore"
       session={session}
+      slug={slug}
     />
   );
 }
 
-export const generateMetadata = (props: { params: { slug: string } }) =>
-  generateMetadataTemplate({ ...props, docType: docType });
+export async function generateMetadata(props: {
+  params: Promise<{ slug: string }>;
+}) {
+  const { slug } = await props.params;
+
+  return generateMetadataTemplate({ slug: slug, docType: docType });
+}
 
 export const generateStaticParams = () => generateStaticParamsTemplate(docType);

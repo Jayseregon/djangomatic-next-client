@@ -3,12 +3,12 @@ import { headers } from "next/headers";
 import { SearchInput } from "@/src/components/ui/SearchInput";
 import { SidebarSaas } from "@/src/components/ui/sidebars/SidebarSaas";
 
-export default function SaasLayout({
+export default async function SaasLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const nonce = headers().get("x-nonce");
+  const nonce = (await headers()).get("x-nonce");
 
   return (
     <div className="flex min-h-screen">

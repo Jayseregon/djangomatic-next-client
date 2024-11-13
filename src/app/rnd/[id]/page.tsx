@@ -3,7 +3,10 @@ import { UnAuthenticated } from "@/components/auth/unAuthenticated";
 import { TaskManager } from "@/src/components/rnd/TaskManager";
 import { UserAccessRnDSection } from "@/src/components/rnd/UserAccess";
 
-export default async function UserPage({ params }: { params: { id: string } }) {
+export default async function UserPage(props: {
+  params: Promise<{ id: string }>;
+}) {
+  const params = await props.params;
   const session = await auth();
 
   if (!session) return <UnAuthenticated />;

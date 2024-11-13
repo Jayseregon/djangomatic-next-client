@@ -114,8 +114,10 @@ const ReportDocument = ({
 
 export async function GET(
   request: Request,
-  { params }: { params: { id: string } },
+  props: { params: Promise<{ id: string }> },
 ) {
+  const params = await props.params;
+
   if (!params.id || params.id === "new") {
     return new Response("ID is required", { status: 400 });
   }

@@ -3,8 +3,9 @@ import { useTranslations } from "next-intl";
 import { title, subtitle } from "@/components/primitives";
 import { auth } from "@/auth";
 import { UnAuthenticated } from "@/components/auth/unAuthenticated";
-import { BugsManager } from "@/src/components/boards/BugsManager";
 import UserAccessBoards from "@/src/components/boards/UserAccess";
+
+import { BugsManager } from "@/src/components/boards/BugsManager";
 
 export default async function BugsRnDSidePage() {
   const session = await auth();

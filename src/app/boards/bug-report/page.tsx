@@ -3,7 +3,7 @@ import { useTranslations } from "next-intl";
 import { title, subtitle } from "@/components/primitives";
 import { auth } from "@/auth";
 import { UnAuthenticated } from "@/components/auth/unAuthenticated";
-import { BugsManager } from "@/src/components/boards/BugsManager";
+import { BugsManager } from "@/src/components/boards/bugs/BugsManager";
 import UserAccessBoards from "@/src/components/boards/UserAccess";
 
 export default async function BoardsPage() {

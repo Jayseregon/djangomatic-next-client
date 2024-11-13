@@ -28,6 +28,7 @@
       "@/interfaces/*": ["src/interfaces/*"],
       "@/lib/*": ["src/lib/*"],
       "@/hooks/*": ["src/hooks/*"],
+      "@/data/*": ["src/data/*"]
     }
   },
   "include": [

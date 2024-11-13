@@ -138,7 +138,7 @@ const config = {
   safelist: [
     {
       pattern:
-        /bg-(primary|secondary|success|warning|danger)-[5|1|2|3|4|6|7|8|9]00/,
+      /(bg|border|text)-(slate|gray|zinc|neutral|stone|red|orange|amber|yellow|lime|green|emerald|teal|cyan|sky|blue|indigo|violet|purple|fuchsia|pink|rose|primary|secondary|success|warning|danger)-(100|200|300|400|500|600|700|800|900|950)/,
       variants: ["hover", "focus", "active"],
     },
   ],

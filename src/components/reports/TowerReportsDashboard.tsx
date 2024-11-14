@@ -160,22 +160,24 @@ export const TowerReportsDashboard = () => {
           <TableBody emptyContent="No entries found" items={towerReports}>
             {(report) => (
               <TableRow key={report.id}>
-                <TableCell className="text-center">
+                <TableCell className="text-center text-nowrap">
                   {new Date(report.createdAt).toLocaleDateString()}
                 </TableCell>
-                <TableCell className="text-center">
+                <TableCell className="text-center text-nowrap">
                   {new Date(report.updatedAt).toLocaleDateString()}
                 </TableCell>
-                <TableCell className="text-center">
+                <TableCell className="text-center text-nowrap">
                   {report.jde_work_order}
                 </TableCell>
                 <TableCell className="text-center">{report.jde_job}</TableCell>
                 <TableCell>{report.site_name}</TableCell>
-                <TableCell className="text-center">
+                <TableCell className="text-center text-nowrap">
                   {report.site_code}
                 </TableCell>
-                <TableCell className="text-center">{report.tower_id}</TableCell>
-                <TableCell className="text-center">
+                <TableCell className="text-center text-nowrap">
+                  {report.tower_id}
+                </TableCell>
+                <TableCell className="text-center text-nowrap">
                   {report.job_revision}
                 </TableCell>
                 <TableCell className="text-center">
@@ -184,10 +186,10 @@ export const TowerReportsDashboard = () => {
                 <TableCell className="text-center">
                   {report.design_standard}
                 </TableCell>
-                <TableCell className="text-center">
+                <TableCell className="text-center text-nowrap">
                   {report.client_company}
                 </TableCell>
-                <TableCell className="text-center">
+                <TableCell className="text-center text-nowrap">
                   <div className="space-x-2 inline-block">
                     <Button
                       isIconOnly

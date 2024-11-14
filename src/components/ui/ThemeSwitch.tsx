@@ -3,11 +3,7 @@ import { Button } from "@nextui-org/react";
 import { useTheme } from "next-themes";
 
 import { SunThemeIcon, MoonThemeIcon } from "@/components/icons";
-
-interface ThemeSwitchProps {
-  className?: string;
-  nonce?: string;
-}
+import { ThemeSwitchProps } from "@/interfaces/ui";
 
 /**
  * ThemeSwitch component toggles between light and dark themes.
@@ -45,10 +41,10 @@ export const ThemeSwitch = ({
   return (
     <div>
       <Button
+        isIconOnly
         aria-label="Toggle theme"
         className={className}
         color={undefined}
-        isIconOnly={true}
         nonce={nonce}
         size="sm"
         variant={undefined}

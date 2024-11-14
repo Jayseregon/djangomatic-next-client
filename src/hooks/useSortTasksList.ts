@@ -19,44 +19,52 @@ export const useSortTasksList = (
         convertTaskDates(task),
       );
 
-      if (showCompleted) {
-        return {
-          items: tasksWithDates.filter(
-            (task: RnDTeamTask) => task.status === Status.COMPLETED,
-          ),
-        };
-      } else {
-        return {
-          items: tasksWithDates.filter(
-            (task: RnDTeamTask) => task.status !== Status.COMPLETED,
-          ),
-        };
-      }
+      const filteredTasks = showCompleted
+        ? tasksWithDates.filter(
+            (task: RnDTeamTask) =>
+              task.status === Status.COMPLETED ||
+              task.status === Status.CANCELLED,
+          )
+        : tasksWithDates.filter(
+            (task: RnDTeamTask) =>
+              task.status !== Status.COMPLETED &&
+              task.status !== Status.CANCELLED,
+          );
+
+      const sortedTasks = filteredTasks.sort(
+        (a: RnDTeamTask, b: RnDTeamTask) => a.priority - b.priority,
+      );
+
+      return { items: sortedTasks };
     },
     async sort({ items, sortDescriptor }) {
       if (!sortDescriptor) {
         return { items };
       }
 
-      return {
-        items: items.sort((a, b) => {
-          const aValue = a[sortDescriptor.column as keyof RnDTeamTask];
-          const bValue = b[sortDescriptor.column as keyof RnDTeamTask];
+      const sortedItems = [...items].sort((a, b) => {
+        const aValue = a[sortDescriptor.column as keyof RnDTeamTask];
+        const bValue = b[sortDescriptor.column as keyof RnDTeamTask];
 
-          if (aValue == null || bValue == null) {
-            return 0;
-          }
+        if (aValue == null || bValue == null) {
+          return 0;
+        }
 
-          return aValue > bValue
-            ? sortDescriptor.direction === "ascending"
-              ? 1
-              : -1
-            : aValue < bValue
-              ? sortDescriptor.direction === "ascending"
-                ? -1
-                : 1
-              : 0;
-        }),
-      };
+        if (typeof aValue === "number" && typeof bValue === "number") {
+          return sortDescriptor.direction === "ascending"
+            ? aValue - bValue
+            : bValue - aValue;
+        }
+
+        if (typeof aValue === "string" && typeof bValue === "string") {
+          return sortDescriptor.direction === "ascending"
+            ? aValue.localeCompare(bValue)
+            : bValue.localeCompare(aValue);
+        }
+
+        return 0;
+      });
+
+      return { items: sortedItems };
     },
   });

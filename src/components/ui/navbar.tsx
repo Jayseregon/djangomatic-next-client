@@ -57,7 +57,7 @@ export const Navbar = ({ nonce, session }: NavbarProps): JSX.Element | null => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const t = useTranslations("UserProfile");
   const pathname = usePathname();
-  const isUnAuth = pathname === "/signin";
+  const isUnAuth = pathname.startsWith("/signin");
   const [user, setUser] = useState<UserSchema | null>(null);
 
   const navItems = useMemo(() => {
@@ -76,8 +76,10 @@ export const Navbar = ({ nonce, session }: NavbarProps): JSX.Element | null => {
         console.error("Failed to fetch user:", error);
       }
     }
-    fetchData();
-  }, []);
+    if (session?.user) {
+      fetchData();
+    }
+  }, [session?.user]);
 
   if (isUnAuth) {
     return null;
@@ -153,7 +155,10 @@ export const Navbar = ({ nonce, session }: NavbarProps): JSX.Element | null => {
         </NavbarItem>
 
         <NavbarItem nonce={nonce}>
-          <LocaleSwitcher nonce={nonce} />
+          <LocaleSwitcher
+            className="text-foreground bg-transparent hover:bg-primary-100"
+            nonce={nonce}
+          />
         </NavbarItem>
 
         <Dropdown backdrop="blur" nonce={nonce} placement="bottom-end">

@@ -150,6 +150,8 @@ export const InputDataProvider = ({
     tdsPassword: null,
     arcgisErase: false,
     arcgisSnapshot: false,
+    projectId: "",
+    projectNum: "",
   };
   const initTaskData: TaskDataProps = {
     taskId: null,
@@ -249,6 +251,20 @@ export const InputDataProvider = ({
       setInitialInputData({
         ...initialInputData,
         uuidPole: inputData.uuidPole,
+      });
+    }
+    if (inputData.projectId !== initialInputData.projectId) {
+      appendToConsole(`$ InputData: project ID >> ${inputData.projectId}`);
+      setInitialInputData({
+        ...initialInputData,
+        projectId: inputData.projectId,
+      });
+    }
+    if (inputData.projectNum !== initialInputData.projectNum) {
+      appendToConsole(`$ InputData: project number >> ${inputData.projectNum}`);
+      setInitialInputData({
+        ...initialInputData,
+        projectNum: inputData.projectNum,
       });
     }
     if (inputData.operationChoice !== initialInputData.operationChoice) {

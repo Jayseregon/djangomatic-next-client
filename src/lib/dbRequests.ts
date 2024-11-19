@@ -252,6 +252,8 @@ export const startTask = async ({
   arcgisErase,
   arcgisSnapshot,
   is_override,
+  project_id,
+  project_num,
 }: startTaskProps) => {
   if (!backendUser) {
     throw new Error("backendUser is required");
@@ -282,6 +284,11 @@ export const startTask = async ({
       payload.append("db621_pwd", tdsPassword);
       payload.append("erase_previous", arcgisErase ? "yes" : "no");
       payload.append("snapshot", arcgisSnapshot ? "yes" : "no");
+    }
+
+    if (project_id && project_num) {
+      payload.append("project_id", project_id);
+      payload.append("project_num", project_num);
     }
 
     if (operationChoice) {

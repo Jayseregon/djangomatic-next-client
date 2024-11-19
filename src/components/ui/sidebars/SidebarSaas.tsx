@@ -92,6 +92,12 @@ export const SidebarSaas: React.FC<SidebarProps> = ({
     titles: ["admin"],
   });
 
+  // Extract Telus apps data
+  const appCategoriesTelus = getAppCategories({
+    dataTarget: "telus_saas",
+    titles: ["admin"],
+  });
+
   return (
     <div className="flex flex-col gap-2">
       <div className="section">
@@ -139,6 +145,19 @@ export const SidebarSaas: React.FC<SidebarProps> = ({
             }
           >
             <SidebarSection categories={appCategoriesTDS} nonce={nonce} />
+          </AccordionItem>
+
+          {/* Telus Section */}
+          <AccordionItem
+            key="Telus"
+            aria-label="Telus"
+            title={
+              <h2 className="text-xl font-black text-foreground indent-2 mt-3 mb-1">
+                Telus
+              </h2>
+            }
+          >
+            <SidebarSection categories={appCategoriesTelus} nonce={nonce} />
           </AccordionItem>
 
           {/* Vistabeam Section */}

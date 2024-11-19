@@ -463,6 +463,41 @@ export const appsXploreBody = ({
   );
 };
 
+/**
+ * Renders the apps Telus table body.
+ *
+ * @param {Object} params - The parameters for the apps Xplore table body.
+ * @param {UserSchema} params.user - The user object.
+ * @returns {JSX.Element} The rendered apps Xplore table body.
+ */
+export const appsTelusBody = ({
+  user,
+  handleToggle,
+  isSessionSuperUser,
+}: {
+  user: UserSchema;
+  handleToggle: (id: string, field: string, value: boolean) => void;
+  isSessionSuperUser: boolean;
+}): JSX.Element => {
+  const isUserSuperUser = superUserEmails.includes(user.email);
+  const disabled = !isSessionSuperUser && isUserSuperUser;
+
+  return (
+    <TableRow key={user.email}>
+      <TableCell>{user.email}</TableCell>
+      <TableCell>{user.name}</TableCell>
+      <TableCell>
+        <PermissionButton
+          disabled={disabled}
+          fieldName="canAccessAppsTelusAdmin"
+          handleToggle={handleToggle}
+          user={user}
+        />
+      </TableCell>
+    </TableRow>
+  );
+};
+
 export const renderTableBody = (
   user: UserSchema,
   selectedMenu: string,
@@ -483,6 +518,8 @@ export const renderTableBody = (
       return appsVistabeamBody({ user, handleToggle, isSessionSuperUser });
     case "apps-xplore":
       return appsXploreBody({ user, handleToggle, isSessionSuperUser });
+    case "apps-telus":
+      return appsTelusBody({ user, handleToggle, isSessionSuperUser });
     default:
       return defaultBody({ user, handleToggle, isAdmin, isSessionSuperUser });
   }

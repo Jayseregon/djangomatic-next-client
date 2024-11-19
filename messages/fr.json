@@ -144,7 +144,9 @@
     "input_password": "Veuillez entrer votre mot de passe TDS",
     "input_uuidPole": "Optionnel : UUID poteau pour traitement ponctuel",
     "control_erase": "Supprimer existants",
-    "control_snap": "Snapshots auto"
+    "control_snap": "Snapshots auto", 
+    "project_id": "Entrez l'ID du projet",
+    "project_num": "Entrez le numéro de projet"
   },
   "tdsApps": {
     "address_breakdown": {
@@ -278,6 +280,12 @@
     "extract_bom_summary": {
       "description": "Cette application produit un résumé BOM à partir d'un fichier zip contenant des shapefiles extraits d'AutoCAD.",
       "update": "Implémentation de l'outil Xplore."
+    }
+  },
+  "telusApps": {
+    "pole_candidates": {
+      "description": "Cette application génère des fichiers Excel pour les poteaux candidats Telus, à partir des données relevées via Mergin Maps.",
+      "update": "Implémentation de l'outil Telus."
     }
   },
   "DocsUsageGuidelines": {

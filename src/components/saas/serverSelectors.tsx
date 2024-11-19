@@ -456,3 +456,55 @@ export const DropdownOperationSelector = (): JSX.Element => {
     </div>
   );
 };
+
+export const InputTelusCandidateProjectInfo = (): JSX.Element => {
+  const t = useTranslations("appDropdownHelper");
+  const { setInputData } = useInputData();
+
+  const handleInputBlur = (event: ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = event.target;
+
+    if (name === "project_id") {
+      setInputData((prevDataChoices: InputDataProps) => ({
+        ...prevDataChoices,
+        projectId: value,
+      }));
+    } else if (name === "project_num") {
+      setInputData((prevDataChoices: InputDataProps) => ({
+        ...prevDataChoices,
+        projectNum: value,
+      }));
+    }
+  };
+
+  return (
+    <div className="grid grid-cols-2 gap-3 pb-5">
+      <div className="grid grid-cols-1 gap-1">
+        <p>{t("project_id")}</p>
+        <div className="border-2 border-primary rounded-3xl w-full flex items-center justify-center">
+          <input
+            className="border-0 focus:ring-0 focus:ring-inset text-white bg-transparent text-center"
+            id="project_id"
+            name="project_id"
+            placeholder="1234567"
+            type="text"
+            onBlur={handleInputBlur}
+          />
+        </div>
+      </div>
+      <div className="grid grid-cols-1 gap-1">
+        <p>{t("project_num")}</p>
+        <div className="border-2 border-primary rounded-3xl w-full flex items-center justify-center">
+          <input
+            className="border-0 focus:ring-0 focus:ring-inset text-white bg-transparent text-center"
+            id="project_num"
+            name="project_num"
+            placeholder="9876543"
+            type="text"
+            onBlur={handleInputBlur}
+          />
+        </div>
+      </div>
+    </div>
+  );
+};

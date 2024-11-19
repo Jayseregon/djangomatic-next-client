@@ -48,6 +48,14 @@ export const StartTaskButton = (): JSX.Element => {
     };
   }
 
+  if (inputData.projectId && inputData.projectNum) {
+    taskOptions = {
+      ...taskOptions,
+      project_id: inputData.projectId,
+      project_num: inputData.projectNum,
+    };
+  }
+
   if (inputData.tableChoice) {
     taskOptions = {
       ...taskOptions,

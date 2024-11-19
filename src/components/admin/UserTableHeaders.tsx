@@ -181,6 +181,25 @@ export const appsXploreHeader = (): JSX.Element => {
   );
 };
 
+/**
+ * Renders the apps Telus table header.
+ *
+ * @returns {JSX.Element} The rendered apps Xplore table header.
+ */
+export const appsTelusHeader = (): JSX.Element => {
+  return (
+    <TableHeader>
+      <TableColumn key="email" className="w-56">
+        email
+      </TableColumn>
+      <TableColumn key="username" className="w-56">
+        username
+      </TableColumn>
+      <TableColumn key="telus1">admin</TableColumn>
+    </TableHeader>
+  );
+};
+
 export const renderTableHeader = (selectedMenu: string, isAdmin: boolean) => {
   switch (selectedMenu) {
     case "docs":
@@ -195,6 +214,8 @@ export const renderTableHeader = (selectedMenu: string, isAdmin: boolean) => {
       return appsVistabeamHeader();
     case "apps-xplore":
       return appsXploreHeader();
+    case "apps-telus":
+      return appsTelusHeader();
     default:
       return defaultHeader({ isAdmin });
   }

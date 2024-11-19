@@ -507,4 +507,21 @@ export const saasData = {
       is_active: "Y",
     },
   ],
+  telus_saas: [
+    // Create Telus candidates excel files from Mergin Maps survey data
+    {
+      label: "Telus Candidates",
+      type: "admin",
+      href: "/saas/telus/admin/pole_candidates",
+      endpoint: "/saas/telus/ajax/telus-candidates/",
+      desc: "pole_candidates",
+      version: "2.0.0",
+      date_upd: "2024-11-20",
+      doc_href: "/saas/tds/empty",
+      asDownloadable: true,
+      willOverride: false,
+      dbClass: "",
+      is_active: "Y",
+    },
+  ],
 };

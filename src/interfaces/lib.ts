@@ -89,6 +89,7 @@ export interface startTaskProps {
   is_override?: boolean;
   project_id?: string;
   project_num?: string;
+  file_path?: string;
 }
 
 export interface checkTaskStatusProps {

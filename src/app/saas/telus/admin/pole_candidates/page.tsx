@@ -1,7 +1,7 @@
 import { UnAuthenticated } from "@/components/auth/unAuthenticated";
 import { auth } from "@/auth";
 import {
-  ZipFileInputButton,
+  InputTelusZipfileButton,
   InputTelusCandidateProjectInfo,
 } from "@/src/components/saas/serverSelectors";
 import { WithPermissionOverlay } from "@/src/components/auth/withPermissionOverlay";
@@ -48,7 +48,7 @@ function SaasPageContent({ session }: { session: any }): JSX.Element {
           {/* Automatically detects and displays the app description, version, and update date */}
           <AppPageDescription client={client} targetTranslation="telusApps" />
           {/* Allows the user to input a zip file */}
-          <ZipFileInputButton />
+          <InputTelusZipfileButton />
           <InputTelusCandidateProjectInfo />
           {/* Shows the console output */}
           <ConsoleDisplay />

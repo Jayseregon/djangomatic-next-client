@@ -120,7 +120,8 @@
     "menuNoData": "Pas de données disponibles",
     "zipFile": {
       "label": "Fichier Zip",
-      "helperText": "Insérez le fichier zip à traiter"
+      "helperText": "Insérez le fichier zip à traiter",
+      "upload": "Télécharger"
     }
   },
   "startTaskButton": {

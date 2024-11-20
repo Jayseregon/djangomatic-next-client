@@ -120,7 +120,8 @@
     "menuNoData": "No data available",
     "zipFile": {
       "label": "Zip File",
-      "helperText": "Insert the zip file to process"
+      "helperText": "Insert the zip file to process",
+      "upload": "Upload"
     }
   },
   "startTaskButton": {

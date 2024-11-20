@@ -254,6 +254,7 @@ export const startTask = async ({
   is_override,
   project_id,
   project_num,
+  file_path,
 }: startTaskProps) => {
   if (!backendUser) {
     throw new Error("backendUser is required");
@@ -286,9 +287,10 @@ export const startTask = async ({
       payload.append("snapshot", arcgisSnapshot ? "yes" : "no");
     }
 
-    if (project_id && project_num) {
+    if (project_id && project_num && file_path) {
       payload.append("project_id", project_id);
       payload.append("project_num", project_num);
+      payload.append("file_path", file_path);
     }
 
     if (operationChoice) {

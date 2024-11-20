@@ -8,9 +8,14 @@ import {
   DropdownMenu,
   DropdownItem,
   Button,
+  Progress,
+  Spinner,
 } from "@nextui-org/react";
 import DOMPurify from "dompurify";
+import { v4 as uuidv4 } from "uuid";
+import axios from "axios";
 
+import { sanitizeFileName } from "@/lib/utils";
 import { ThumbsUpIcon, ThumbsDownIcon } from "@/components/icons";
 import { InputDataProps } from "@/interfaces/lib";
 
@@ -68,7 +73,10 @@ export const DatabaseSchemaTable3Selector = ({
           setInputData={setInputData}
         />
         {/* Dropdown for selecting a schema */}
-        <SchemasDropdown inputData={inputData} setInputData={setInputData} />
+        <SchemasDropdown
+          inputData={inputData}
+          setInputData={setInputData}
+        />
         {/* Dropdown for selecting a table */}
         <TablesDropdown
           endpoint={endpoint}
@@ -107,7 +115,10 @@ export const DatabaseSchema2Selector = ({
           setInputData={setInputData}
         />
         {/* Dropdown for selecting a schema */}
-        <SchemasDropdown inputData={inputData} setInputData={setInputData} />
+        <SchemasDropdown
+          inputData={inputData}
+          setInputData={setInputData}
+        />
       </div>
     </div>
   );
@@ -149,8 +160,7 @@ export const ZipFileInputButton = (): JSX.Element => {
       <div className="flex w-full inline-block rounded-3xl bg-transparent border-0 text-sm text-white ring-1 ring-inset ring-primary">
         <label
           className="flex items-center justify-center w-20 h-10 bg-primary text-sm text-white text-center rounded-l-3xl ps-2"
-          htmlFor="file-input"
-        >
+          htmlFor="file-input">
           <span>{t("zipFile.label")}</span>
           <input
             accept=".zip"
@@ -276,8 +286,7 @@ export const ArcGISControls = (): JSX.Element => {
           id="arcgisErase"
           name="arcgisErase"
           variant="bordered"
-          onClick={handleControlChange}
-        >
+          onClick={handleControlChange}>
           {inputData.arcgisErase ? <ThumbsUpIcon /> : <ThumbsDownIcon />}
         </Button>
       </div>
@@ -289,8 +298,7 @@ export const ArcGISControls = (): JSX.Element => {
           id="arcgisSnapshot"
           name="arcgisSnapshot"
           variant="bordered"
-          onClick={handleControlChange}
-        >
+          onClick={handleControlChange}>
           {inputData.arcgisSnapshot ? <ThumbsUpIcon /> : <ThumbsDownIcon />}
         </Button>
       </div>
@@ -334,8 +342,7 @@ export const SuperVersionControl = ({
           color={inputData.willOverride ? "success" : "danger"}
           id="versionControle"
           variant="bordered"
-          onClick={handleControlChange}
-        >
+          onClick={handleControlChange}>
           {inputData.willOverride ? <ThumbsUpIcon /> : <ThumbsDownIcon />}
         </Button>
       </div>
@@ -399,7 +406,7 @@ export const DropdownOperationSelector = (): JSX.Element => {
   const t = useTranslations();
   const { setInputData } = useInputData();
   const [selectedLabel, setSelectedLabel] = useState<string>(
-    t("ServerDropdowns.operation_label"),
+    t("ServerDropdowns.operation_label")
   );
 
   // Hardcoded choices
@@ -433,8 +440,7 @@ export const DropdownOperationSelector = (): JSX.Element => {
           <Button
             className="bg-primary text-white w-full h-10"
             radius="full"
-            variant="solid"
-          >
+            variant="solid">
             {selectedLabel}
           </Button>
         </DropdownTrigger>
@@ -448,8 +454,7 @@ export const DropdownOperationSelector = (): JSX.Element => {
             const selected = Array.from(keys)[0] as string;
 
             handleSelectionChange(selected);
-          }}
-        >
+          }}>
           {(item) => <DropdownItem key={item.value}>{item.label}</DropdownItem>}
         </DropdownMenu>
       </Dropdown>
@@ -503,6 +508,139 @@ export const InputTelusCandidateProjectInfo = (): JSX.Element => {
             type="text"
             onBlur={handleInputBlur}
           />
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export const InputTelusZipfileButton = (): JSX.Element => {
+  const t = useTranslations("ServerDropdowns");
+  const { setInputData } = useInputData();
+  const [file, setFile] = useState<File | null>(null);
+  const [fileName, setFileName] = useState<string | null>(null);
+  const [uploadProgress, setUploadProgress] = useState<number>(0);
+  const [isUploading, setIsUploading] = useState<boolean>(false);
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      setFile(e.target.files[0]);
+      setFileName(e.target.files[0].name);
+    }
+  };
+
+  const handleUpload = async () => {
+    if (file) {
+      setIsUploading(true);
+      const sanitizedzipfileName = sanitizeFileName(file.name);
+      const uuid = uuidv4();
+
+      // Set up the EventSource here
+      const eventSource = new EventSource(
+        `/api/azure-blob/progress?uuid=${uuid}`
+      );
+
+      eventSource.onmessage = (event) => {
+        const progress = JSON.parse(event.data);
+        setUploadProgress((progress.loadedBytes / file.size) * 100);
+      };
+
+      eventSource.onerror = () => {
+        eventSource.close();
+      };
+
+      const formData = new FormData();
+
+      formData.append("file", file);
+      formData.append("zipfileName", sanitizedzipfileName);
+      formData.append("uuid", uuid);
+
+      try {
+        const res = await axios.post(
+          "/api/azure-blob/telus-zip/upload",
+          formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        );
+
+        console.log("Upload successful: ", res.data);
+
+        if (res.status === 200) {
+          setInputData((prevDataChoices: InputDataProps) => ({
+            ...prevDataChoices,
+            fileName: res.data.azurePath,
+          }));
+        } else {
+          throw new Error("Upload failed.");
+        }
+
+        setFile(null);
+        setFileName(null);
+      } catch (error) {
+        throw new Error((error as Error).message);
+      } finally {
+        setIsUploading(false);
+        setUploadProgress(0);
+      }
+    }
+  };
+
+  return (
+    <div className="flex flex-col">
+      <div className="grid grid-cols-2 gap-8">
+        <DisplayFieldGuideline guideline={t("zipFile.helperText")} />
+        <div className="flex w-full inline-block rounded-3xl bg-transparent border-0 text-sm text-white ring-1 ring-inset ring-primary">
+          <label
+            className="flex items-center justify-center w-20 h-10 bg-primary text-sm text-white text-center rounded-l-3xl ps-2"
+            htmlFor="file-input">
+            <span>{t("zipFile.label")}</span>
+            <input
+              accept=".zip"
+              aria-label="file-input"
+              className="sr-only"
+              id="file-input"
+              name="file-input"
+              type="file"
+              onChange={handleFileChange}
+            />
+          </label>
+          {fileName && (
+            <span className="ms-3 text-sm text-foreground flex items-center">
+              {fileName}
+            </span>
+          )}
+        </div>
+      </div>
+      <div className="grid grid-cols-2 gap-8">
+        <Progress
+          showValueLabel
+          aria-label="upload-progress"
+          className="mt-4"
+          color="primary"
+          maxValue={100}
+          value={uploadProgress}
+        />
+        <div className="h-full w-full content-end">
+          <Button
+            aria-label="upload-button"
+            className="bg-primary text-white w-full"
+            disabled={isUploading}
+            isDisabled={isUploading}
+            radius="full"
+            onClick={handleUpload}>
+            {isUploading ? (
+              <Spinner
+                aria-label="upload-spinner"
+                color="white"
+                size="sm"
+              />
+            ) : (
+              t("zipFile.upload")
+            )}
+          </Button>
         </div>
       </div>
     </div>

@@ -49,6 +49,12 @@ export const StartTaskButton = (): JSX.Element => {
   }
 
   if (inputData.projectId && inputData.projectNum) {
+    if (inputData.fileName) {
+      taskOptions = {
+        ...taskOptions,
+        file_path: inputData.fileName,
+      };
+    }
     taskOptions = {
       ...taskOptions,
       project_id: inputData.projectId,

@@ -237,26 +237,11 @@ export const fetchSchemaTables = async ({
   }
 };
 
-export const startTask = async ({
-  db_choice,
-  schema_choice,
-  table_choice,
-  dbClass,
-  endpoint,
-  uuidPole,
-  file,
-  backendUser,
-  operationChoice,
-  tdsUsername,
-  tdsPassword,
-  arcgisErase,
-  arcgisSnapshot,
-  is_override,
-}: startTaskProps) => {
-  if (!backendUser) {
+export const startTask = async (taskOptions: startTaskProps) => {
+  if (!taskOptions.backendUser) {
     throw new Error("backendUser is required");
   }
-  const { djAuthToken } = await getServerTokens(backendUser);
+  const { djAuthToken } = await getServerTokens(taskOptions.backendUser);
 
   try {
     // get the csrf token from server
@@ -266,75 +251,140 @@ export const startTask = async ({
       throw new Error("Failed to retrieve CSRF token");
     }
 
-    // define request params
+    // Initialize FormData
     const payload = new FormData();
 
-    payload.append("db_choice", db_choice);
-    payload.append("schema_choice", schema_choice);
-    payload.append("db_class", dbClass);
+    // Append base fields
+    payload.append("db_choice", taskOptions.db_choice);
+    payload.append("schema_choice", taskOptions.schema_choice);
+    payload.append("db_class", taskOptions.dbClass);
 
-    if (file) {
-      payload.append("file", file);
+    /**
+     * Mapping of taskOptions keys to payload keys, with conditions and transformations.
+     */
+    const optionsToPayloadMapping = [
+      {
+        optionKey: "file",
+        payloadKey: "file",
+        condition: (options: startTaskProps) => options.file instanceof File,
+      },
+      {
+        optionKey: "tdsUsername",
+        payloadKey: "db621_user",
+        condition: (options: startTaskProps) =>
+          !!options.tdsUsername && !!options.tdsPassword,
+      },
+      {
+        optionKey: "tdsPassword",
+        payloadKey: "db621_pwd",
+        condition: (options: startTaskProps) =>
+          !!options.tdsUsername && !!options.tdsPassword,
+      },
+      {
+        optionKey: "arcgisErase",
+        payloadKey: "erase_previous",
+        condition: (options: startTaskProps) =>
+          !!options.tdsUsername && !!options.tdsPassword,
+        transform: (value: boolean) => (value ? "yes" : "no"),
+      },
+      {
+        optionKey: "arcgisSnapshot",
+        payloadKey: "snapshot",
+        condition: (options: startTaskProps) =>
+          !!options.tdsUsername && !!options.tdsPassword,
+        transform: (value: boolean) => (value ? "yes" : "no"),
+      },
+      {
+        optionKey: "project_id",
+        payloadKey: "project_id",
+        condition: (options: startTaskProps) =>
+          !!options.project_id && !!options.project_num && !!options.file_path,
+      },
+      {
+        optionKey: "project_num",
+        payloadKey: "project_num",
+        condition: (options: startTaskProps) =>
+          !!options.project_id && !!options.project_num && !!options.file_path,
+      },
+      {
+        optionKey: "file_path",
+        payloadKey: "file_path",
+        condition: (options: startTaskProps) =>
+          !!options.project_id && !!options.project_num && !!options.file_path,
+      },
+      {
+        optionKey: "operationChoice",
+        payloadKey: "operation_choice",
+        condition: (options: startTaskProps) => !!options.operationChoice,
+      },
+    ];
+
+    // Append fields based on the mapping
+    optionsToPayloadMapping.forEach(
+      ({ optionKey, payloadKey, condition, transform }) => {
+        if (condition(taskOptions)) {
+          const value = taskOptions[optionKey as keyof startTaskProps];
+
+          if (value !== undefined) {
+            let finalValue: string | Blob;
+
+            if (transform && typeof value === "boolean") {
+              finalValue = transform(value);
+            } else if (value instanceof File) {
+              finalValue = value;
+            } else {
+              finalValue = String(value);
+            }
+            payload.append(payloadKey, finalValue);
+          }
+        }
+      },
+    );
+
+    // Handle special case for 'table_choice' which needs to be appended to multiple keys
+    if (taskOptions.table_choice) {
+      [
+        "pole_table_choice",
+        "table_choice",
+        "dfn_choice",
+        "pattern_choice",
+      ].forEach((key) => {
+        payload.append(key, taskOptions.table_choice as string);
+      });
     }
 
-    if (tdsUsername && tdsPassword) {
-      payload.append("db621_user", tdsUsername);
-      payload.append("db621_pwd", tdsPassword);
-      payload.append("erase_previous", arcgisErase ? "yes" : "no");
-      payload.append("snapshot", arcgisSnapshot ? "yes" : "no");
-    }
-
-    if (operationChoice) {
-      payload.append("operation_choice", operationChoice);
-    }
-
-    // Append the same table_choice value to multiple fields
-    // because the backend can accept it in any of these fields
-    if (table_choice) {
-      payload.append("pole_table_choice", table_choice);
-      payload.append("table_choice", table_choice);
-      payload.append("dfn_choice", table_choice);
-      payload.append("pattern_choice", table_choice);
-    }
-
-    // set override flag for import HLD/GPS to Postgres
+    // Handle specific flags based on the endpoint
     if (
-      endpoint === "/saas/tds/ajax/query-import-hld-to-postgres/" ||
-      endpoint === "/saas/tds/ajax/query-import-gps-to-postgres/"
+      taskOptions.endpoint === "/saas/tds/ajax/query-import-hld-to-postgres/" ||
+      taskOptions.endpoint === "/saas/tds/ajax/query-import-gps-to-postgres/"
     ) {
-      if (is_override) {
+      if (taskOptions.is_override) {
         payload.append("is_override", "yes");
       }
     }
 
-    // set 'assign_uniq' flag for change ownership UNIQ
-    if (endpoint === "/saas/tds/ajax/super/query-change-ownership-uniq/") {
-      if (is_override) {
+    if (
+      taskOptions.endpoint ===
+      "/saas/tds/ajax/super/query-change-ownership-uniq/"
+    ) {
+      if (taskOptions.is_override) {
         payload.append("assign_uniq", "yes");
       }
     }
 
-    // set 'run_full_db' flag for full db version
-    if (endpoint === "/saas/tds/ajax/super/query-postgres-version/") {
-      if (is_override) {
+    if (
+      taskOptions.endpoint === "/saas/tds/ajax/super/query-postgres-version/"
+    ) {
+      if (taskOptions.is_override) {
         payload.append("run_full_db", "yes");
       }
     }
 
-    // set projectType value for poles calculations
-    if (endpoint === "/saas/tds/ajax/query-poles-dfn-calc/") {
-      if (is_override) {
-        payload.append("projectType", "HLD");
-      } else {
-        payload.append("projectType", "LLD");
-      }
-      payload.append("uuidPole", uuidPole || "");
+    // Set 'projectType' for poles calculations based on 'is_override'
+    if (taskOptions.endpoint === "/saas/tds/ajax/query-poles-dfn-calc/") {
+      payload.append("projectType", taskOptions.is_override ? "HLD" : "LLD");
+      payload.append("uuidPole", taskOptions.uuidPole || "");
     }
-
-    // // Log the payload for debugging
-    // for (let pair of payload.entries()) {
-    //   console.log(pair[0] + ": " + pair[1]);
-    // }
 
     const headers = {
       "X-CSRFToken": csrfToken,
@@ -342,7 +392,9 @@ export const startTask = async ({
       // "Content-Type": "multipart/form-data", // Axios sets this automatically when using FormData
     };
     // make request
-    const response = await axiosInstance.post(endpoint, payload, { headers });
+    const response = await axiosInstance.post(taskOptions.endpoint, payload, {
+      headers,
+    });
 
     // check request status
     if (response.status !== 200) {

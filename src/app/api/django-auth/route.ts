@@ -22,6 +22,10 @@ const backendCredentialsMap: Record<
     email: process.env.APP_XPLORE_USER_EMAIL,
     password: process.env.APP_XPLORE_USER_PASSWORD,
   },
+  telus: {
+    email: process.env.APP_TELUS_USER_EMAIL,
+    password: process.env.APP_TELUS_USER_PASSWORD,
+  },
 };
 
 const getBackendCredentials = (backendUser: string) => {

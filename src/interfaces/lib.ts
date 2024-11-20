@@ -17,6 +17,7 @@ export interface UserSchema {
   canAccessAppsVistabeamOverride: boolean;
   canAccessAppsVistabeamSuper: boolean;
   canAccessAppsXploreAdmin: boolean;
+  canAccessAppsTelusAdmin: boolean;
   canAccessBugReportBoard: boolean;
   canAccessRoadmapBoard: boolean;
   canAccessReports: boolean;
@@ -86,6 +87,9 @@ export interface startTaskProps {
   arcgisErase?: boolean;
   arcgisSnapshot?: boolean;
   is_override?: boolean;
+  project_id?: string;
+  project_num?: string;
+  file_path?: string;
 }
 
 export interface checkTaskStatusProps {
@@ -115,6 +119,8 @@ export interface InputDataProps {
   tdsPassword?: string | null;
   arcgisErase?: boolean;
   arcgisSnapshot?: boolean;
+  projectId?: string;
+  projectNum?: string;
 }
 
 export interface TaskDataProps {

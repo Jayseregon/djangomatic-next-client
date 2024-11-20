@@ -115,6 +115,7 @@ export const UserTable = ({
           <Radio value="apps-cogeco">COGECO</Radio>
           <Radio value="apps-vistabeam">Vistabeam</Radio>
           <Radio value="apps-xplore">Xplore</Radio>
+          <Radio value="apps-telus">Telus</Radio>
         </RadioGroup>
       </div>
     );

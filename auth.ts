@@ -56,7 +56,7 @@ export const config = {
       // Check if the user's email is in the list of authorized members
       const isAuthorized =
         authorizedMembers.some((member) => member.email === user.email) ||
-        user.email?.endsWith("@telecon.ca");
+        user.email?.endsWith("@telecon.ca") || user.email?.endsWith("@telecon.com");
 
       const isAdmin = authorizedMembers.some(
         (member) => member.email === user.email,

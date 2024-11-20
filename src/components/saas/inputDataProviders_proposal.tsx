@@ -30,7 +30,7 @@ interface InputDataContextProps {
  * Context for managing input and task data.
  */
 const InputDataContext = createContext<InputDataContextProps | undefined>(
-  undefined
+  undefined,
 );
 
 /**
@@ -214,6 +214,7 @@ export const InputDataProvider = ({
       } else if (inputData.appType === "override") {
         return `$ RemoteApp: !! >> will ERASE existing data`;
       }
+
       return `$ InputData: will override >> ${value}`;
     },
     // Add other fields as needed...
@@ -241,7 +242,7 @@ export const InputDataProvider = ({
   const detectChanges = (
     prevData: any,
     currentData: any,
-    labels: { [key: string]: string | ((value: any) => string) }
+    labels: { [key: string]: string | ((value: any) => string) },
   ) => {
     Object.keys(labels).forEach((key) => {
       if (prevData[key] !== currentData[key]) {
@@ -299,7 +300,8 @@ export const InputDataProvider = ({
         appendToConsole,
         appName,
         setAppName,
-      }}>
+      }}
+    >
       {children}
     </InputDataContext.Provider>
   );

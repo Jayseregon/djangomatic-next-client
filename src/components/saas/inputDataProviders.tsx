@@ -6,6 +6,7 @@ import React, {
   useState,
   useEffect,
   ReactNode,
+  useRef,
 } from "react";
 
 import { stripHtmlTags, maskPassword } from "@/src/lib/utils";
@@ -161,15 +162,15 @@ export const InputDataProvider = ({
     isLoading: false,
   };
   const initAppName: string = "";
-  const [initialInputData, setInitialInputData] =
-    useState<InputDataProps>(initInputData);
-  const [initialTaskData, setInitialTaskData] =
-    useState<TaskDataProps>(initTaskData);
   const [initialAppName, setInitialAppName] = useState<string>(initAppName);
   const [inputData, setInputData] = useState<InputDataProps>(initInputData);
   const [taskData, setTaskData] = useState<TaskDataProps>(initTaskData);
   const [consoleOutput, setConsoleOutput] = useState<string>("");
   const [appName, setAppName] = useState<string>(initAppName);
+
+  // Store previous inputData and taskData to compare changes
+  const prevInputDataRef = useRef<InputDataProps>(inputData);
+  const prevTaskDataRef = useRef<TaskDataProps>(taskData);
 
   /**
    * Function to append new data to the console output.
@@ -180,166 +181,113 @@ export const InputDataProvider = ({
     setConsoleOutput((prevOutput) => prevOutput + "\n" + newData);
   };
 
-  // Watch for changes in inputData and append to console
-  useEffect(() => {
-    if (inputData.dbChoice !== initialInputData.dbChoice) {
-      appendToConsole(`$ InputData: db choice >> ${inputData.dbChoice}`);
-      setInitialInputData({
-        ...initialInputData,
-        dbChoice: inputData.dbChoice,
-      });
-    }
-    if (inputData.schemaChoice !== initialInputData.schemaChoice) {
-      appendToConsole(
-        `$ InputData: schema choice >> ${inputData.schemaChoice}`,
-      );
-      setInitialInputData({
-        ...initialInputData,
-        schemaChoice: inputData.schemaChoice,
-      });
-    }
-    if (inputData.tableChoice !== initialInputData.tableChoice) {
-      appendToConsole(`$ InputData: table choice >> ${inputData.tableChoice}`);
-      setInitialInputData({
-        ...initialInputData,
-        tableChoice: inputData.tableChoice,
-      });
-    }
-    if (inputData.fileName !== initialInputData.fileName) {
-      appendToConsole(`$ InputData: file >> ${inputData.fileName}`);
-      setInitialInputData({
-        ...initialInputData,
-        fileName: inputData.fileName,
-      });
-    }
-    if (inputData.tdsUsername !== initialInputData.tdsUsername) {
-      appendToConsole(`$ InputData: TDS username >> ${inputData.tdsUsername}`);
-      setInitialInputData({
-        ...initialInputData,
-        tdsUsername: inputData.tdsUsername,
-      });
-    }
-    if (inputData.tdsPassword !== initialInputData.tdsPassword) {
-      appendToConsole(
-        `$ InputData: TDS password >> ${maskPassword(inputData.tdsPassword || "")}`,
-      );
-      setInitialInputData({
-        ...initialInputData,
-        tdsPassword: inputData.tdsPassword,
-      });
-    }
-    if (inputData.arcgisErase !== initialInputData.arcgisErase) {
-      appendToConsole(
-        `$ InputData: erase DFN in DB621 >> ${inputData.arcgisErase}`,
-      );
-      setInitialInputData({
-        ...initialInputData,
-        arcgisErase: inputData.arcgisErase,
-      });
-    }
-    if (inputData.arcgisSnapshot !== initialInputData.arcgisSnapshot) {
-      appendToConsole(
-        `$ InputData: create DFN snapshots >> ${inputData.arcgisSnapshot}`,
-      );
-      setInitialInputData({
-        ...initialInputData,
-        arcgisSnapshot: inputData.arcgisSnapshot,
-      });
-    }
-    if (inputData.uuidPole !== initialInputData.uuidPole) {
-      appendToConsole(`$ InputData: pole uuid >> ${inputData.uuidPole}`);
-      setInitialInputData({
-        ...initialInputData,
-        uuidPole: inputData.uuidPole,
-      });
-    }
-    if (inputData.projectId !== initialInputData.projectId) {
-      appendToConsole(`$ InputData: project ID >> ${inputData.projectId}`);
-      setInitialInputData({
-        ...initialInputData,
-        projectId: inputData.projectId,
-      });
-    }
-    if (inputData.projectNum !== initialInputData.projectNum) {
-      appendToConsole(`$ InputData: project number >> ${inputData.projectNum}`);
-      setInitialInputData({
-        ...initialInputData,
-        projectNum: inputData.projectNum,
-      });
-    }
-    if (inputData.operationChoice !== initialInputData.operationChoice) {
-      appendToConsole(
-        `$ InputData: recover operation >> ${inputData.operationChoice}`,
-      );
-      setInitialInputData({
-        ...initialInputData,
-        operationChoice: inputData.operationChoice,
-      });
-    }
-    if (inputData.willOverride !== initialInputData.willOverride) {
+  /**
+   * Mapping of inputData keys to user-friendly labels or custom handlers.
+   */
+  const inputDataLabels: {
+    [key in keyof InputDataProps]?: string | ((value: any) => string);
+  } = {
+    dbChoice: (value) => `$ InputData: db choice >> ${value}`,
+    schemaChoice: (value) => `$ InputData: schema choice >> ${value}`,
+    tableChoice: (value) => `$ InputData: table choice >> ${value}`,
+    fileName: (value) => `$ InputData: file >> ${value}`,
+    tdsUsername: (value) => `$ InputData: TDS username >> ${value}`,
+    tdsPassword: (value) =>
+      `$ InputData: TDS password >> ${maskPassword(value || "")}`,
+    arcgisErase: (value) => `$ InputData: erase DFN in DB621 >> ${value}`,
+    arcgisSnapshot: (value) => `$ InputData: create DFN snapshots >> ${value}`,
+    uuidPole: (value) => `$ InputData: pole uuid >> ${value}`,
+    projectId: (value) => `$ InputData: project ID >> ${value}`,
+    projectNum: (value) => `$ InputData: project number >> ${value}`,
+    operationChoice: (value) => `$ InputData: recover operation >> ${value}`,
+    willOverride: (value) => {
       if (
         inputData.taskEndpoint ===
         "/saas/tds/ajax/super/query-change-ownership-uniq/"
       ) {
-        appendToConsole(
-          `$ InputData: assign ownership UNIQ >> ${inputData.willOverride}`,
-        );
+        return `$ InputData: assign ownership UNIQ >> ${value}`;
       } else if (
         inputData.taskEndpoint ===
         "/saas/tds/ajax/super/query-postgres-version/"
       ) {
-        appendToConsole(
-          `$ InputData: run full db >> ${inputData.willOverride}`,
-        );
+        return `$ InputData: run full db >> ${value}`;
+      } else if (inputData.appType === "override") {
+        return `$ RemoteApp: !! >> will ERASE existing data`;
       }
-      setInitialInputData({
-        ...initialInputData,
-        willOverride: inputData.willOverride,
-      });
-    }
+
+      return `$ InputData: will override >> ${value}`;
+    },
+    // Add other fields as needed...
+  };
+
+  /**
+   * Mapping of taskData keys to user-friendly labels or custom handlers.
+   */
+  const taskDataLabels: {
+    [key in keyof TaskDataProps]?: string | ((value: any) => string);
+  } = {
+    taskId: (value) => `$ TaskData: task id >> ${value}`,
+    taskStatus: (value) => `$ TaskData: task status >> ${value}`,
+    taskResult: (value) => `$ TaskData: task result >> ${stripHtmlTags(value)}`,
+    // Add other fields as needed...
+  };
+
+  /**
+   * Detects changes between previous and current data, and logs descriptive messages.
+   *
+   * @param prevData - The previous state of the data object.
+   * @param currentData - The current state of the data object.
+   * @param labels - A mapping of data keys to user-friendly labels or custom message functions.
+   */
+  const detectChanges = (
+    prevData: any,
+    currentData: any,
+    labels: { [key: string]: string | ((value: any) => string) },
+  ) => {
+    Object.keys(labels).forEach((key) => {
+      if (prevData[key] !== currentData[key]) {
+        const label = labels[key];
+        let message = "";
+
+        if (typeof label === "function") {
+          message = label(currentData[key]);
+        } else {
+          message = `${label} >> ${currentData[key]}`;
+        }
+
+        appendToConsole(message);
+      }
+    });
+  };
+
+  /**
+   * useEffect hook monitoring changes in 'inputData'.
+   * When 'inputData' changes, detectChanges logs any updated fields to the console.
+   */
+  useEffect(() => {
+    detectChanges(prevInputDataRef.current, inputData, inputDataLabels);
+    prevInputDataRef.current = { ...inputData };
   }, [inputData]);
 
-  // Watch for changes in taskData and append to console
+  /**
+   * useEffect hook monitoring changes in 'taskData'.
+   * When 'taskData' changes, detectChanges logs any updated fields to the console.
+   */
   useEffect(() => {
-    if (taskData.taskId !== initialTaskData.taskId) {
-      appendToConsole(`$ TaskData: task id >> ${taskData.taskId}`);
-      setInitialTaskData({ ...initialTaskData, taskId: taskData.taskId });
-    }
-    if (taskData.taskStatus !== initialTaskData.taskStatus) {
-      appendToConsole(`$ TaskData: task status >> ${taskData.taskStatus}`);
-      setInitialTaskData({
-        ...initialTaskData,
-        taskStatus: taskData.taskStatus,
-      });
-    }
-    if (taskData.taskResult !== initialTaskData.taskResult) {
-      appendToConsole(
-        `$ TaskData: task result >> ${stripHtmlTags(taskData.taskResult)}`,
-      );
-      setInitialTaskData({
-        ...initialTaskData,
-        taskResult: stripHtmlTags(taskData.taskResult),
-      });
-    }
+    detectChanges(prevTaskDataRef.current, taskData, taskDataLabels);
+    prevTaskDataRef.current = { ...taskData };
   }, [taskData]);
 
-  // Watch for changes in appName and append to console
+  /**
+   * useEffect hook monitoring changes in 'appName'.
+   * Logs initialization message when 'appName' changes.
+   */
   useEffect(() => {
     if (appName !== initialAppName) {
       appendToConsole(`$ RemoteApp: initializing >> ${appName}`);
       setInitialAppName(appName);
     }
-    if (
-      inputData.willOverride !== initialInputData.willOverride &&
-      inputData.appType === "override"
-    ) {
-      appendToConsole(`$ RemoteApp: !! >> will ERASE existing data`);
-      setInitialInputData({
-        ...initialInputData,
-        willOverride: inputData.willOverride,
-      });
-    }
-  }, [appName, setAppName]);
+  }, [appName]);
 
   return (
     <InputDataContext.Provider

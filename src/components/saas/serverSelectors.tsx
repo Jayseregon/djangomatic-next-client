@@ -73,10 +73,7 @@ export const DatabaseSchemaTable3Selector = ({
           setInputData={setInputData}
         />
         {/* Dropdown for selecting a schema */}
-        <SchemasDropdown
-          inputData={inputData}
-          setInputData={setInputData}
-        />
+        <SchemasDropdown inputData={inputData} setInputData={setInputData} />
         {/* Dropdown for selecting a table */}
         <TablesDropdown
           endpoint={endpoint}
@@ -115,10 +112,7 @@ export const DatabaseSchema2Selector = ({
           setInputData={setInputData}
         />
         {/* Dropdown for selecting a schema */}
-        <SchemasDropdown
-          inputData={inputData}
-          setInputData={setInputData}
-        />
+        <SchemasDropdown inputData={inputData} setInputData={setInputData} />
       </div>
     </div>
   );
@@ -160,7 +154,8 @@ export const ZipFileInputButton = (): JSX.Element => {
       <div className="flex w-full inline-block rounded-3xl bg-transparent border-0 text-sm text-white ring-1 ring-inset ring-primary">
         <label
           className="flex items-center justify-center w-20 h-10 bg-primary text-sm text-white text-center rounded-l-3xl ps-2"
-          htmlFor="file-input">
+          htmlFor="file-input"
+        >
           <span>{t("zipFile.label")}</span>
           <input
             accept=".zip"
@@ -286,7 +281,8 @@ export const ArcGISControls = (): JSX.Element => {
           id="arcgisErase"
           name="arcgisErase"
           variant="bordered"
-          onClick={handleControlChange}>
+          onClick={handleControlChange}
+        >
           {inputData.arcgisErase ? <ThumbsUpIcon /> : <ThumbsDownIcon />}
         </Button>
       </div>
@@ -298,7 +294,8 @@ export const ArcGISControls = (): JSX.Element => {
           id="arcgisSnapshot"
           name="arcgisSnapshot"
           variant="bordered"
-          onClick={handleControlChange}>
+          onClick={handleControlChange}
+        >
           {inputData.arcgisSnapshot ? <ThumbsUpIcon /> : <ThumbsDownIcon />}
         </Button>
       </div>
@@ -342,7 +339,8 @@ export const SuperVersionControl = ({
           color={inputData.willOverride ? "success" : "danger"}
           id="versionControle"
           variant="bordered"
-          onClick={handleControlChange}>
+          onClick={handleControlChange}
+        >
           {inputData.willOverride ? <ThumbsUpIcon /> : <ThumbsDownIcon />}
         </Button>
       </div>
@@ -406,7 +404,7 @@ export const DropdownOperationSelector = (): JSX.Element => {
   const t = useTranslations();
   const { setInputData } = useInputData();
   const [selectedLabel, setSelectedLabel] = useState<string>(
-    t("ServerDropdowns.operation_label")
+    t("ServerDropdowns.operation_label"),
   );
 
   // Hardcoded choices
@@ -440,7 +438,8 @@ export const DropdownOperationSelector = (): JSX.Element => {
           <Button
             className="bg-primary text-white w-full h-10"
             radius="full"
-            variant="solid">
+            variant="solid"
+          >
             {selectedLabel}
           </Button>
         </DropdownTrigger>
@@ -454,7 +453,8 @@ export const DropdownOperationSelector = (): JSX.Element => {
             const selected = Array.from(keys)[0] as string;
 
             handleSelectionChange(selected);
-          }}>
+          }}
+        >
           {(item) => <DropdownItem key={item.value}>{item.label}</DropdownItem>}
         </DropdownMenu>
       </Dropdown>
@@ -537,11 +537,12 @@ export const InputTelusZipfileButton = (): JSX.Element => {
 
       // Set up the EventSource here
       const eventSource = new EventSource(
-        `/api/azure-blob/progress?uuid=${uuid}`
+        `/api/azure-blob/progress?uuid=${uuid}`,
       );
 
       eventSource.onmessage = (event) => {
         const progress = JSON.parse(event.data);
+
         setUploadProgress((progress.loadedBytes / file.size) * 100);
       };
 
@@ -563,7 +564,7 @@ export const InputTelusZipfileButton = (): JSX.Element => {
             headers: {
               "Content-Type": "multipart/form-data",
             },
-          }
+          },
         );
 
         console.log("Upload successful: ", res.data);
@@ -595,7 +596,8 @@ export const InputTelusZipfileButton = (): JSX.Element => {
         <div className="flex w-full inline-block rounded-3xl bg-transparent border-0 text-sm text-white ring-1 ring-inset ring-primary">
           <label
             className="flex items-center justify-center w-20 h-10 bg-primary text-sm text-white text-center rounded-l-3xl ps-2"
-            htmlFor="file-input">
+            htmlFor="file-input"
+          >
             <span>{t("zipFile.label")}</span>
             <input
               accept=".zip"
@@ -630,13 +632,10 @@ export const InputTelusZipfileButton = (): JSX.Element => {
             disabled={isUploading}
             isDisabled={isUploading}
             radius="full"
-            onClick={handleUpload}>
+            onClick={handleUpload}
+          >
             {isUploading ? (
-              <Spinner
-                aria-label="upload-spinner"
-                color="white"
-                size="sm"
-              />
+              <Spinner aria-label="upload-spinner" color="white" size="sm" />
             ) : (
               t("zipFile.upload")
             )}

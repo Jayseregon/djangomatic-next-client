@@ -5,7 +5,11 @@ import React, { useEffect } from "react";
 import { useTranslations } from "next-intl";
 
 import { startTask, checkTaskStatus } from "@/lib/dbRequests";
-import { startTaskProps, TaskDataProps } from "@/interfaces/lib";
+import {
+  InputDataProps,
+  startTaskProps,
+  TaskDataProps,
+} from "@/interfaces/lib";
 
 import { useInputData, useTaskData } from "./inputDataProviders";
 import { DownloadButton } from "./serverDropdowns";
@@ -23,6 +27,7 @@ export const StartTaskButton = (): JSX.Element => {
   const { appendToConsole } = useConsoleData();
   const t = useTranslations("startTaskButton");
 
+  // Base taskOptions
   let taskOptions: startTaskProps = {
     db_choice: inputData.dbChoice || "",
     schema_choice: inputData.schemaChoice || "",
@@ -31,64 +36,88 @@ export const StartTaskButton = (): JSX.Element => {
     backendUser: inputData.clientName,
   };
 
-  if (inputData.file) {
-    taskOptions = {
-      ...taskOptions,
-      file: inputData.file,
-    };
-  }
+  // Mapping of inputData properties to taskOptions properties
+  const inputToTaskOptionsMapping = [
+    {
+      inputKey: "file",
+      taskOptionKey: "file",
+      condition: (data: InputDataProps) => !!data.file,
+    },
+    {
+      inputKey: "fileName",
+      taskOptionKey: "file_path",
+      condition: (data: InputDataProps) =>
+        !!data.fileName && !!data.projectId && !!data.projectNum,
+    },
+    {
+      inputKey: "projectId",
+      taskOptionKey: "project_id",
+      condition: (data: InputDataProps) =>
+        !!data.projectId && !!data.projectNum,
+    },
+    {
+      inputKey: "projectNum",
+      taskOptionKey: "project_num",
+      condition: (data: InputDataProps) =>
+        !!data.projectId && !!data.projectNum,
+    },
+    {
+      inputKey: "tdsUsername",
+      taskOptionKey: "tdsUsername",
+      condition: (data: InputDataProps) =>
+        !!data.tdsUsername && !!data.tdsPassword,
+    },
+    {
+      inputKey: "tdsPassword",
+      taskOptionKey: "tdsPassword",
+      condition: (data: InputDataProps) =>
+        !!data.tdsUsername && !!data.tdsPassword,
+    },
+    {
+      inputKey: "arcgisErase",
+      taskOptionKey: "arcgisErase",
+      condition: (data: InputDataProps) =>
+        !!data.tdsUsername && !!data.tdsPassword,
+    },
+    {
+      inputKey: "arcgisSnapshot",
+      taskOptionKey: "arcgisSnapshot",
+      condition: (data: InputDataProps) =>
+        !!data.tdsUsername && !!data.tdsPassword,
+    },
+    {
+      inputKey: "tableChoice",
+      taskOptionKey: "table_choice",
+      condition: (data: InputDataProps) => !!data.tableChoice,
+    },
+    {
+      inputKey: "willOverride",
+      taskOptionKey: "is_override",
+      condition: (data: InputDataProps) => !!data.willOverride,
+    },
+    {
+      inputKey: "operationChoice",
+      taskOptionKey: "operationChoice",
+      condition: (data: InputDataProps) => !!data.operationChoice,
+    },
+    {
+      inputKey: "uuidPole",
+      taskOptionKey: "uuidPole",
+      condition: (data: InputDataProps) => !!data.uuidPole,
+    },
+  ];
 
-  if (inputData.tdsUsername && inputData.tdsPassword) {
-    taskOptions = {
-      ...taskOptions,
-      tdsUsername: inputData.tdsUsername,
-      tdsPassword: inputData.tdsPassword,
-      arcgisErase: inputData.arcgisErase,
-      arcgisSnapshot: inputData.arcgisSnapshot,
-    };
-  }
-
-  if (inputData.projectId && inputData.projectNum) {
-    if (inputData.fileName) {
-      taskOptions = {
-        ...taskOptions,
-        file_path: inputData.fileName,
-      };
-    }
-    taskOptions = {
-      ...taskOptions,
-      project_id: inputData.projectId,
-      project_num: inputData.projectNum,
-    };
-  }
-
-  if (inputData.tableChoice) {
-    taskOptions = {
-      ...taskOptions,
-      table_choice: inputData.tableChoice,
-    };
-  }
-
-  if (inputData.willOverride) {
-    taskOptions = {
-      ...taskOptions,
-      is_override: inputData.willOverride,
-    };
-  }
-
-  if (inputData.operationChoice) {
-    taskOptions = {
-      ...taskOptions,
-      operationChoice: inputData.operationChoice,
-    };
-  }
-
-  if (inputData.uuidPole) {
-    taskOptions = {
-      ...taskOptions,
-      uuidPole: inputData.uuidPole,
-    };
-  }
+  // Dynamically build taskOptions based on inputData and conditions
+  inputToTaskOptionsMapping.forEach(
+    ({ inputKey, taskOptionKey, condition }) => {
+      if (condition(inputData)) {
+        taskOptions = {
+          ...taskOptions,
+          [taskOptionKey]: inputData[inputKey as keyof InputDataProps],
+        };
+      }
+    },
+  );
 
   /**
    * Handles the task initiation process.

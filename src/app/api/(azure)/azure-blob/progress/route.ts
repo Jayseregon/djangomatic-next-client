@@ -31,11 +31,14 @@ export async function GET(request: Request): Promise<Response> {
        *
        * @param {Object} progress - The progress update object.
        * @param {string} progress.uuid - The UUID of the upload.
-       * @param {number} progress.loadedBytes - The number of bytes uploaded.
+       * @param {number} progress.bytesUploaded - The number of bytes uploaded.
        */
-      const onProgress = (progress: { uuid: string; loadedBytes: number }) => {
+      const onProgress = (progress: {
+        uuid: string;
+        bytesUploaded: number;
+      }) => {
         if (progress.uuid === uuid) {
-          console.log(`Sending progress: ${progress.loadedBytes} bytes`);
+          console.log(`Sending progress: ${progress.bytesUploaded} bytes`);
           try {
             controller.enqueue(`data: ${JSON.stringify(progress)}\n\n`);
           } catch (error) {

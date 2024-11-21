@@ -18,6 +18,36 @@ import { BlobStorage } from "./BlobStorage";
  * @returns {JSX.Element} The rendered AdminTabs component.
  */
 const AdminTabs = ({ sessionEmail }: { sessionEmail: string }): JSX.Element => {
+  const [usersCount, setUsersCount] = useState<number>(0);
+  const [superUsersCount, setSuperUsersCount] = useState<number>(0);
+
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const response = await fetch("/api/prisma-user");
+        const data = await response.json();
+        const sortedData = data.sort((a: UserSchema, b: UserSchema) => {
+          return a.name.localeCompare(b.name);
+        });
+
+        const regularUsers = sortedData.filter(
+          (user: UserSchema) => !user.isAdmin,
+        );
+
+        setUsersCount(regularUsers.length || 0);
+
+        const superUsers = sortedData.filter(
+          (user: UserSchema) => user.isAdmin,
+        );
+
+        setSuperUsersCount(superUsers.length || 0);
+      } catch (error) {
+        console.error("Failed to fetch users:", error);
+      }
+    }
+    fetchData();
+  }, []);
+
   return (
     <div>
       <div className="flex w-full flex-col">
@@ -33,10 +63,13 @@ const AdminTabs = ({ sessionEmail }: { sessionEmail: string }): JSX.Element => {
           variant="underlined"
         >
           {/* User Permissions Tab */}
-          <Tab key="user-perms" title="User Permissions">
+          <Tab key="user-perms" title={`User Permissions (${usersCount})`}>
             <UserTable sessionEmail={sessionEmail} />
           </Tab>
-          <Tab key="superuser-perms" title="Superuser Permissions">
+          <Tab
+            key="superuser-perms"
+            title={`Superuser Permissions (${superUsersCount})`}
+          >
             <UserTable isAdmin sessionEmail={sessionEmail} />
           </Tab>
           {/* Azure Blobs Storage Tab */}

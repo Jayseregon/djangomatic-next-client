@@ -521,6 +521,7 @@ export const InputTelusZipfileButton = (): JSX.Element => {
   const [fileName, setFileName] = useState<string | null>(null);
   const [uploadProgress, setUploadProgress] = useState<number>(0);
   const [isUploading, setIsUploading] = useState<boolean>(false);
+  const CHUNK_SIZE = 5 * 1024 * 1024; // 5MB
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
@@ -532,56 +533,73 @@ export const InputTelusZipfileButton = (): JSX.Element => {
   const handleUpload = async () => {
     if (file) {
       setIsUploading(true);
-      const sanitizedzipfileName = sanitizeFileName(file.name);
+      const sanitizedZipfileName = sanitizeFileName(file.name);
       const uuid = uuidv4();
 
-      // Set up the EventSource here
-      const eventSource = new EventSource(
-        `/api/azure-blob/progress?uuid=${uuid}`,
-      );
-
-      eventSource.onmessage = (event) => {
-        const progress = JSON.parse(event.data);
-
-        setUploadProgress((progress.loadedBytes / file.size) * 100);
-      };
-
-      eventSource.onerror = () => {
-        eventSource.close();
-      };
-
-      const formData = new FormData();
-
-      formData.append("file", file);
-      formData.append("zipfileName", sanitizedzipfileName);
-      formData.append("uuid", uuid);
-
       try {
-        const res = await axios.post(
-          "/api/azure-blob/telus-zip/upload",
-          formData,
-          {
-            headers: {
-              "Content-Type": "multipart/form-data",
-            },
-          },
+        // Set up the EventSource for progress updates
+        const eventSource = new EventSource(
+          `/api/azure-blob/progress?uuid=${uuid}`,
         );
 
-        console.log("Upload successful: ", res.data);
+        eventSource.onmessage = (event) => {
+          const progress = JSON.parse(event.data);
 
-        if (res.status === 200) {
-          setInputData((prevDataChoices: InputDataProps) => ({
-            ...prevDataChoices,
-            fileName: res.data.azurePath,
-          }));
-        } else {
-          throw new Error("Upload failed.");
+          setUploadProgress((progress.bytesUploaded / file.size) * 100);
+        };
+
+        eventSource.onerror = () => {
+          eventSource.close();
+        };
+
+        const totalChunks = Math.ceil(file.size / CHUNK_SIZE);
+
+        for (let chunkIndex = 0; chunkIndex < totalChunks; chunkIndex++) {
+          const start = chunkIndex * CHUNK_SIZE;
+          const end = Math.min(start + CHUNK_SIZE, file.size);
+          const chunk = file.slice(start, end);
+
+          const formData = new FormData();
+
+          formData.append("chunk", chunk);
+          formData.append("chunkIndex", chunkIndex.toString());
+          formData.append("totalChunks", totalChunks.toString());
+          formData.append("zipfileName", sanitizedZipfileName);
+          formData.append("uuid", uuid);
+
+          const res = await axios.post(
+            "/api/azure-blob/telus-zip/upload",
+            formData,
+            {
+              headers: {
+                "Content-Type": "multipart/form-data",
+              },
+            },
+          );
+
+          console.log("Upload successful: ", res.data);
+
+          if (res.status === 200) {
+            setInputData((prevDataChoices: InputDataProps) => ({
+              ...prevDataChoices,
+              fileName: res.data.azurePath,
+            }));
+          } else {
+            throw new Error("Upload failed.");
+          }
+
+          // Update upload progress after each chunk
+          setUploadProgress(((chunkIndex + 1) / totalChunks) * 100);
         }
+
+        // Close the EventSource after upload is complete
+        eventSource.close();
 
         setFile(null);
         setFileName(null);
       } catch (error) {
-        throw new Error((error as Error).message);
+        console.error("Upload failed:", error);
+        throw new Error("Upload failed.");
       } finally {
         setIsUploading(false);
         setUploadProgress(0);

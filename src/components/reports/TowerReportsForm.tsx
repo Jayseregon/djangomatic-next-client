@@ -17,12 +17,14 @@ import {
   TowerReportImage,
   AntennaTransmissionLine,
   ChecklistRow,
+  Note,
 } from "@/types/reports";
 import { TowerReportFormProps } from "@/interfaces/reports";
 import ToastNotification, {
   ToastResponse,
 } from "@/components/ui/ToastNotification";
 import { FormInput } from "@/components/ui/formInput";
+import NotesInputs from "@/components/reports/NotesInputs";
 
 import FormSectionAccordion from "./FormSectionAccordion";
 import QuickbaseInputs from "./QuickbaseInputs";
@@ -72,6 +74,8 @@ export const TowerReportForm = ({
   const [checklistForm9, setChecklistForm9] = useState<ChecklistRow[]>([]);
   const [checklistForm10, setChecklistForm10] = useState<ChecklistRow[]>([]);
   const [checklistForm11, setChecklistForm11] = useState<ChecklistRow[]>([]);
+  const [antennaNotes, setAntennaNotes] = useState<Note[]>([]);
+  const [deficiencyNotes, setDeficiencyNotes] = useState<Note[]>([]);
 
   const subdir = `${formData.jde_job}-${formData.jde_work_order}` || "";
   const siteImagesLabelOptions: string[] = siteImagesLabelOptionsData;
@@ -123,7 +127,9 @@ export const TowerReportForm = ({
       setSiteImages(report.site_images || []);
       setFrontImages(report.front_image || []);
       setDeficiencyImages(report.deficiency_images || []);
+      setDeficiencyNotes(report.notes_deficiency || []);
       setAntennaInventory(report.antenna_inventory || []);
+      setAntennaNotes(report.notes_antenna || []);
 
       initializeChecklistForm(
         report.checklistForm4,
@@ -178,6 +184,82 @@ export const TowerReportForm = ({
     }
   }, [report]);
 
+  // Handler functions for antenna notes
+  const handleAddAntennaNote = () => {
+    setAntennaNotes((prev) => [
+      ...prev,
+      { id: "", indexNumber: prev.length + 1, comment: "" },
+    ]);
+  };
+
+  const handleAntennaNoteChange = (
+    index: number,
+    field: string,
+    value: any,
+  ) => {
+    setAntennaNotes((prev) => {
+      const updatedNotes = [...prev];
+
+      updatedNotes[index] = {
+        ...updatedNotes[index],
+        [field]: value,
+        indexNumber: index + 1, // Ensure index stays in sync
+      };
+
+      return updatedNotes;
+    });
+  };
+
+  const handleRemoveAntennaNote = (index: number) => {
+    setAntennaNotes((prev) => {
+      const filtered = prev.filter((_, i) => i !== index);
+
+      // Reindex remaining notes
+      return filtered.map((note, i) => ({
+        ...note,
+        indexNumber: i + 1,
+      }));
+    });
+  };
+
+  // Handler functions for deficiency notes
+  const handleAddDeficiencyNote = () => {
+    setDeficiencyNotes((prev) => [
+      ...prev,
+      { id: "", indexNumber: prev.length + 1, comment: "" },
+    ]);
+  };
+
+  const handleDeficiencyNoteChange = (
+    index: number,
+    field: string,
+    value: any,
+  ) => {
+    setDeficiencyNotes((prev) => {
+      const updatedNotes = [...prev];
+
+      updatedNotes[index] = {
+        ...updatedNotes[index],
+        [field]: value,
+        indexNumber: index + 1, // Ensure index stays in sync
+      };
+
+      return updatedNotes;
+    });
+  };
+
+  const handleRemoveDeficiencyNote = (index: number) => {
+    setDeficiencyNotes((prev) => {
+      const filtered = prev.filter((_, i) => i !== index);
+
+      // Reindex remaining notes
+      return filtered.map((note, i) => ({
+        ...note,
+        indexNumber: i + 1,
+      }));
+    });
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     onSave({
@@ -194,6 +276,8 @@ export const TowerReportForm = ({
       checklistForm9: checklistForm9,
       checklistForm10: checklistForm10,
       checklistForm11: checklistForm11,
+      notes_antenna: antennaNotes,
+      notes_deficiency: deficiencyNotes,
     });
   };
 
@@ -212,6 +296,8 @@ export const TowerReportForm = ({
       checklistForm9: checklistForm9,
       checklistForm10: checklistForm10,
       checklistForm11: checklistForm11,
+      notes_antenna: antennaNotes,
+      notes_deficiency: deficiencyNotes,
     });
 
     if (result.success) {
@@ -400,32 +486,50 @@ export const TowerReportForm = ({
         title="Antenna & Transmission Line Inventory"
       >
         {/* Antenna & Transmission Line Inventory */}
-        {formData.jde_work_order && formData.jde_work_order?.length > 5 && (
-          <AntennaTransmissionInputs
-            antennaInventory={antennaInventory}
-            onAddAntenna={handleAddAntenna}
-            onAntennaChange={handleAntennaInventoryChange}
-            onDuplicateAntenna={handleDuplicateAntenna}
-            onRemoveAntenna={handleRemoveAntenna}
+        <div className="space-y-10">
+          {formData.jde_work_order && formData.jde_work_order?.length > 5 && (
+            <AntennaTransmissionInputs
+              antennaInventory={antennaInventory}
+              onAddAntenna={handleAddAntenna}
+              onAntennaChange={handleAntennaInventoryChange}
+              onDuplicateAntenna={handleDuplicateAntenna}
+              onRemoveAntenna={handleRemoveAntenna}
+            />
+          )}
+          {/* Antenna Notes Section */}
+          <NotesInputs
+            notes={antennaNotes}
+            onAddNote={handleAddAntennaNote}
+            onNoteChange={handleAntennaNoteChange}
+            onRemoveNote={handleRemoveAntennaNote}
           />
-        )}
+        </div>
       </FormSectionAccordion>
 
       {/* Divider */}
       <FormSectionAccordion menuKey="deficiencies" title="Deficiency Images">
         {/* Deficiency Images */}
-        {formData.jde_work_order && formData.jde_work_order?.length > 5 && (
-          <ImageUpload
-            images={deficiencyImages}
-            isDeficiency={true}
-            labelOptions={[]}
-            labelPlaceholder="Description"
-            newImageButtonName="Add Deficiency"
-            subdir={subdir}
-            onImagesChange={setDeficiencyImages}
-            onNewImageUpload={handleNewImageUpload}
+        <div className="space-y-10">
+          {formData.jde_work_order && formData.jde_work_order?.length > 5 && (
+            <ImageUpload
+              images={deficiencyImages}
+              isDeficiency={true}
+              labelOptions={[]}
+              labelPlaceholder="Description"
+              newImageButtonName="Add Deficiency"
+              subdir={subdir}
+              onImagesChange={setDeficiencyImages}
+              onNewImageUpload={handleNewImageUpload}
+            />
+          )}
+          {/* Deficiency Notes Section */}
+          <NotesInputs
+            notes={deficiencyNotes}
+            onAddNote={handleAddDeficiencyNote}
+            onNoteChange={handleDeficiencyNoteChange}
+            onRemoveNote={handleRemoveDeficiencyNote}
           />
-        )}
+        </div>
       </FormSectionAccordion>
 
       {/* Divider */}

@@ -29,6 +29,8 @@ export type TowerReport = {
   checklistForm9: ChecklistRow[];
   checklistForm10: ChecklistRow[];
   checklistForm11: ChecklistRow[];
+  notes_antenna: Note[];
+  notes_deficiency: Note[];
 };
 
 export type ChecklistRow = {
@@ -62,4 +64,10 @@ export type AntennaTransmissionLine = {
   tx_line: string;
   odu: string;
   carrier: string;
+};
+
+export type Note = {
+  id: string;
+  indexNumber: number;
+  comment: string;
 };

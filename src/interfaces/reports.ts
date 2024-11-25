@@ -3,6 +3,7 @@ import {
   TowerReportImage,
   TOCSections,
   AntennaTransmissionLine,
+  Note,
 } from "@/types/reports";
 
 export interface TowerReportFormProps {
@@ -60,6 +61,12 @@ export interface FormInputProps {
   isRounded?: boolean;
   withTooltip?: boolean;
   className?: string;
+  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+}
+
+export interface NoteInputProps {
+  id: string;
+  value: string | number | undefined;
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
@@ -126,4 +133,11 @@ export interface ImageRowProps {
 export interface JsonListForm {
   code: string;
   item: string;
+}
+
+export interface NotesInputsProps {
+  notes: Note[];
+  onAddNote: () => void;
+  onNoteChange: (index: number, field: string, value: any) => void;
+  onRemoveNote: (index: number) => void;
 }

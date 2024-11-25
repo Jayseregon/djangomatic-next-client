@@ -6,6 +6,7 @@ import {
   FormInputProps,
   LabelInputProps,
   AntennaFormInputProps,
+  NoteInputProps,
 } from "@/interfaces/reports";
 import { cn } from "@/src/lib/utils";
 
@@ -64,6 +65,27 @@ export const FormInput: React.FC<FormInputProps> = ({
           />
         </div>
       )}
+    </div>
+  );
+};
+
+export const NoteInput: React.FC<NoteInputProps> = ({
+  id,
+  value,
+  onChange,
+}) => {
+  return (
+    <div className="border-2 border-primary rounded-3xl w-full flex items-center justify-center">
+      <input
+        required
+        className="border-0 w-full focus:ring-0 focus:ring-inset text-foreground bg-transparent text-left text-ellipsis overflow-hidden"
+        id={id}
+        name={id}
+        placeholder="..."
+        type="text"
+        value={value}
+        onChange={onChange}
+      />
     </div>
   );
 };

@@ -82,6 +82,8 @@ model TowerReport {
   checklistForm9    ChecklistRow[]            @relation("ChecklistForm9Rows")
   checklistForm10   ChecklistRow[]            @relation("ChecklistForm10Rows")
   checklistForm11   ChecklistRow[]            @relation("ChecklistForm11Rows")
+  notes_antenna     Note[]                    @relation("AntennaNotes")
+  notes_deficiency  Note[]                    @relation("DeficiencyNotes")
 }
 
 model TowerReportImage {
@@ -187,4 +189,14 @@ enum BugPriority {
   MEDIUM
   HIGH
   CRITICAL
+}
+
+model Note {
+  id                      String       @id @default(cuid())
+  indexNumber             Int
+  comment                 String
+  towerReportAntennaId    String?
+  towerReportDeficiencyId String?
+  towerReportAntenna      TowerReport? @relation(fields: [towerReportAntennaId], references: [id], name: "AntennaNotes", map: "AntennaNotes_towerReportAntennaId_fkey")
+  towerReportDeficiency   TowerReport? @relation(fields: [towerReportDeficiencyId], references: [id], name: "DeficiencyNotes", map: "DeficiencyNotes_towerReportDeficiencyId_fkey")
 }

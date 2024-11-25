@@ -5,6 +5,7 @@ import {
   TowerReportImage,
   AntennaTransmissionLine,
   ChecklistRow,
+  Note,
 } from "@/src/types/reports";
 const prisma = new PrismaClient();
 
@@ -21,6 +22,8 @@ const createNestedData = (data: any) => {
   const checklistForm9 = data.checklistForm9 || [];
   const checklistForm10 = data.checklistForm10 || [];
   const checklistForm11 = data.checklistForm11 || [];
+  const notes_antenna = data.notes_antenna || [];
+  const notes_deficiency = data.notes_deficiency || [];
 
   return {
     ...data,
@@ -121,24 +124,45 @@ const createNestedData = (data: any) => {
         comments: checklist.comments,
       })),
     },
+    notes_antenna: {
+      create: notes_antenna.map((note: Note) => ({
+        indexNumber: parseInt(note.indexNumber as any) || 0,
+        comment: note.comment || "",
+      })),
+    },
+    notes_deficiency: {
+      create: notes_deficiency.map((note: Note) => ({
+        indexNumber: parseInt(note.indexNumber as any) || 0,
+        comment: note.comment || "",
+      })),
+    },
   };
 };
 
 export async function POST(request: Request) {
   try {
     const data = await request.json();
+
+    console.log("Incoming data:", data);
     const nestedData = createNestedData(data);
 
-    // Create the report with nested images
+    console.log("Nested data:", nestedData);
+
     const newReport = await prisma.towerReport.create({
       data: nestedData,
     });
 
     return NextResponse.json({ report: newReport }, { status: 201 });
   } catch (error) {
-    console.error(error);
+    console.error("Error creating report:", error);
 
-    return new NextResponse("Error creating report", { status: 500 });
+    return NextResponse.json(
+      {
+        error: "Failed to create report",
+        details: error instanceof Error ? error.message : "Unknown error",
+      },
+      { status: 500 },
+    );
   } finally {
     await prisma.$disconnect();
   }
@@ -149,14 +173,17 @@ export async function PUT(request: Request) {
   const id = searchParams.get("id");
 
   if (!id) {
-    return new NextResponse("ID is required", { status: 400 });
+    return NextResponse.json({ error: "ID is required" }, { status: 400 });
   }
 
   try {
     const data = await request.json();
+
+    console.log("Incoming data:", data);
     const nestedData = createNestedData(data);
 
-    // Update the report
+    console.log("Nested data:", nestedData);
+
     const updatedReport = await prisma.towerReport.update({
       where: { id },
       data: {
@@ -209,14 +236,28 @@ export async function PUT(request: Request) {
           deleteMany: {},
           create: nestedData.checklistForm11.create,
         },
+        notes_antenna: {
+          deleteMany: {},
+          create: nestedData.notes_antenna.create,
+        },
+        notes_deficiency: {
+          deleteMany: {},
+          create: nestedData.notes_deficiency.create,
+        },
       },
     });
 
-    return NextResponse.json({ report: updatedReport }, { status: 201 });
+    return NextResponse.json({ report: updatedReport }, { status: 200 });
   } catch (error) {
-    console.error(error);
+    console.error("Error updating report:", error);
 
-    return new NextResponse("Error updating report", { status: 500 });
+    return NextResponse.json(
+      {
+        error: "Failed to update report",
+        details: error instanceof Error ? error.message : "Unknown error",
+      },
+      { status: 500 },
+    );
   } finally {
     await prisma.$disconnect();
   }
@@ -231,6 +272,13 @@ export async function DELETE(request: Request) {
   }
 
   try {
+    // Delete associated notes first
+    await prisma.note.deleteMany({
+      where: {
+        OR: [{ towerReportAntennaId: id }, { towerReportDeficiencyId: id }],
+      },
+    });
+
     // Delete associated images from each category
     await prisma.towerReportImage.deleteMany({
       where: { siteProjectId: id },

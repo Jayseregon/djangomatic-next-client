@@ -203,14 +203,17 @@ export const TowerReportForm = ({
         ...note,
         indexNumber: idx + 1,
       }));
+
       setAntennaNotes(reindexedNotes);
     } else {
       setAntennaNotes((prev) => {
         const updatedNotes = [...prev];
+
         updatedNotes[index] = {
           ...updatedNotes[index],
           [field]: value,
         };
+
         return updatedNotes;
       });
     }
@@ -219,6 +222,7 @@ export const TowerReportForm = ({
   const handleRemoveAntennaNote = (index: number) => {
     setAntennaNotes((prev) => {
       const filtered = prev.filter((_, i) => i !== index);
+
       return filtered.map((note, i) => ({
         ...note,
         indexNumber: i + 1,
@@ -244,15 +248,18 @@ export const TowerReportForm = ({
         ...note,
         indexNumber: idx + 1,
       }));
+
       setDeficiencyNotes(reindexedNotes);
     } else {
       setDeficiencyNotes((prev) => {
         const updatedNotes = [...prev];
+
         updatedNotes[index] = {
           ...updatedNotes[index],
           [field]: value,
           indexNumber: index + 1,
         };
+
         return updatedNotes;
       });
     }
@@ -261,6 +268,7 @@ export const TowerReportForm = ({
   const handleRemoveDeficiencyNote = (index: number) => {
     setDeficiencyNotes((prev) => {
       const filtered = prev.filter((_, i) => i !== index);
+
       return filtered.map((note, i) => ({
         ...note,
         indexNumber: i + 1,

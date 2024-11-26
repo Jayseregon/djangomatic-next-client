@@ -4,9 +4,10 @@ import { Grip } from "lucide-react";
 
 import { ImageUploadProps, LocalImages } from "@/src/interfaces/reports";
 import { AddButton } from "@/src/components/ui/formInput";
+import { TowerReportImage } from "@/types/reports";
+
 import ImageRow from "./ImageRow";
 import FormInputRow from "./FormInputRow";
-import { TowerReportImage } from "@/types/reports";
 
 export const ImageUpload: React.FC<ImageUploadProps> = ({
   images,
@@ -67,7 +68,7 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({
       const { url, azureId, id } = await uploadImageToAzure(
         file,
         label,
-        subdir
+        subdir,
       );
       const newImage = {
         id,
@@ -91,7 +92,7 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({
 
   const handleLabelChange = (
     index: number,
-    e: React.ChangeEvent<HTMLInputElement>
+    e: React.ChangeEvent<HTMLInputElement>,
   ) => {
     if (isFrontcover) return;
 
@@ -105,14 +106,14 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({
     setLocalImages(newImages);
 
     const updatedImages = images.map((img, i) =>
-      i === index ? { ...img, label: value } : img
+      i === index ? { ...img, label: value } : img,
     );
 
     onImagesChange(updatedImages);
   };
 
   const handleDeficiencyCheckProcedureChange = (
-    e: React.ChangeEvent<HTMLInputElement>
+    e: React.ChangeEvent<HTMLInputElement>,
   ) => {
     const index = parseInt(e.target.name.split("-")[1], 10);
 
@@ -128,14 +129,14 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({
     setLocalImages(newImages);
 
     const updatedImages = images.map((img, i) =>
-      i === index ? { ...img, deficiency_check_procedure: value } : img
+      i === index ? { ...img, deficiency_check_procedure: value } : img,
     );
 
     onImagesChange(updatedImages);
   };
 
   const handleDeficiencyRecommendationChange = (
-    e: React.ChangeEvent<HTMLInputElement>
+    e: React.ChangeEvent<HTMLInputElement>,
   ) => {
     const index = parseInt(e.target.name.split("-")[1], 10);
 
@@ -151,7 +152,7 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({
     setLocalImages(newImages);
 
     const updatedImages = images.map((img, i) =>
-      i === index ? { ...img, deficiency_recommendation: value } : img
+      i === index ? { ...img, deficiency_recommendation: value } : img,
     );
 
     onImagesChange(updatedImages);
@@ -186,7 +187,7 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({
         `/api/azure-report-images/delete?subdir=${subdir}&azureId=${imageToRemove.azureId}`,
         {
           method: "DELETE",
-        }
+        },
       );
       onImagesChange(images.filter((img) => img.imgIndex !== index));
     }
@@ -198,7 +199,7 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({
   const uploadImageToAzure = async (
     file: File,
     label: string,
-    subdir: string
+    subdir: string,
   ) => {
     const formData = new FormData();
 
@@ -229,8 +230,9 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({
     const reorderedParent = images
       .map((parentImage) => {
         const matchingLocal = reorderedLocal.find(
-          (local) => local.url === parentImage.url
+          (local) => local.url === parentImage.url,
         );
+
         return matchingLocal
           ? { ...parentImage, imgIndex: matchingLocal.imgIndex }
           : null;
@@ -245,21 +247,24 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({
     <>
       <Reorder.Group
         axis="y"
+        className="space-y-4"
         values={localImages.sort((a, b) => a.imgIndex - b.imgIndex)}
         onReorder={handleReorder}
-        className="space-y-4">
+      >
         {localImages
           .sort((a, b) => a.imgIndex - b.imgIndex)
           .map((image) => (
             <Reorder.Item
               key={image.url || `new-${image.imgIndex}`}
-              value={image}
               className="touch-none"
-              dragControls={dragControls}>
+              dragControls={dragControls}
+              value={image}
+            >
               <div className="flex items-center gap-2 bg-background p-2 rounded-lg">
                 <div
+                  className="cursor-grab"
                   onPointerDown={(e) => dragControls.start(e)}
-                  className="cursor-grab">
+                >
                   <Grip color="#4b5563" />
                 </div>
                 <div className="flex-1">
@@ -296,10 +301,7 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({
       {((isFrontcover && localImages.length === 0) ||
         (!isFrontcover &&
           (maxImages === undefined || localImages.length < maxImages))) && (
-        <AddButton
-          label={newImageButtonName}
-          onClick={addImageField}
-        />
+        <AddButton label={newImageButtonName} onClick={addImageField} />
       )}
     </>
   );

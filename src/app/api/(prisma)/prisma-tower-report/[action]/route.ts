@@ -142,11 +142,7 @@ const createNestedData = (data: any) => {
 export async function POST(request: Request) {
   try {
     const data = await request.json();
-
-    console.log("Incoming data:", data);
     const nestedData = createNestedData(data);
-
-    console.log("Nested data:", nestedData);
 
     const newReport = await prisma.towerReport.create({
       data: nestedData,
@@ -154,8 +150,6 @@ export async function POST(request: Request) {
 
     return NextResponse.json({ report: newReport }, { status: 201 });
   } catch (error) {
-    console.error("Error creating report:", error);
-
     return NextResponse.json(
       {
         error: "Failed to create report",
@@ -178,11 +172,7 @@ export async function PUT(request: Request) {
 
   try {
     const data = await request.json();
-
-    console.log("Incoming data:", data);
     const nestedData = createNestedData(data);
-
-    console.log("Nested data:", nestedData);
 
     const updatedReport = await prisma.towerReport.update({
       where: { id },
@@ -249,8 +239,6 @@ export async function PUT(request: Request) {
 
     return NextResponse.json({ report: updatedReport }, { status: 200 });
   } catch (error) {
-    console.error("Error updating report:", error);
-
     return NextResponse.json(
       {
         error: "Failed to update report",
@@ -318,8 +306,6 @@ export async function DELETE(request: Request) {
 
     return new NextResponse(null, { status: 204 });
   } catch (error) {
-    console.error(error);
-
     return new NextResponse("Error deleting report", { status: 500 });
   } finally {
     await prisma.$disconnect();

@@ -197,24 +197,28 @@ export const TowerReportForm = ({
     field: string,
     value: any,
   ) => {
-    setAntennaNotes((prev) => {
-      const updatedNotes = [...prev];
-
-      updatedNotes[index] = {
-        ...updatedNotes[index],
-        [field]: value,
-        indexNumber: index + 1, // Ensure index stays in sync
-      };
-
-      return updatedNotes;
-    });
+    if (field === "reorder") {
+      // Reordered notes are passed as "value"
+      const reindexedNotes = value.map((note: Note, idx: number) => ({
+        ...note,
+        indexNumber: idx + 1,
+      }));
+      setAntennaNotes(reindexedNotes);
+    } else {
+      setAntennaNotes((prev) => {
+        const updatedNotes = [...prev];
+        updatedNotes[index] = {
+          ...updatedNotes[index],
+          [field]: value,
+        };
+        return updatedNotes;
+      });
+    }
   };
 
   const handleRemoveAntennaNote = (index: number) => {
     setAntennaNotes((prev) => {
       const filtered = prev.filter((_, i) => i !== index);
-
-      // Reindex remaining notes
       return filtered.map((note, i) => ({
         ...note,
         indexNumber: i + 1,
@@ -235,24 +239,28 @@ export const TowerReportForm = ({
     field: string,
     value: any,
   ) => {
-    setDeficiencyNotes((prev) => {
-      const updatedNotes = [...prev];
-
-      updatedNotes[index] = {
-        ...updatedNotes[index],
-        [field]: value,
-        indexNumber: index + 1, // Ensure index stays in sync
-      };
-
-      return updatedNotes;
-    });
+    if (field === "reorder") {
+      const reindexedNotes = value.map((note: Note, idx: number) => ({
+        ...note,
+        indexNumber: idx + 1,
+      }));
+      setDeficiencyNotes(reindexedNotes);
+    } else {
+      setDeficiencyNotes((prev) => {
+        const updatedNotes = [...prev];
+        updatedNotes[index] = {
+          ...updatedNotes[index],
+          [field]: value,
+          indexNumber: index + 1,
+        };
+        return updatedNotes;
+      });
+    }
   };
 
   const handleRemoveDeficiencyNote = (index: number) => {
     setDeficiencyNotes((prev) => {
       const filtered = prev.filter((_, i) => i !== index);
-
-      // Reindex remaining notes
       return filtered.map((note, i) => ({
         ...note,
         indexNumber: i + 1,

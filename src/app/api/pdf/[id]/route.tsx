@@ -137,6 +137,8 @@ export async function GET(
       checklistForm9: true,
       checklistForm10: true,
       checklistForm11: true,
+      notes_antenna: true,
+      notes_deficiency: true,
     },
   });
 

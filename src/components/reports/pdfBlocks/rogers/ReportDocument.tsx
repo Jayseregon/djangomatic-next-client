@@ -49,6 +49,7 @@ const ReportDocument = ({
         {report.antenna_inventory.length > 0 && (
           <AntennaInventoryPage
             antennaInventory={report.antenna_inventory}
+            antennaNotes={report.notes_antenna}
             tocSections={tocSections}
             willCaptureToc={willCaptureToc}
           />

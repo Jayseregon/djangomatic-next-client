@@ -7,6 +7,8 @@ import { TOCSections, TowerReport } from "@/src/types/reports";
 import TOCSectionPDF from "./TOCSection";
 import DeficienciesTable from "./DeficienciesTable";
 import PageFooter from "./PageFooter";
+import { ListTitle } from "./ListElements";
+import PageNotes from "./PageNotes";
 
 const DeficienciesPage = ({
   report,
@@ -39,6 +41,10 @@ const DeficienciesPage = ({
             sheets for pictures.
           </Text>
           <DeficienciesTable items={report.deficiency_images} />
+          <View style={[StylesPDF.PageNotesContentSection, { paddingTop: 30 }]}>
+            <ListTitle title="Additonal comments:" />
+            <PageNotes items={report.notes_deficiency} />
+          </View>
         </View>
         <PageFooter redlinePages={report.redline_pages} />
       </Page>

@@ -24,7 +24,7 @@ export const ListItem = ({
   number,
   text,
 }: {
-  number: string;
+  number: number | string;
   text: string;
 }) => {
   return (

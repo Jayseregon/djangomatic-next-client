@@ -1,4 +1,4 @@
-import { View } from "@react-pdf/renderer";
+import { Page, View } from "@react-pdf/renderer";
 
 import listForm4 from "public/reports/rogers/listForm4.json";
 import listForm5 from "public/reports/rogers/listForm5.json";
@@ -13,6 +13,7 @@ import { TOCSections, TowerReport } from "@/src/types/reports";
 
 import TOCSectionPDF from "./TOCSection";
 import AppendixCTable from "./AppendixCTable";
+import PageFooter from "./PageFooter";
 
 const AppendixC = ({
   report,
@@ -23,42 +24,61 @@ const AppendixC = ({
   tocSections: TOCSections[];
   willCaptureToc: boolean;
 }) => {
+  // Split the checklistForm4 items
+  const first20Items = report.checklistForm4.slice(0, 20);
+  const remainingItems = report.checklistForm4.slice(20);
+
   return (
     <>
-      <View break style={StylesPDF.sectionTitleContainer}>
-        <TOCSectionPDF
-          jumpRedlines
-          id="appendix-c"
-          redlinePages={report.redline_pages}
-          style={StylesPDF.pageTitle}
-          tocSections={tocSections}
-          willCaptureToc={willCaptureToc}
-        >
-          Appendix C
-        </TOCSectionPDF>
-        <TOCSectionPDF
-          jumpRedlines
-          id="post-construction-itemized-checklist"
-          redlinePages={report.redline_pages}
-          style={StylesPDF.pageTitle}
-          tocSections={tocSections}
-          willCaptureToc={willCaptureToc}
-        >
-          Post Construction Itemized Checklist
-        </TOCSectionPDF>
-      </View>
-      {/* New page */}
-      <View>
-        <AppendixCTable
-          formNb="4"
-          items={report.checklistForm4}
-          list={listForm4}
-          title="Antenna Structure and Site Works"
-          type="Civil"
-        />
-      </View>
-      {/* New page */}
-      <View break>
+      <Page size="LETTER" style={StylesPDF.page}>
+        <View style={StylesPDF.sectionTitleContainer}>
+          <TOCSectionPDF
+            jumpRedlines
+            id="appendix-c"
+            redlinePages={report.redline_pages}
+            style={StylesPDF.pageTitle}
+            tocSections={tocSections}
+            willCaptureToc={willCaptureToc}
+          >
+            Appendix C
+          </TOCSectionPDF>
+          <TOCSectionPDF
+            jumpRedlines
+            id="post-construction-itemized-checklist"
+            redlinePages={report.redline_pages}
+            style={StylesPDF.pageTitle}
+            tocSections={tocSections}
+            willCaptureToc={willCaptureToc}
+          >
+            Post Construction Itemized Checklist
+          </TOCSectionPDF>
+        </View>
+        <PageFooter jumpRedlines redlinePages={report.redline_pages} />
+      </Page>
+      {/* New page - FORM 4 */}
+      <Page size="LETTER" style={StylesPDF.page}>
+        <View>
+          <AppendixCTable
+            formNb="4"
+            items={first20Items}
+            list={listForm4}
+            title="Antenna Structure and Site Works"
+            type="Civil"
+          />
+        </View>
+        <View break>
+          <AppendixCTable
+            formNb="4"
+            items={remainingItems}
+            list={listForm4}
+            title="Antenna Structure and Site Works - (Continued)"
+            type="Civil"
+          />
+        </View>
+        <PageFooter jumpRedlines redlinePages={report.redline_pages} />
+      </Page>
+      {/* New page - FORM 5 */}
+      <Page size="LETTER" style={StylesPDF.page}>
         <AppendixCTable
           formNb="5"
           items={report.checklistForm5}
@@ -66,9 +86,10 @@ const AppendixC = ({
           title="Electrical/Mechanical Alarm & Fire Protection Systems"
           type="Civil"
         />
-      </View>
-      {/* 2 in 1 page */}
-      <View break>
+        <PageFooter jumpRedlines redlinePages={report.redline_pages} />
+      </Page>
+      {/* New page - FORM 6 */}
+      <Page size="LETTER" style={StylesPDF.page}>
         <AppendixCTable
           formNb="6"
           items={report.checklistForm6}
@@ -76,46 +97,54 @@ const AppendixC = ({
           title="AC Power and Grounding"
           type="Civil"
         />
-      </View>
-      <View style={{ paddingTop: 20 }}>
-        <AppendixCTable
-          formNb="7"
-          items={report.checklistForm7}
-          list={listForm7}
-          title="Cable Tray and Overhead Support"
-          type="Civil"
-        />
-      </View>
-      {/* 2 in 1 page */}
-      <View break>
-        <AppendixCTable
-          formNb="8"
-          items={report.checklistForm8}
-          list={listForm8}
-          title="Cellular Base Station"
-          type="Technical Install & Commission"
-        />
-      </View>
-      <View style={{ paddingTop: 20 }}>
-        <AppendixCTable
-          formNb="9"
-          items={report.checklistForm9}
-          list={listForm9}
-          title="Microwave Radio"
-          type="Technical Install & Commission"
-        />
-      </View>
-      {/* 2 in 1 page */}
-      <View break>
-        <AppendixCTable
-          formNb="10"
-          items={report.checklistForm10}
-          list={listForm10}
-          title="AC/DC Power"
-          type="Technical Install & Commission"
-        />
-      </View>
-      <View style={{ paddingTop: 20 }}>
+        <PageFooter jumpRedlines redlinePages={report.redline_pages} />
+      </Page>
+      {/* New page - FORM 7 & 8 */}
+      <Page size="LETTER" style={StylesPDF.page}>
+        <View>
+          <AppendixCTable
+            formNb="7"
+            items={report.checklistForm7}
+            list={listForm7}
+            title="Cable Tray and Overhead Support"
+            type="Civil"
+          />
+        </View>
+        <View style={{ paddingTop: 20 }}>
+          <AppendixCTable
+            formNb="8"
+            items={report.checklistForm8}
+            list={listForm8}
+            title="Cellular Base Station"
+            type="Technical Install & Commission"
+          />
+        </View>
+        <PageFooter jumpRedlines redlinePages={report.redline_pages} />
+      </Page>
+      {/* New page - FORM 9 & 10 */}
+      <Page size="LETTER" style={StylesPDF.page}>
+        <View>
+          <AppendixCTable
+            formNb="9"
+            items={report.checklistForm9}
+            list={listForm9}
+            title="Microwave Radio"
+            type="Technical Install & Commission"
+          />
+        </View>
+        <View style={{ paddingTop: 20 }}>
+          <AppendixCTable
+            formNb="10"
+            items={report.checklistForm10}
+            list={listForm10}
+            title="AC/DC Power"
+            type="Technical Install & Commission"
+          />
+        </View>
+        <PageFooter jumpRedlines redlinePages={report.redline_pages} />
+      </Page>
+      {/* New page - FORM 10 */}
+      <Page size="LETTER" style={StylesPDF.page}>
         <AppendixCTable
           formNb="11"
           items={report.checklistForm11}
@@ -123,7 +152,8 @@ const AppendixC = ({
           title="Miscellaneous Equipment"
           type="Technical Install & Commission"
         />
-      </View>
+        <PageFooter jumpRedlines redlinePages={report.redline_pages} />
+      </Page>
     </>
   );
 };

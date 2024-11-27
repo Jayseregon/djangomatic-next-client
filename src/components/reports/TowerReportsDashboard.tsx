@@ -11,7 +11,7 @@ import {
   TableCell,
   Button,
 } from "@nextui-org/react";
-import { Cog, Download, Pencil, Trash2 } from "lucide-react";
+import { Cog, FileText, Pencil, Trash2 } from "lucide-react";
 
 import { TowerReport } from "@/src/types/reports";
 
@@ -209,7 +209,7 @@ export const TowerReportsDashboard = () => {
                       variant="bordered"
                       onClick={() => handleGeneratePDF(report.id)}
                     >
-                      <Download />
+                      <FileText />
                     </Button>
                     <Button
                       isIconOnly

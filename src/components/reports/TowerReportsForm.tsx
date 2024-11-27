@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Button } from "@nextui-org/react";
-import { CircleOff, Download, Save, SaveAll } from "lucide-react";
+import { CircleOff, FileText, Save, SaveAll } from "lucide-react";
 
 import DynamicForm from "@/components/reports/checklist/DynamicForm";
 import listForm4 from "public/reports/rogers/listForm4.json";
@@ -690,7 +690,7 @@ export const TowerReportForm = ({
             variant="bordered"
             onClick={handleGeneratePDF}
           >
-            <Download />
+            <FileText />
           </Button>
         )}
         <Button

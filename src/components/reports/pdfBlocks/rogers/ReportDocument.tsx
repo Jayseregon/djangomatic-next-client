@@ -3,16 +3,18 @@ import { Page, Document } from "@react-pdf/renderer";
 
 import { StylesPDF } from "@/styles/stylesPDF";
 import { TowerReport, TOCSections } from "@/types/reports";
-import FrontPage from "@/components/reports/pdfBlocks/rogers/FrontPage";
-import AuthorPage from "@/components/reports/pdfBlocks/rogers/AuthorPage";
-import TableOfContentsPage from "@/components/reports/pdfBlocks/rogers/TableOfContentsPage";
-import ScopeOfWorkPage from "@/components/reports/pdfBlocks/rogers/ScopeOfWorkPage";
-import AntennaInventoryPage from "@/components/reports/pdfBlocks/rogers/AntennaInventoryPage";
-import DeficienciesPage from "@/components/reports/pdfBlocks/rogers/DeficienciesPage";
-import SitePhotosPage from "@/components/reports/pdfBlocks/rogers/SitePhotosPage";
-import PageFooter from "@/components/reports/pdfBlocks/rogers/PageFooter";
-import AppendixA from "@/components/reports/pdfBlocks/rogers/AppendixA";
-import AppendixB from "@/components/reports/pdfBlocks/rogers/AppendixB";
+
+import FrontPage from "./FrontPage";
+import AuthorPage from "./AuthorPage";
+import TableOfContentsPage from "./TableOfContentsPage";
+import ScopeOfWorkPage from "./ScopeOfWorkPage";
+import AntennaInventoryPage from "./AntennaInventoryPage";
+import DeficienciesPage from "./DeficienciesPage";
+import SitePhotosPage from "./SitePhotosPage";
+import PageFooter from "./PageFooter";
+import AppendixA from "./AppendixA";
+import AppendixB from "./AppendixB";
+import AppendixC from "./AppendixC";
 
 const ReportDocument = ({
   report,
@@ -74,30 +76,22 @@ const ReportDocument = ({
         <PageFooter redlinePages={report.redline_pages} />
       </Page>
 
-      {/* New page for Appendices */}
-      <Page size="LETTER" style={StylesPDF.page}>
-        {/* Isolate Appendix A for readline page count */}
-        <AppendixA tocSections={tocSections} willCaptureToc={willCaptureToc} />
-        {/* Page Footer */}
-        <PageFooter redlinePages={report.redline_pages} />
-      </Page>
-      {/* New page for Appendices */}
-      <Page size="LETTER" style={StylesPDF.page}>
-        {/* New page Appendix B */}
-        <AppendixB
-          redlinePages={report.redline_pages}
-          tocSections={tocSections}
-          willCaptureToc={willCaptureToc}
-        />
-        {/* New page Appendix C */}
-        {/* <AppendixC
-            report={report}
-            tocSections={tocSections}
-            willCaptureToc={willCaptureToc}
-          /> */}
-        {/* Page Footer */}
-        <PageFooter jumpRedlines redlinePages={report.redline_pages} />
-      </Page>
+      {/* New section for Appendices */}
+      <AppendixA
+        redlinePages={report.redline_pages}
+        tocSections={tocSections}
+        willCaptureToc={willCaptureToc}
+      />
+      <AppendixB
+        redlinePages={report.redline_pages}
+        tocSections={tocSections}
+        willCaptureToc={willCaptureToc}
+      />
+      <AppendixC
+        report={report}
+        tocSections={tocSections}
+        willCaptureToc={willCaptureToc}
+      />
     </Document>
   );
 };

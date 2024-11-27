@@ -1,4 +1,4 @@
-import { View, Text, Image as PdfImg } from "@react-pdf/renderer";
+import { Page, View, Text, Image as PdfImg } from "@react-pdf/renderer";
 
 import { StylesPDF } from "@/styles/stylesPDF";
 import { TOCSections } from "@/src/types/reports";
@@ -12,6 +12,7 @@ import {
   SubListItem,
 } from "./ListElements";
 import TOCSectionPDF from "./TOCSection";
+import PageFooter from "./PageFooter";
 
 const AppendixB = ({
   tocSections,
@@ -23,7 +24,7 @@ const AppendixB = ({
   redlinePages: number;
 }) => {
   return (
-    <>
+    <Page size="LETTER" style={StylesPDF.page}>
       <View style={StylesPDF.sectionTitleContainer}>
         <TOCSectionPDF
           jumpRedlines
@@ -123,7 +124,8 @@ const AppendixB = ({
           </View>
         ))}
       </View>
-    </>
+      <PageFooter jumpRedlines redlinePages={redlinePages} />
+    </Page>
   );
 };
 

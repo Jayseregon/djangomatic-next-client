@@ -2,12 +2,14 @@
 
 import { useParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
-import { PDFViewer, Font } from "@react-pdf/renderer";
+import { Font, BlobProvider } from "@react-pdf/renderer";
+import { Button } from "@nextui-org/button";
 
 import { TowerReport, TOCSections } from "@/src/types/reports";
 import { LoadingContent } from "@/components/ui/LoadingContent";
 import { UnAuthorized } from "@/components/auth/unAuthorized";
 import ReportDocument from "@/components/reports/pdfBlocks/rogers/ReportDocument";
+import { titleCase } from "@/src/lib/utils";
 
 // disable hyphenation
 Font.registerHyphenationCallback((word) => [word]);
@@ -28,7 +30,7 @@ export default function PDFViewerPage() {
         );
         const data = await response.json();
 
-        // Transform the checklist forms
+        // Transform the checklist forms to ensure isChecked is boolean | undefined >> prisma boolean? type defaults to null
         const transformChecklistForm = (form: any[]) =>
           form.map((item) => ({
             ...item,
@@ -69,13 +71,51 @@ export default function PDFViewerPage() {
     return <LoadingContent />;
   }
 
+  const fileName = `${report.site_code}-${titleCase(report.tower_site_name)}-${report.site_region}-${report.jde_job}-PCI.pdf`;
+
   return (
-    <PDFViewer height={"100%"} width={"100%"}>
-      <ReportDocument
-        report={report}
-        tocSections={tocSections}
-        willCaptureToc={false}
-      />
-    </PDFViewer>
+    <BlobProvider
+      document={
+        <ReportDocument
+          report={report}
+          tocSections={tocSections}
+          willCaptureToc={false}
+        />
+      }
+    >
+      {({ url, loading }) => {
+        if (loading) {
+          return <LoadingContent />;
+        }
+
+        const handleDownload = () => {
+          const link = document.createElement("a");
+
+          link.href = url!;
+          link.download = fileName;
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+        };
+
+        return (
+          <>
+            <Button
+              className="bg-primary text-white w-full w-1/2 h-10 mb-5"
+              radius="full"
+              variant="solid"
+              onClick={handleDownload}
+            >
+              Download PDF
+            </Button>
+            <iframe
+              className="w-full h-full"
+              src={url!}
+              title={`render-report-${report.id}`}
+            />
+          </>
+        );
+      }}
+    </BlobProvider>
   );
 }

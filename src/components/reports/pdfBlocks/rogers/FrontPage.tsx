@@ -57,7 +57,7 @@ const FrontPage = ({ report }: { report: TowerReport }) => {
         fixed
         src={
           report.front_image.length > 0
-            ? report.front_image[0].url
+            ? `/api/proxy-image?url=${encodeURIComponent(report.front_image[0].url)}`
             : "/static/landscape-placeholder.png"
         }
         style={StylesPDF.frontCoverImage}

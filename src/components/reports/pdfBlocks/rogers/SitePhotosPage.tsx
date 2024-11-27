@@ -1,10 +1,11 @@
 import React from "react";
-import { Text, View, Image as PdfImg } from "@react-pdf/renderer";
+import { Page, Text, View, Image as PdfImg } from "@react-pdf/renderer";
 
 import { StylesPDF } from "@/styles/stylesPDF";
 import { TOCSections, TowerReport } from "@/src/types/reports";
 
 import TOCSectionPDF from "./TOCSection";
+import PageFooter from "./PageFooter";
 
 const SitePhotosPage = ({
   report,
@@ -28,28 +29,38 @@ const SitePhotosPage = ({
 
   return (
     <>
-      <View break style={StylesPDF.sectionTitleContainer}>
-        <TOCSectionPDF
-          id="site-photos"
-          style={StylesPDF.pageTitle}
-          tocSections={tocSections}
-          willCaptureToc={willCaptureToc}
-        >
-          Site Photos
-        </TOCSectionPDF>
-      </View>
+      <Page size="LETTER" style={StylesPDF.page}>
+        <View style={StylesPDF.sectionTitleContainer}>
+          <TOCSectionPDF
+            id="site-photos"
+            style={StylesPDF.pageTitle}
+            tocSections={tocSections}
+            willCaptureToc={willCaptureToc}
+          >
+            Site Photos
+          </TOCSectionPDF>
+        </View>
+        <PageFooter redlinePages={report.redline_pages} />
+      </Page>
+
       {/* Dynamic display photos in pairs */}
       {siteImagePairs.map((pair, index) => (
-        <View key={index} break style={StylesPDF.imageColumn}>
-          {pair.map((image, idx) => (
-            <View key={idx} style={StylesPDF.imageContainer}>
-              <PdfImg src={image.url} style={StylesPDF.image} />
-              <Text style={StylesPDF.label}>
-                {image.imgIndex + 1 + ". " + image.label}
-              </Text>
-            </View>
-          ))}
-        </View>
+        <Page key={index} size="LETTER" style={StylesPDF.page}>
+          <View key={index} style={StylesPDF.imageColumn}>
+            {pair.map((image, idx) => (
+              <View key={idx} style={StylesPDF.imageContainer}>
+                <PdfImg
+                  src={`/api/proxy-image?url=${encodeURIComponent(image.url)}`}
+                  style={StylesPDF.image}
+                />
+                <Text style={StylesPDF.label}>
+                  {image.imgIndex + 1 + ". " + image.label}
+                </Text>
+              </View>
+            ))}
+          </View>
+          <PageFooter redlinePages={report.redline_pages} />
+        </Page>
       ))}
     </>
   );

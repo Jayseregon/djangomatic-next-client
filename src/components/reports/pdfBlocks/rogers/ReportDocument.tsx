@@ -53,28 +53,26 @@ const ReportDocument = ({
             willCaptureToc={willCaptureToc}
           />
         )}
-
-        {/* New page DEFICIENCIES (if exists) */}
-        {report.deficiency_images.length > 0 && (
-          <DeficienciesPage
-            report={report}
-            tocSections={tocSections}
-            willCaptureToc={willCaptureToc}
-          />
-        )}
-
-        {/* New page SITE PHOTOS */}
-        {report.site_images.length > 0 && (
-          <SitePhotosPage
-            report={report}
-            tocSections={tocSections}
-            willCaptureToc={willCaptureToc}
-          />
-        )}
-
-        {/* Page Footer */}
         <PageFooter redlinePages={report.redline_pages} />
       </Page>
+
+      {/* New page DEFICIENCIES (if exists) */}
+      {report.deficiency_images.length > 0 && (
+        <DeficienciesPage
+          report={report}
+          tocSections={tocSections}
+          willCaptureToc={willCaptureToc}
+        />
+      )}
+
+      {/* New page SITE PHOTOS (if exists) */}
+      {report.site_images.length > 0 && (
+        <SitePhotosPage
+          report={report}
+          tocSections={tocSections}
+          willCaptureToc={willCaptureToc}
+        />
+      )}
 
       {/* New section for Appendices */}
       <AppendixA

@@ -28,7 +28,7 @@ const PageFooter = ({
       {/* Footer Rogers corner */}
       <PdfImg
         fixed
-        src="./public/reports/rogers/rogers-footer.jpg"
+        src="/reports/rogers/rogers-footer.jpg"
         style={StylesPDF.pageImageFooter}
       />
     </>

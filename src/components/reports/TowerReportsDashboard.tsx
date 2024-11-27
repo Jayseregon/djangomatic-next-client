@@ -87,7 +87,8 @@ export const TowerReportsDashboard = () => {
   };
 
   const handleGeneratePDF = (reportId: string) => {
-    window.open(`/api/pdf/${reportId}`, "_blank");
+    window.open(`/pdf/rogers/${reportId}`, "_blank");
+    // window.open(`/api/pdf/${reportId}`, "_blank");
   };
 
   const topContent = (

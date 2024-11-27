@@ -365,7 +365,8 @@ export const TowerReportForm = ({
 
   const handleGeneratePDF = () => {
     if (report?.id) {
-      window.open(`/api/pdf/${report.id}`, "_blank");
+      // window.open(`/api/pdf/${report.id}`, "_blank");
+      window.open(`/pdf/rogers/${report.id}`, "_blank");
     }
   };
 

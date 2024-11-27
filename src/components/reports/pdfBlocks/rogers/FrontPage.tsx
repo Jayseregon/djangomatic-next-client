@@ -11,13 +11,13 @@ const FrontPage = ({ report }: { report: TowerReport }) => {
       {/* Header TD Logo */}
       <PdfImg
         fixed
-        src="./public/reports/telecon-design-logo.png"
+        src="/reports/telecon-design-logo.png"
         style={StylesPDF.pageTDLogo}
       />
       {/* Header Rogers Logo */}
       <PdfImg
         fixed
-        src="./public/reports/rogers/rogers-logo.png"
+        src="/reports/rogers/rogers-logo.png"
         style={StylesPDF.pageClientLogo}
       />
       {/* QB Data */}
@@ -58,7 +58,7 @@ const FrontPage = ({ report }: { report: TowerReport }) => {
         src={
           report.front_image.length > 0
             ? report.front_image[0].url
-            : "./public/static/landscape-placeholder.png"
+            : "/static/landscape-placeholder.png"
         }
         style={StylesPDF.frontCoverImage}
       />
@@ -78,7 +78,7 @@ const FrontPage = ({ report }: { report: TowerReport }) => {
       {/* Footer Rogers corner */}
       <PdfImg
         fixed
-        src="./public/reports/rogers/rogers-footer.jpg"
+        src="/reports/rogers/rogers-footer.jpg"
         style={StylesPDF.pageImageFooter}
       />
     </Page>

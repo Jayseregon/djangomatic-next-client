@@ -81,7 +81,7 @@ const AppendixB = ({
             ]}
           >
             <PdfImg
-              src="./public/reports/rogers/tower-schema.jpg"
+              src="/reports/rogers/tower-schema.jpg"
               style={StylesPDF.image}
             />
           </View>

@@ -2,7 +2,7 @@
 
 import { useParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
-import { Font, BlobProvider } from "@react-pdf/renderer";
+import { Font, pdf, BlobProvider } from "@react-pdf/renderer";
 import { Button } from "@nextui-org/button";
 
 import { TowerReport, TOCSections } from "@/src/types/reports";
@@ -18,10 +18,10 @@ export default function PDFViewerPage() {
   const params = useParams();
   const [report, setReport] = useState<TowerReport | null>(null);
   const [tocSections, setTocSections] = useState<TOCSections[]>([]);
+  const [isTocReady, setIsTocReady] = useState(false);
 
-  // Moved useEffect before the conditional return
   useEffect(() => {
-    if (!params.id) return; // Exit early if params.id is undefined
+    if (!params.id) return;
 
     const fetchReport = async () => {
       try {
@@ -30,7 +30,7 @@ export default function PDFViewerPage() {
         );
         const data = await response.json();
 
-        // Transform the checklist forms to ensure isChecked is boolean | undefined >> prisma boolean? type defaults to null
+        // Transform the checklist forms to ensure isChecked is boolean | undefined
         const transformChecklistForm = (form: any[]) =>
           form.map((item) => ({
             ...item,
@@ -39,10 +39,8 @@ export default function PDFViewerPage() {
 
         const transformedReport = {
           ...data,
-          // Ensure date fields are properly converted
           createdAt: new Date(data.createdAt),
           updatedAt: new Date(data.updatedAt),
-          // Transform checklist forms
           checklistForm4: transformChecklistForm(data.checklistForm4),
           checklistForm5: transformChecklistForm(data.checklistForm5),
           checklistForm6: transformChecklistForm(data.checklistForm6),
@@ -54,7 +52,6 @@ export default function PDFViewerPage() {
         };
 
         setReport(transformedReport);
-        setTocSections([]);
       } catch (error) {
         console.error("Failed to fetch report:", error);
       }
@@ -63,15 +60,42 @@ export default function PDFViewerPage() {
     fetchReport();
   }, [params.id]);
 
+  useEffect(() => {
+    const generateTocSections = async () => {
+      if (!report) return;
+
+      const newTocSections: TOCSections[] = [];
+      const doc = (
+        <ReportDocument
+          report={report}
+          tocSections={newTocSections}
+          willCaptureToc={true}
+        />
+      );
+      const instance = pdf();
+
+      instance.updateContainer(doc);
+
+      // Force render to populate tocSections
+      await instance.toBlob();
+      setTocSections(newTocSections);
+      setIsTocReady(true);
+    };
+
+    generateTocSections();
+  }, [report]);
+
   if (!params.id) {
     return <UnAuthorized />;
   }
 
-  if (!report) {
+  if (!report || !isTocReady) {
     return <LoadingContent />;
   }
 
-  const fileName = `${report.site_code}-${titleCase(report.tower_site_name)}-${report.site_region}-${report.jde_job}-PCI.pdf`;
+  const fileName = `${report.site_code}-${titleCase(
+    report.tower_site_name,
+  )}-${report.site_region}-${report.jde_job}-PCI.pdf`;
 
   return (
     <BlobProvider

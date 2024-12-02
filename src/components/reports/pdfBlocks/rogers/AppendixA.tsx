@@ -1,10 +1,9 @@
-import { Page, View } from "@react-pdf/renderer";
+import { View } from "@react-pdf/renderer";
 
 import { StylesPDF } from "@/styles/stylesPDF";
 import { TOCSections } from "@/src/types/reports";
 
 import TOCSectionPDF from "./TOCSection";
-import PageFooter from "./PageFooter";
 
 const AppendixA = ({
   redlinePages,
@@ -15,8 +14,11 @@ const AppendixA = ({
   tocSections: TOCSections[];
   willCaptureToc: boolean;
 }) => {
-  return (
-    <Page size="LETTER" style={StylesPDF.page}>
+  const pages = [];
+
+  // Content of Appendix A
+  pages.push(
+    <View key="appendix-a" wrap={false}>
       <View style={StylesPDF.sectionTitleContainer}>
         <TOCSectionPDF
           id="appendix-a"
@@ -35,9 +37,12 @@ const AppendixA = ({
           Redline of Construction Drawings
         </TOCSectionPDF>
       </View>
-      <PageFooter redlinePages={redlinePages} />
-    </Page>
+      {/* Additional content can be added here */}
+      {/* ...existing code... */}
+    </View>
   );
+
+  return pages;
 };
 
 export default AppendixA;

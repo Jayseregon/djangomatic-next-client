@@ -13,7 +13,7 @@ const TableOfContentsPage = ({
     title: string,
     pageNumber: number,
     containerWidth: number,
-    fontSize: number,
+    fontSize: number
   ) => {
     const titleWidth = title.length * fontSize * 0.95; // Approximate width of the title
     const pageNumberWidth = `p.${pageNumber}`.length * fontSize * 0.7; // Approximate width of the page number
@@ -24,8 +24,10 @@ const TableOfContentsPage = ({
   };
 
   return (
-    <View break>
-      <Text id="table-of-contents" style={StylesPDF.pageTitle}>
+    <View>
+      <Text
+        id="table-of-contents"
+        style={StylesPDF.pageTitle}>
         Table of contents
       </Text>
       {tocSections.map((section, index) => {
@@ -37,28 +39,24 @@ const TableOfContentsPage = ({
             style={{
               fontSize: 12,
               marginBottom: 10,
-            }}
-          >
+            }}>
             {section.title}
           </Text>
         ) : (
           <Link
             key={index}
             src={`#${section.title.replace(/\s+/g, "-").toLowerCase()}`}
-            style={{ textDecoration: "none", color: "#000" }}
-          >
+            style={{ textDecoration: "none", color: "#000" }}>
             <View
               style={{
                 flexDirection: "row",
                 justifyContent: "space-between",
                 marginBottom: 10,
-              }}
-            >
+              }}>
               <Text
                 style={{
                   fontSize: 12,
-                }}
-              >
+                }}>
                 {section.title}
               </Text>
               <Text
@@ -67,8 +65,7 @@ const TableOfContentsPage = ({
                   flexGrow: 1,
                   textAlign: "center",
                   overflow: "hidden",
-                }}
-              >
+                }}>
                 {generateDots(section.title, section.pageNumber, 980, 12)}
               </Text>
               <Text
@@ -76,8 +73,7 @@ const TableOfContentsPage = ({
                   fontSize: 12,
                   backgroundColor: "#fff",
                   paddingLeft: 5,
-                }}
-              >
+                }}>
                 {`p.${section.pageNumber}`}
               </Text>
             </View>

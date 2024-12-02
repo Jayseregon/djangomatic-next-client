@@ -1,5 +1,5 @@
 import React from "react";
-import { Page, Text, View, Image as PdfImg } from "@react-pdf/renderer";
+import { Text, View, Image as PdfImg } from "@react-pdf/renderer";
 
 import { titleCase } from "@/src/lib/utils";
 import { StylesPDF } from "@/styles/stylesPDF";
@@ -7,7 +7,7 @@ import { TowerReport } from "@/src/types/reports";
 
 const FrontPage = ({ report }: { report: TowerReport }) => {
   return (
-    <Page size="LETTER" style={StylesPDF.page}>
+    <>
       {/* Header TD Logo */}
       <PdfImg
         fixed
@@ -26,8 +26,7 @@ const FrontPage = ({ report }: { report: TowerReport }) => {
           style={{
             textTransform: "uppercase",
             fontSize: 14,
-          }}
-        >
+          }}>
           post construction inspection report
         </Text>
         <Text style={{ padding: "5 0" }}>for</Text>
@@ -35,8 +34,7 @@ const FrontPage = ({ report }: { report: TowerReport }) => {
           style={{
             fontSize: 18,
             textTransform: "capitalize",
-          }}
-        >
+          }}>
           rogers wireless
         </Text>
         <Text style={{ padding: "10 0" }}>
@@ -81,7 +79,7 @@ const FrontPage = ({ report }: { report: TowerReport }) => {
         src="/reports/rogers/rogers-footer.jpg"
         style={StylesPDF.pageImageFooter}
       />
-    </Page>
+    </>
   );
 };
 

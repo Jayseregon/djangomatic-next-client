@@ -2,7 +2,7 @@
 
 import { useParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
-import { Font, pdf, BlobProvider } from "@react-pdf/renderer";
+import { Font, BlobProvider } from "@react-pdf/renderer";
 import { Button } from "@nextui-org/button";
 
 import { TowerReport, TOCSections } from "@/src/types/reports";
@@ -11,9 +11,65 @@ import { UnAuthorized } from "@/components/auth/unAuthorized";
 import ReportDocument from "@/components/reports/pdfBlocks/rogers/ReportDocument";
 import { titleCase } from "@/src/lib/utils";
 
-// disable hyphenation
+// Disable hyphenation
 Font.registerHyphenationCallback((word) => [word]);
 
+// New component for PDF viewer
+const PDFViewer = ({
+  blob,
+  fileName,
+  reportId,
+}: {
+  blob: Blob | null;
+  fileName: string;
+  reportId: string;
+}) => {
+  const [pdfUrl, setPdfUrl] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (blob) {
+      const url = URL.createObjectURL(blob);
+      setPdfUrl(url);
+
+      return () => {
+        URL.revokeObjectURL(url);
+      };
+    }
+  }, [blob]);
+
+  const handleDownload = () => {
+    if (!blob) return;
+
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = fileName;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
+  return (
+    <>
+      <Button
+        className="bg-primary text-white w-full w-1/2 h-10 mb-5"
+        radius="full"
+        variant="solid"
+        onClick={handleDownload}
+        disabled={!blob}>
+        Download PDF
+      </Button>
+      {pdfUrl && (
+        <iframe
+          className="w-full h-full"
+          src={pdfUrl}
+          title={`render-report-${reportId}`}
+        />
+      )}
+    </>
+  );
+};
+
+// Main component modifications
 export default function PDFViewerPage() {
   const params = useParams();
   const [report, setReport] = useState<TowerReport | null>(null);
@@ -26,7 +82,7 @@ export default function PDFViewerPage() {
     const fetchReport = async () => {
       try {
         const response = await fetch(
-          `/api/prisma-tower-report?id=${params.id}`,
+          `/api/prisma-tower-report?id=${params.id}`
         );
         const data = await response.json();
 
@@ -65,6 +121,7 @@ export default function PDFViewerPage() {
       if (!report) return;
 
       const newTocSections: TOCSections[] = [];
+      // Create a document instance to populate TOC sections
       const doc = (
         <ReportDocument
           report={report}
@@ -72,12 +129,13 @@ export default function PDFViewerPage() {
           willCaptureToc={true}
         />
       );
-      const instance = pdf();
 
-      instance.updateContainer(doc);
+      // Use BlobProvider to force rendering and populate tocSections
+      const instance = <BlobProvider document={doc}>{() => null}</BlobProvider>;
 
-      // Force render to populate tocSections
-      await instance.toBlob();
+      // Since BlobProvider is asynchronous, we need to wait for it to render
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+
       setTocSections(newTocSections);
       setIsTocReady(true);
     };
@@ -94,7 +152,7 @@ export default function PDFViewerPage() {
   }
 
   const fileName = `${report.site_code}-${titleCase(
-    report.tower_site_name,
+    report.tower_site_name
   )}-${report.site_region}-${report.jde_job}-PCI.pdf`;
 
   return (
@@ -105,39 +163,22 @@ export default function PDFViewerPage() {
           tocSections={tocSections}
           willCaptureToc={false}
         />
-      }
-    >
-      {({ url, loading }) => {
+      }>
+      {({ blob, url, loading, error }) => {
         if (loading) {
           return <LoadingContent />;
         }
 
-        const handleDownload = () => {
-          const link = document.createElement("a");
-
-          link.href = url!;
-          link.download = fileName;
-          document.body.appendChild(link);
-          link.click();
-          document.body.removeChild(link);
-        };
+        if (error) {
+          return <div>Error generating PDF: {error.message}</div>;
+        }
 
         return (
-          <>
-            <Button
-              className="bg-primary text-white w-full w-1/2 h-10 mb-5"
-              radius="full"
-              variant="solid"
-              onClick={handleDownload}
-            >
-              Download PDF
-            </Button>
-            <iframe
-              className="w-full h-full"
-              src={url!}
-              title={`render-report-${report.id}`}
-            />
-          </>
+          <PDFViewer
+            blob={blob}
+            fileName={fileName}
+            reportId={report.id}
+          />
         );
       }}
     </BlobProvider>

@@ -25,7 +25,7 @@ const AntennaInventoryPage = ({
   willCaptureToc: boolean;
 }) => {
   return (
-    <View break>
+    <View>
       <TOCSectionPDF
         id="antenna-and-transmission-line-inventory"
         style={StylesPDF.pageTitle}

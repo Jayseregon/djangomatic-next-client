@@ -138,6 +138,7 @@ export const StylesPDF = StyleSheet.create({
     flexDirection: "row",
     alignItems: "flex-start",
     paddingLeft: 20,
+    marginBottom: 5,
     fontSize: 10,
   },
   subListItemContainer: {

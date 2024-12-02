@@ -21,7 +21,8 @@ const ScopeOfWorkPage = ({
         id="scope-of-work"
         style={StylesPDF.pageTitle}
         tocSections={tocSections}
-        willCaptureToc={willCaptureToc}>
+        willCaptureToc={willCaptureToc}
+      >
         Scope of Work
       </TOCSectionPDF>
       <Text style={StylesPDF.PageContentSectionIndent}>
@@ -41,14 +42,16 @@ const ScopeOfWorkPage = ({
         style={[
           StylesPDF.PageContentSection,
           { textTransform: "uppercase", paddingTop: 80 },
-        ]}>
+        ]}
+      >
         Report approved by:
       </Text>
       <Text
         style={[
           StylesPDF.PageContentSection,
           { fontFamily: "Helvetica-Bold", paddingTop: 150 },
-        ]}>
+        ]}
+      >
         {report.assigned_peng}
       </Text>
     </View>

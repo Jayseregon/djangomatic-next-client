@@ -14,9 +14,7 @@ const TOCSectionPDF = ({
 }: TOCSectionProps) => {
   if (!willCaptureToc) {
     return (
-      <Text
-        id={id}
-        style={style}>
+      <Text id={id} style={style}>
         {children}
       </Text>
     );
@@ -33,7 +31,7 @@ const TOCSectionPDF = ({
 
           // Remove any existing entry with the same title
           const existingIndex = tocSections.findIndex(
-            (section) => section.title === title
+            (section) => section.title === title,
           );
 
           if (existingIndex !== -1) {

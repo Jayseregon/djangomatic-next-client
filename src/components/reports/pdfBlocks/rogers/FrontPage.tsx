@@ -26,7 +26,8 @@ const FrontPage = ({ report }: { report: TowerReport }) => {
           style={{
             textTransform: "uppercase",
             fontSize: 14,
-          }}>
+          }}
+        >
           post construction inspection report
         </Text>
         <Text style={{ padding: "5 0" }}>for</Text>
@@ -34,7 +35,8 @@ const FrontPage = ({ report }: { report: TowerReport }) => {
           style={{
             fontSize: 18,
             textTransform: "capitalize",
-          }}>
+          }}
+        >
           rogers wireless
         </Text>
         <Text style={{ padding: "10 0" }}>

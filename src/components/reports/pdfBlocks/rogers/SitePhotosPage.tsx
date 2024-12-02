@@ -18,29 +18,29 @@ const SitePhotosPage = ({
   const pages = [];
   // Sort the site_images by imgIndex
   const sortedSiteImages = [...report.site_images].sort(
-    (a, b) => a.imgIndex - b.imgIndex
+    (a, b) => a.imgIndex - b.imgIndex,
   );
 
   // Introduction Page
   pages.push(
-    <View
-      key="site-photos-intro"
-      wrap={false}>
+    <View key="site-photos-intro" wrap={false}>
       <View style={StylesPDF.sectionTitleContainer}>
         <TOCSectionPDF
           id="site-photos"
           style={StylesPDF.pageTitle}
           tocSections={tocSections}
-          willCaptureToc={willCaptureToc}>
+          willCaptureToc={willCaptureToc}
+        >
           Site Photos
         </TOCSectionPDF>
       </View>
       {/* Footer can be added here if needed */}
-    </View>
+    </View>,
   );
 
   // Group images into pairs
   const siteImagePairs = [];
+
   for (let i = 0; i < sortedSiteImages.length; i += 2) {
     siteImagePairs.push(sortedSiteImages.slice(i, i + 2));
   }
@@ -51,11 +51,10 @@ const SitePhotosPage = ({
       <View
         key={`site-photo-pair-${index}`}
         style={StylesPDF.imageColumn}
-        wrap={false}>
+        wrap={false}
+      >
         {pair.map((image, idx) => (
-          <View
-            key={idx}
-            style={StylesPDF.imageContainer}>
+          <View key={idx} style={StylesPDF.imageContainer}>
             <PdfImg
               src={`/api/proxy-image?url=${encodeURIComponent(image.url)}`}
               style={StylesPDF.image}
@@ -66,7 +65,7 @@ const SitePhotosPage = ({
           </View>
         ))}
         {/* Footer can be added here if needed */}
-      </View>
+      </View>,
     );
   });
 

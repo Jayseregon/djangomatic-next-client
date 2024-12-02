@@ -12,7 +12,6 @@ import {
   SubListItem,
 } from "./ListElements";
 import TOCSectionPDF from "./TOCSection";
-import PageFooter from "./PageFooter";
 
 const AppendixB = ({
   tocSections,
@@ -27,9 +26,7 @@ const AppendixB = ({
 
   // Page 1: Title page
   pages.push(
-    <View
-      key="appendix-b-page-1"
-      wrap={false}>
+    <View key="appendix-b-page-1" wrap={false}>
       <View style={StylesPDF.sectionTitleContainer}>
         <TOCSectionPDF
           jumpRedlines
@@ -37,7 +34,8 @@ const AppendixB = ({
           redlinePages={redlinePages}
           style={StylesPDF.pageTitle}
           tocSections={tocSections}
-          willCaptureToc={willCaptureToc}>
+          willCaptureToc={willCaptureToc}
+        >
           Appendix B
         </TOCSectionPDF>
         <TOCSectionPDF
@@ -46,11 +44,12 @@ const AppendixB = ({
           redlinePages={redlinePages}
           style={StylesPDF.pageTitle}
           tocSections={tocSections}
-          willCaptureToc={willCaptureToc}>
+          willCaptureToc={willCaptureToc}
+        >
           Field Inspection Checking Procedures
         </TOCSectionPDF>
       </View>
-    </View>
+    </View>,
   );
 
   // Define the list keys for each page
@@ -89,9 +88,7 @@ const AppendixB = ({
 
   // Page 2: Introduction, side-by-side content, and lists A-D
   pages.push(
-    <View
-      key="appendix-b-page-2"
-      wrap={false}>
+    <View key="appendix-b-page-2" wrap={false}>
       <Text style={StylesPDF.AppendixContentSectionIndent}>
         The following outlines the manner in which the tower and the site were
         checked during the course of the field inspection. This checking is in
@@ -105,9 +102,7 @@ const AppendixB = ({
       <View style={StylesPDF.sideBySideContainer}>
         <View style={StylesPDF.sideBySideItem}>
           {Object.values(sideImageList).map((list, index) => (
-            <View
-              key={index}
-              style={StylesPDF.AppendixContentSection}>
+            <View key={index} style={StylesPDF.AppendixContentSection}>
               <ListTitle title={list.title} />
               {list.items.map((item, itemIndex) => (
                 <ListItem
@@ -123,7 +118,8 @@ const AppendixB = ({
           style={[
             StylesPDF.sideBySideItem,
             { alignSelf: "center", paddingLeft: 10 },
-          ]}>
+          ]}
+        >
           <PdfImg
             src="/reports/rogers/tower-schema.jpg"
             style={StylesPDF.image}
@@ -134,10 +130,9 @@ const AppendixB = ({
       {/* Render lists A-D */}
       {page2Lists.map((key) => {
         const list = checkingProceduresList[key];
+
         return (
-          <View
-            key={key}
-            style={StylesPDF.AppendixContentSection}>
+          <View key={key} style={StylesPDF.AppendixContentSection}>
             <ListCheckingTitle
               letter={list.title.letter}
               title={list.title.title}
@@ -171,21 +166,18 @@ const AppendixB = ({
           </View>
         );
       })}
-    </View>
+    </View>,
   );
 
   // Page 3: Lists E-K
   pages.push(
-    <View
-      key="appendix-b-page-3"
-      wrap={false}>
+    <View key="appendix-b-page-3" wrap={false}>
       {/* Render lists E-K */}
       {page3Lists.map((key) => {
         const list = checkingProceduresList[key];
+
         return (
-          <View
-            key={key}
-            style={StylesPDF.AppendixContentSection}>
+          <View key={key} style={StylesPDF.AppendixContentSection}>
             <ListCheckingTitle
               letter={list.title.letter}
               title={list.title.title}
@@ -219,21 +211,18 @@ const AppendixB = ({
           </View>
         );
       })}
-    </View>
+    </View>,
   );
 
   // Page 4: Lists L-162
   pages.push(
-    <View
-      key="appendix-b-page-4"
-      wrap={false}>
+    <View key="appendix-b-page-4" wrap={false}>
       {/* Render lists L-162 */}
       {page4Lists.map((key) => {
         const list = checkingProceduresList[key];
+
         return (
-          <View
-            key={key}
-            style={StylesPDF.AppendixContentSection}>
+          <View key={key} style={StylesPDF.AppendixContentSection}>
             <ListCheckingTitle
               letter={list.title.letter}
               title={list.title.title}
@@ -267,21 +256,18 @@ const AppendixB = ({
           </View>
         );
       })}
-    </View>
+    </View>,
   );
 
   // Page 5: Lists 163-169
   pages.push(
-    <View
-      key="appendix-b-page-5"
-      wrap={false}>
+    <View key="appendix-b-page-5" wrap={false}>
       {/* Render lists 163-169 */}
       {page5Lists.map((key) => {
         const list = checkingProceduresList[key];
+
         return (
-          <View
-            key={key}
-            style={StylesPDF.AppendixContentSection}>
+          <View key={key} style={StylesPDF.AppendixContentSection}>
             <ListCheckingTitle
               letter={list.title.letter}
               title={list.title.title}
@@ -315,7 +301,7 @@ const AppendixB = ({
           </View>
         );
       })}
-    </View>
+    </View>,
   );
 
   return pages;

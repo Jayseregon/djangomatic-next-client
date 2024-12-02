@@ -20,19 +20,18 @@ const DeficienciesPage = ({
 }) => {
   const pages = [];
   const sortedImages = [...report.deficiency_images].sort(
-    (a, b) => a.imgIndex - b.imgIndex
+    (a, b) => a.imgIndex - b.imgIndex,
   );
 
   // Summary Page
   pages.push(
-    <View
-      key="deficiency-summary"
-      wrap={false}>
+    <View key="deficiency-summary" wrap={false}>
       <TOCSectionPDF
         id="summary-of-deficiencies"
         style={StylesPDF.pageTitle}
         tocSections={tocSections}
-        willCaptureToc={willCaptureToc}>
+        willCaptureToc={willCaptureToc}
+      >
         Summary of Deficiencies
       </TOCSectionPDF>
       <Text style={StylesPDF.PageContentSectionIndent}>
@@ -46,25 +45,24 @@ const DeficienciesPage = ({
         <PageNotes items={report.notes_deficiency} />
       </View>
       {/* Footer can be added here if needed */}
-    </View>
+    </View>,
   );
 
   // Deficiency Photos Introduction Page
   pages.push(
-    <View
-      key="deficiency-photos-intro"
-      wrap={false}>
+    <View key="deficiency-photos-intro" wrap={false}>
       <View style={StylesPDF.sectionTitleContainer}>
         <TOCSectionPDF
           id="deficiency-photos"
           style={StylesPDF.pageTitle}
           tocSections={tocSections}
-          willCaptureToc={willCaptureToc}>
+          willCaptureToc={willCaptureToc}
+        >
           Deficiency Photos
         </TOCSectionPDF>
       </View>
       {/* Footer can be added here if needed */}
-    </View>
+    </View>,
   );
 
   // Deficiency Photos Pages
@@ -73,7 +71,8 @@ const DeficienciesPage = ({
       <View
         key={`deficiency-photo-${index}`}
         style={StylesPDF.imageColumn}
-        wrap={false}>
+        wrap={false}
+      >
         <View style={StylesPDF.imageContainer}>
           <PdfImg
             src={`/api/proxy-image?url=${encodeURIComponent(image.url)}`}
@@ -84,7 +83,7 @@ const DeficienciesPage = ({
           </Text>
         </View>
         {/* Footer can be added here if needed */}
-      </View>
+      </View>,
     );
   });
 

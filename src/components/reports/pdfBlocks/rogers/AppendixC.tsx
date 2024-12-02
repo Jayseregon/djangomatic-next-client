@@ -50,7 +50,7 @@ const AppendixC = ({
           Post Construction Itemized Checklist
         </TOCSectionPDF>
       </View>
-    </View>
+    </View>,
   );
 
   // Split the checklistForm4 items if necessary
@@ -67,7 +67,7 @@ const AppendixC = ({
         title="Antenna Structure and Site Works"
         type="Civil"
       />
-    </View>
+    </View>,
   );
 
   // Form 4 - Second Part (if any)
@@ -81,7 +81,7 @@ const AppendixC = ({
           title="Antenna Structure and Site Works - (Continued)"
           type="Civil"
         />
-      </View>
+      </View>,
     );
   }
 
@@ -95,7 +95,7 @@ const AppendixC = ({
         title="Electrical/Mechanical Alarm & Fire Protection Systems"
         type="Civil"
       />
-    </View>
+    </View>,
   );
 
   // Form 6
@@ -108,7 +108,7 @@ const AppendixC = ({
         title="AC Power and Grounding"
         type="Civil"
       />
-    </View>
+    </View>,
   );
 
   // Form 7 and 8
@@ -128,7 +128,7 @@ const AppendixC = ({
         title="Cellular Base Station"
         type="Technical Install & Commission"
       />
-    </View>
+    </View>,
   );
 
   // Form 9 and 10
@@ -148,7 +148,7 @@ const AppendixC = ({
         title="AC/DC Power"
         type="Technical Install & Commission"
       />
-    </View>
+    </View>,
   );
 
   // Form 11
@@ -161,7 +161,7 @@ const AppendixC = ({
         title="Miscellaneous Equipment"
         type="Technical Install & Commission"
       />
-    </View>
+    </View>,
   );
 
   return pages;

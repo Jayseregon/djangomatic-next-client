@@ -29,6 +29,7 @@ const PDFViewer = ({
   useEffect(() => {
     if (blob) {
       const url = URL.createObjectURL(blob);
+
       setPdfUrl(url);
 
       return () => {
@@ -41,6 +42,7 @@ const PDFViewer = ({
     if (!blob) return;
 
     const link = document.createElement("a");
+
     link.href = URL.createObjectURL(blob);
     link.download = fileName;
     document.body.appendChild(link);
@@ -52,10 +54,11 @@ const PDFViewer = ({
     <>
       <Button
         className="bg-primary text-white w-full w-1/2 h-10 mb-5"
+        disabled={!blob}
         radius="full"
         variant="solid"
         onClick={handleDownload}
-        disabled={!blob}>
+      >
         Download PDF
       </Button>
       {pdfUrl && (
@@ -82,7 +85,7 @@ export default function PDFViewerPage() {
     const fetchReport = async () => {
       try {
         const response = await fetch(
-          `/api/prisma-tower-report?id=${params.id}`
+          `/api/prisma-tower-report?id=${params.id}`,
         );
         const data = await response.json();
 
@@ -151,7 +154,7 @@ export default function PDFViewerPage() {
   }
 
   const fileName = `${report.site_code}-${titleCase(
-    report.tower_site_name
+    report.tower_site_name,
   )}-${report.site_region}-${report.jde_job}-PCI.pdf`;
 
   // Second render with populated TOC
@@ -163,8 +166,9 @@ export default function PDFViewerPage() {
           tocSections={tocSections}
           willCaptureToc={false}
         />
-      }>
-      {({ blob, url, loading, error }) => {
+      }
+    >
+      {({ blob, loading, error }) => {
         if (loading) {
           return <LoadingContent />;
         }
@@ -174,11 +178,7 @@ export default function PDFViewerPage() {
         }
 
         return (
-          <PDFViewer
-            blob={blob}
-            fileName={fileName}
-            reportId={report.id}
-          />
+          <PDFViewer blob={blob} fileName={fileName} reportId={report.id} />
         );
       }}
     </BlobProvider>

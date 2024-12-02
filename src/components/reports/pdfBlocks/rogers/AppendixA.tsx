@@ -6,11 +6,9 @@ import { TOCSections } from "@/src/types/reports";
 import TOCSectionPDF from "./TOCSection";
 
 const AppendixA = ({
-  redlinePages,
   tocSections,
   willCaptureToc,
 }: {
-  redlinePages: number;
   tocSections: TOCSections[];
   willCaptureToc: boolean;
 }) => {
@@ -39,7 +37,7 @@ const AppendixA = ({
       </View>
       {/* Additional content can be added here */}
       {/* ...existing code... */}
-    </View>
+    </View>,
   );
 
   return pages;

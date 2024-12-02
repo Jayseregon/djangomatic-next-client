@@ -1,11 +1,5 @@
 import React from "react";
-import {
-  Document,
-  Page,
-  View,
-  Text,
-  Image as PdfImg,
-} from "@react-pdf/renderer";
+import { Document, Page, Text, Image as PdfImg } from "@react-pdf/renderer";
 
 import { TOCSections, TowerReport } from "@/src/types/reports";
 import { StylesPDF } from "@/styles/stylesPDF";
@@ -32,17 +26,19 @@ const ReportDocument = ({
 }) => {
   // Collect all pages into an array
   const pages = [
-    <FrontPage report={report} />,
-    <AuthorPage report={report} />,
-    <TableOfContentsPage tocSections={tocSections} />,
+    <FrontPage key="front-page" report={report} />,
+    <AuthorPage key="author-page" report={report} />,
+    <TableOfContentsPage key="toc-page" tocSections={tocSections} />,
     <ScopeOfWorkPage
+      key="scope-of-work-page"
       report={report}
       tocSections={tocSections}
       willCaptureToc={willCaptureToc}
     />,
     <AntennaInventoryPage
-      antennaNotes={report.notes_antenna}
+      key="antenna-inventory-page"
       antennaInventory={report.antenna_inventory}
+      antennaNotes={report.notes_antenna}
       tocSections={tocSections}
       willCaptureToc={willCaptureToc}
     />,
@@ -57,7 +53,6 @@ const ReportDocument = ({
       willCaptureToc,
     }),
     ...AppendixA({
-      redlinePages: report.redline_pages,
       tocSections,
       willCaptureToc,
     }),
@@ -82,20 +77,17 @@ const ReportDocument = ({
   return (
     <Document>
       {pages.map((PageContent, index) => (
-        <Page
-          key={index}
-          size="LETTER"
-          style={StylesPDF.page}>
+        <Page key={index} size="LETTER" style={StylesPDF.page}>
           {/* Render the page content */}
           {PageContent}
-          {/* Add page number */}
-          <Text
-            fixed
-            style={StylesPDF.pageCount}>
-            Page{" "}
-            <Text style={{ fontFamily: "Helvetica-Bold" }}>{index + 1}</Text> of{" "}
-            {totalPages + report.redline_pages}
-          </Text>
+          {/* Add page number if not the first page */}
+          {index !== 0 && (
+            <Text fixed style={StylesPDF.pageCount}>
+              Page{" "}
+              <Text style={{ fontFamily: "Helvetica-Bold" }}>{index + 1}</Text>{" "}
+              of {totalPages + report.redline_pages}
+            </Text>
+          )}
           {/* Add footer image */}
           <PdfImg
             fixed
@@ -105,16 +97,11 @@ const ReportDocument = ({
         </Page>
       ))}
       {postRedlinesPages.map((PageContent, index) => (
-        <Page
-          key={index}
-          size="LETTER"
-          style={StylesPDF.page}>
+        <Page key={pages.length + index} size="LETTER" style={StylesPDF.page}>
           {/* Render the page content */}
           {PageContent}
           {/* Add page number */}
-          <Text
-            fixed
-            style={StylesPDF.pageCount}>
+          <Text fixed style={StylesPDF.pageCount}>
             Page{" "}
             <Text style={{ fontFamily: "Helvetica-Bold" }}>
               {pages.length + index + 1 + report.redline_pages}

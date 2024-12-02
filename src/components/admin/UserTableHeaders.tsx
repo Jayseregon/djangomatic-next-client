@@ -27,7 +27,6 @@ export const defaultHeader = ({
         <TableColumn key="Roadmap">Roadmap</TableColumn>
         <TableColumn key="Bugs">Bugs</TableColumn>
         <TableColumn key="rnd">r&amp;d</TableColumn>
-        <TableColumn key="reports">reports</TableColumn>
       </TableHeader>
     );
   }
@@ -47,7 +46,6 @@ export const defaultHeader = ({
       <TableColumn key="Roadmap">Roadmap</TableColumn>
       <TableColumn key="Bugs">Bugs</TableColumn>
       <TableColumn key="rnd">r&amp;d</TableColumn>
-      <TableColumn key="reports">reports</TableColumn>
     </TableHeader>
   );
 };
@@ -94,6 +92,21 @@ export const videosHeader = (): JSX.Element => {
       <TableColumn key="videos4">lidar</TableColumn>
       <TableColumn key="videos5">eng</TableColumn>
       <TableColumn key="videos6">sttar</TableColumn>
+    </TableHeader>
+  );
+};
+
+export const reportsHeader = (): JSX.Element => {
+  return (
+    <TableHeader>
+      <TableColumn key="email" className="w-56">
+        email
+      </TableColumn>
+      <TableColumn key="username" className="w-56">
+        username
+      </TableColumn>
+      <TableColumn key="access">access</TableColumn>
+      <TableColumn key="delete">delete</TableColumn>
     </TableHeader>
   );
 };
@@ -206,6 +219,8 @@ export const renderTableHeader = (selectedMenu: string, isAdmin: boolean) => {
       return docsHeader();
     case "videos":
       return videosHeader();
+    case "reports":
+      return reportsHeader();
     case "apps-tds":
       return appsTdsHeader();
     case "apps-cogeco":

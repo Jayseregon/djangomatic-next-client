@@ -37,6 +37,7 @@ model User {
   canAccessBugReportBoard        Boolean       @default(true)
   canAccessRoadmapBoard          Boolean       @default(false)
   canAccessReports               Boolean       @default(false)
+  canDeleteReports               Boolean       @default(false)
   canAccessRnd                   Boolean       @default(false)
   canAccessDocsTDS               Boolean       @default(false)
   canAccessDocsCogeco            Boolean       @default(false)

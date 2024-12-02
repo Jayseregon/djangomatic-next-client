@@ -102,6 +102,7 @@ export const UserTable = ({
           <Radio value="default">Default</Radio>
           <Radio value="docs">Docs</Radio>
           <Radio value="videos">Videos</Radio>
+          <Radio value="reports">Reports</Radio>
         </RadioGroup>
         <RadioGroup
           aria-label="apps-menu"

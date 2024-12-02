@@ -10,6 +10,7 @@ import {
   TableCell,
   TableRow,
   Chip,
+  SortDescriptor,
 } from "@nextui-org/react";
 
 import { useSortTasksList } from "@/hooks/useSortTasksList";
@@ -41,6 +42,14 @@ export const TaskBoardShort = ({
     tasksList.reload();
   }, [user, taskUpdated]);
 
+  const handleSortChange = (sortDescriptor: SortDescriptor) => {
+    tasksList.sort({
+      ...sortDescriptor,
+      column: sortDescriptor.column ?? "id",
+      direction: sortDescriptor.direction ?? "ascending",
+    });
+  };
+
   return (
     <div className="mt-10 w-11/12">
       <div className="overflow-x-auto">
@@ -62,7 +71,7 @@ export const TaskBoardShort = ({
             </div>
           }
           onRowAction={(key) => handleRowAction(key.toString())}
-          onSortChange={tasksList.sort}
+          onSortChange={handleSortChange}
         >
           <TableHeader>
             <TableColumn key="task" allowsSorting className="text-center">
@@ -162,6 +171,14 @@ export const TaskBoardFull = ({
     tasksList.reload();
   }, [id, taskUpdated]);
 
+  const handleSortChange = (sortDescriptor: SortDescriptor) => {
+    tasksList.sort({
+      ...sortDescriptor,
+      column: sortDescriptor.column ?? "id",
+      direction: sortDescriptor.direction ?? "ascending",
+    });
+  };
+
   return (
     <>
       {!showCompleted ? (
@@ -188,7 +205,7 @@ export const TaskBoardFull = ({
               <div className="flex justify-end w-full">{topContent}</div>
             }
             onRowAction={(key) => handleRowAction(key.toString())}
-            onSortChange={tasksList.sort}
+            onSortChange={handleSortChange}
           >
             <TableHeader>
               <TableColumn key="created" allowsSorting className="text-center">

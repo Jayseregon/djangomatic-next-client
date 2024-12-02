@@ -24,9 +24,9 @@ function cspMiddleware(req: NextRequest): NextResponse {
   object-src 'none';
   base-uri 'self';
   form-action 'self';
-  frame-ancestors 'none';
-  frame-src https://github.com;
-  connect-src 'self' https://github.com https://api.github.com https://docker-djangomatic.azurewebsites.net https://staging-djangomatic.azurewebsites.net https://djangomatic-pro.azurewebsites.net https://cdn.jsdelivr.net https://unpkg.com;
+  frame-ancestors blob: https://staging-djangomatic.azurewebsites.net https://djangomatic-pro.azurewebsites.net;
+  frame-src https://github.com blob:;
+  connect-src 'self' https://github.com https://api.github.com https://docker-djangomatic.azurewebsites.net https://staging-djangomatic.azurewebsites.net https://djangomatic-pro.azurewebsites.net https://cdn.jsdelivr.net https://unpkg.com data:;
   media-src 'self' blob: https://djangomaticstorage.blob.core.windows.net;
   upgrade-insecure-requests;
   `

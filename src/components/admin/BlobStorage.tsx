@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { SortDescriptor } from "@react-types/shared";
 import { useAsyncList } from "@react-stately/data";
 import {
   Button,
@@ -291,6 +292,14 @@ export const BlobStorage = (): JSX.Element => {
     );
   };
 
+  const handleSortChange = (sortDescriptor: SortDescriptor) => {
+    blobsList.sort({
+      ...sortDescriptor,
+      column: sortDescriptor.column ?? "id",
+      direction: sortDescriptor.direction ?? "ascending",
+    });
+  };
+
   return (
     <div className="mt-10 w-full">
       <div className="overflow-x-auto">
@@ -306,7 +315,7 @@ export const BlobStorage = (): JSX.Element => {
           selectionMode="single"
           sortDescriptor={blobsList.sortDescriptor}
           topContent={topContent()}
-          onSortChange={blobsList.sort}
+          onSortChange={handleSortChange}
         >
           <TableHeader>
             <TableColumn key="name" allowsSorting>

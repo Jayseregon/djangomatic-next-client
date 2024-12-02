@@ -53,3 +53,51 @@ const TOCSectionPDF = ({
 };
 
 export default TOCSectionPDF;
+
+
+// import React from "react";
+// import { Text } from "@react-pdf/renderer";
+
+// import { TOCSectionProps } from "@/src/interfaces/reports";
+
+// const TOCSectionPDF = ({
+//   id,
+//   style,
+//   children,
+//   tocSections,
+//   willCaptureToc,
+//   redlinePages = 0,
+//   jumpRedlines = false,
+// }: TOCSectionProps) => {
+//   return (
+//     <Text
+//       id={id}
+//       style={style}
+//       render={({ pageNumber }) => {
+//         if (willCaptureToc) {
+//           const title =
+//             React.isValidElement(children) &&
+//             typeof children.props.children === "string"
+//               ? children.props.children
+//               : String(children);
+
+//           // Check if the title already exists to prevent duplicates
+//           const existingIndex = tocSections.findIndex(
+//             (section) => section.title === title
+//           );
+
+//           if (existingIndex === -1) {
+//             tocSections.push({ title, pageNumber });
+//           } else {
+//             // Update the page number if it has changed
+//             tocSections[existingIndex].pageNumber = pageNumber;
+//           }
+//         }
+
+//         return children;
+//       }}
+//     />
+//   );
+// };
+
+// export default TOCSectionPDF;

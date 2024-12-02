@@ -10,7 +10,6 @@ import {
 import { TOCSections, TowerReport } from "@/src/types/reports";
 import { StylesPDF } from "@/styles/stylesPDF";
 
-// Import your page components
 import FrontPage from "./FrontPage";
 import AuthorPage from "./AuthorPage";
 import TableOfContentsPage from "./TableOfContentsPage";
@@ -18,7 +17,6 @@ import ScopeOfWorkPage from "./ScopeOfWorkPage";
 import AntennaInventoryPage from "./AntennaInventoryPage";
 import DeficienciesPage from "./DeficienciesPage";
 import SitePhotosPage from "./SitePhotosPage";
-// Reactivate the Appendices
 import AppendixA from "./AppendixA";
 import AppendixB from "./AppendixB";
 import AppendixC from "./AppendixC";
@@ -48,7 +46,6 @@ const ReportDocument = ({
       tocSections={tocSections}
       willCaptureToc={willCaptureToc}
     />,
-    // Use spread operator to include arrays returned by components
     ...DeficienciesPage({
       report,
       tocSections,
@@ -59,7 +56,6 @@ const ReportDocument = ({
       tocSections,
       willCaptureToc,
     }),
-    // Reactivate Appendices
     ...AppendixA({
       redlinePages: report.redline_pages,
       tocSections,
@@ -89,16 +85,15 @@ const ReportDocument = ({
           style={StylesPDF.page}>
           {/* Render the page content */}
           {PageContent}
-          {/* Add footer with page number */}
-
+          {/* Add page number */}
           <Text
             fixed
             style={StylesPDF.pageCount}>
             Page{" "}
             <Text style={{ fontFamily: "Helvetica-Bold" }}>{index + 1}</Text> of{" "}
-            {totalPages}
+            {totalPages + report.redline_pages}
           </Text>
-
+          {/* Add footer image */}
           <PdfImg
             fixed
             src="/reports/rogers/rogers-footer.jpg"

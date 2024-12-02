@@ -2,7 +2,7 @@
 
 import { useParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
-import { Font, BlobProvider } from "@react-pdf/renderer";
+import { Font, BlobProvider, pdf } from "@react-pdf/renderer";
 import { Button } from "@nextui-org/button";
 
 import { TowerReport, TOCSections } from "@/src/types/reports";
@@ -120,23 +120,22 @@ export default function PDFViewerPage() {
     const generateTocSections = async () => {
       if (!report) return;
 
-      const newTocSections: TOCSections[] = [];
-      // Create a document instance to populate TOC sections
+      // First render to collect TOC entries
+      const tocSectionsTemp: TOCSections[] = [];
+      const willCaptureToc = true;
+
       const doc = (
         <ReportDocument
           report={report}
-          tocSections={newTocSections}
-          willCaptureToc={true}
+          tocSections={tocSectionsTemp}
+          willCaptureToc={willCaptureToc}
         />
       );
 
-      // Use BlobProvider to force rendering and populate tocSections
-      const instance = <BlobProvider document={doc}>{() => null}</BlobProvider>;
+      // Render the document to buffer to capture TOC entries
+      await pdf(doc).toBuffer();
 
-      // Since BlobProvider is asynchronous, we need to wait for it to render
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-
-      setTocSections(newTocSections);
+      setTocSections(tocSectionsTemp);
       setIsTocReady(true);
     };
 
@@ -155,6 +154,7 @@ export default function PDFViewerPage() {
     report.tower_site_name
   )}-${report.site_region}-${report.jde_job}-PCI.pdf`;
 
+  // Second render with populated TOC
   return (
     <BlobProvider
       document={

@@ -1,11 +1,13 @@
 import React from "react";
-import { Text, View, Image as PdfImg } from "@react-pdf/renderer";
+import { View, Text, Image as PdfImg } from "@react-pdf/renderer";
 
 import { StylesPDF } from "@/styles/stylesPDF";
 import { TOCSections, TowerReport } from "@/src/types/reports";
 
 import TOCSectionPDF from "./TOCSection";
 import DeficienciesTable from "./DeficienciesTable";
+import { ListTitle } from "./ListElements";
+import PageNotes from "./PageNotes";
 
 const DeficienciesPage = ({
   report,
@@ -16,29 +18,40 @@ const DeficienciesPage = ({
   tocSections: TOCSections[];
   willCaptureToc: boolean;
 }) => {
-  const sortedImages = [
-    ...report.deficiency_images.sort((a, b) => a.imgIndex - b.imgIndex),
-  ];
+  const pages = [];
+  const sortedImages = [...report.deficiency_images].sort(
+    (a, b) => a.imgIndex - b.imgIndex,
+  );
 
-  return (
-    <>
-      <View break>
-        <TOCSectionPDF
-          id="summary-of-deficiencies"
-          style={StylesPDF.pageTitle}
-          tocSections={tocSections}
-          willCaptureToc={willCaptureToc}
-        >
-          Summary of Deficiencies
-        </TOCSectionPDF>
-        <Text style={StylesPDF.PageContentSectionIndent}>
-          The following is a list of deficiencies identified and referenced by
-          the checking procedure in the appendix. Please refer to the detailed
-          sheets for pictures.
-        </Text>
-        <DeficienciesTable items={report.deficiency_images} />
+  // Summary Page
+  pages.push(
+    <View key="deficiency-summary" wrap={false}>
+      <TOCSectionPDF
+        id="summary-of-deficiencies"
+        style={StylesPDF.pageTitle}
+        tocSections={tocSections}
+        willCaptureToc={willCaptureToc}
+      >
+        Summary of Deficiencies
+      </TOCSectionPDF>
+      <Text style={StylesPDF.PageContentSectionIndent}>
+        The following is a list of deficiencies identified and referenced by the
+        checking procedure in the appendix. Please refer to the detailed sheets
+        for pictures.
+      </Text>
+      <DeficienciesTable items={report.deficiency_images} />
+      <View style={[StylesPDF.PageNotesContentSection, { paddingTop: 30 }]}>
+        <ListTitle title="Additional comments:" />
+        <PageNotes items={report.notes_deficiency} />
       </View>
-      <View break style={StylesPDF.sectionTitleContainer}>
+      {/* Footer can be added here if needed */}
+    </View>,
+  );
+
+  // Deficiency Photos Introduction Page
+  pages.push(
+    <View key="deficiency-photos-intro" wrap={false}>
+      <View style={StylesPDF.sectionTitleContainer}>
         <TOCSectionPDF
           id="deficiency-photos"
           style={StylesPDF.pageTitle}
@@ -48,18 +61,33 @@ const DeficienciesPage = ({
           Deficiency Photos
         </TOCSectionPDF>
       </View>
-      {sortedImages.map((image, index) => (
-        <View key={index} break style={StylesPDF.imageColumn}>
-          <View style={StylesPDF.imageContainer}>
-            <PdfImg src={image.url} style={StylesPDF.image} />
-            <Text style={StylesPDF.label}>
-              {image.imgIndex + 1 + ". " + image.label}
-            </Text>
-          </View>
-        </View>
-      ))}
-    </>
+      {/* Footer can be added here if needed */}
+    </View>,
   );
+
+  // Deficiency Photos Pages
+  sortedImages.forEach((image, index) => {
+    pages.push(
+      <View
+        key={`deficiency-photo-${index}`}
+        style={StylesPDF.imageColumn}
+        wrap={false}
+      >
+        <View style={StylesPDF.imageContainer}>
+          <PdfImg
+            src={`/api/proxy-image?url=${encodeURIComponent(image.url)}`}
+            style={StylesPDF.image}
+          />
+          <Text style={StylesPDF.label}>
+            {image.imgIndex + 1 + ". " + image.label}
+          </Text>
+        </View>
+        {/* Footer can be added here if needed */}
+      </View>,
+    );
+  });
+
+  return pages;
 };
 
 export default DeficienciesPage;

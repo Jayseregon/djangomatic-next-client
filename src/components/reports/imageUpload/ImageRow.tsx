@@ -45,7 +45,10 @@ const ImageRow: React.FC<ImageRowProps> = ({
             </>
           ) : (
             <>
-              <DisplayInput value={image.imgIndex + 1 + ". " + image.label} />
+              <DisplayInput
+                value={image.imgIndex + 1 + ". " + image.label}
+                width="w-full"
+              />
               <TrashButton
                 className="ml-2"
                 onClick={() => removeImageField(image.imgIndex)}

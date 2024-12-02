@@ -92,29 +92,6 @@ export const SunThemeIcon = ({ size = 24, ...props }: IconSvgProps) => (
   </svg>
 );
 
-export const SearchIcon = (props: IconSvgProps) => (
-  <svg
-    aria-hidden="true"
-    className="size-6"
-    fill="none"
-    focusable="false"
-    height="1em"
-    role="presentation"
-    stroke="currentColor"
-    strokeWidth={1.5}
-    viewBox="0 0 24 24"
-    width="1em"
-    xmlns="http://www.w3.org/2000/svg"
-    {...props}
-  >
-    <path
-      d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    />
-  </svg>
-);
-
 export const MoonIcon = (props: IconSvgProps) => (
   <svg
     aria-hidden="true"
@@ -377,6 +354,22 @@ export const AddImageIcon = ({ size = 20, ...props }: IconSvgProps) => (
     <g fill="currentColor">
       <path d="m.5 3 .04.87a2 2 0 0 0-.342 1.311l.637 7A2 2 0 0 0 2.826 14H9v-1H2.826a1 1 0 0 1-.995-.91l-.637-7A1 1 0 0 1 2.19 4h11.62a1 1 0 0 1 .996 1.09L14.54 8h1.005l.256-2.819A2 2 0 0 0 13.81 3H9.828a2 2 0 0 1-1.414-.586l-.828-.828A2 2 0 0 0 6.172 1H2.5a2 2 0 0 0-2 2m5.672-1a1 1 0 0 1 .707.293L7.586 3H2.19q-.362.002-.683.12L1.5 2.98a1 1 0 0 1 1-.98z" />
       <path d="M13.5 9a.5.5 0 0 1 .5.5V11h1.5a.5.5 0 1 1 0 1H14v1.5a.5.5 0 1 1-1 0V12h-1.5a.5.5 0 0 1 0-1H13V9.5a.5.5 0 0 1 .5-.5" />
+    </g>
+  </svg>
+);
+
+export const SearchIcon = ({ size = 20, ...props }: IconSvgProps) => (
+  <svg
+    aria-hidden="true"
+    focusable="false"
+    height={size}
+    role="presentation"
+    viewBox="0 0 16 16"
+    width={size * 2.4}
+    {...props}
+  >
+    <g fill="currentColor">
+      <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0" />
     </g>
   </svg>
 );

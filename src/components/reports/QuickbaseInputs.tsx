@@ -1,6 +1,5 @@
-import { QuickbaseInputsProps } from "@/src/interfaces/reports";
-
-import { FormInput } from "../ui/formInput";
+import { QuickbaseInputsProps } from "@/interfaces/reports";
+import { FormInput } from "@/components/ui/formInput";
 
 export default function QuickbaseInputs({
   formData,

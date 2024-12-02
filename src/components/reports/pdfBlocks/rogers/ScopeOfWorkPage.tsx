@@ -16,7 +16,7 @@ const ScopeOfWorkPage = ({
   willCaptureToc: boolean;
 }) => {
   return (
-    <View break>
+    <View>
       <TOCSectionPDF
         id="scope-of-work"
         style={StylesPDF.pageTitle}

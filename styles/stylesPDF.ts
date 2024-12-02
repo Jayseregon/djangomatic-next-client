@@ -110,6 +110,11 @@ export const StylesPDF = StyleSheet.create({
     textAlign: "justify",
     paddingBottom: 10,
   },
+  PageNotesContentSection: {
+    lineHeight: 0.8,
+    textAlign: "justify",
+    paddingBottom: 10,
+  },
   PageContentSectionIndent: {
     textIndent: 20,
     lineHeight: 1.2,
@@ -132,8 +137,9 @@ export const StylesPDF = StyleSheet.create({
   listItemContainer: {
     flexDirection: "row",
     alignItems: "flex-start",
-    paddingLeft: 5,
+    paddingLeft: 20,
     marginBottom: 5,
+    fontSize: 10,
   },
   subListItemContainer: {
     flexDirection: "row",

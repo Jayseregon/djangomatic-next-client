@@ -1,7 +1,10 @@
 import React, { useState, useEffect, useRef } from "react";
+import { Reorder, useDragControls } from "motion/react";
+import { Grip } from "lucide-react";
 
 import { ImageUploadProps, LocalImages } from "@/src/interfaces/reports";
 import { AddButton } from "@/src/components/ui/formInput";
+import { TowerReportImage } from "@/types/reports";
 
 import ImageRow from "./ImageRow";
 import FormInputRow from "./FormInputRow";
@@ -20,6 +23,7 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({
 }) => {
   const [localImages, setLocalImages] = useState<LocalImages[]>([]);
   const isInitialized = useRef(false);
+  const dragControls = useDragControls();
 
   useEffect(() => {
     if (!isInitialized.current && images.length > 0) {
@@ -213,89 +217,87 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({
     return { url: data.url, azureId: data.azureId, id: data.id };
   };
 
-  const handleDragStart = (e: React.DragEvent<HTMLDivElement>) => {
-    e.dataTransfer.setData("text/plain", e.currentTarget.dataset.index!);
-  };
+  const handleReorder = (newOrder: LocalImages[]) => {
+    // Create new array with updated indices
+    const reorderedLocal = newOrder.map((image, newIndex) => ({
+      ...image,
+      imgIndex: newIndex,
+    }));
 
-  const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
-    e.preventDefault();
-  };
+    setLocalImages(reorderedLocal);
 
-  const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
-    e.preventDefault();
-    const draggedIndex = e.dataTransfer.getData("text/plain");
-    const targetIndex = e.currentTarget.dataset.index;
+    // Update parent state
+    const reorderedParent = images
+      .map((parentImage) => {
+        const matchingLocal = reorderedLocal.find(
+          (local) => local.url === parentImage.url,
+        );
 
-    if (draggedIndex !== targetIndex) {
-      const reorderedImages = [...localImages];
-      const [draggedImage] = reorderedImages.splice(Number(draggedIndex), 1);
+        return matchingLocal
+          ? { ...parentImage, imgIndex: matchingLocal.imgIndex }
+          : null;
+      })
+      .filter((img): img is TowerReportImage => img !== null)
+      .sort((a, b) => a.imgIndex - b.imgIndex);
 
-      reorderedImages.splice(Number(targetIndex), 0, draggedImage);
-
-      // Update imgIndex for each image
-      const updatedImages = reorderedImages.map((image, index) => ({
-        ...image,
-        imgIndex: index,
-        id: images[index]?.id ?? null,
-        azureId: images[index]?.azureId ?? null,
-        url: image.url ?? "",
-      }));
-
-      setLocalImages(updatedImages);
-      onImagesChange(updatedImages);
-    }
+    onImagesChange(reorderedParent);
   };
 
   return (
     <>
-      {/* {isDeficiency && localImages.length > 0 && <Header />} */}
-      {localImages
-        .sort((a, b) => a.imgIndex - b.imgIndex)
-        .map((image, index) =>
-          image.url ? (
-            <div
-              key={index}
-              draggable
-              data-index={index}
-              onDragOver={handleDragOver}
-              onDragStart={handleDragStart}
-              onDrop={handleDrop}
+      <Reorder.Group
+        axis="y"
+        className="space-y-4"
+        values={localImages.sort((a, b) => a.imgIndex - b.imgIndex)}
+        onReorder={handleReorder}
+      >
+        {localImages
+          .sort((a, b) => a.imgIndex - b.imgIndex)
+          .map((image) => (
+            <Reorder.Item
+              key={image.url || `new-${image.imgIndex}`}
+              className="touch-none"
+              dragControls={dragControls}
+              value={image}
             >
-              <ImageRow
-                image={image}
-                isDeficiency={isDeficiency}
-                isFrontcover={isFrontcover}
-                removeImageField={removeImageField}
-              />
-            </div>
-          ) : (
-            <div
-              key={index}
-              draggable
-              data-index={index}
-              onDragOver={handleDragOver}
-              onDragStart={handleDragStart}
-              onDrop={handleDrop}
-            >
-              <FormInputRow
-                handleDeficiencyCheckProcedureChange={
-                  handleDeficiencyCheckProcedureChange
-                }
-                handleDeficiencyRecommendationChange={
-                  handleDeficiencyRecommendationChange
-                }
-                handleImageChange={handleImageChange}
-                handleLabelChange={handleLabelChange}
-                image={image}
-                isDeficiency={isDeficiency}
-                isFrontcover={isFrontcover}
-                labelOptions={labelOptions}
-                labelPlaceholder={labelPlaceholder}
-                removeImageField={removeImageField}
-              />
-            </div>
-          ),
-        )}
+              <div className="flex items-center gap-2 bg-background p-2 rounded-lg">
+                <div
+                  className="cursor-grab"
+                  onPointerDown={(e) => dragControls.start(e)}
+                >
+                  <Grip color="#4b5563" />
+                </div>
+                <div className="flex-1">
+                  {image.url ? (
+                    <ImageRow
+                      image={image}
+                      isDeficiency={isDeficiency}
+                      isFrontcover={isFrontcover}
+                      removeImageField={removeImageField}
+                    />
+                  ) : (
+                    <FormInputRow
+                      handleDeficiencyCheckProcedureChange={
+                        handleDeficiencyCheckProcedureChange
+                      }
+                      handleDeficiencyRecommendationChange={
+                        handleDeficiencyRecommendationChange
+                      }
+                      handleImageChange={handleImageChange}
+                      handleLabelChange={handleLabelChange}
+                      image={image}
+                      isDeficiency={isDeficiency}
+                      isFrontcover={isFrontcover}
+                      labelOptions={labelOptions}
+                      labelPlaceholder={labelPlaceholder}
+                      removeImageField={removeImageField}
+                    />
+                  )}
+                </div>
+              </div>
+            </Reorder.Item>
+          ))}
+      </Reorder.Group>
       {((isFrontcover && localImages.length === 0) ||
         (!isFrontcover &&
           (maxImages === undefined || localImages.length < maxImages))) && (

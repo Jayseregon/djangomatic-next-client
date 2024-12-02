@@ -2,23 +2,30 @@ import React from "react";
 import { Text, View } from "@react-pdf/renderer";
 
 import { StylesPDF } from "@/styles/stylesPDF";
-import { AntennaTransmissionLine, TOCSections } from "@/src/types/reports";
+import {
+  AntennaTransmissionLine,
+  TOCSections,
+  Note,
+} from "@/src/types/reports";
 
 import TOCSectionPDF from "./TOCSection";
-import { ListTitle, ListItem } from "./ListElements";
+import { ListTitle } from "./ListElements";
 import AntennaInventoryTable from "./AntennaInventoryTable";
+import PageNotes from "./PageNotes";
 
 const AntennaInventoryPage = ({
+  antennaNotes,
   antennaInventory,
   tocSections,
   willCaptureToc,
 }: {
+  antennaNotes: Note[];
   antennaInventory: AntennaTransmissionLine[];
   tocSections: TOCSections[];
   willCaptureToc: boolean;
 }) => {
   return (
-    <View break>
+    <View>
       <TOCSectionPDF
         id="antenna-and-transmission-line-inventory"
         style={StylesPDF.pageTitle}
@@ -32,13 +39,9 @@ const AntennaInventoryPage = ({
         antennas and transmission lines on the tower.
       </Text>
       <AntennaInventoryTable items={antennaInventory} />
-      <View style={[StylesPDF.PageContentSection, { paddingTop: 30 }]}>
+      <View style={[StylesPDF.PageNotesContentSection, { paddingTop: 30 }]}>
         <ListTitle title="Notes:" />
-        <ListItem
-          number="1"
-          text="Antenna loading listed above are included in the installation SOW"
-        />
-        <ListItem number="2" text="The azimuths are +/- 10" />
+        <PageNotes items={antennaNotes} />
       </View>
     </View>
   );

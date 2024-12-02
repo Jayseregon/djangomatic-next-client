@@ -72,14 +72,6 @@ export const defaultBody = ({
             user={user}
           />
         </TableCell>
-        <TableCell>
-          <PermissionButton
-            disabled={disabled}
-            fieldName="canAccessReports"
-            handleToggle={handleToggle}
-            user={user}
-          />
-        </TableCell>
       </TableRow>
     );
   }
@@ -117,14 +109,6 @@ export const defaultBody = ({
         <PermissionButton
           disabled={disabled}
           fieldName="canAccessRnd"
-          handleToggle={handleToggle}
-          user={user}
-        />
-      </TableCell>
-      <TableCell>
-        <PermissionButton
-          disabled={disabled}
-          fieldName="canAccessReports"
           handleToggle={handleToggle}
           user={user}
         />
@@ -259,6 +243,42 @@ export const videosBody = ({
         <PermissionButton
           disabled={disabled}
           fieldName="canAccessVideoSttar"
+          handleToggle={handleToggle}
+          user={user}
+        />
+      </TableCell>
+    </TableRow>
+  );
+};
+
+export const reportsBody = ({
+  user,
+  handleToggle,
+  isSessionSuperUser,
+}: {
+  user: UserSchema;
+  handleToggle: (id: string, field: string, value: boolean) => void;
+  isSessionSuperUser: boolean;
+}): JSX.Element => {
+  const isUserSuperUser = superUserEmails.includes(user.email);
+  const disabled = !isSessionSuperUser && isUserSuperUser;
+
+  return (
+    <TableRow key={user.email}>
+      <TableCell>{user.email}</TableCell>
+      <TableCell>{user.name}</TableCell>
+      <TableCell>
+        <PermissionButton
+          disabled={disabled}
+          fieldName="canAccessReports"
+          handleToggle={handleToggle}
+          user={user}
+        />
+      </TableCell>
+      <TableCell>
+        <PermissionButton
+          disabled={disabled}
+          fieldName="canDeleteReports"
           handleToggle={handleToggle}
           user={user}
         />
@@ -510,6 +530,8 @@ export const renderTableBody = (
       return docsBody({ user, handleToggle, isSessionSuperUser });
     case "videos":
       return videosBody({ user, handleToggle, isSessionSuperUser });
+    case "reports":
+      return reportsBody({ user, handleToggle, isSessionSuperUser });
     case "apps-tds":
       return appsTdsBody({ user, handleToggle, isSessionSuperUser });
     case "apps-cogeco":

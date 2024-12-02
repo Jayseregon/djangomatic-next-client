@@ -2,7 +2,7 @@
 import { Button } from "@nextui-org/react";
 import { useRouter } from "next/router";
 
-import { PDFFileIcon } from "../icons";
+import { PDFFileIcon } from "@/components/icons";
 
 export default function ButtonPDFRenderer() {
   const router = useRouter();

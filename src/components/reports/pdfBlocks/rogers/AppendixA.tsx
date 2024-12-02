@@ -12,26 +12,35 @@ const AppendixA = ({
   tocSections: TOCSections[];
   willCaptureToc: boolean;
 }) => {
-  return (
-    <View style={StylesPDF.sectionTitleContainer}>
-      <TOCSectionPDF
-        id="appendix-a"
-        style={StylesPDF.pageTitle}
-        tocSections={tocSections}
-        willCaptureToc={willCaptureToc}
-      >
-        Appendix A
-      </TOCSectionPDF>
-      <TOCSectionPDF
-        id="redline-of-construction-drawings"
-        style={StylesPDF.pageTitle}
-        tocSections={tocSections}
-        willCaptureToc={willCaptureToc}
-      >
-        Redline of Construction Drawings
-      </TOCSectionPDF>
-    </View>
+  const pages = [];
+
+  // Content of Appendix A
+  pages.push(
+    <View key="appendix-a" wrap={false}>
+      <View style={StylesPDF.sectionTitleContainer}>
+        <TOCSectionPDF
+          id="appendix-a"
+          style={StylesPDF.pageTitle}
+          tocSections={tocSections}
+          willCaptureToc={willCaptureToc}
+        >
+          Appendix A
+        </TOCSectionPDF>
+        <TOCSectionPDF
+          id="redline-of-construction-drawings"
+          style={StylesPDF.pageTitle}
+          tocSections={tocSections}
+          willCaptureToc={willCaptureToc}
+        >
+          Redline of Construction Drawings
+        </TOCSectionPDF>
+      </View>
+      {/* Additional content can be added here */}
+      {/* ...existing code... */}
+    </View>,
   );
+
+  return pages;
 };
 
 export default AppendixA;

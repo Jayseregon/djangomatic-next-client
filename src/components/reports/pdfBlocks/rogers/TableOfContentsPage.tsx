@@ -24,7 +24,7 @@ const TableOfContentsPage = ({
   };
 
   return (
-    <View break>
+    <View>
       <Text id="table-of-contents" style={StylesPDF.pageTitle}>
         Table of contents
       </Text>

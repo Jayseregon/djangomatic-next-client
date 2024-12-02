@@ -10,14 +10,38 @@ import {
   TableRow,
   TableCell,
   Button,
+  Input,
 } from "@nextui-org/react";
-import { Cog, Download, Pencil, Trash2 } from "lucide-react";
+import { Cog, FileText, Pencil, Trash2 } from "lucide-react";
+import { useSession } from "next-auth/react";
 
 import { TowerReport } from "@/src/types/reports";
+import { UserSchema } from "@/src/interfaces/lib";
+import { SearchIcon } from "@/components/icons";
 
 export const TowerReportsDashboard = () => {
   const [towerReports, setTowerReports] = useState<TowerReport[]>([]);
+  const [user, setUser] = useState<UserSchema | null>(null);
+  const [filterValue, setFilterValue] = useState("");
   const router = useRouter();
+  const { data: session } = useSession();
+
+  useEffect(() => {
+    if (!session) return;
+    async function fetchUser() {
+      try {
+        const response = await fetch(
+          `/api/prisma-user?email=${session!.user.email}`,
+        );
+        const data = await response.json();
+
+        setUser(data[0]);
+      } catch (error) {
+        console.error("Failed to fetch user:", error);
+      }
+    }
+    fetchUser();
+  }, [session]);
 
   useEffect(() => {
     async function fetchData() {
@@ -31,6 +55,20 @@ export const TowerReportsDashboard = () => {
       }
     }
     fetchData();
+  }, []);
+
+  const filteredReports = React.useMemo(() => {
+    return towerReports.filter((report) =>
+      report.jde_work_order.toLowerCase().includes(filterValue.toLowerCase()),
+    );
+  }, [towerReports, filterValue]);
+
+  const onSearchChange = React.useCallback((value: string) => {
+    setFilterValue(value);
+  }, []);
+
+  const onClear = React.useCallback(() => {
+    setFilterValue("");
   }, []);
 
   const handleDelete = async (reportId: string) => {
@@ -87,19 +125,41 @@ export const TowerReportsDashboard = () => {
   };
 
   const handleGeneratePDF = (reportId: string) => {
-    window.open(`/api/pdf/${reportId}`, "_blank");
+    window.open(`/pdf/rogers/${reportId}`, "_blank");
+    // window.open(`/api/pdf/${reportId}`, "_blank");
   };
 
   const topContent = (
-    <div className="flex items-center justify-center">
-      <Button
-        className="bg-primary text-white w-full w-1/2 h-10"
-        radius="full"
-        variant="solid"
-        onClick={handleCreate}
-      >
-        Create New Report
-      </Button>
+    <div className="flex flex-col gap-4">
+      <div className="flex justify-between items-center">
+        <Input
+          isClearable
+          aria-label="search-bar"
+          className="h-10 w-1/2"
+          classNames={{
+            input:
+              "text-sm border-none outline-none ring-0 focus:border-none focus:outline-none focus:ring-0",
+            inputWrapper: "bg-background border border-primary",
+          }}
+          color="primary"
+          placeholder="Search by Work Order..."
+          radius="full"
+          startContent={
+            <SearchIcon className="text-base text-default-400 pointer-events-none flex-shrink-0" />
+          }
+          value={filterValue}
+          onClear={() => onClear()}
+          onValueChange={onSearchChange}
+        />
+        <Button
+          className="bg-primary text-white h-10"
+          radius="full"
+          variant="solid"
+          onClick={handleCreate}
+        >
+          Create New Report
+        </Button>
+      </div>
     </div>
   );
 
@@ -157,7 +217,7 @@ export const TowerReportsDashboard = () => {
               </div>
             </TableColumn>
           </TableHeader>
-          <TableBody emptyContent="No entries found" items={towerReports}>
+          <TableBody emptyContent="No entries found" items={filteredReports}>
             {(report) => (
               <TableRow key={report.id}>
                 <TableCell className="text-center text-nowrap">
@@ -208,17 +268,19 @@ export const TowerReportsDashboard = () => {
                       variant="bordered"
                       onClick={() => handleGeneratePDF(report.id)}
                     >
-                      <Download />
+                      <FileText />
                     </Button>
-                    <Button
-                      isIconOnly
-                      color="danger"
-                      size="sm"
-                      variant="bordered"
-                      onClick={() => handleDelete(report.id)}
-                    >
-                      <Trash2 />
-                    </Button>
+                    {user?.canDeleteReports && (
+                      <Button
+                        isIconOnly
+                        color="danger"
+                        size="sm"
+                        variant="bordered"
+                        onClick={() => handleDelete(report.id)}
+                      >
+                        <Trash2 />
+                      </Button>
+                    )}
                   </div>
                 </TableCell>
               </TableRow>

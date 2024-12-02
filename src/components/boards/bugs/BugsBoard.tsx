@@ -10,6 +10,7 @@ import {
   TableCell,
   TableRow,
   Chip,
+  SortDescriptor,
 } from "@nextui-org/react";
 
 import { useSortBugsList } from "@/hooks/useSortBugsList";
@@ -34,6 +35,14 @@ export const BugsBoard = ({
     bugsList.reload();
   }, [bugsUpdated]);
 
+  const handleSortChange = (sortDescriptor: SortDescriptor) => {
+    bugsList.sort({
+      ...sortDescriptor,
+      column: sortDescriptor.column ?? "id",
+      direction: sortDescriptor.direction ?? "ascending",
+    });
+  };
+
   return (
     <div className="mt-10 w-full">
       <div className="overflow-x-auto">
@@ -52,7 +61,7 @@ export const BugsBoard = ({
             <div className="flex justify-end w-full">{topContent}</div>
           }
           onRowAction={(key) => handleRowAction(key.toString())}
-          onSortChange={bugsList.sort}
+          onSortChange={handleSortChange}
         >
           <TableHeader>
             <TableColumn key="priority" allowsSorting className="text-center">

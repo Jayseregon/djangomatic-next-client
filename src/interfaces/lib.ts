@@ -21,6 +21,7 @@ export interface UserSchema {
   canAccessBugReportBoard: boolean;
   canAccessRoadmapBoard: boolean;
   canAccessReports: boolean;
+  canDeleteReports: boolean;
   canAccessRnd: boolean;
   canAccessDocsTDS: boolean;
   canAccessDocsCogeco: boolean;

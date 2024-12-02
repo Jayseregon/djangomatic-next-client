@@ -61,6 +61,9 @@ const ReportDocument = ({
       tocSections,
       willCaptureToc,
     }),
+  ];
+
+  const postRedlinesPages = [
     ...AppendixB({
       tocSections,
       willCaptureToc,
@@ -73,7 +76,7 @@ const ReportDocument = ({
     }),
   ];
 
-  const totalPages = pages.length;
+  const totalPages = pages.length + postRedlinesPages.length;
 
   // Now map over these pages to include page numbers
   return (
@@ -92,6 +95,31 @@ const ReportDocument = ({
             Page{" "}
             <Text style={{ fontFamily: "Helvetica-Bold" }}>{index + 1}</Text> of{" "}
             {totalPages + report.redline_pages}
+          </Text>
+          {/* Add footer image */}
+          <PdfImg
+            fixed
+            src="/reports/rogers/rogers-footer.jpg"
+            style={StylesPDF.pageImageFooter}
+          />
+        </Page>
+      ))}
+      {postRedlinesPages.map((PageContent, index) => (
+        <Page
+          key={index}
+          size="LETTER"
+          style={StylesPDF.page}>
+          {/* Render the page content */}
+          {PageContent}
+          {/* Add page number */}
+          <Text
+            fixed
+            style={StylesPDF.pageCount}>
+            Page{" "}
+            <Text style={{ fontFamily: "Helvetica-Bold" }}>
+              {pages.length + index + 1 + report.redline_pages}
+            </Text>{" "}
+            of {totalPages + report.redline_pages}
           </Text>
           {/* Add footer image */}
           <PdfImg

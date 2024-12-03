@@ -3,6 +3,7 @@ import { Text, View } from "@react-pdf/renderer";
 
 import { StylesPDF } from "@/styles/stylesPDF";
 import { AntennaTransmissionLine } from "@/src/types/reports";
+import { parseTextBold } from "@/lib/pdfRenderUtils";
 
 const AntennaInventoryTableRow = ({
   items,
@@ -24,7 +25,7 @@ const AntennaInventoryTableRow = ({
           <Text>{item.azimuth}</Text>
         </View>
         <View style={StylesPDF.trTxLine}>
-          <Text>{item.tx_line}</Text>
+          <Text>{parseTextBold(item.tx_line)}</Text>
         </View>
         <View style={StylesPDF.trOdu}>
           <Text>{item.odu}</Text>

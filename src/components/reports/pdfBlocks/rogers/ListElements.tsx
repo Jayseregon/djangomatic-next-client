@@ -1,6 +1,7 @@
 import { View, Text } from "@react-pdf/renderer";
 
 import { StylesPDF } from "@/styles/stylesPDF";
+import { parseTextBold } from "@/lib/pdfRenderUtils";
 
 export const ListTitle = ({ title }: { title: string }) => {
   return <Text style={StylesPDF.listTitle}>{title}</Text>;
@@ -30,7 +31,7 @@ export const ListItem = ({
   return (
     <View style={StylesPDF.listItemContainer}>
       <Text style={StylesPDF.listItemNumber}>{number}.</Text>
-      <Text style={StylesPDF.listItemText}>{text}</Text>
+      <Text style={StylesPDF.listItemText}>{parseTextBold(text)}</Text>
     </View>
   );
 };

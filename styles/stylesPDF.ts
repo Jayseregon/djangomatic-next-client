@@ -499,4 +499,7 @@ export const StylesPDF = StyleSheet.create({
     textAlign: "left",
     display: "flex",
   },
+  boldText: {
+    fontFamily: "Helvetica-Bold",
+  }
 });

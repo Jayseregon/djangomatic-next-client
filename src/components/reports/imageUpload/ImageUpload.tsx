@@ -6,8 +6,8 @@ import { ImageUploadProps, LocalImages } from "@/src/interfaces/reports";
 import { AddButton } from "@/src/components/ui/formInput";
 import { TowerReportImage } from "@/types/reports";
 
-import ImageRow from "./ImageRow";
-import FormInputRow from "./FormInputRow";
+import { ImageRow } from "./ImageRow";
+import { FormInputRow } from "./FormInputRow";
 
 export const ImageUpload: React.FC<ImageUploadProps> = ({
   images,

@@ -1,8 +1,11 @@
-import React from "react";
+"use client";
+
+import React, { useEffect, useState } from "react";
 import { View, Text, Image as PdfImg } from "@react-pdf/renderer";
 
 import { StylesPDF } from "@/styles/stylesPDF";
 import { TOCSections, TowerReport } from "@/src/types/reports";
+import { fetchImageBatch } from "@/lib/pdfRenderUtils";
 
 import TOCSectionPDF from "./TOCSection";
 
@@ -15,6 +18,20 @@ const SitePhotosPage = ({
   tocSections: TOCSections[];
   willCaptureToc: boolean;
 }) => {
+  const [imageDataUrls, setImageDataUrls] = useState<{ [key: string]: string }>(
+    {},
+  );
+
+  useEffect(() => {
+    const loadImages = async () => {
+      const urlMap = await fetchImageBatch(report.site_images);
+
+      setImageDataUrls(urlMap);
+    };
+
+    loadImages();
+  }, [report.site_images]);
+
   const pages = [];
   // Sort the site_images by imgIndex
   const sortedSiteImages = [...report.site_images].sort(
@@ -56,7 +73,10 @@ const SitePhotosPage = ({
         {pair.map((image, idx) => (
           <View key={idx} style={StylesPDF.imageContainer}>
             <PdfImg
-              src={`/api/proxy-image?url=${encodeURIComponent(image.url)}`}
+              src={
+                imageDataUrls[image.url] ||
+                `/api/proxy-image?url=${encodeURIComponent(image.url)}`
+              }
               style={StylesPDF.image}
             />
             <Text style={StylesPDF.label}>

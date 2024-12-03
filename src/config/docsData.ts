@@ -35,6 +35,12 @@ export const docsData = {
       app_url: "poles_dfn_calc",
       is_qgis_doc: false,
     },
+    // Demo doc for Gab
+    {
+      label: "Demo Doc",
+      href: "/docs/tds/demo-doc",
+      is_qgis_doc: true,
+    },
     // Tableaux Dynamiques
     {
       label: "Dynamic Pole Tables",

@@ -1,8 +1,6 @@
 import { auth } from "@/auth";
 import { UnAuthenticated } from "@/components/auth/unAuthenticated";
-import { title } from "@/src/components/primitives";
-import { TowerReportsDashboard } from "@/src/components/reports/TowerReportsDashboard";
-import UserAccessReports from "@/src/components/reports/UserAccess";
+import { DashboardManager } from "@/src/components/reports/DashboardManager";
 
 /**
  * ReportsPage - The main component for the reports page.
@@ -34,12 +32,5 @@ function ReportsPageContent({ session }: { session: any }): JSX.Element {
   if (!session) return <UnAuthenticated />;
 
   // Render the reports dashboard
-  return (
-    <UserAccessReports email={session.user.email}>
-      <div className="mx-auto space-y-16">
-        <h1 className={title()}>PCI Reports</h1>
-        <TowerReportsDashboard />
-      </div>
-    </UserAccessReports>
-  );
+  return <DashboardManager email={session.user.email} />;
 }

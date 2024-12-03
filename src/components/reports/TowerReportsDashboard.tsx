@@ -13,35 +13,18 @@ import {
   Input,
 } from "@nextui-org/react";
 import { Cog, FileText, Pencil, Trash2 } from "lucide-react";
-import { useSession } from "next-auth/react";
 
 import { TowerReport } from "@/src/types/reports";
-import { UserSchema } from "@/src/interfaces/lib";
 import { SearchIcon } from "@/components/icons";
 
-export const TowerReportsDashboard = () => {
+export const TowerReportsDashboard = ({
+  canDeleteReports,
+}: {
+  canDeleteReports: boolean;
+}) => {
   const [towerReports, setTowerReports] = useState<TowerReport[]>([]);
-  const [user, setUser] = useState<UserSchema | null>(null);
   const [filterValue, setFilterValue] = useState("");
   const router = useRouter();
-  const { data: session } = useSession();
-
-  useEffect(() => {
-    if (!session) return;
-    async function fetchUser() {
-      try {
-        const response = await fetch(
-          `/api/prisma-user?email=${session!.user.email}`,
-        );
-        const data = await response.json();
-
-        setUser(data[0]);
-      } catch (error) {
-        console.error("Failed to fetch user:", error);
-      }
-    }
-    fetchUser();
-  }, [session]);
 
   useEffect(() => {
     async function fetchData() {
@@ -270,7 +253,7 @@ export const TowerReportsDashboard = () => {
                     >
                       <FileText />
                     </Button>
-                    {user?.canDeleteReports && (
+                    {canDeleteReports && (
                       <Button
                         isIconOnly
                         color="danger"

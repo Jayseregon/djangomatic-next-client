@@ -9,9 +9,11 @@ import { UnAuthorized } from "../auth/unAuthorized";
 
 export default function UserAccessReports({
   email,
+  setCanDeleteReports,
   children,
 }: {
   email: string;
+  setCanDeleteReports: React.Dispatch<React.SetStateAction<boolean>>;
   children: React.ReactNode;
 }) {
   const [user, setUser] = useState<UserSchema | null>(null);
@@ -22,6 +24,7 @@ export default function UserAccessReports({
         const data = await fetchUser(email);
 
         setUser(data);
+        setCanDeleteReports(data.canDeleteReports);
       } catch (error) {
         console.error("Failed to fetch user:", error);
       }

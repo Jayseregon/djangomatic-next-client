@@ -141,3 +141,10 @@ export interface NotesInputsProps {
   onNoteChange: (index: number, field: string, value: any) => void;
   onRemoveNote: (index: number) => void;
 }
+
+export interface ImageRotateModalProps {
+  isOpen: boolean;
+  file: File;
+  onClose: () => void;
+  onConfirm: (rotatedFile: File) => void;
+}

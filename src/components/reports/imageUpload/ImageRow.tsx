@@ -7,12 +7,12 @@ import {
 } from "@/src/components/ui/formInput";
 import { ImageRowProps } from "@/src/interfaces/reports";
 
-const ImageRow: React.FC<ImageRowProps> = ({
+export const ImageRow = ({
   image,
   isDeficiency,
   isFrontcover,
   removeImageField,
-}) => (
+}: ImageRowProps) => (
   <div
     className={`flex items-center justify-center  ${isFrontcover ?? "space-x-4"}`}
   >
@@ -67,5 +67,3 @@ const ImageRow: React.FC<ImageRowProps> = ({
     )}
   </div>
 );
-
-export default ImageRow;

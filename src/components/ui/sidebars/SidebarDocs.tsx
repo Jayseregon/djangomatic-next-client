@@ -92,6 +92,22 @@ export const SidebarDocs: React.FC<SidebarProps> = ({
             </Link>
           </AccordionItem>
 
+          {/* Admin Section */}
+          <AccordionItem
+            key="Admin"
+            aria-label="Admin"
+            title={
+              <h2 className="text-xl font-black text-foreground indent-2 mt-3 mb-1">
+                Admin
+              </h2>
+            }
+          >
+            <SidebarSection
+              categories={getDocsCategories({ docDataTarget: "admin_docs" })}
+              nonce={nonce}
+            />
+          </AccordionItem>
+
           {/* COGECO Section */}
           <AccordionItem
             key="COGECO"
@@ -104,6 +120,22 @@ export const SidebarDocs: React.FC<SidebarProps> = ({
           >
             <SidebarSection
               categories={getDocsCategories({ docDataTarget: "cogeco_docs" })}
+              nonce={nonce}
+            />
+          </AccordionItem>
+
+          {/* Comcast Section */}
+          <AccordionItem
+            key="Comcast"
+            aria-label="Comcast"
+            title={
+              <h2 className="text-xl font-black text-foreground indent-2 mt-3 mb-1">
+                Comcast
+              </h2>
+            }
+          >
+            <SidebarSection
+              categories={getDocsCategories({ docDataTarget: "comcast_docs" })}
               nonce={nonce}
             />
           </AccordionItem>

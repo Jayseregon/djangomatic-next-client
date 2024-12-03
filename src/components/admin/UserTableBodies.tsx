@@ -143,7 +143,7 @@ export const docsBody = ({
       <TableCell>
         <PermissionButton
           disabled={disabled}
-          fieldName="canAccessDocsTDS"
+          fieldName="canAccessDocsAdmin"
           handleToggle={handleToggle}
           user={user}
         />
@@ -152,6 +152,22 @@ export const docsBody = ({
         <PermissionButton
           disabled={disabled}
           fieldName="canAccessDocsCogeco"
+          handleToggle={handleToggle}
+          user={user}
+        />
+      </TableCell>
+      <TableCell>
+        <PermissionButton
+          disabled={disabled}
+          fieldName="canAccessDocsComcast"
+          handleToggle={handleToggle}
+          user={user}
+        />
+      </TableCell>
+      <TableCell>
+        <PermissionButton
+          disabled={disabled}
+          fieldName="canAccessDocsTDS"
           handleToggle={handleToggle}
           user={user}
         />

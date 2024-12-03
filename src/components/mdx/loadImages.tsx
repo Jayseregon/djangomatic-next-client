@@ -20,7 +20,7 @@ export const LoadDynamicImage = ({
   // height,
 }: LoadImageProps): JSX.Element => {
   // const nonce = useContext(NonceContext);
-  const imgSrc = `/docs/${imageName}.jpg`;
+  const imgSrc = `/assets/${imageName}.jpg`;
   const nonce = useContext(NonceContext);
 
   return (

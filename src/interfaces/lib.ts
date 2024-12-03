@@ -27,6 +27,8 @@ export interface UserSchema {
   canAccessDocsCogeco: boolean;
   canAccessDocsVistabeam: boolean;
   canAccessDocsXplore: boolean;
+  canAccessDocsComcast: boolean;
+  canAccessDocsAdmin: boolean;
   canAccessVideoAdmin: boolean;
   canAccessVideoGIS: boolean;
   canAccessVideoCAD: boolean;

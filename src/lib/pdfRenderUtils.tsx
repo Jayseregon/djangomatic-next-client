@@ -1,6 +1,7 @@
 import { Text } from "@react-pdf/renderer";
 
 import { StylesPDF } from "@/styles/stylesPDF";
+import { TowerReportImage } from "@/types/reports";
 
 export const parseTextBold = (text: string) => {
   const parts = text.split(/(\*\*[^\*]+\*\*)/g);
@@ -17,3 +18,32 @@ export const parseTextBold = (text: string) => {
     }
   });
 };
+
+export async function fetchImageBatch(
+  images: TowerReportImage[],
+): Promise<{ [key: string]: string }> {
+  const urls = images.map((img) => img.url);
+  const encodedUrls = encodeURIComponent(JSON.stringify(urls));
+
+  try {
+    const response = await fetch(`/api/proxy-image?urls=${encodedUrls}`);
+    const imagesData = await response.json();
+
+    return imagesData.reduce((acc: { [key: string]: string }, img: any) => {
+      if (img) {
+        const bytes = new Uint8Array(img.data);
+        const base64 = btoa(
+          bytes.reduce((data, byte) => data + String.fromCharCode(byte), ""),
+        );
+
+        acc[img.url] = `data:${img.contentType};base64,${base64}`;
+      }
+
+      return acc;
+    }, {});
+  } catch (error) {
+    console.error("Error loading images:", error);
+
+    return {};
+  }
+}

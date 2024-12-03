@@ -26,6 +26,7 @@ declare module "next-auth/jwt" {
 
 const authorizedMembers = [
   { email: "jayseregon@gmail.com" },
+  { email: "prevg18@gmail.com" },
   { email: "jeremie.bitsch@telecon.ca" },
   { email: "m-l.betournay@telecon.ca" },
   { email: "gabriel.prevost@telecon.ca" },
@@ -56,10 +57,11 @@ export const config = {
       // Check if the user's email is in the list of authorized members
       const isAuthorized =
         authorizedMembers.some((member) => member.email === user.email) ||
-        user.email?.endsWith("@telecon.ca") || user.email?.endsWith("@telecon.com");
+        user.email?.endsWith("@telecon.ca") ||
+        user.email?.endsWith("@telecon.com");
 
       const isAdmin = authorizedMembers.some(
-        (member) => member.email === user.email,
+        (member) => member.email === user.email
       );
 
       if (isAuthorized) {

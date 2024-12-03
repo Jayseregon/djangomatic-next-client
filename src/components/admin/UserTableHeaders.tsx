@@ -64,10 +64,12 @@ export const docsHeader = (): JSX.Element => {
       <TableColumn key="username" className="w-56">
         username
       </TableColumn>
-      <TableColumn key="docs1">tds</TableColumn>
+      <TableColumn key="docs1">admin</TableColumn>
       <TableColumn key="docs2">cogeco</TableColumn>
-      <TableColumn key="docs3">vistabeam</TableColumn>
-      <TableColumn key="docs4">xplore</TableColumn>
+      <TableColumn key="docs3">comcast</TableColumn>
+      <TableColumn key="docs4">tds</TableColumn>
+      <TableColumn key="docs5">vistabeam</TableColumn>
+      <TableColumn key="docs6">xplore</TableColumn>
     </TableHeader>
   );
 };

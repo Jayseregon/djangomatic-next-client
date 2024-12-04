@@ -7,6 +7,7 @@ import {
   ChecklistRow,
   Note,
 } from "@/src/types/reports";
+import { handlePrismaError } from "@/src/lib/prismaErrorHandler";
 const prisma = new PrismaClient();
 
 const createNestedData = (data: any) => {
@@ -150,13 +151,17 @@ export async function POST(request: Request) {
 
     return NextResponse.json({ report: newReport }, { status: 201 });
   } catch (error) {
-    return NextResponse.json(
-      {
-        error: "Failed to create report",
-        details: error instanceof Error ? error.message : "Unknown error",
-      },
-      { status: 500 },
-    );
+    if (error instanceof Error) {
+      return NextResponse.json(
+        {
+          error: "Failed to create report",
+          details: error.message,
+        },
+        { status: 500 },
+      );
+    } else {
+      return handlePrismaError(error);
+    }
   } finally {
     await prisma.$disconnect();
   }
@@ -239,13 +244,17 @@ export async function PUT(request: Request) {
 
     return NextResponse.json({ report: updatedReport }, { status: 200 });
   } catch (error) {
-    return NextResponse.json(
-      {
-        error: "Failed to update report",
-        details: error instanceof Error ? error.message : "Unknown error",
-      },
-      { status: 500 },
-    );
+    if (error instanceof Error) {
+      return NextResponse.json(
+        {
+          error: "Failed to update report",
+          details: error.message,
+        },
+        { status: 500 },
+      );
+    } else {
+      return handlePrismaError(error);
+    }
   } finally {
     await prisma.$disconnect();
   }
@@ -305,8 +314,8 @@ export async function DELETE(request: Request) {
     });
 
     return new NextResponse(null, { status: 204 });
-  } catch (error) {
-    return new NextResponse("Error deleting report", { status: 500 });
+  } catch (error: any) {
+    return handlePrismaError(error);
   } finally {
     await prisma.$disconnect();
   }

@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server";
 import { PrismaClient } from "@prisma/client";
 
+import { handlePrismaError } from "@/src/lib/prismaErrorHandler";
+
 const prisma = new PrismaClient();
 
 export async function GET(request: Request) {
@@ -24,8 +26,8 @@ export async function GET(request: Request) {
     // console.log("Found tasks:", tasks);
 
     return NextResponse.json(tasks);
-  } catch (error) {
-    return new NextResponse("Error fetching tasks", { status: 500 });
+  } catch (error: any) {
+    return handlePrismaError(error);
   } finally {
     await prisma.$disconnect();
   }

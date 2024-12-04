@@ -18,7 +18,7 @@ const AntennaInventoryTableRow = ({
         </View>
         <View style={StylesPDF.trAntenna}>
           <Text>
-            ({item.quantity}) {item.equipment}
+            ({parseTextBold(item.quantity)}) {parseTextBold(item.equipment)}
           </Text>
         </View>
         <View style={StylesPDF.trAzimuth}>
@@ -28,7 +28,7 @@ const AntennaInventoryTableRow = ({
           <Text>{parseTextBold(item.tx_line)}</Text>
         </View>
         <View style={StylesPDF.trOdu}>
-          <Text>{item.odu}</Text>
+          <Text>{parseTextBold(item.odu)}</Text>
         </View>
         <View style={StylesPDF.trCarrier}>
           <Text>{item.carrier}</Text>

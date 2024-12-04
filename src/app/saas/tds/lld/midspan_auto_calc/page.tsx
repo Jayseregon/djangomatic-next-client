@@ -7,6 +7,7 @@ import { StartTaskButton } from "@/src/components/saas/startTaskButton";
 import { InputDataProvider } from "@/src/components/saas/inputDataProviders";
 import { ConsoleDisplay } from "@/src/components/saas/consoleDisplay";
 import { AppPageDescription } from "@/src/components/saas/appPageDescription";
+import DocLinkButton from "@/components/docs/DocLinkButton";
 // import dynamic from "next/dynamic";
 // import { useMemo } from "react";
 
@@ -48,6 +49,7 @@ function SaasPageContent({ session }: { session: any }): JSX.Element {
       email={session.user.email}
       permission="canAccessAppsTdsLLD"
     >
+      <DocLinkButton projectType="tds_docs" slug="midspan-calculator" />
       <div className="space-y-5 mb-5">
         <InputDataProvider>
           {/* Automatically detects and displays the app name */}

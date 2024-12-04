@@ -111,8 +111,8 @@ export const docsData = {
   admin_docs: [
     // temp doc placeholder, qgis doc: FALSE
     {
-      label: "Admin Doc Placeholder",
-      href: "/docs/admin/admin-doc-placeholder",
+      label: "PCI Reports Rogers",
+      href: "/docs/admin/pci-reports-rogers",
       is_qgis_doc: false,
     },
     // temp doc placeholder, qgis doc: TRUE

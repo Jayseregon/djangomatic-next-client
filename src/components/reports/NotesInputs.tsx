@@ -22,11 +22,7 @@ export default function NotesInputs({
         onReorder={(newNotes) => onNoteChange(-1, "reorder", newNotes)}
       >
         {notes.map((note, index) => (
-          <Reorder.Item
-            key={note.id || index}
-            dragControls={dragControls}
-            value={note}
-          >
+          <Reorder.Item key={note.id} dragControls={dragControls} value={note}>
             <div className="flex items-center space-x-2">
               <div
                 className="cursor-grab"

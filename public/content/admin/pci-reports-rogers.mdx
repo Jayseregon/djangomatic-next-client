@@ -1,0 +1,178 @@
+---
+title: PCI Reports Rogers
+slug: pci-reports-rogers
+---
+<div>
+  ### Quick start guide for generating PCI reports for Rogers.
+
+  <TableOfContentsMdx
+  title="Table of Contents"
+    items={[
+      { title: "Step 1: Create a New Report", id: "step-1-create-a-new-report" },
+      { title: "Step 2: Available Sections", id: "step-2-available-sections" },
+      { title: "Step 3: Antenna & Inventory Section", id: "step-3-antenna-inventory-section" },
+      { title: "Step 4: Deficiency Images Section", id: "step-4-deficiency-images-section" },
+      { title: "Step 5: Site Images Section", id: "step-5-site-images-section" },
+      { title: "Step 6: Form Sections", id: "step-6-form-sections" },
+      { title: "Step 7: Cancel Progress", id: "step-7-cancel-progress" },
+      { title: "Step 8: Save the Report", id: "step-8-save-the-report" },
+      { title: "Step 9: Download the Report", id: "step-9-download-the-report" },
+      { title: "Step 10: Dashboard Actions", id: "step-10-dashboard-actions" }
+    ]}
+  />
+
+  <h2 id="step-1-create-a-new-report">Step 1: Create a New Report</h2>
+
+  - Once you are in the PCI reports dashboard, you can create a new report by clicking on the <Snippet>Create New Report</Snippet> button. 
+  - The first section presents the report details extracted from Quickbase. You need to provide the Work Order and click on <Snippet>Search QB</Snippet> to proceed and auto-fill the rest of the <Snippet>Quickbase Project Data</Snippet> section.
+
+  <LoadDynamicImage imageName="pci-reports-rogers/qb-section" width={500} />
+
+  - Additionally, you have the option to add a front cover image to the report using the <Snippet>Add Cover Image</Snippet> button. 
+  - You can either click and select an image from your computer or drag and drop an image file into the drop area.
+  
+  <LoadDynamicImage imageName="pci-reports-rogers/front-cover-drop-area" width={700} />
+
+  - Once you have selected an image, you will be prompted with a modal menu to rotate the image if needed and save it to upload the image.
+
+  <LoadDynamicImage imageName="pci-reports-rogers/front-cover-rotate" width={500} />
+
+  <LoadDynamicImage imageName="pci-reports-rogers/front-cover-uploaded" width={500} />
+
+  - These are the minimal details required to create a new report. Once done, you will be able to perform a <Quote>quick save</Quote> of the report with the button:
+  
+  <LoadDynamicImage imageName="pci-reports-rogers/quick-save" width={100} />
+
+  - You will receive a notification confirming that the report has been saved successfully.
+  
+  <LoadDynamicImage imageName="pci-reports-rogers/save-notification" width={300} />
+
+  <h2 id="step-2-available-sections">Step 2: Available Sections</h2>
+
+  - The report is divided into several sections, each within its own accordion menu. You can navigate through the sections and expand or collapse them as needed.
+  
+  <LoadDynamicImage imageName="pci-reports-rogers/report-sections" width={500} />
+
+  <h2 id="step-3-antenna-inventory-section">Step 3: Antenna & Inventory Section</h2>
+
+  - Using the <Snippet>Add New Inventory</Snippet> button, you can add new entries to the table. 
+  - Each field is editable with string data (e.g., alphanumeric text). 
+  
+  <LoadDynamicImage imageName="pci-reports-rogers/antenna-inventory" width={500} />
+
+  - You can also delete or duplicate an entry using the respective buttons associated with the specific entry row. 
+  
+  <LoadDynamicImage imageName="pci-reports-rogers/row-entry-buttons" width={100} />
+
+  - Similar to markdown, the fields <Snippet>Quantity</Snippet>, <Snippet>Equipment</Snippet>, <Snippet>TX Line</Snippet>, and <Snippet>ODU</Snippet> support enclosing text within double asterisks to make it bold.
+  
+  <LoadDynamicImage imageName="pci-reports-rogers/antenna-fields-bold" width={700} />
+
+  <LoadDynamicImage imageName="pci-reports-rogers/antenna-fields-bold-render" width={700} />
+
+  - Using the <Snippet>Add New Note</Snippet> button, you can add notes below the table. Each note also supports markdown syntax for bold text. 
+  - Each note can be deleted using the inline delete button and reordered using the drag handle on the left side of the note.
+  
+  <LoadDynamicImage imageName="pci-reports-rogers/antenna-notes" width={700} />
+
+  <h2 id="step-4-deficiency-images-section">Step 4: Deficiency Images Section</h2>
+
+  - Similarly to the Antenna & Inventory section, you can add new entries to the table using the <Snippet>Add Deficiency</Snippet> button and add new notes using the <Snippet>Add New Note</Snippet> button.
+  - Each note entry has the same functionality as in the Antenna & Inventory section: bold text, delete button, and drag handle for reordering.
+  
+  <LoadDynamicImage imageName="pci-reports-rogers/deficiency-section" width={500} />
+
+  - When adding a new deficiency image, you are first prompted to fill in the <Snippet>Description</Snippet>, <Snippet>Checking Procedure</Snippet>, and <Snippet>Recommendation</Snippet> fields. Then, the image input field will be unlocked, allowing you to either click and select an image from your computer or drag and drop an image file into the drop area. 
+  
+  <LoadDynamicImage imageName="pci-reports-rogers/deficiency-image-input" width={700} />
+
+  <LoadDynamicImage imageName="pci-reports-rogers/deficiency-image-drop-area" width={700} />
+
+  - Once you have selected an image, you will be prompted with a modal menu to rotate the image if needed and save it to upload the image. 
+  
+  <LoadDynamicImage imageName="pci-reports-rogers/deficiency-image-rotation" width={500} />
+
+  - After successfully uploading the image, you will see the preview inline with its related fields. 
+  - You can also delete the image using the delete button and reorder the images using the drag handle on the left side of the image. 
+  
+  <LoadDynamicImage imageName="pci-reports-rogers/deficiency-image-display" width={700} />
+
+  - If the content of the image-related fields is too long to be fully displayed, you can hover over the field to see the full content in a tooltip.
+  
+  <LoadDynamicImage imageName="pci-reports-rogers/deficiency-field-tooltip" width={700} />
+
+  <Callout type="warning"> 
+  ### **Fair Warning**
+  The report is <u>not saved automatically</u>. You need to manually and periodically save your progress to avoid losing any data.
+  <LoadDynamicImage imageName="pci-reports-rogers/quick-save" width={100} />
+  </Callout>
+
+  <h2 id="step-5-site-images-section">Step 5: Site Images Section</h2>
+
+  - Like the Deficiency Images section, you can add new entries to the table using the <Snippet>Add Site Image</Snippet> button. 
+  
+  <LoadDynamicImage imageName="pci-reports-rogers/site-image" width={700} />
+
+  - You will be prompted to fill in the description field by either typing it in or selecting one from the dropdown list.
+  
+  <LoadDynamicImage imageName="pci-reports-rogers/site-image-dropdown" width={500} />
+
+  - After that, you can click and select an image from your computer or drag and drop an image file into the drop area.
+  
+  <LoadDynamicImage imageName="pci-reports-rogers/site-image-drop-area" width={700} />
+
+  - Once you have selected an image, you will be prompted with a modal menu to rotate the image if needed and save it to upload the image.
+  
+  <LoadDynamicImage imageName="pci-reports-rogers/site-image-rotate" width={500} />
+
+  - After successfully uploading the image, you will see the preview inline with its related fields.
+  - All images have a drag handle on the left side to allow reordering and a delete button to remove the image.
+  
+  <LoadDynamicImage imageName="pci-reports-rogers/site-image-list" width={700} />
+
+  <h2 id="step-6-form-sections">Step 6: Form Sections</h2>
+
+  - The form sections are divided into several parts, each with its own accordion menu. You can navigate through the sections and expand or collapse them as needed. 
+  - Each is built with the same structure, displaying the fields <Quote>id</Quote> and <Quote>description</Quote>, radio buttons to select the proper status between <Quote>Yes</Quote>, <Quote>No</Quote>, and <Quote>N/A</Quote>, and a <Quote>comments</Quote> field for additional information if needed.
+  
+  <LoadDynamicImage imageName="pci-reports-rogers/form-sections" width={500} />
+
+  <h2 id="step-7-cancel-progress">Step 7: Cancel Progress</h2>
+
+  - If you want to cancel the progress and exit the report, you can click on the <Quote>Cancel</Quote> button. This will undo all the changes made since the last save or quick save, and you will be redirected back to the PCI reports dashboard.
+  
+  <LoadDynamicImage imageName="pci-reports-rogers/cancel" width={100} />
+
+  <h2 id="step-8-save-the-report">Step 8: Save the Report</h2>
+
+  - Once you have completed the report, you can save it while choosing to remain in the report using the <Quote>quick save</Quote> button: 
+  
+  <LoadDynamicImage imageName="pci-reports-rogers/quick-save" width={100} />
+
+  - Or you can save and exit the report using the <Quote>save & exit</Quote> button: 
+  
+  <LoadDynamicImage imageName="pci-reports-rogers/save-exit" width={100} />
+
+  <h2 id="step-9-download-the-report">Step 9: Download the Report</h2>
+
+  - Once you have saved the report, you can generate the PDF file by clicking on the <Quote>File</Quote> button.
+  
+  <LoadDynamicImage imageName="pci-reports-rogers/generate-file" width={100} />
+    
+  - This will redirect you to a new page where you can preview the report and download it as a PDF file.
+  
+  <LoadDynamicImage imageName="pci-reports-rogers/pdf-report-page" width={700} />
+
+  <h2 id="step-10-dashboard-actions">Step 10: Dashboard Actions</h2>
+
+  - In the PCI reports dashboard, you can see the list of all the reports created.
+  - You can search for a specific report using the search bar based on the <Quote>Work Order</Quote> number.
+  
+  <LoadDynamicImage imageName="pci-reports-rogers/dashboard-search" width={700} />
+
+  - You have the ability to edit a report by clicking on the <Quote>Edit</Quote> button. 
+  - Or, you can directly generate the PDF file by clicking on the <Quote>File</Quote> button:
+  
+  <LoadDynamicImage imageName="pci-reports-rogers/dashboard-commands" width={100} />
+
+</div>

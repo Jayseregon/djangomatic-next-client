@@ -7,16 +7,18 @@ import { evaluate } from "next-mdx-remote-client/rsc";
 
 import { MdxRendererProps } from "@/interfaces/mdx";
 
-import Callout from "./callout";
-import Snippet from "./snippet";
-import { LoadDynamicImage } from "./loadImages";
-import Quote from "./quote";
+import LoadDynamicImage from "./LoadDynamicImage";
+import Callout from "./Callout";
+import Snippet from "./Snippet";
+import Quote from "./Quote";
+import TableOfContentsMdx from "./TableOfContentsMdx";
 
 const sharedComponents: MDXComponents = {
   Callout,
   Snippet,
   LoadDynamicImage,
   Quote,
+  TableOfContentsMdx,
 };
 
 export async function MDXRenderer({ source }: MdxRendererProps) {

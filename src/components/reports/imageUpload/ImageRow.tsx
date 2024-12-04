@@ -25,24 +25,24 @@ export const ImageRow = ({
         />
         {!isFrontcover ? (
           isDeficiency ? (
-            <>
+            <div className="flex items-center space-x-2">
               <DisplayInputWithTooltip
                 value={image.imgIndex + 1 + ". " + image.label}
-                width="w-1/3"
+                width="flex-1"
               />
               <DisplayInput
                 value={image.deficiency_check_procedure}
-                width="w-1/3 max-w-20"
+                width="w-20"
               />
               <DisplayInputWithTooltip
                 value={image.deficiency_recommendation}
-                width="w-1/3"
+                width="flex-1"
               />
               <TrashButton
                 className="ml-2"
                 onClick={() => removeImageField(image.imgIndex)}
               />
-            </>
+            </div>
           ) : (
             <>
               <DisplayInput

@@ -146,9 +146,13 @@ export const DisplayInputWithTooltip = ({
       placement="top"
     >
       <div
-        className={`border-2 h-10 border-primary/50 text-foreground/50 rounded-3xl ${width ? width : "w-1/2"} text-nowrap flex items-center justify-left ps-5`}
+        className={`border-2 h-10 border-primary/50 text-foreground/50 rounded-3xl ${
+          width ? width : "w-1/2"
+        } max-w-xs overflow-hidden flex items-center ps-5`}
       >
-        <p className="text-ellipsis overflow-hidden">{value}</p>
+        <p className="text-ellipsis whitespace-nowrap overflow-hidden">
+          {value}
+        </p>
       </div>
     </Tooltip>
   );

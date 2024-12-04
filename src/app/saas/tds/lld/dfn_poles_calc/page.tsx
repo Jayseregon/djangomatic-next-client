@@ -10,6 +10,7 @@ import { StartTaskButton } from "@/src/components/saas/startTaskButton";
 import { InputDataProvider } from "@/src/components/saas/inputDataProviders";
 import { ConsoleDisplay } from "@/src/components/saas/consoleDisplay";
 import { AppPageDescription } from "@/src/components/saas/appPageDescription";
+import DocLinkButton from "@/components/docs/DocLinkButton";
 
 /**
  * SaasPage component handles authentication and renders the SaasPageContent if the user is authenticated.
@@ -40,6 +41,7 @@ function SaasPageContent({ session }: { session: any }): JSX.Element {
       email={session.user.email}
       permission="canAccessAppsTdsLLD"
     >
+      <DocLinkButton projectType="tds_docs" slug="dfn-poles-calculator" />
       <div className="space-y-5 mb-5">
         <InputDataProvider>
           {/* Automatically detects and displays the app name */}

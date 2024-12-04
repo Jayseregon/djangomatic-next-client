@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server";
 import { PrismaClient } from "@prisma/client";
 
+import { handlePrismaError } from "@/src/lib/prismaErrorHandler";
+
 const prisma = new PrismaClient();
 
 export async function GET(request: Request) {
@@ -39,10 +41,8 @@ export async function GET(request: Request) {
     // console.log("Find unique report:", report);
 
     return NextResponse.json(report);
-  } catch (error) {
-    console.error("Error fetching report:", error);
-
-    return new NextResponse("Error fetching report", { status: 500 });
+  } catch (error: any) {
+    return handlePrismaError(error);
   } finally {
     await prisma.$disconnect();
   }

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Button } from "@nextui-org/react";
 import { CircleOff, FileText, Save, SaveAll } from "lucide-react";
+import { v4 as uuidv4 } from "uuid";
 
 import DynamicForm from "@/components/reports/checklist/DynamicForm";
 import listForm4 from "public/reports/rogers/listForm4.json";
@@ -25,6 +26,7 @@ import ToastNotification, {
 } from "@/components/ui/ToastNotification";
 import { FormInput } from "@/components/ui/formInput";
 import NotesInputs from "@/components/reports/NotesInputs";
+import DocLinkButton from "@/components/docs/DocLinkButton";
 
 import FormSectionAccordion from "./FormSectionAccordion";
 import QuickbaseInputs from "./QuickbaseInputs";
@@ -188,7 +190,11 @@ export const TowerReportForm = ({
   const handleAddAntennaNote = () => {
     setAntennaNotes((prev) => [
       ...prev,
-      { id: "", indexNumber: prev.length + 1, comment: "" },
+      {
+        id: uuidv4(),
+        indexNumber: prev.length + 1,
+        comment: "",
+      },
     ]);
   };
 
@@ -198,7 +204,6 @@ export const TowerReportForm = ({
     value: any,
   ) => {
     if (field === "reorder") {
-      // Reordered notes are passed as "value"
       const reindexedNotes = value.map((note: Note, idx: number) => ({
         ...note,
         indexNumber: idx + 1,
@@ -234,7 +239,11 @@ export const TowerReportForm = ({
   const handleAddDeficiencyNote = () => {
     setDeficiencyNotes((prev) => [
       ...prev,
-      { id: "", indexNumber: prev.length + 1, comment: "" },
+      {
+        id: uuidv4(),
+        indexNumber: prev.length + 1,
+        comment: "",
+      },
     ]);
   };
 
@@ -257,7 +266,6 @@ export const TowerReportForm = ({
         updatedNotes[index] = {
           ...updatedNotes[index],
           [field]: value,
-          indexNumber: index + 1,
         };
 
         return updatedNotes;
@@ -449,265 +457,271 @@ export const TowerReportForm = ({
   };
 
   return (
-    <form className="space-y-4 w-full px-20 pt-5" onSubmit={handleSubmit}>
-      {/* Quickbase Query */}
-      <div className="grid grid-cols-2 items-center gap-8">
-        <FormInput
-          label="Work Order"
-          name="jde_work_order"
-          placeholder="XXXXXX"
-          value={formData.jde_work_order}
-          onChange={handleChange}
-        />
-        <div className="h-full w-full content-end">
-          <Button
-            className="bg-primary text-white w-full w-full h-10"
-            isDisabled={
-              !formData.jde_work_order || formData.jde_work_order?.length < 6
-            }
-            radius="full"
-            variant="solid"
-            onClick={handleSearchQB}
-          >
-            Search QB
-          </Button>
-        </div>
-      </div>
-
-      {/* Front Images */}
-      {formData.jde_work_order && formData.jde_work_order?.length > 5 && (
-        <ImageUpload
-          images={frontImages}
-          isFrontcover={true}
-          labelPlaceholder="Front Image"
-          newImageButtonName="Add Cover Image"
-          subdir={subdir}
-          onImagesChange={setFrontImages}
-          onNewImageUpload={handleNewImageUpload}
-        />
-      )}
-
-      {/* Divider */}
-      <FormSectionAccordion
-        defaultOpen
-        menuKey="qb-data"
-        title="Quickbase Project Data"
+    <>
+      <DocLinkButton projectType="admin_docs" slug="pci-reports-rogers" />
+      <form
+        className="space-y-4 w-full px-20 pt-5 z-30"
+        onSubmit={handleSubmit}
       >
-        {/* Quickbase Data */}
-        <QuickbaseInputs formData={formData} handleChange={handleChange} />
-      </FormSectionAccordion>
-
-      {/* Divider */}
-      <FormSectionAccordion
-        menuKey="antenna"
-        title="Antenna & Transmission Line Inventory"
-      >
-        {/* Antenna & Transmission Line Inventory */}
-        <div className="space-y-10">
-          {formData.jde_work_order && formData.jde_work_order?.length > 5 && (
-            <AntennaTransmissionInputs
-              antennaInventory={antennaInventory}
-              onAddAntenna={handleAddAntenna}
-              onAntennaChange={handleAntennaInventoryChange}
-              onDuplicateAntenna={handleDuplicateAntenna}
-              onRemoveAntenna={handleRemoveAntenna}
-            />
-          )}
-          {/* Antenna Notes Section */}
-          <NotesInputs
-            notes={antennaNotes}
-            onAddNote={handleAddAntennaNote}
-            onNoteChange={handleAntennaNoteChange}
-            onRemoveNote={handleRemoveAntennaNote}
+        {/* Quickbase Query */}
+        <div className="grid grid-cols-2 items-center gap-8">
+          <FormInput
+            label="Work Order"
+            name="jde_work_order"
+            placeholder="XXXXXX"
+            value={formData.jde_work_order}
+            onChange={handleChange}
           />
+          <div className="h-full w-full content-end">
+            <Button
+              className="bg-primary text-white w-full w-full h-10"
+              isDisabled={
+                !formData.jde_work_order || formData.jde_work_order?.length < 6
+              }
+              radius="full"
+              variant="solid"
+              onClick={handleSearchQB}
+            >
+              Search QB
+            </Button>
+          </div>
         </div>
-      </FormSectionAccordion>
 
-      {/* Divider */}
-      <FormSectionAccordion menuKey="deficiencies" title="Deficiency Images">
-        {/* Deficiency Images */}
-        <div className="space-y-10">
-          {formData.jde_work_order && formData.jde_work_order?.length > 5 && (
-            <ImageUpload
-              images={deficiencyImages}
-              isDeficiency={true}
-              labelOptions={[]}
-              labelPlaceholder="Description"
-              newImageButtonName="Add Deficiency"
-              subdir={subdir}
-              onImagesChange={setDeficiencyImages}
-              onNewImageUpload={handleNewImageUpload}
-            />
-          )}
-          {/* Deficiency Notes Section */}
-          <NotesInputs
-            notes={deficiencyNotes}
-            onAddNote={handleAddDeficiencyNote}
-            onNoteChange={handleDeficiencyNoteChange}
-            onRemoveNote={handleRemoveDeficiencyNote}
-          />
-        </div>
-      </FormSectionAccordion>
-
-      {/* Divider */}
-      <FormSectionAccordion menuKey="site" title="Site Images">
-        {/* Site Images */}
+        {/* Front Images */}
         {formData.jde_work_order && formData.jde_work_order?.length > 5 && (
           <ImageUpload
-            images={siteImages}
-            labelOptions={siteImagesLabelOptions}
-            labelPlaceholder="Select/Edit an option"
-            newImageButtonName="Add Site Image"
+            images={frontImages}
+            isFrontcover={true}
+            labelPlaceholder="Front Image"
+            newImageButtonName="Add Cover Image"
             subdir={subdir}
-            onImagesChange={setSiteImages}
+            onImagesChange={setFrontImages}
             onNewImageUpload={handleNewImageUpload}
           />
         )}
-      </FormSectionAccordion>
 
-      {/* Form 4 */}
-      <FormSectionAccordion
-        menuKey="form4"
-        title="FORM 4: Civil - Antenna Structure and Site Works"
-      >
-        <DynamicForm
-          checkListForm={checklistForm4}
-          list={listForm4}
-          setChecklistForm={setChecklistForm4}
-          onFormChange={handleChecklistFormChange}
-        />
-      </FormSectionAccordion>
-
-      {/* Form 5 */}
-      <FormSectionAccordion
-        menuKey="form5"
-        title="FORM 5: Civil - Electrical/Mechanical Alarm & Fire Protection Systems"
-      >
-        <DynamicForm
-          checkListForm={checklistForm5}
-          list={listForm5}
-          setChecklistForm={setChecklistForm5}
-          onFormChange={handleChecklistFormChange}
-        />
-      </FormSectionAccordion>
-
-      {/* Form 6 */}
-      <FormSectionAccordion
-        menuKey="form6"
-        title="FORM 6: Civil - AC Power and Grounding"
-      >
-        <DynamicForm
-          checkListForm={checklistForm6}
-          list={listForm6}
-          setChecklistForm={setChecklistForm6}
-          onFormChange={handleChecklistFormChange}
-        />
-      </FormSectionAccordion>
-
-      {/* Form 7 */}
-      <FormSectionAccordion
-        menuKey="form7"
-        title="FORM 7: Civil - Cable Tray and Overhead Support"
-      >
-        <DynamicForm
-          checkListForm={checklistForm7}
-          list={listForm7}
-          setChecklistForm={setChecklistForm7}
-          onFormChange={handleChecklistFormChange}
-        />
-      </FormSectionAccordion>
-
-      {/* Form 8 */}
-      <FormSectionAccordion
-        menuKey="form8"
-        title="FORM 8: Technical Install & Commission - Cellular Base Station"
-      >
-        <DynamicForm
-          checkListForm={checklistForm8}
-          list={listForm8}
-          setChecklistForm={setChecklistForm8}
-          onFormChange={handleChecklistFormChange}
-        />
-      </FormSectionAccordion>
-
-      {/* Form 9 */}
-      <FormSectionAccordion
-        menuKey="form9"
-        title="FORM 9: Technical Install & Commission - Microwave Radio"
-      >
-        <DynamicForm
-          checkListForm={checklistForm9}
-          list={listForm9}
-          setChecklistForm={setChecklistForm9}
-          onFormChange={handleChecklistFormChange}
-        />
-      </FormSectionAccordion>
-
-      {/* Form 10 */}
-      <FormSectionAccordion
-        menuKey="form10"
-        title="FORM 10: Technical Install & Commission - AC/DC Power"
-      >
-        <DynamicForm
-          checkListForm={checklistForm10}
-          list={listForm10}
-          setChecklistForm={setChecklistForm10}
-          onFormChange={handleChecklistFormChange}
-        />
-      </FormSectionAccordion>
-
-      {/* Form 11 */}
-      <FormSectionAccordion
-        menuKey="form11"
-        title="FORM 11: Technical Install & Commission - Miscellaneous Equipment"
-      >
-        <DynamicForm
-          checkListForm={checklistForm11}
-          list={listForm11}
-          setChecklistForm={setChecklistForm11}
-          onFormChange={handleChecklistFormChange}
-        />
-      </FormSectionAccordion>
-
-      <div className="space-x-4 mt-4 mx-auto">
-        <Button isIconOnly color="success" type="submit">
-          <SaveAll />
-        </Button>
-        <Button
-          isIconOnly
-          color="success"
-          type="button"
-          variant="bordered"
-          onClick={handleSaveAndContinue}
+        {/* Divider */}
+        <FormSectionAccordion
+          defaultOpen
+          menuKey="qb-data"
+          title="Quickbase Project Data"
         >
-          <Save />
-        </Button>
-        {!isNew && (
+          {/* Quickbase Data */}
+          <QuickbaseInputs formData={formData} handleChange={handleChange} />
+        </FormSectionAccordion>
+
+        {/* Divider */}
+        <FormSectionAccordion
+          menuKey="antenna"
+          title="Antenna & Transmission Line Inventory"
+        >
+          {/* Antenna & Transmission Line Inventory */}
+          <div className="space-y-10">
+            {formData.jde_work_order && formData.jde_work_order?.length > 5 && (
+              <AntennaTransmissionInputs
+                antennaInventory={antennaInventory}
+                onAddAntenna={handleAddAntenna}
+                onAntennaChange={handleAntennaInventoryChange}
+                onDuplicateAntenna={handleDuplicateAntenna}
+                onRemoveAntenna={handleRemoveAntenna}
+              />
+            )}
+            {/* Antenna Notes Section */}
+            <NotesInputs
+              notes={antennaNotes}
+              onAddNote={handleAddAntennaNote}
+              onNoteChange={handleAntennaNoteChange}
+              onRemoveNote={handleRemoveAntennaNote}
+            />
+          </div>
+        </FormSectionAccordion>
+
+        {/* Divider */}
+        <FormSectionAccordion menuKey="deficiencies" title="Deficiency Images">
+          {/* Deficiency Images */}
+          <div className="space-y-10">
+            {formData.jde_work_order && formData.jde_work_order?.length > 5 && (
+              <ImageUpload
+                images={deficiencyImages}
+                isDeficiency={true}
+                labelOptions={[]}
+                labelPlaceholder="Description"
+                newImageButtonName="Add Deficiency"
+                subdir={subdir}
+                onImagesChange={setDeficiencyImages}
+                onNewImageUpload={handleNewImageUpload}
+              />
+            )}
+            {/* Deficiency Notes Section */}
+            <NotesInputs
+              notes={deficiencyNotes}
+              onAddNote={handleAddDeficiencyNote}
+              onNoteChange={handleDeficiencyNoteChange}
+              onRemoveNote={handleRemoveDeficiencyNote}
+            />
+          </div>
+        </FormSectionAccordion>
+
+        {/* Divider */}
+        <FormSectionAccordion menuKey="site" title="Site Images">
+          {/* Site Images */}
+          {formData.jde_work_order && formData.jde_work_order?.length > 5 && (
+            <ImageUpload
+              images={siteImages}
+              labelOptions={siteImagesLabelOptions}
+              labelPlaceholder="Select/Edit an option"
+              newImageButtonName="Add Site Image"
+              subdir={subdir}
+              onImagesChange={setSiteImages}
+              onNewImageUpload={handleNewImageUpload}
+            />
+          )}
+        </FormSectionAccordion>
+
+        {/* Form 4 */}
+        <FormSectionAccordion
+          menuKey="form4"
+          title="FORM 4: Civil - Antenna Structure and Site Works"
+        >
+          <DynamicForm
+            checkListForm={checklistForm4}
+            list={listForm4}
+            setChecklistForm={setChecklistForm4}
+            onFormChange={handleChecklistFormChange}
+          />
+        </FormSectionAccordion>
+
+        {/* Form 5 */}
+        <FormSectionAccordion
+          menuKey="form5"
+          title="FORM 5: Civil - Electrical/Mechanical Alarm & Fire Protection Systems"
+        >
+          <DynamicForm
+            checkListForm={checklistForm5}
+            list={listForm5}
+            setChecklistForm={setChecklistForm5}
+            onFormChange={handleChecklistFormChange}
+          />
+        </FormSectionAccordion>
+
+        {/* Form 6 */}
+        <FormSectionAccordion
+          menuKey="form6"
+          title="FORM 6: Civil - AC Power and Grounding"
+        >
+          <DynamicForm
+            checkListForm={checklistForm6}
+            list={listForm6}
+            setChecklistForm={setChecklistForm6}
+            onFormChange={handleChecklistFormChange}
+          />
+        </FormSectionAccordion>
+
+        {/* Form 7 */}
+        <FormSectionAccordion
+          menuKey="form7"
+          title="FORM 7: Civil - Cable Tray and Overhead Support"
+        >
+          <DynamicForm
+            checkListForm={checklistForm7}
+            list={listForm7}
+            setChecklistForm={setChecklistForm7}
+            onFormChange={handleChecklistFormChange}
+          />
+        </FormSectionAccordion>
+
+        {/* Form 8 */}
+        <FormSectionAccordion
+          menuKey="form8"
+          title="FORM 8: Technical Install & Commission - Cellular Base Station"
+        >
+          <DynamicForm
+            checkListForm={checklistForm8}
+            list={listForm8}
+            setChecklistForm={setChecklistForm8}
+            onFormChange={handleChecklistFormChange}
+          />
+        </FormSectionAccordion>
+
+        {/* Form 9 */}
+        <FormSectionAccordion
+          menuKey="form9"
+          title="FORM 9: Technical Install & Commission - Microwave Radio"
+        >
+          <DynamicForm
+            checkListForm={checklistForm9}
+            list={listForm9}
+            setChecklistForm={setChecklistForm9}
+            onFormChange={handleChecklistFormChange}
+          />
+        </FormSectionAccordion>
+
+        {/* Form 10 */}
+        <FormSectionAccordion
+          menuKey="form10"
+          title="FORM 10: Technical Install & Commission - AC/DC Power"
+        >
+          <DynamicForm
+            checkListForm={checklistForm10}
+            list={listForm10}
+            setChecklistForm={setChecklistForm10}
+            onFormChange={handleChecklistFormChange}
+          />
+        </FormSectionAccordion>
+
+        {/* Form 11 */}
+        <FormSectionAccordion
+          menuKey="form11"
+          title="FORM 11: Technical Install & Commission - Miscellaneous Equipment"
+        >
+          <DynamicForm
+            checkListForm={checklistForm11}
+            list={listForm11}
+            setChecklistForm={setChecklistForm11}
+            onFormChange={handleChecklistFormChange}
+          />
+        </FormSectionAccordion>
+
+        <div className="space-x-4 mt-4 mx-auto">
+          <Button isIconOnly color="success" type="submit">
+            <SaveAll />
+          </Button>
           <Button
             isIconOnly
-            color="primary"
+            color="success"
             type="button"
             variant="bordered"
-            onClick={handleGeneratePDF}
+            onClick={handleSaveAndContinue}
           >
-            <FileText />
+            <Save />
           </Button>
-        )}
-        <Button
-          isIconOnly
-          color="danger"
-          type="button"
-          variant="bordered"
-          onClick={handleCancelClick}
-        >
-          <CircleOff />
-        </Button>
-      </div>
-      <ToastNotification
-        open={toastOpen}
-        response={toastMessage}
-        setOpen={setToastOpen}
-      />
-    </form>
+          {!isNew && (
+            <Button
+              isIconOnly
+              color="primary"
+              type="button"
+              variant="bordered"
+              onClick={handleGeneratePDF}
+            >
+              <FileText />
+            </Button>
+          )}
+          <Button
+            isIconOnly
+            color="danger"
+            type="button"
+            variant="bordered"
+            onClick={handleCancelClick}
+          >
+            <CircleOff />
+          </Button>
+        </div>
+        <ToastNotification
+          open={toastOpen}
+          response={toastMessage}
+          setOpen={setToastOpen}
+        />
+      </form>
+    </>
   );
 };

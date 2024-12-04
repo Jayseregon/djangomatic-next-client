@@ -93,8 +93,15 @@ export default auth((req) => {
  */
 export const config = {
   matcher: [
-    "/", // Apply middleware to the homepage.
-    "/((?!_next|_vercel|.*\\..*).*)", // Apply middleware to all other routes except for Next.js internal routes and static files.
-    "/((?!api|_next/static|_next/image|static|docs|favicon.ico).*)", // Apply middleware to all other routes except for API routes, Next.js static/image routes, static files, documentation, and the favicon.
+    /*
+     * Match all request paths except for the ones starting with:
+     * - _next/static (static files)
+     * - _next/image (image optimization files)
+     * - favicon.ico (favicon file)
+     * - public folder
+     * - api routes
+     */
+    "/((?!_next/static|_next/image|favicon.ico|public|api).*)",
+    "/",
   ],
 };

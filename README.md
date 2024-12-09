@@ -6,35 +6,153 @@
 2. [How to Use](#how-to-use)
     - [Prerequisites](#prerequisites)
     - [Local Development](#local-development)
-3. [License](#license)
-4. [Contact](#contact)
+    - [Database Management](#database-management)
+3. [CI/CD and Branching Strategy](#cicd-and-branching-strategy)
+4. [Developer Best Practices](#developer-best-practices)
+5. [License](#license)
+6. [Contact](#contact)
 
 ## Technologies Used
 
-- [Next.js 14](https://nextjs.org/docs/getting-started)
-- [NextUI v2](https://nextui.org/)
-- [Tailwind CSS](https://tailwindcss.com/)
-- [Tailwind Variants](https://tailwind-variants.org)
-- [TypeScript](https://www.typescriptlang.org/)
-- [Framer Motion](https://www.framer.com/motion/)
-- [next-themes](https://github.com/pacocoursey/next-themes)
+- [Next.js 15](https://nextjs.org/docs/getting-started) - for web framework
+- [NextUI](https://nextui.org/) - for UI components
+- [Tailwind CSS](https://tailwindcss.com/) - for styling
+- [Tailwind Variants](https://tailwind-variants.org) - for dynamic styling
+- [TypeScript](https://www.typescriptlang.org/) - for type safety
+- [Motion](https://motion.dev/) - for animations
+- [next-themes](https://github.com/pacocoursey/next-themes) - for theme management
+- [Prisma](https://www.prisma.io/) - for db management 
+- [Jest](https://jestjs.io/) - for testing
+- [ESLint](https://eslint.org/) - for code linting
+- [Prettier](https://prettier.io/) - for code formatting
 
 ## How to Use
 
 ### Prerequisites
 
-- Docker installed on your machine.
-- Docker Compose installed for local development (optional).
+- Docker (for local PostgreSQL database)
+- Node.js (v20 or higher)
+- npm (v9 or higher)
 
 ### Local Development
 
-**Build and run the container using Docker Compose:**
+1. Start PostgreSQL database:
+```bash
+docker compose up -d --build
+```
 
-This will use the `Dockerfile` for building the image and `docker-compose.yml` for running the container with the necessary settings for local development.
+2. Install dependencies:
+```bash
+npm install
+```
 
-    ```bash
-    docker-compose up -d --build
-    ```
+3. Start the application:
+```bash
+npm run dev
+```
+
+4. Run linting:
+```bash
+npm run lint
+```
+
+5. Run tests:
+```bash
+npm test
+```
+
+
+### Database Management
+
+New migrations (dev):
+```bash
+npx prisma migrate dev --name <migration_name>
+```
+
+Apply existing migrations (dev):
+```bash
+npx prisma migrate dev
+```
+
+Access to Prisma Studio (local)
+```bash
+npx prisma studio
+```
+
+Apply migrations (prod):
+```bash
+npx prisma migrate deploy
+```
+
+## CI/CD and Branching Strategy
+
+### Branches
+
+- `main`: Production deployment (protected, requires PR approval)
+- `staging`: Testing and staging environment
+
+### Deployment Flow
+
+1. Feature branches are created from `main`
+2. PRs are merged into `staging` for testing
+3. Once verified, `staging` is merged into `main` via PR
+4. GitHub Actions automatically:
+    - Builds Docker images
+    - Pushes to Azure Container Registry
+    - Deploys to respective environments
+
+## Developer Best Practices
+
+### Workflow
+
+1. Create GitHub issues
+    - Title format: `[Type] Brief Description`
+    - Types: `Feature`, `Bug`, `Enhancement`, `Tech Debt`
+    - Examples:
+      - `[Feature] Add user authentication flow`
+      - `[Bug] Fix database connection timeout`
+    - Include:
+      - Clear objective
+      - Acceptance criteria
+      - Technical requirements
+
+2. Create feature branches
+    - Manually:
+      - Branch naming: `type/issue-number/brief-description`
+      - Examples:
+        - `feature/123/add-auth-flow`
+        - `bugfix/456/fix-db-timeout`
+    - From GitHub Issues (recommended):
+      - Use GitHub's "Create a branch" feature
+      - Branch will be automatically named based on issue number and title
+      - Example: `123-add-user-authentication-flow`
+
+3. Commit best practices
+    - Format: `type(scope): description`
+    - Examples:
+      - `feat(auth): implement login form`
+      - `fix(db): resolve connection timeout`
+      - `chore(deps): update dependencies`
+    - Keep commits atomic and focused
+    - Use present tense
+4. Run linting after each commit:
+```bash
+npm run lint
+```
+5. Ensure all tests pass:
+```bash
+npm test
+```
+6. Submit PR for code review
+7. Address review comments
+
+### Code Quality
+
+- Write comprehensive tests
+- Follow TypeScript best practices
+- Document code changes
+- Participate in code reviews
+- Keep dependencies updated
 
 ## License
 
@@ -46,6 +164,6 @@ Please note that while this project uses an open-source license, it is not open 
 
 If you have any questions or need further clarification, feel free to reach out to the head developer of this project:
 
->  `Jeremie Bitsch`
+> `Jeremie Bitsch`
 
 Contact can be done via Teams or email. Please use the appropriate channel based on the nature of your query.

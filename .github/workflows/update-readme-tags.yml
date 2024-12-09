@@ -18,8 +18,8 @@ jobs:
         run: |
           # Read version from package.json
           VERSION=$(node -p "require('./package.json').version")
-          # Format date to YYYY-MM-DD
-          DATE_UPDATED=$(date +'%Y-%m-%d')
+          # Format date to YYYY.MM.DD (using dots instead of dashes)
+          DATE_UPDATED=$(date +'%Y.%m.%d')
           sed -i "s/version-[^)]*/version-${VERSION}-blue/g" README.md
           sed -i "s/last%20updated-[^)]*/last%20updated-${DATE_UPDATED}-brightgreen/g" README.md
 

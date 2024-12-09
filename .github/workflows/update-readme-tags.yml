@@ -18,10 +18,10 @@ jobs:
         run: |
           # Read version from package.json
           VERSION=$(node -p "require('./package.json').version")
-          # Format date to match README badge format (e.g., 2024--01--10%20%40%203%3A50pm)
-          DATE_UPDATED=$(date +'%Y--%m--%d%%20%%40%%20%-I%%3A%M%p' | tr '[:upper:]' '[:lower:]')
+          # Format date to YYYY-MM-DD
+          DATE_UPDATED=$(date +'%Y-%m-%d')
           sed -i "s/version-[^)]*/version-${VERSION}-blue/g" README.md
-          sed -i "s/last%20updated-[^-]*-brightgreen/last%20updated-${DATE_UPDATED}-brightgreen/g" README.md
+          sed -i "s/last%20updated-[^)]*/last%20updated-${DATE_UPDATED}-brightgreen/g" README.md
 
       - name: Configure Git
         run: |

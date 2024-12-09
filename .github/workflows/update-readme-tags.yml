@@ -1,0 +1,40 @@
+name: Update README Tags on PR
+
+on:
+  pull_request:
+    types: [opened, synchronize]
+
+jobs:
+  update-readme:
+    runs-on: ubuntu-latest
+    env:
+      TZ: 'America/Montreal'  # Set timezone to Eastern Time
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Update README badges
+        run: |
+          # Read version from package.json
+          VERSION=$(node -p "require('./package.json').version")
+          DATE_UPDATED=$(TZ=$TZ date +'%Y--%m--%d%%20%%40%%20%-I%%3A%M%p' | tr '[:upper:]' '[:lower:]')
+          sed -i "s/version-[^)]*/version-${VERSION}-blue/g" README.md
+          sed -i "s/last%20updated-[^-]*-brightgreen/last%20updated-${DATE_UPDATED}-brightgreen/g" README.md
+
+      - name: Configure Git
+        run: |
+          git config --global user.name 'GitHub Actions'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+          git config pull.rebase true
+
+      - name: Check and commit changes
+        run: |
+          if [[ -n "$(git status --porcelain)" ]]; then
+            git add README.md
+            git commit -m 'Update version and last updated badges in README'
+            git pull --rebase origin ${{ github.head_ref }}
+            git push origin HEAD:${{ github.head_ref }}
+          else
+            echo "No changes to commit"
+          fi

@@ -29,6 +29,8 @@ export interface UserSchema {
   canAccessDocsXplore: boolean;
   canAccessDocsComcast: boolean;
   canAccessDocsAdmin: boolean;
+  canAccessDocsKC: boolean;
+  canAccessDocsKCSecure: boolean;
   canAccessVideoAdmin: boolean;
   canAccessVideoGIS: boolean;
   canAccessVideoCAD: boolean;

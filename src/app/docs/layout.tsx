@@ -1,4 +1,3 @@
-import { headers } from "next/headers";
 import { setRequestLocale } from "next-intl/server";
 
 import { SidebarDocs } from "@/src/components/ui/sidebars/SidebarDocs";
@@ -9,12 +8,8 @@ export default async function DocsLayout(props: {
   params: Promise<{ locale: string }>;
 }) {
   const params = await props.params;
-
   const { locale } = params;
-
   const { children } = props;
-
-  const nonce = (await headers()).get("x-nonce");
 
   setRequestLocale(locale);
 
@@ -24,7 +19,7 @@ export default async function DocsLayout(props: {
         <SearchInput alwaysExpanded={true} />
       </div>
       <div className="w-72 fixed inset-y-0 left-0 mt-32 ms-4 mb-12 overflow-y-auto">
-        <SidebarDocs nonce={nonce || undefined} />
+        <SidebarDocs />
       </div>
       <section className="flex-grow ml-72 flex flex-col items-center gap-4 py-8 md:py-10 overflow-y-auto">
         <div className="inline-block max-w-full text-center justify-center">

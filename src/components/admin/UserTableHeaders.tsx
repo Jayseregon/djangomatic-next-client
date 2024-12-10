@@ -1,4 +1,5 @@
 import { TableHeader, TableColumn } from "@nextui-org/react";
+import { FileLock } from "lucide-react";
 
 /**
  * Renders the default table header.
@@ -64,12 +65,16 @@ export const docsHeader = (): JSX.Element => {
       <TableColumn key="username" className="w-56">
         username
       </TableColumn>
-      <TableColumn key="docs1">admin</TableColumn>
-      <TableColumn key="docs2">cogeco</TableColumn>
-      <TableColumn key="docs3">comcast</TableColumn>
-      <TableColumn key="docs4">tds</TableColumn>
-      <TableColumn key="docs5">vistabeam</TableColumn>
-      <TableColumn key="docs6">xplore</TableColumn>
+      <TableColumn key="kc">K-C</TableColumn>
+      <TableColumn key="kc-secure" className="inline-flex items-center gap-1">
+        K-C <FileLock size={16} />
+      </TableColumn>
+      <TableColumn key="admin">admin</TableColumn>
+      <TableColumn key="cogeco">cogeco</TableColumn>
+      <TableColumn key="comcast">comcast</TableColumn>
+      <TableColumn key="tds">tds</TableColumn>
+      <TableColumn key="vistabeam">vistabeam</TableColumn>
+      <TableColumn key="xplore">xplore</TableColumn>
     </TableHeader>
   );
 };

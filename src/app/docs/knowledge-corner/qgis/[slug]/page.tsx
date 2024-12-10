@@ -18,7 +18,7 @@ export default async function MdPage(props: {
   return (
     <DynamicDocTemplate
       docType={docType}
-      permission="canAccessDocsComcast"
+      permission="canAccessDocsKC"
       session={session}
       slug={slug}
     />

@@ -1,30 +1,29 @@
 "use client";
 
 import { Link } from "@nextui-org/react";
-import React from "react";
+import React, { useContext } from "react";
 import { useTranslations } from "next-intl";
 import { usePathname } from "next/navigation";
 import { Accordion, AccordionItem } from "@nextui-org/react";
 
 import { siteConfig } from "@/config/site";
 import { saasData } from "@/config/saasData";
-import { AppItem, SidebarProps, AppCategory } from "@/interfaces/ui";
+import { AppItem, AppCategory } from "@/interfaces/ui";
 import {
   linkTagStyling,
   SidebarSection,
 } from "@/components/ui/sidebars/helper";
+import { NonceContext } from "@/src/app/providers";
 
 /**
  * SidebarSaas component renders a sidebar with categorized SaaS applications.
  * It uses an accordion to group applications by categories such as TDS, COGECO, Vistabeam, and Xplore.
  *
  * @param {SidebarProps} props - The props for the SidebarSaas component.
- * @param {string} [props.nonce] - An optional nonce for the Link component.
  * @returns {JSX.Element} The rendered SidebarSaas component.
  */
-export const SidebarSaas: React.FC<SidebarProps> = ({
-  nonce,
-}: SidebarProps): JSX.Element => {
+export const SidebarSaas = (): JSX.Element => {
+  const nonce = useContext(NonceContext);
   const t = useTranslations("SaasSidebar");
   const currentPath = usePathname();
   const saasPath = siteConfig.navItemsBase.filter(
@@ -131,7 +130,7 @@ export const SidebarSaas: React.FC<SidebarProps> = ({
               </h2>
             }
           >
-            <SidebarSection categories={appCategoriesCOGECO} nonce={nonce} />
+            <SidebarSection categories={appCategoriesCOGECO} />
           </AccordionItem>
 
           {/* TDS Section */}
@@ -144,7 +143,7 @@ export const SidebarSaas: React.FC<SidebarProps> = ({
               </h2>
             }
           >
-            <SidebarSection categories={appCategoriesTDS} nonce={nonce} />
+            <SidebarSection categories={appCategoriesTDS} />
           </AccordionItem>
 
           {/* Telus Section */}
@@ -157,7 +156,7 @@ export const SidebarSaas: React.FC<SidebarProps> = ({
               </h2>
             }
           >
-            <SidebarSection categories={appCategoriesTelus} nonce={nonce} />
+            <SidebarSection categories={appCategoriesTelus} />
           </AccordionItem>
 
           {/* Vistabeam Section */}
@@ -170,7 +169,7 @@ export const SidebarSaas: React.FC<SidebarProps> = ({
               </h2>
             }
           >
-            <SidebarSection categories={appCategoriesVistabeam} nonce={nonce} />
+            <SidebarSection categories={appCategoriesVistabeam} />
           </AccordionItem>
 
           {/* Xplore Section */}
@@ -183,7 +182,7 @@ export const SidebarSaas: React.FC<SidebarProps> = ({
               </h2>
             }
           >
-            <SidebarSection categories={appCategoriesXplore} nonce={nonce} />
+            <SidebarSection categories={appCategoriesXplore} />
           </AccordionItem>
         </Accordion>
       </div>

@@ -1,6 +1,6 @@
 # Next.js & NextUI Application for Djangomatic
 
-[![Version](https://img.shields.io/badge/version-1.7.13-blue)](https://github.com/teleconapplications/djangomatic_prototype)
+[![Version](https://img.shields.io/badge/version-1.7.15-blue)](https://github.com/teleconapplications/djangomatic_prototype)
 [![Last Updated](https://img.shields.io/badge/last%20updated-2024.12.10-brightgreen)](https://github.com/teleconapplications/djangomatic_prototype)
 
 ## Table of Contents
@@ -91,15 +91,26 @@ npx prisma migrate deploy
 
 ### Branches
 
-- `main`: Production deployment (protected, requires PR approval)
-- `staging`: Testing and staging environment
+- `main`: Default branch from which new branches are created. PRs must be submitted to `main`.
+- `staging`: Deploys to staging/pre-production environment for testing.
+- `production`: Live production branch, updated once all checks, tests, and staging are cleared.
+
+*All branches are protected, read-only, and require PRs for any updates.*
 
 ### Deployment Flow
 
-1. Feature branches are created from `main`
-2. PRs are merged into `staging` for testing
-3. Once verified, `staging` is merged into `main` via PR
-4. GitHub Actions automatically:
+1. **PR updates to `main`**
+    - Multiple updates can be merged into `main` before a global test.
+2. **PR to `staging` for testing**
+    - Perform a comprehensive test of all updates in `staging`.
+3. **Issue Handling in `staging`**
+    - If issues are identified, create issues and PR fixes directly to `staging`.
+4. **PR `staging` to `main`**
+    - Once all checks pass, merge `staging` back into `main`.
+5. **PR `main` to `production`**
+    - Deploy to live production environment after final approval.
+
+6. GitHub Actions automatically:
     - Builds Docker images
     - Pushes to Azure Container Registry
     - Deploys to respective environments

@@ -1,10 +1,12 @@
 "use client";
 
 import { Link } from "@nextui-org/react";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { usePathname } from "next/navigation";
 
+import { NonceContext } from "@/src/app/providers";
 import { videosData } from "@/config/videosData";
+import { knowledgeHubData, SoftwareType } from "@/config/knowledgeCornerData";
 import { BlobProps } from "@/components/admin/BlobStorage";
 import { SidebarSectionProps } from "@/interfaces/ui";
 
@@ -35,13 +37,12 @@ export const linkTagStyling = (currentPath: string, href: string): string =>
  *
  * @param {SidebarSectionProps} props - The props for the SidebarSection component.
  * @param {Array} props.categories - An array of category objects, each containing a title and data array.
- * @param {string} [props.nonce] - An optional nonce for the Link component.
  * @returns {JSX.Element} The rendered SidebarSection component.
  */
 export const SidebarSection = ({
   categories,
-  nonce,
 }: SidebarSectionProps): JSX.Element => {
+  const nonce = useContext(NonceContext);
   const currentPath = usePathname();
 
   return (
@@ -133,5 +134,56 @@ export const SidebarVideosSection = (): JSX.Element => {
         </React.Fragment>
       ))}
     </div>
+  );
+};
+
+export const SidebarSoftwareSection = (): JSX.Element => {
+  const nonce = useContext(NonceContext);
+  const currentPath = usePathname();
+  const { software_docs } = knowledgeHubData;
+
+  // Group docs by software type
+  const groupedDocs = software_docs.reduce(
+    (acc, doc) => {
+      if (!acc[doc.software]) {
+        acc[doc.software] = [];
+      }
+      acc[doc.software].push(doc);
+
+      return acc;
+    },
+    {} as Record<SoftwareType, typeof software_docs>,
+  );
+
+  // Software type display names
+  const softwareNames: Record<SoftwareType, string> = {
+    qgis: "QGIS",
+    autocad: "AutoCAD",
+    autodesign: "AutoDesign",
+  };
+
+  return (
+    <>
+      {(Object.keys(groupedDocs) as SoftwareType[]).map((software) => (
+        <React.Fragment key={software}>
+          <h3 className="text-md font-bold text-foreground indent-3 pt-3 pb-2">
+            {softwareNames[software]}
+          </h3>
+          <ul>
+            {groupedDocs[software].map((item, index) => (
+              <li key={`${index}-${item.label}`} className="py-1">
+                <Link
+                  className={linkTagStyling(currentPath, item.href)}
+                  href={item.href}
+                  nonce={nonce}
+                >
+                  {item.label}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </React.Fragment>
+      ))}
+    </>
   );
 };

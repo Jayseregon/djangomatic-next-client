@@ -1,5 +1,3 @@
-import { headers } from "next/headers";
-
 import { SearchInput } from "@/src/components/ui/SearchInput";
 import { SidebarSaas } from "@/src/components/ui/sidebars/SidebarSaas";
 
@@ -8,15 +6,13 @@ export default async function SaasLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const nonce = (await headers()).get("x-nonce");
-
   return (
     <div className="flex min-h-screen">
       <div className="w-72 fixed inset-y-0 left-0 mt-20 ms-4 mb-12">
         <SearchInput alwaysExpanded={true} />
       </div>
       <div className="w-72 fixed inset-y-0 left-0 mt-32 ms-4 mb-12 overflow-y-auto">
-        <SidebarSaas nonce={nonce || undefined} />
+        <SidebarSaas />
       </div>
       <section className="flex-grow ml-72 flex flex-col items-center gap-4 py-8 md:py-10 overflow-y-auto">
         <div className="inline-block max-w-full text-center justify-center">

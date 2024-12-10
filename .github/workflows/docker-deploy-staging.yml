@@ -27,7 +27,7 @@ jobs:
         run: |
           cat <<EOF > .env
           DATABASE_URL=${{ secrets.DATABASE_URL_STAGE }}
-          NEXT_PUBLIC_APP_ENV=${{ secrets.NEXT_PUBLIC_APP_ENV }}
+          NEXT_PUBLIC_APP_ENV=${{ secrets.NEXT_PUBLIC_APP_ENV_STAGE }}
           NEXT_PUBLIC_BASE_URL=${{ secrets.NEXT_PUBLIC_BASE_URL }}
           AZURE_ACCOUNT_KEY=${{ secrets.AZURE_ACCOUNT_KEY }}
           AZURE_SAS_TOKEN=${{ secrets.AZURE_SAS_TOKEN }}

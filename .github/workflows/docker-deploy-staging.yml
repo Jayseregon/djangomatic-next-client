@@ -1,0 +1,54 @@
+name: Build and Push to Staging
+
+on:
+  # push:
+  #   branches:
+  #     - staging
+  pull_request:
+    types:
+      - closed
+
+jobs:
+  build:
+    if: ${{ github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'staging' }}
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          ref: 'staging'
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Log in to Azure Container Registry
+        run: docker login -u ${{ secrets.ACR_USERNAME }} -p ${{ secrets.ACR_PASSWORD }} crdjangomaticprod01.azurecr.io
+
+      - name: Create .env file
+        run: |
+          cat <<EOF > .env
+          DATABASE_URL=${{ secrets.DATABASE_URL_STAGE }}
+          NEXT_PUBLIC_APP_ENV=${{ secrets.NEXT_PUBLIC_APP_ENV_STAGE }}
+          NEXT_PUBLIC_BASE_URL=${{ secrets.NEXT_PUBLIC_BASE_URL }}
+          AZURE_ACCOUNT_KEY=${{ secrets.AZURE_ACCOUNT_KEY }}
+          AZURE_SAS_TOKEN=${{ secrets.AZURE_SAS_TOKEN }}
+          AZURE_STORAGE_CONTAINER_NAME=${{ secrets.AZURE_STORAGE_CONTAINER_NAME }}
+          AZURE_STORAGE_DJANGO_CONTAINER_NAME=${{ secrets.AZURE_STORAGE_DJANGO_CONTAINER_NAME }}
+          AZURE_STORAGE_ACCOUNT_NAME=${{ secrets.AZURE_STORAGE_ACCOUNT_NAME }}
+          AZURE_STORAGE_CONNECTION_STRING=${{ secrets.AZURE_STORAGE_CONNECTION_STRING }}
+          DATABASE_POSTGIS_MAIN_URL=${{ secrets.DATABASE_POSTGIS_MAIN_URL }}
+          DATABASE_POSTGIS_PROD_URL=${{ secrets.DATABASE_POSTGIS_PROD_URL }}
+          DATABASE_POSTGIS_SNAP_URL=${{ secrets.DATABASE_POSTGIS_SNAP_URL }}
+          DATABASE_COGECO_LAURENTIDES_URL=${{ secrets.DATABASE_COGECO_LAURENTIDES_URL }}
+          DATABASE_OSHKOSH_URL=${{ secrets.DATABASE_OSHKOSH_URL }}
+          EOF
+
+      - name: Build Docker image
+        run: docker buildx build --no-cache --platform linux/amd64 -t docker-djangomatic-next --load .
+
+      - name: Tag Staging image
+        run: docker tag docker-djangomatic-next crdjangomaticprod01.azurecr.io/docker-djangomatic-next-staging:staging-ci-test
+
+      - name: Push Staging image to ACR
+        run: docker image push crdjangomaticprod01.azurecr.io/docker-djangomatic-next-staging:staging-ci-test

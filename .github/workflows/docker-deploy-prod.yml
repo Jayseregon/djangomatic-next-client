@@ -47,7 +47,7 @@ jobs:
         run: docker buildx build --no-cache --platform linux/amd64 -t docker-djangomatic-next --load .
 
       - name: Tag Staging image
-        run: docker tag docker-djangomatic-next crdjangomaticprod01.azurecr.io/docker-djangomatic-next-prod:prod-ci-test
+        run: docker tag docker-djangomatic-next crdjangomaticprod01.azurecr.io/docker-djangomatic-next-prod:prod-latest
 
       - name: Push Staging image to ACR
-        run: docker image push crdjangomaticprod01.azurecr.io/docker-djangomatic-next-prod:prod-ci-test
+        run: docker image push crdjangomaticprod01.azurecr.io/docker-djangomatic-next-prod:prod-latest

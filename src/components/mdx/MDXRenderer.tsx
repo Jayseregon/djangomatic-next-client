@@ -6,10 +6,10 @@ import type {
 import { evaluate } from "next-mdx-remote-client/rsc";
 
 import { MdxRendererProps } from "@/interfaces/mdx";
-import Callout from "@/components/mdx/Callout";
-import Snippet from "@/components/mdx/Snippet";
+import Callout from "@/components/mdx/callout";
+import Snippet from "@/components/mdx/snippet";
 import LoadDynamicImage from "@/components/mdx/LoadDynamicImage";
-import Quote from "@/components/mdx/Quote";
+import Quote from "@/components/mdx/quote";
 import TableOfContentsMdx from "@/components/mdx/TableOfContentsMdx";
 
 const sharedComponents: MDXComponents = {

@@ -3,11 +3,15 @@ import {
   Card,
   CardHeader,
   CardBody,
+  CardFooter,
   Input,
   Textarea,
   Select,
   SelectItem,
+  Button,
 } from "@nextui-org/react";
+import { Trash2 } from "lucide-react";
+import { useDebouncedCallback } from "use-debounce";
 
 import { CardType } from "@/interfaces/roadmap";
 import { cn } from "@/src/lib/utils";
@@ -27,38 +31,64 @@ function RoadmapCard({
   card: CardType;
   setCards: React.Dispatch<React.SetStateAction<CardType[]>>;
 }) {
+  // Debounced update function
+  const debouncedUpdate = useDebouncedCallback((field, value) => {
+    fetch("/api/roadmap-cards/update", {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id: card.id, [field]: value }),
+    });
+  }, 500);
+
   const handleTitleChange = useCallback(
     (newTitle: string) => {
-      setCards((items: any[]) =>
-        items.map((item) =>
-          item.id === card.id ? { ...item, title: newTitle } : item,
-        ),
+      const updatedCard = { ...card, title: newTitle };
+
+      setCards((items) =>
+        items.map((item) => (item.id === card.id ? updatedCard : item)),
       );
+      debouncedUpdate("title", newTitle);
     },
-    [card.id, setCards],
+    [card, setCards, debouncedUpdate],
   );
 
   const handleDescriptionChange = useCallback(
     (newDescription: string) => {
-      setCards((items: any[]) =>
-        items.map((item) =>
-          item.id === card.id ? { ...item, description: newDescription } : item,
-        ),
+      const updatedCard = { ...card, description: newDescription };
+
+      setCards((items) =>
+        items.map((item) => (item.id === card.id ? updatedCard : item)),
       );
+      debouncedUpdate("description", newDescription);
     },
-    [card.id, setCards],
+    [card, setCards, debouncedUpdate],
   );
 
   const handleColorChange = useCallback(
     (newColor: string) => {
-      setCards((items: any[]) =>
-        items.map((item) =>
-          item.id === card.id ? { ...item, color: newColor } : item,
-        ),
+      const updatedCard = { ...card, color: newColor };
+
+      setCards((items) =>
+        items.map((item) => (item.id === card.id ? updatedCard : item)),
       );
+      fetch("/api/roadmap-cards/update", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id: card.id, color: newColor }),
+      });
     },
-    [card.id, setCards],
+    [card, setCards],
   );
+
+  const handleDelete = useCallback(() => {
+    fetch("/api/roadmap-cards/delete", {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id: card.id }),
+    }).then(() => {
+      setCards((items) => items.filter((item) => item.id !== card.id));
+    });
+  }, [card.id, setCards]);
 
   const colorOptions = [
     "slate",
@@ -101,7 +131,7 @@ function RoadmapCard({
         <Input
           isClearable
           aria-label="Title"
-          className="basis-3/4"
+          // className="basis-3/4"
           classNames={{
             input: "border-0 focus:ring-0",
             inputWrapper: card.color
@@ -113,6 +143,25 @@ function RoadmapCard({
           variant="bordered"
           onValueChange={handleTitleChange}
         />
+      </CardHeader>
+      <CardBody>
+        <Textarea
+          aria-label="Description"
+          classNames={{
+            input: "border-0 focus:ring-0",
+            inputWrapper: card.color
+              ? "border-background/50 hover:!border-background"
+              : "border-foreground/50 hover:!border-foreground",
+          }}
+          maxRows={9}
+          minRows={3}
+          placeholder="Description"
+          value={card.description}
+          variant="bordered"
+          onValueChange={handleDescriptionChange}
+        />
+      </CardBody>
+      <CardFooter className="flex items-center justify-between">
         <Select
           aria-label="Background Color"
           className="basis-1/4"
@@ -145,24 +194,15 @@ function RoadmapCard({
             </SelectItem>
           ))}
         </Select>
-      </CardHeader>
-      <CardBody>
-        <Textarea
-          aria-label="Description"
-          classNames={{
-            input: "border-0 focus:ring-0",
-            inputWrapper: card.color
-              ? "border-background/50 hover:!border-background"
-              : "border-foreground/50 hover:!border-foreground",
-          }}
-          maxRows={9}
-          minRows={3}
-          placeholder="Description"
-          value={card.description}
-          variant="bordered"
-          onValueChange={handleDescriptionChange}
-        />
-      </CardBody>
+        <Button
+          isIconOnly
+          color="danger"
+          variant="light"
+          onPress={handleDelete}
+        >
+          <Trash2 />
+        </Button>
+      </CardFooter>
     </Card>
   );
 }

@@ -3,6 +3,9 @@ export interface CardType {
   title: string;
   description: string;
   color: string;
+  position: number;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface SortableItemProps {

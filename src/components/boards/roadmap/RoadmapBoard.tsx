@@ -1,7 +1,6 @@
 "use client";
 
-import React, { useCallback, useState } from "react";
-import { v4 as uuidv4 } from "uuid";
+import React, { useCallback, useEffect, useState } from "react";
 import { Button } from "@nextui-org/react";
 import {
   DndContext,
@@ -19,15 +18,22 @@ import {
 import { Grid2x2Plus } from "lucide-react";
 
 import { CardType } from "@/interfaces/roadmap";
-import { initialCards } from "@/data/initialCards";
 
 import RoadmapCard from "./RoadmapCard";
 import SortableItem from "./SortableItem";
 
-function RoadmapBoard() {
-  const [cards, setCards] = useState<CardType[]>(initialCards);
+export default function RoadmapBoard() {
+  const [cards, setCards] = useState<CardType[]>([]);
 
   const sensors = useSensors(useSensor(MouseSensor), useSensor(TouchSensor));
+
+  useEffect(() => {
+    fetch("/api/roadmap-cards")
+      .then((res) => res.json())
+      .then((data) => {
+        setCards(data);
+      });
+  }, []);
 
   const handleDragEnd = (event: any) => {
     const { active, over } = event;
@@ -36,17 +42,34 @@ function RoadmapBoard() {
       setCards((items) => {
         const oldIndex = items.findIndex((item) => item.id === active.id);
         const newIndex = items.findIndex((item) => item.id === over.id);
+        const newItems = arrayMove(items, oldIndex, newIndex);
 
-        return arrayMove(items, oldIndex, newIndex);
+        // Update positions in the database
+        newItems.forEach((item, index) => {
+          fetch("/api/roadmap-cards/update", {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ id: item.id, position: index }),
+          });
+        });
+
+        return newItems;
       });
     }
   };
 
   const addCard = useCallback(() => {
-    setCards((items) => [
-      { id: uuidv4(), title: "", description: "", color: "" },
-      ...items,
-    ]);
+    fetch("/api/roadmap-cards/create", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ title: "", description: "", color: "" }),
+    })
+      .then((res) => res.json())
+      .then((createdCard) => {
+        setCards((items) => [...items, createdCard]);
+      });
   }, []);
 
   return (
@@ -72,5 +95,3 @@ function RoadmapBoard() {
     </div>
   );
 }
-
-export default RoadmapBoard;

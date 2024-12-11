@@ -205,3 +205,13 @@ model Note {
   towerReportAntenna      TowerReport? @relation(fields: [towerReportAntennaId], references: [id], name: "AntennaNotes", map: "AntennaNotes_towerReportAntennaId_fkey")
   towerReportDeficiency   TowerReport? @relation(fields: [towerReportDeficiencyId], references: [id], name: "DeficiencyNotes", map: "DeficiencyNotes_towerReportDeficiencyId_fkey")
 }
+
+model RoadmapCard {
+  id          String   @id @default(cuid())
+  title       String
+  description String
+  color       String
+  position    Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}

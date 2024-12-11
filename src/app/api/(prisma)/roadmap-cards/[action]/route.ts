@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { PrismaClient } from "@prisma/client";
 
-import { handlePrismaError } from "@/lib/prismaErrorHandler";
+import { handlePrismaError } from "@/src/lib/prismaErrorHandler";
 
 const prisma = new PrismaClient();
 
@@ -10,21 +10,15 @@ export async function GET(request: Request) {
   const id = searchParams.get("id");
 
   if (!id) {
-    return new NextResponse("Bug ID is required", { status: 400 });
+    return new NextResponse("Card ID is required", { status: 400 });
   }
 
   try {
-    const bug = await prisma.bugReport.findUnique({
+    const card = await prisma.roadmapCard.findUnique({
       where: { id },
     });
 
-    if (!bug) {
-      return new NextResponse("Bug not found", { status: 404 });
-    }
-
-    // console.log("Found bug:", bug);
-
-    return NextResponse.json(bug);
+    return NextResponse.json(card);
   } catch (error: any) {
     return handlePrismaError(error);
   } finally {
@@ -35,12 +29,27 @@ export async function GET(request: Request) {
 export async function POST(request: Request) {
   try {
     const data = await request.json();
+    const { title, description, color } = data;
 
-    const newTask = await prisma.bugReport.create({
-      data: data,
+    // Get the current max position
+    const maxPosition = await prisma.roadmapCard.aggregate({
+      _max: {
+        position: true,
+      },
     });
 
-    return NextResponse.json(newTask);
+    const newPosition = (maxPosition._max.position ?? 0) + 1;
+
+    const newCard = await prisma.roadmapCard.create({
+      data: {
+        title,
+        description,
+        color,
+        position: newPosition,
+      },
+    });
+
+    return NextResponse.json(newCard);
   } catch (error: any) {
     return handlePrismaError(error);
   } finally {
@@ -51,31 +60,14 @@ export async function POST(request: Request) {
 export async function PUT(request: Request) {
   try {
     const data = await request.json();
+    const { id, ...updateData } = data;
 
-    // Destructure to exclude 'createdBy' from updateData
-    const { id, createdBy: _createdBy, ...updateData } = data;
-
-    // Prepare the update object
-    const updateObject: any = {
-      ...updateData,
-    };
-
-    // Remove fields that should not be directly updated
-    delete updateObject.createdDate;
-    delete updateObject.createdBy; // Ensure 'createdBy' is not updated
-
-    // Change 'bugStatus' to 'status'
-    if (updateObject.bugStatus) {
-      updateObject.status = updateObject.bugStatus;
-      delete updateObject.bugStatus;
-    }
-
-    const updatedTask = await prisma.bugReport.update({
+    const updatedCard = await prisma.roadmapCard.update({
       where: { id },
-      data: updateObject,
+      data: updateData,
     });
 
-    return NextResponse.json(updatedTask);
+    return NextResponse.json(updatedCard);
   } catch (error: any) {
     return handlePrismaError(error);
   } finally {
@@ -87,11 +79,9 @@ export async function DELETE(request: Request) {
   try {
     const { id } = await request.json();
 
-    const _ = await prisma.bugReport.delete({
-      where: { id },
-    });
+    await prisma.roadmapCard.delete({ where: { id } });
 
-    return new NextResponse("Task deleted", { status: 200 });
+    return new NextResponse("Card deleted", { status: 200 });
   } catch (error: any) {
     return handlePrismaError(error);
   } finally {

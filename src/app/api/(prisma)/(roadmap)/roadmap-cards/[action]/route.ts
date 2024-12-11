@@ -95,10 +95,28 @@ export async function DELETE(request: Request) {
   }
 }
 
-export async function OPTIONS() {
-  return new NextResponse("Method Not Allowed", { status: 405 });
+export async function PATCH(request: Request) {
+  try {
+    const { updates } = await request.json();
+
+    // Use transaction to ensure all position updates succeed or none do
+    const result = await prisma.$transaction(
+      updates.map(({ id, position }: { id: string; position: number }) =>
+        prisma.roadmapCard.update({
+          where: { id },
+          data: { position },
+        }),
+      ),
+    );
+
+    return NextResponse.json(result);
+  } catch (error: any) {
+    return handlePrismaError(error);
+  } finally {
+    await prisma.$disconnect();
+  }
 }
 
-export async function PATCH() {
+export async function OPTIONS() {
   return new NextResponse("Method Not Allowed", { status: 405 });
 }

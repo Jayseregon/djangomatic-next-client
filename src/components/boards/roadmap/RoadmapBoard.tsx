@@ -16,6 +16,7 @@ import {
   SortableContext,
   rectSortingStrategy,
   verticalListSortingStrategy,
+  arrayMove,
 } from "@dnd-kit/sortable";
 import { Grid2x2Plus, FolderPlus } from "lucide-react";
 
@@ -50,21 +51,57 @@ export default function RoadmapBoard() {
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
 
-    if (over && active.data.current?.type === "card") {
-      const activeCardId = active.id as string;
+    if (!over) return;
 
-      if (over.data.current?.type === "project") {
-        const projectId = over.id as string;
+    const activeType = active.data.current?.type;
+    const overType = over.data.current?.type;
+
+    const activeId = active.id as string;
+    const overId = over.id as string;
+
+    if (activeType === "card") {
+      if (overType === "card") {
+        const activeProjectId = active.data.current?.projectId;
+        const overProjectId = over.data.current?.projectId;
+
+        if (!activeProjectId && !overProjectId) {
+          if (activeId !== overId) {
+            const oldIndex = cards.findIndex((card) => card.id === activeId);
+            const newIndex = cards.findIndex((card) => card.id === overId);
+
+            const newCards = arrayMove(cards, oldIndex, newIndex);
+
+            setCards(newCards);
+
+            // Update positions in the database
+            const updates = newCards.map((card, index) => ({
+              id: card.id,
+              position: index,
+            }));
+
+            fetch("/api/roadmap-cards/update-positions", {
+              method: "PATCH",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ updates }),
+            });
+          }
+
+          return;
+        }
+      }
+
+      if (overType === "project") {
+        const projectId = overId;
 
         // Assign card to project
         fetch("/api/roadmap-cards/assign-to-project", {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ cardId: activeCardId, projectId }),
+          body: JSON.stringify({ cardId: activeId, projectId }),
         }).then(() => {
           // Update state accordingly
           setCards((prevCards) =>
-            prevCards.filter((card) => card.id !== activeCardId),
+            prevCards.filter((card) => card.id !== activeId),
           );
           // Optionally, update the project's cards locally
           setProjects((prevProjects) =>
@@ -157,7 +194,7 @@ export default function RoadmapBoard() {
               {cards.map((card) => (
                 <SortableItem
                   key={card.id}
-                  data={{ type: "card", card }}
+                  data={{ type: "card", card, projectId: null }}
                   id={card.id}
                 >
                   <RoadmapCard card={card} setCards={setCards} />
@@ -190,10 +227,26 @@ export default function RoadmapBoard() {
                         {project.cards.map((card) => (
                           <SortableItem
                             key={card.id}
-                            data={{ type: "card", card }}
+                            data={{ type: "card", card, projectId: project.id }}
                             id={card.id}
                           >
-                            <RoadmapCard card={card} setCards={setCards} />
+                            <RoadmapCard
+                              card={card}
+                              setCards={(updatedCards) =>
+                                setProjects((prevProjects) =>
+                                  prevProjects.map((p) =>
+                                    p.id === project.id
+                                      ? {
+                                          ...p,
+                                          cards: Array.isArray(updatedCards)
+                                            ? updatedCards
+                                            : [],
+                                        }
+                                      : p,
+                                  ),
+                                )
+                              }
+                            />
                           </SortableItem>
                         ))}
                       </div>

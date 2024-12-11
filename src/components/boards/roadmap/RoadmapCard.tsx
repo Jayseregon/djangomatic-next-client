@@ -31,7 +31,6 @@ function RoadmapCard({
   card: CardType;
   setCards: React.Dispatch<React.SetStateAction<CardType[]>>;
 }) {
-  // Debounced update function
   const debouncedUpdate = useDebouncedCallback((field, value) => {
     fetch("/api/roadmap-cards/update", {
       method: "PUT",
@@ -202,13 +201,6 @@ function RoadmapCard({
         >
           <Trash2 />
         </Button>
-        <div>
-          {card.projects.map((project) => (
-            <span key={project.id} className="badge">
-              {project.name}
-            </span>
-          ))}
-        </div>
       </CardFooter>
     </Card>
   );

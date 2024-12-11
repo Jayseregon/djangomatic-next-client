@@ -61,15 +61,20 @@ export async function POST(request: Request) {
 export async function PUT(request: Request) {
   try {
     const data = await request.json();
-    const { id, projects, ...updateData } = data;
+    const { id, projectId, ...updateData } = data;
 
     const updatedCard = await prisma.roadmapCard.update({
       where: { id },
       data: {
         ...updateData,
-        projects: {
-          set: projects?.map((projectId: string) => ({ id: projectId })) || [],
-        },
+        projects: projectId
+          ? {
+              connect: [{ id: projectId }],
+            }
+          : undefined,
+      },
+      include: {
+        projects: true,
       },
     });
 

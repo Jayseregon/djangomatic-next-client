@@ -92,24 +92,33 @@ export default function RoadmapBoard() {
 
       if (overType === "project") {
         const projectId = overId;
+        const card = active.data.current?.card;
 
-        // Assign card to project
-        fetch("/api/roadmap-cards/assign-to-project", {
+        // Optimistic update
+        setCards((prevCards) => prevCards.filter((c) => c.id !== activeId));
+        setProjects((prevProjects) =>
+          prevProjects.map((project) =>
+            project.id === projectId
+              ? { ...project, cards: [...project.cards, card] }
+              : project,
+          ),
+        );
+
+        // API call
+        fetch("/api/roadmap-cards/update", {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ cardId: activeId, projectId }),
-        }).then(() => {
-          // Update state accordingly
-          setCards((prevCards) =>
-            prevCards.filter((card) => card.id !== activeId),
-          );
-          // Optionally, update the project's cards locally
+          body: JSON.stringify({ id: activeId, projectId }),
+        }).catch((error) => {
+          console.error("Failed to assign card to project:", error);
+          // Revert optimistic update on error
+          setCards((prevCards) => [...prevCards, card]);
           setProjects((prevProjects) =>
             prevProjects.map((project) =>
               project.id === projectId
                 ? {
                     ...project,
-                    cards: [...project.cards, active.data.current!.card],
+                    cards: project.cards.filter((c) => c.id !== card.id),
                   }
                 : project,
             ),

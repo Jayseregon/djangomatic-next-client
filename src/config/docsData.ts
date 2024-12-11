@@ -97,8 +97,8 @@ export const docsData = {
   comcast_docs: [
     // Comcast Basemap Design Workflow, qgis doc: FALSE
     {
-      label: "Comcast Basemap Design Workflow",
-      href: "/docs/comcast/comcast-basemap-design-workflow",
+      label: "Basemap Design Workflow",
+      href: "/docs/comcast/basemap-design-workflow",
       is_qgis_doc: false,
     },
     // temp doc placeholder, qgis doc: FALSE

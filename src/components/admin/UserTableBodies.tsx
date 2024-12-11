@@ -143,6 +143,22 @@ export const docsBody = ({
       <TableCell>
         <PermissionButton
           disabled={disabled}
+          fieldName="canAccessDocsKC"
+          handleToggle={handleToggle}
+          user={user}
+        />
+      </TableCell>
+      <TableCell>
+        <PermissionButton
+          disabled={disabled}
+          fieldName="canAccessDocsKCSecure"
+          handleToggle={handleToggle}
+          user={user}
+        />
+      </TableCell>
+      <TableCell>
+        <PermissionButton
+          disabled={disabled}
           fieldName="canAccessDocsAdmin"
           handleToggle={handleToggle}
           user={user}

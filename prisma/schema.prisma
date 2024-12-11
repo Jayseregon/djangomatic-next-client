@@ -45,6 +45,8 @@ model User {
   canAccessDocsXplore            Boolean       @default(false)
   canAccessDocsComcast           Boolean       @default(false)
   canAccessDocsAdmin             Boolean       @default(false)
+  canAccessDocsKC                Boolean       @default(false)
+  canAccessDocsKCSecure          Boolean       @default(false)
   canAccessVideoAdmin            Boolean       @default(true)
   canAccessVideoGIS              Boolean       @default(true)
   canAccessVideoCAD              Boolean       @default(true)

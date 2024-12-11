@@ -16,6 +16,7 @@ export async function GET(request: Request) {
   try {
     const card = await prisma.roadmapCard.findUnique({
       where: { id },
+      include: { projects: true },
     });
 
     return NextResponse.json(card);
@@ -60,11 +61,16 @@ export async function POST(request: Request) {
 export async function PUT(request: Request) {
   try {
     const data = await request.json();
-    const { id, ...updateData } = data;
+    const { id, projects, ...updateData } = data;
 
     const updatedCard = await prisma.roadmapCard.update({
       where: { id },
-      data: updateData,
+      data: {
+        ...updateData,
+        projects: {
+          set: projects?.map((projectId: string) => ({ id: projectId })) || [],
+        },
+      },
     });
 
     return NextResponse.json(updatedCard);

@@ -7,17 +7,12 @@ const prisma = new PrismaClient();
 
 export async function GET() {
   try {
-    const cards = await prisma.roadmapCard.findMany({
-      orderBy: { position: "asc" },
+    const projects = await prisma.roadmapProject.findMany({
+      include: { cards: true },
+      orderBy: { createdAt: "asc" },
     });
 
-    if (!cards) {
-      return new NextResponse("Cards not found", { status: 404 });
-    }
-
-    // console.log("Found cards:", cards);
-
-    return NextResponse.json(cards);
+    return NextResponse.json(projects);
   } catch (error: any) {
     return handlePrismaError(error);
   } finally {

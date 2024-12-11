@@ -1,7 +1,8 @@
 "use client";
 
 import React, { useCallback, useEffect, useState } from "react";
-import { Button } from "@nextui-org/react";
+import { useRouter } from "next/navigation";
+import { Button, Input } from "@nextui-org/react";
 import {
   DndContext,
   rectIntersection,
@@ -9,21 +10,26 @@ import {
   TouchSensor,
   useSensor,
   useSensors,
+  DragEndEvent,
 } from "@dnd-kit/core";
 import {
-  arrayMove,
   SortableContext,
   rectSortingStrategy,
+  verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
-import { Grid2x2Plus } from "lucide-react";
+import { Grid2x2Plus, FolderPlus } from "lucide-react";
 
-import { CardType } from "@/interfaces/roadmap";
+import { CardType, ProjectType } from "@/interfaces/roadmap";
 
 import RoadmapCard from "./RoadmapCard";
 import SortableItem from "./SortableItem";
 
 export default function RoadmapBoard() {
+  const router = useRouter();
   const [cards, setCards] = useState<CardType[]>([]);
+  const [projects, setProjects] = useState<ProjectType[]>([]);
+  const [projectName, setProjectName] = useState("");
+  const [showProjectInput, setShowProjectInput] = useState(false);
 
   const sensors = useSensors(useSensor(MouseSensor), useSensor(TouchSensor));
 
@@ -33,28 +39,46 @@ export default function RoadmapBoard() {
       .then((data) => {
         setCards(data);
       });
+
+    fetch("/api/roadmap-projects")
+      .then((res) => res.json())
+      .then((data) => {
+        setProjects(data);
+      });
   }, []);
 
-  const handleDragEnd = (event: any) => {
+  const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
 
-    if (active.id !== over.id) {
-      setCards((items) => {
-        const oldIndex = items.findIndex((item) => item.id === active.id);
-        const newIndex = items.findIndex((item) => item.id === over.id);
-        const newItems = arrayMove(items, oldIndex, newIndex);
+    if (over && active.data.current?.type === "card") {
+      const activeCardId = active.id as string;
 
-        // Update positions in the database
-        newItems.forEach((item, index) => {
-          fetch("/api/roadmap-cards/update", {
-            method: "PUT",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ id: item.id, position: index }),
-          });
+      if (over.data.current?.type === "project") {
+        const projectId = over.id as string;
+
+        // Assign card to project
+        fetch("/api/roadmap-cards/assign-to-project", {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ cardId: activeCardId, projectId }),
+        }).then(() => {
+          // Update state accordingly
+          setCards((prevCards) =>
+            prevCards.filter((card) => card.id !== activeCardId),
+          );
+          // Optionally, update the project's cards locally
+          setProjects((prevProjects) =>
+            prevProjects.map((project) =>
+              project.id === projectId
+                ? {
+                    ...project,
+                    cards: [...project.cards, active.data.current!.card],
+                  }
+                : project,
+            ),
+          );
         });
-
-        return newItems;
-      });
+      }
     }
   };
 
@@ -72,25 +96,121 @@ export default function RoadmapBoard() {
       });
   }, []);
 
+  const addProject = useCallback(() => {
+    if (!projectName.trim()) return;
+
+    fetch("/api/roadmap-projects/create", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ name: projectName }),
+    })
+      .then((res) => res.json())
+      .then((createdProject) => {
+        setProjects((items) => [...items, { ...createdProject, cards: [] }]);
+        setProjectName("");
+        setShowProjectInput(false);
+      });
+  }, [projectName]);
+
+  const viewProject = useCallback((projectId: string) => {
+    router.push(`/boards/roadmap/projects/${projectId}`);
+  }, []);
+
   return (
     <div>
-      <Button isIconOnly color="success" onClick={addCard}>
-        <Grid2x2Plus />
-      </Button>
+      <div className="flex gap-2">
+        <Button isIconOnly color="success" onClick={addCard}>
+          <Grid2x2Plus />
+        </Button>
+        <Button
+          isIconOnly
+          color="primary"
+          onClick={() => setShowProjectInput(true)}
+        >
+          <FolderPlus />
+        </Button>
+        {showProjectInput && (
+          <div className="flex items-center gap-2">
+            <Input
+              placeholder="Project Name"
+              value={projectName}
+              onChange={(e) => setProjectName(e.target.value)}
+            />
+            <Button onClick={addProject}>Add Project</Button>
+          </div>
+        )}
+      </div>
       <DndContext
         collisionDetection={rectIntersection}
         sensors={sensors}
         onDragEnd={handleDragEnd}
       >
-        <SortableContext items={cards} strategy={rectSortingStrategy}>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-4">
-            {cards.map((card) => (
-              <SortableItem key={card.id} id={card.id}>
-                <RoadmapCard card={card} setCards={setCards} />
-              </SortableItem>
-            ))}
-          </div>
-        </SortableContext>
+        <div className="mt-4">
+          <h2>Unassigned Cards</h2>
+          <SortableContext
+            items={cards.map((card) => card.id)}
+            strategy={rectSortingStrategy}
+          >
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              {cards.map((card) => (
+                <SortableItem
+                  key={card.id}
+                  data={{ type: "card", card }}
+                  id={card.id}
+                >
+                  <RoadmapCard card={card} setCards={setCards} />
+                </SortableItem>
+              ))}
+            </div>
+          </SortableContext>
+        </div>
+
+        <div className="mt-8">
+          <h2>Projects</h2>
+          <SortableContext
+            items={projects.map((project) => project.id)}
+            strategy={verticalListSortingStrategy}
+          >
+            <div className="flex flex-col gap-4">
+              {projects.map((project) => (
+                <SortableItem
+                  key={project.id}
+                  data={{ type: "project" }}
+                  id={project.id}
+                >
+                  <div className="p-4 border rounded-md">
+                    <h3>{project.name}</h3>
+                    <SortableContext
+                      items={project.cards.map((card) => card.id)}
+                      strategy={rectSortingStrategy}
+                    >
+                      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-4">
+                        {project.cards.map((card) => (
+                          <SortableItem
+                            key={card.id}
+                            data={{ type: "card", card }}
+                            id={card.id}
+                          >
+                            <RoadmapCard card={card} setCards={setCards} />
+                          </SortableItem>
+                        ))}
+                      </div>
+                    </SortableContext>
+                    <Button
+                      as="a"
+                      className="mt-2"
+                      onClick={() => viewProject(project.id)}
+                    >
+                      View Project
+                    </Button>
+                  </div>
+                </SortableItem>
+              ))}
+            </div>
+          </SortableContext>
+        </div>
       </DndContext>
     </div>
   );

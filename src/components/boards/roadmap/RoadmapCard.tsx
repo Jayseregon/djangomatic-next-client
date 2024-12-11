@@ -202,6 +202,13 @@ function RoadmapCard({
         >
           <Trash2 />
         </Button>
+        <div>
+          {card.projects.map((project) => (
+            <span key={project.id} className="badge">
+              {project.name}
+            </span>
+          ))}
+        </div>
       </CardFooter>
     </Card>
   );

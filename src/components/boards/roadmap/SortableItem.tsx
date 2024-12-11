@@ -4,7 +4,7 @@ import { CSS } from "@dnd-kit/utilities";
 
 import { SortableItemProps } from "@/interfaces/roadmap";
 
-const SortableItem = React.memo(({ id, children }: SortableItemProps) => {
+const SortableItem = React.memo(({ id, data, children }: SortableItemProps) => {
   const {
     attributes,
     listeners,
@@ -12,7 +12,7 @@ const SortableItem = React.memo(({ id, children }: SortableItemProps) => {
     transform,
     transition,
     isDragging,
-  } = useSortable({ id });
+  } = useSortable({ id, data });
 
   const style: React.CSSProperties = {
     transform: CSS.Transform.toString(transform),

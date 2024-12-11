@@ -7,7 +7,6 @@ import { title, subtitle } from "@/components/primitives";
 import { UnAuthenticated } from "@/components/auth/unAuthenticated";
 import UserAccessBoards from "@/src/components/boards/UserAccess";
 
-// Dynamically import RoadmapBoard with SSR disabled
 const RoadmapBoard = dynamic(
   () => import("@/components/boards/roadmap/RoadmapBoard"),
   {
@@ -15,7 +14,7 @@ const RoadmapBoard = dynamic(
   },
 );
 
-export default function RoadmapBoardPageContent({ session }: { session: any }) {
+export default function AllCardsView({ session }: { session: any }) {
   const t = useTranslations("Boards.roadmap");
 
   if (!session) return <UnAuthenticated />;

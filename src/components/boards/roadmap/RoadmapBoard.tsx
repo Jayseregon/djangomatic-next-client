@@ -94,12 +94,30 @@ export default function RoadmapBoard() {
         const projectId = overId;
         const card = active.data.current?.card;
 
+        // Check if card already exists in the target project
+        const targetProject = projects.find((p) => p.id === projectId);
+
+        if (
+          targetProject &&
+          targetProject.cards.some((c) => c.id === card.id)
+        ) {
+          // Card already exists in this project, ignore the drop
+          return;
+        }
+
         // Optimistic update
         setCards((prevCards) => prevCards.filter((c) => c.id !== activeId));
         setProjects((prevProjects) =>
           prevProjects.map((project) =>
             project.id === projectId
-              ? { ...project, cards: [...project.cards, card] }
+              ? {
+                  ...project,
+                  // Ensure no duplicates in the cards array
+                  cards: [
+                    ...project.cards.filter((c) => c.id !== card.id),
+                    card,
+                  ],
+                }
               : project,
           ),
         );
@@ -233,31 +251,48 @@ export default function RoadmapBoard() {
                       strategy={rectSortingStrategy}
                     >
                       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-4">
-                        {project.cards.map((card) => (
-                          <SortableItem
-                            key={card.id}
-                            data={{ type: "card", card, projectId: project.id }}
-                            id={card.id}
-                          >
-                            <RoadmapCard
-                              card={card}
-                              setCards={(updatedCards) =>
-                                setProjects((prevProjects) =>
-                                  prevProjects.map((p) =>
-                                    p.id === project.id
-                                      ? {
-                                          ...p,
-                                          cards: Array.isArray(updatedCards)
-                                            ? updatedCards
-                                            : [],
-                                        }
-                                      : p,
-                                  ),
-                                )
-                              }
-                            />
-                          </SortableItem>
-                        ))}
+                        {project.cards
+                          .filter(
+                            (card, index, self) =>
+                              // Remove any duplicate cards based on ID
+                              index === self.findIndex((c) => c.id === card.id),
+                          )
+                          .map((card) => (
+                            <SortableItem
+                              key={`${project.id}-${card.id}`} // Use composite key to ensure uniqueness
+                              data={{
+                                type: "card",
+                                card,
+                                projectId: project.id,
+                              }}
+                              id={card.id}
+                            >
+                              <RoadmapCard
+                                card={card}
+                                setCards={(updatedCards) =>
+                                  setProjects((prevProjects) =>
+                                    prevProjects.map((p) =>
+                                      p.id === project.id
+                                        ? {
+                                            ...p,
+                                            cards: Array.isArray(updatedCards)
+                                              ? updatedCards.filter(
+                                                  (c, i, arr) =>
+                                                    // Remove duplicates when updating cards
+                                                    arr.findIndex(
+                                                      (card) =>
+                                                        card.id === c.id,
+                                                    ) === i,
+                                                )
+                                              : [],
+                                          }
+                                        : p,
+                                    ),
+                                  )
+                                }
+                              />
+                            </SortableItem>
+                          ))}
                       </div>
                     </SortableContext>
                     <Button

@@ -11,6 +11,7 @@ import {
   useSensor,
   useSensors,
   DragEndEvent,
+  pointerWithin,
 } from "@dnd-kit/core";
 import {
   SortableContext,
@@ -46,13 +47,13 @@ export default function RoadmapBoard() {
     fetch("/api/roadmap-cards")
       .then((res) => res.json())
       .then((data) => {
-        setCards(data);
+        setCards(data.sort((a: CardType, b: CardType) => a.position - b.position));
       });
 
     fetch("/api/roadmap-projects")
       .then((res) => res.json())
       .then((data) => {
-        setProjects(data);
+        setProjects(data.sort((a: ProjectType, b: ProjectType) => a.position - b.position));
       });
   }, []);
 
@@ -66,6 +67,36 @@ export default function RoadmapBoard() {
 
     const activeId = active.id as string;
     const overId = over.id as string;
+
+    if (activeType === "project" && overType === "project") {
+      if (activeId !== overId) {
+        const oldIndex = projects.findIndex((project) => project.id === activeId);
+        const newIndex = projects.findIndex((project) => project.id === overId);
+
+        const newProjects = arrayMove(projects, oldIndex, newIndex);
+        
+        // Update all positions based on new order
+        const updatedProjects = newProjects.map((project, index) => ({
+          ...project,
+          position: index,
+        }));
+        
+        setProjects(updatedProjects);
+
+        // Update positions in the database
+        const updates = updatedProjects.map((project) => ({
+          id: project.id,
+          position: project.position,
+        }));
+
+        fetch("/api/roadmap-projects/update-positions", {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ updates }),
+        });
+      }
+      return;
+    }
 
     if (activeType === "card") {
       if (overType === "card") {
@@ -245,9 +276,10 @@ export default function RoadmapBoard() {
       </div>
 
       <DndContext
-        collisionDetection={rectIntersection}
+        collisionDetection={pointerWithin} // Changed from rectIntersection to pointerWithin
         sensors={sensors}
         onDragEnd={handleDragEnd}
+        modifiers={[]} // Remove any existing modifiers that might cause flickering
       >
         {/* Fixed position side projects container */}
         <div

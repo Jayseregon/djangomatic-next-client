@@ -36,11 +36,44 @@ export async function POST(request: Request) {
     const data = await request.json();
     const { name } = data;
 
+    // Get the current max position
+    const maxPosition = await prisma.roadmapProject.aggregate({
+      _max: {
+        position: true,
+      },
+    });
+
+    const newPosition = (maxPosition._max.position ?? 0) + 1;
+
     const newProject = await prisma.roadmapProject.create({
-      data: { name },
+      data: { 
+        name,
+        position: newPosition
+      },
     });
 
     return NextResponse.json(newProject);
+  } catch (error: any) {
+    return handlePrismaError(error);
+  } finally {
+    await prisma.$disconnect();
+  }
+}
+
+export async function PATCH(request: Request) {
+  try {
+    const { updates } = await request.json();
+
+    const result = await prisma.$transaction(
+      updates.map(({ id, position }: { id: string; position: number }) =>
+        prisma.roadmapProject.update({
+          where: { id },
+          data: { position },
+        })
+      )
+    );
+
+    return NextResponse.json(result);
   } catch (error: any) {
     return handlePrismaError(error);
   } finally {

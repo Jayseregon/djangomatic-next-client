@@ -9,7 +9,7 @@ export async function GET() {
   try {
     const projects = await prisma.roadmapProject.findMany({
       include: { cards: true },
-      orderBy: { createdAt: "asc" },
+      orderBy: { position: "asc" },
     });
 
     return NextResponse.json(projects);

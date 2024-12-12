@@ -18,6 +18,7 @@ export interface SortableItemProps {
 export interface ProjectType {
   id: string;
   name: string;
+  position: number;  // Add this line
   createdAt: string;
   updatedAt: string;
   cards: CardType[];

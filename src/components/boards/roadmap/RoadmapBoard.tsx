@@ -18,7 +18,13 @@ import {
   verticalListSortingStrategy,
   arrayMove,
 } from "@dnd-kit/sortable";
-import { Grid2x2Plus, FolderPlus } from "lucide-react";
+import {
+  Grid2x2Plus,
+  FolderPlus,
+  Save,
+  CircleX,
+  FolderOpenDot,
+} from "lucide-react";
 
 import { CardType, ProjectType } from "@/interfaces/roadmap";
 
@@ -184,17 +190,20 @@ export default function RoadmapBoard() {
 
   return (
     <div>
-      <div className="flex gap-2">
-        <Button isIconOnly color="success" onClick={addCard}>
-          <Grid2x2Plus />
-        </Button>
-        <Button
-          isIconOnly
-          color="primary"
-          onClick={() => setShowProjectInput(true)}
-        >
-          <FolderPlus />
-        </Button>
+      {/* top content with buttons & commands */}
+      <div className="flex flex-row gap-10 my-3">
+        <div className="flex gap-3">
+          <Button isIconOnly color="success" onClick={addCard}>
+            <Grid2x2Plus />
+          </Button>
+          <Button
+            isIconOnly
+            color="primary"
+            onClick={() => setShowProjectInput(true)}
+          >
+            <FolderPlus />
+          </Button>
+        </div>
         {showProjectInput && (
           <div className="flex items-center gap-2">
             <Input
@@ -202,111 +211,81 @@ export default function RoadmapBoard() {
               value={projectName}
               onChange={(e) => setProjectName(e.target.value)}
             />
-            <Button onClick={addProject}>Add Project</Button>
+            <Button isIconOnly color="success" onClick={addProject}>
+              <Save />
+            </Button>
+            <Button
+              isIconOnly
+              color="danger"
+              onClick={() => setShowProjectInput(false)}
+            >
+              <CircleX />
+            </Button>
           </div>
         )}
       </div>
+
       <DndContext
         collisionDetection={rectIntersection}
         sensors={sensors}
         onDragEnd={handleDragEnd}
       >
-        <div className="mt-4">
-          <h2>Unassigned Cards</h2>
-          <SortableContext
-            items={cards.map((card) => card.id)}
-            strategy={rectSortingStrategy}
-          >
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              {cards.map((card) => (
-                <SortableItem
-                  key={card.id}
-                  data={{ type: "card", card, projectId: null }}
-                  id={card.id}
-                >
-                  <RoadmapCard card={card} setCards={setCards} />
-                </SortableItem>
-              ))}
-            </div>
-          </SortableContext>
-        </div>
-
-        <div className="mt-8">
-          <h2>Projects</h2>
-          <SortableContext
-            items={projects.map((project) => project.id)}
-            strategy={verticalListSortingStrategy}
-          >
-            <div className="flex flex-col gap-4">
-              {projects.map((project) => (
-                <SortableItem
-                  key={project.id}
-                  data={{ type: "project" }}
-                  id={project.id}
-                >
-                  <div className="p-4 border rounded-md">
-                    <h3>{project.name}</h3>
-                    <SortableContext
-                      items={project.cards.map((card) => card.id)}
-                      strategy={rectSortingStrategy}
+        <div className="flex gap-8">
+          {/* side content with projects as drop targets */}
+          <div className="w-72 flex-shrink-0">
+            <div className="flex flex-col gap-2">
+              <SortableContext
+                items={projects.map((project) => project.id)}
+                strategy={verticalListSortingStrategy}
+              >
+                <div className="flex flex-col gap-4">
+                  {projects.map((project) => (
+                    <SortableItem
+                      key={project.id}
+                      data={{ type: "project" }}
+                      id={project.id}
                     >
-                      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-4">
-                        {project.cards
-                          .filter(
-                            (card, index, self) =>
-                              // Remove any duplicate cards based on ID
-                              index === self.findIndex((c) => c.id === card.id),
-                          )
-                          .map((card) => (
-                            <SortableItem
-                              key={`${project.id}-${card.id}`} // Use composite key to ensure uniqueness
-                              data={{
-                                type: "card",
-                                card,
-                                projectId: project.id,
-                              }}
-                              id={card.id}
-                            >
-                              <RoadmapCard
-                                card={card}
-                                setCards={(updatedCards) =>
-                                  setProjects((prevProjects) =>
-                                    prevProjects.map((p) =>
-                                      p.id === project.id
-                                        ? {
-                                            ...p,
-                                            cards: Array.isArray(updatedCards)
-                                              ? updatedCards.filter(
-                                                  (c, i, arr) =>
-                                                    // Remove duplicates when updating cards
-                                                    arr.findIndex(
-                                                      (card) =>
-                                                        card.id === c.id,
-                                                    ) === i,
-                                                )
-                                              : [],
-                                          }
-                                        : p,
-                                    ),
-                                  )
-                                }
-                              />
-                            </SortableItem>
-                          ))}
+                      <div className="flex p-2 border rounded-md justify-between">
+                        <h3>
+                          {project.name} ({project.cards.length})
+                        </h3>
+                        <Button
+                          isIconOnly
+                          color="primary"
+                          variant="light"
+                          onClick={() => viewProject(project.id)}
+                        >
+                          <FolderOpenDot />
+                        </Button>
                       </div>
-                    </SortableContext>
-                    <Button
-                      as="a"
-                      className="mt-2"
-                      onClick={() => viewProject(project.id)}
-                    >
-                      View Project
-                    </Button>
-                  </div>
-                </SortableItem>
-              ))}
+                    </SortableItem>
+                  ))}
+                </div>
+              </SortableContext>
             </div>
-          </SortableContext>
+          </div>
+
+          {/* main content to display all cards */}
+          <div className="flex-grow px-4">
+            <div className="w-full">
+              <SortableContext
+                items={cards.map((card) => card.id)}
+                strategy={rectSortingStrategy}
+              >
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                  {cards.map((card) => (
+                    <SortableItem
+                      key={card.id}
+                      data={{ type: "card", card, projectId: null }}
+                      id={card.id}
+                    >
+                      <RoadmapCard card={card} setCards={setCards} />
+                    </SortableItem>
+                  ))}
+                </div>
+              </SortableContext>
+            </div>
+          </div>
         </div>
       </DndContext>
     </div>

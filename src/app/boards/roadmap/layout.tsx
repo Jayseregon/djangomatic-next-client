@@ -1,21 +1,12 @@
-import { SearchInput } from "@/src/components/ui/SearchInput";
-import { SidebarRoadmap } from "@/components/ui/sidebars/SidebarRoadmap";
-
-export default function BoardsLayout({
+export default function RoadmapLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
   return (
     <div className="flex min-h-screen">
-      <div className="w-72 fixed inset-y-0 left-0 mt-20 ms-4 mb-12">
-        <SearchInput alwaysExpanded={true} />
-      </div>
-      <div className="w-72 fixed inset-y-0 left-0 mt-32 ms-4 mb-12 overflow-y-auto">
-        <SidebarRoadmap />
-      </div>
-      <section className="flex-grow ml-72 flex flex-col items-center gap-4 py-8 md:py-10 overflow-y-auto">
-        <div className="inline-block max-w-full text-center justify-center">
+      <section className="flex-grow flex flex-col items-center py-8 md:py-10 overflow-y-auto">
+        <div className="inline-block w-full text-center justify-center">
           {children}
         </div>
       </section>

@@ -11,7 +11,6 @@ import {
   useSensor,
   useSensors,
   DragEndEvent,
-  pointerWithin,
 } from "@dnd-kit/core";
 import {
   SortableContext,
@@ -47,13 +46,19 @@ export default function RoadmapBoard() {
     fetch("/api/roadmap-cards")
       .then((res) => res.json())
       .then((data) => {
-        setCards(data.sort((a: CardType, b: CardType) => a.position - b.position));
+        setCards(
+          data.sort((a: CardType, b: CardType) => a.position - b.position),
+        );
       });
 
     fetch("/api/roadmap-projects")
       .then((res) => res.json())
       .then((data) => {
-        setProjects(data.sort((a: ProjectType, b: ProjectType) => a.position - b.position));
+        setProjects(
+          data.sort(
+            (a: ProjectType, b: ProjectType) => a.position - b.position,
+          ),
+        );
       });
   }, []);
 
@@ -70,17 +75,19 @@ export default function RoadmapBoard() {
 
     if (activeType === "project" && overType === "project") {
       if (activeId !== overId) {
-        const oldIndex = projects.findIndex((project) => project.id === activeId);
+        const oldIndex = projects.findIndex(
+          (project) => project.id === activeId,
+        );
         const newIndex = projects.findIndex((project) => project.id === overId);
 
         const newProjects = arrayMove(projects, oldIndex, newIndex);
-        
+
         // Update all positions based on new order
         const updatedProjects = newProjects.map((project, index) => ({
           ...project,
           position: index,
         }));
-        
+
         setProjects(updatedProjects);
 
         // Update positions in the database
@@ -95,6 +102,7 @@ export default function RoadmapBoard() {
           body: JSON.stringify({ updates }),
         });
       }
+
       return;
     }
 
@@ -144,22 +152,19 @@ export default function RoadmapBoard() {
           return;
         }
 
-        // Optimistic update
-        setCards((prevCards) => prevCards.filter((c) => c.id !== activeId));
         setProjects((prevProjects) =>
           prevProjects.map((project) =>
             project.id === projectId
               ? {
                   ...project,
-                  // Ensure no duplicates in the cards array
-                  cards: [
-                    ...project.cards.filter((c) => c.id !== card.id),
-                    card,
-                  ],
+                  cards: [...project.cards, card],
                 }
               : project,
           ),
         );
+
+        // Do not remove the card from the main view
+        // setCards remains unchanged
 
         // API call
         fetch("/api/roadmap-cards/update", {
@@ -169,7 +174,6 @@ export default function RoadmapBoard() {
         }).catch((error) => {
           console.error("Failed to assign card to project:", error);
           // Revert optimistic update on error
-          setCards((prevCards) => [...prevCards, card]);
           setProjects((prevProjects) =>
             prevProjects.map((project) =>
               project.id === projectId
@@ -227,7 +231,7 @@ export default function RoadmapBoard() {
       <div
         className="flex flex-row gap-10 my-3"
         nonce={nonce}
-        style={{ marginLeft: "21rem" }}
+        style={{ marginLeft: "31rem" }}
       >
         <div className="flex gap-3">
           <Button isIconOnly color="success" onClick={addCard}>
@@ -268,7 +272,7 @@ export default function RoadmapBoard() {
           position: "fixed",
           top: "20rem",
           left: "1.5rem",
-          width: "18rem", // Matches w-72
+          width: "30rem",
           zIndex: 30,
         }}
       >
@@ -276,10 +280,10 @@ export default function RoadmapBoard() {
       </div>
 
       <DndContext
-        collisionDetection={pointerWithin} // Changed from rectIntersection to pointerWithin
+        collisionDetection={rectIntersection} // Changed from pointerWithin to rectIntersection
+        modifiers={[]} // Remove any existing modifiers that might cause flickering
         sensors={sensors}
         onDragEnd={handleDragEnd}
-        modifiers={[]} // Remove any existing modifiers that might cause flickering
       >
         {/* Fixed position side projects container */}
         <div
@@ -288,14 +292,14 @@ export default function RoadmapBoard() {
             position: "fixed",
             top: "22.5rem",
             left: "1.5rem",
-            width: "18rem", // Matches w-72
+            width: "30rem",
             maxHeight: "calc(100vh - 22.5rem)", // Adjust for top offset
             overflowY: "auto",
             zIndex: 30,
           }}
         >
           {/* side content with projects as drop targets */}
-          <div className="flex flex-col gap-2">
+          <div className="flex flex-col gap-4">
             <SortableContext
               items={projects.map((project) => project.id)}
               strategy={verticalListSortingStrategy}
@@ -307,7 +311,7 @@ export default function RoadmapBoard() {
                     data={{ type: "project" }}
                     id={project.id}
                   >
-                    <div className="flex px-2 py-5 border border-foreground rounded-md justify-between">
+                    <div className="flex px-2 py-8 border border-foreground rounded-md justify-between">
                       <div className="flex flex-col text-left ps-3">
                         <h3 className="capitalize">{project.name}</h3>
                         <div className="italic font-light text-sm">
@@ -331,7 +335,19 @@ export default function RoadmapBoard() {
         </div>
 
         {/* Main content adjusted for fixed sidebar */}
-        <div nonce={nonce} style={{ marginLeft: "20rem" }}>
+        <div
+          nonce={nonce}
+          style={{
+            position: "fixed",
+            top: "22.5rem",
+            right: "1.5rem",
+            width: "calc(100% - 33rem)", // Adjust for left offset
+            maxHeight: "calc(100vh - 22.5rem)", // Adjust for top offset
+            overflowY: "auto",
+            zIndex: 30,
+            marginLeft: "32rem",
+          }}
+        >
           {/* main content to display all cards */}
           <div className="flex-grow px-4">
             <div className="w-full">

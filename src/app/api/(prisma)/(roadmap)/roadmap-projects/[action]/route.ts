@@ -46,9 +46,9 @@ export async function POST(request: Request) {
     const newPosition = (maxPosition._max.position ?? 0) + 1;
 
     const newProject = await prisma.roadmapProject.create({
-      data: { 
+      data: {
         name,
-        position: newPosition
+        position: newPosition,
       },
     });
 
@@ -69,8 +69,8 @@ export async function PATCH(request: Request) {
         prisma.roadmapProject.update({
           where: { id },
           data: { position },
-        })
-      )
+        }),
+      ),
     );
 
     return NextResponse.json(result);

@@ -18,10 +18,13 @@ import { cn } from "@/src/lib/utils";
 
 // Define the custom Badge component
 const Badge: React.FC<{ color: string }> = ({ color }) => (
-  <span
-    aria-label={`${color} badge`}
-    className={`inline-block rounded-full bg-${color}-400 w-4 h-4`}
-  />
+  <div className="flex flex-row gap-1">
+    <span
+      aria-label={`${color} badge`}
+      className={`inline-block rounded-full bg-${color}-400 w-4 h-4`}
+    />
+    <span className="text-background">{color}</span>
+  </div>
 );
 
 function RoadmapCard({
@@ -90,28 +93,21 @@ function RoadmapCard({
   }, [card.id, setCards]);
 
   const colorOptions = [
-    "slate",
     "gray",
-    "zinc",
-    "neutral",
-    "stone",
     "red",
     "orange",
-    "amber",
     "yellow",
     "lime",
     "green",
     "emerald",
     "teal",
     "cyan",
-    "sky",
     "blue",
     "indigo",
     "violet",
     "purple",
     "fuchsia",
     "pink",
-    "rose",
   ];
 
   return (
@@ -126,13 +122,13 @@ function RoadmapCard({
         card.color ? `text-${card.color}-950` : "text-foreground",
       )}
     >
-      <CardHeader className="flex flex-row items-center gap-2">
+      <CardHeader className="flex flex-row items-center">
         <Input
           isClearable
           aria-label="Title"
           // className="basis-3/4"
           classNames={{
-            input: "border-0 focus:ring-0",
+            input: "border-0 focus:ring-0 m-0 p-0",
             inputWrapper: card.color
               ? "border-background/50 hover:!border-background"
               : "border-foreground/50 hover:!border-foreground",
@@ -147,13 +143,12 @@ function RoadmapCard({
         <Textarea
           aria-label="Description"
           classNames={{
-            input: "border-0 focus:ring-0",
+            input: "border-0 focus:ring-0 p-0 m-0",
             inputWrapper: card.color
               ? "border-background/50 hover:!border-background"
               : "border-foreground/50 hover:!border-foreground",
           }}
-          maxRows={9}
-          minRows={3}
+          minRows={2}
           placeholder="Description"
           value={card.description}
           variant="bordered"
@@ -163,7 +158,7 @@ function RoadmapCard({
       <CardFooter className="flex items-center justify-between">
         <Select
           aria-label="Background Color"
-          className="basis-1/4"
+          className="basis-1/2 p-0 m-0"
           classNames={{
             trigger: card.color
               ? "border-0 text-background border border-background/50"

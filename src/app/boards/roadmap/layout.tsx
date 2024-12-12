@@ -4,8 +4,8 @@ export default function RoadmapLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="flex min-h-screen">
-      <section className="flex-grow flex flex-col items-center py-8 md:py-10 overflow-y-auto">
+    <div className="flex h-fit">
+      <section className="flex-grow flex flex-col items-center pt-8 md:pt-10">
         <div className="inline-block w-full text-center justify-center">
           {children}
         </div>

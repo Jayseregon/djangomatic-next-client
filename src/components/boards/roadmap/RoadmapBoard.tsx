@@ -5,12 +5,12 @@ import { useRouter } from "next/navigation";
 import { Button, Input } from "@nextui-org/react";
 import {
   DndContext,
-  rectIntersection,
   MouseSensor,
   TouchSensor,
   useSensor,
   useSensors,
   DragEndEvent,
+  pointerWithin,
 } from "@dnd-kit/core";
 import {
   SortableContext,
@@ -280,7 +280,7 @@ export default function RoadmapBoard() {
       </div>
 
       <DndContext
-        collisionDetection={rectIntersection} // Changed from pointerWithin to rectIntersection
+        collisionDetection={pointerWithin}
         modifiers={[]} // Remove any existing modifiers that might cause flickering
         sensors={sensors}
         onDragEnd={handleDragEnd}

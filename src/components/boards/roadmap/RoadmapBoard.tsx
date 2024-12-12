@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useContext, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Button, Input } from "@nextui-org/react";
 import {
@@ -27,12 +27,14 @@ import {
 } from "lucide-react";
 
 import { CardType, ProjectType } from "@/interfaces/roadmap";
+import { NonceContext } from "@/src/app/providers";
 
 import RoadmapCard from "./RoadmapCard";
 import SortableItem from "./SortableItem";
 
 export default function RoadmapBoard() {
   const router = useRouter();
+  const nonce = useContext(NonceContext);
   const [cards, setCards] = useState<CardType[]>([]);
   const [projects, setProjects] = useState<ProjectType[]>([]);
   const [projectName, setProjectName] = useState("");
@@ -191,7 +193,11 @@ export default function RoadmapBoard() {
   return (
     <div>
       {/* top content with buttons & commands */}
-      <div className="flex flex-row gap-10 my-3">
+      <div
+        className="flex flex-row gap-10 my-3"
+        nonce={nonce}
+        style={{ marginLeft: "21rem" }}
+      >
         <div className="flex gap-3">
           <Button isIconOnly color="success" onClick={addCard}>
             <Grid2x2Plus />
@@ -225,46 +231,75 @@ export default function RoadmapBoard() {
         )}
       </div>
 
+      <div
+        nonce={nonce}
+        style={{
+          position: "fixed",
+          top: "20rem",
+          left: "1.5rem",
+          width: "18rem", // Matches w-72
+          zIndex: 30,
+        }}
+      >
+        <h2 className="text-foreground text-2xl font-semibold">Projects</h2>
+      </div>
+
       <DndContext
         collisionDetection={rectIntersection}
         sensors={sensors}
         onDragEnd={handleDragEnd}
       >
-        <div className="flex gap-8">
+        {/* Fixed position side projects container */}
+        <div
+          nonce={nonce}
+          style={{
+            position: "fixed",
+            top: "22.5rem",
+            left: "1.5rem",
+            width: "18rem", // Matches w-72
+            maxHeight: "calc(100vh - 22.5rem)", // Adjust for top offset
+            overflowY: "auto",
+            zIndex: 30,
+          }}
+        >
           {/* side content with projects as drop targets */}
-          <div className="w-72 flex-shrink-0">
-            <div className="flex flex-col gap-2">
-              <SortableContext
-                items={projects.map((project) => project.id)}
-                strategy={verticalListSortingStrategy}
-              >
-                <div className="flex flex-col gap-4">
-                  {projects.map((project) => (
-                    <SortableItem
-                      key={project.id}
-                      data={{ type: "project" }}
-                      id={project.id}
-                    >
-                      <div className="flex p-2 border rounded-md justify-between">
-                        <h3>
-                          {project.name} ({project.cards.length})
-                        </h3>
-                        <Button
-                          isIconOnly
-                          color="primary"
-                          variant="light"
-                          onClick={() => viewProject(project.id)}
-                        >
-                          <FolderOpenDot />
-                        </Button>
+          <div className="flex flex-col gap-2">
+            <SortableContext
+              items={projects.map((project) => project.id)}
+              strategy={verticalListSortingStrategy}
+            >
+              <div className="flex flex-col gap-5">
+                {projects.map((project) => (
+                  <SortableItem
+                    key={project.id}
+                    data={{ type: "project" }}
+                    id={project.id}
+                  >
+                    <div className="flex px-2 py-5 border border-foreground rounded-md justify-between">
+                      <div className="flex flex-col text-left ps-3">
+                        <h3 className="capitalize">{project.name}</h3>
+                        <div className="italic font-light text-sm">
+                          {project.cards.length} cards
+                        </div>
                       </div>
-                    </SortableItem>
-                  ))}
-                </div>
-              </SortableContext>
-            </div>
+                      <Button
+                        isIconOnly
+                        color="primary"
+                        variant="light"
+                        onClick={() => viewProject(project.id)}
+                      >
+                        <FolderOpenDot />
+                      </Button>
+                    </div>
+                  </SortableItem>
+                ))}
+              </div>
+            </SortableContext>
           </div>
+        </div>
 
+        {/* Main content adjusted for fixed sidebar */}
+        <div nonce={nonce} style={{ marginLeft: "20rem" }}>
           {/* main content to display all cards */}
           <div className="flex-grow px-4">
             <div className="w-full">

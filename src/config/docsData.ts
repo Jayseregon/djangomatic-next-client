@@ -101,12 +101,6 @@ export const docsData = {
       href: "/docs/comcast/basemap-design-workflow",
       is_qgis_doc: false,
     },
-    // temp doc placeholder, qgis doc: FALSE
-    {
-      label: "Comcast Doc Placeholder",
-      href: "/docs/comcast/comcast-doc-placeholder",
-      is_qgis_doc: false,
-    },
     // temp doc placeholder, qgis doc: TRUE
     {
       label: "Comcast Doc Placeholder",

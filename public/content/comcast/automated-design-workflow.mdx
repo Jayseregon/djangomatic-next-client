@@ -1,0 +1,192 @@
+---
+title: Automated Design Workflow
+slug: automated-design-workflow
+---
+<div>
+---
+
+**Comprehensive Solutions for Efficient Data Preparation and Network Design**  
+*Empowering streamlined workflows with detailed, client-focused guides.*
+
+---
+
+## Table of Contents
+
+- [Overview](#overview)
+- [Requirements](#requirements)
+- [Step-by-Step Instructions](#step-by-step-instructions)
+  - [Step 1: Open QGIS](#step-1-open-qgis)
+  - [Step 2: Open the Python Console](#step-2-open-the-python-console)
+  - [Step 3: Open the Script Editor](#step-3-open-the-script-editor)
+  - [Step 4: Load the Script](#step-4-load-the-script)
+  - [Step 5: Run the Script](#step-5-run-the-script)
+  - [Step 6: Select the ‘Connections’ Shapefile](#step-6-select-the-connections-shapefile)
+  - [Step 7: Select the ‘Nodes’ Shapefile](#step-7-select-the-nodes-shapefile)
+  - [Step 8: Script Execution](#step-8-script-execution)
+  - [Step 9: Verify the Output](#step-9-verify-the-output)
+- [Opening Sttar and Preparing for Data Input](#opening-sttar-and-preparing-for-data-input)
+  - [Step 1: Open Sttar Software](#step-1-open-sttar-software)
+  - [Step 2: Import Configuration or Project File](#step-2-import-configuration-or-project-file)
+
+---
+
+## Overview
+
+This guide provides step-by-step instructions for processing a Geopackage using QGIS to prepare specific data layers for input into Sttar. The target data layers include:
+
+- **Aerial Drops**
+- **Underground Drops**
+- **Pedestal/Handholes**
+- **OLT**
+- **HP**
+- **Poles**
+- **Routes AER**
+- **Route UG**
+
+---
+
+## Requirements
+
+- **QGIS software**
+- Katapult `Nodes` and `Connections` shapefiles.
+- The Python script `` `comcast_data_preparation.py` ``.
+- The Python script `` `process_cad_imports.py` ``.
+
+---
+
+## Step-by-Step Instructions
+
+### Step 1: Open QGIS
+
+1. Launch QGIS.
+
+> **Outcome**: QGIS is successfully opened and ready for data preparation.
+
+---
+
+### Step 2: Open the Python Console
+
+1. Access the Python Console:
+   - Go to `` `Plugins > Python Console` `` in the top menu.
+
+![Open Python Console](path/to/screenshot2.png)  
+*Navigate to the Python Console to enable scripting features in QGIS.*
+
+---
+
+### Step 3: Open the Script Editor
+
+1. Open the Script Editor:
+   - In the Python Console, click the **Show Editor** button (paper and pencil icon).
+
+![Open Script Editor](path/to/screenshot3.png)  
+*Access the Script Editor to load your custom Python scripts.*
+
+---
+
+### Step 4: Load the Script
+
+1. Load the script into the editor:
+   - Click the **Open Script** button (folder icon) in the Script Editor.
+   - Navigate to the location where you saved `` `comcast_data_prep.py` ``.
+   - Select the file and click **Open**.
+
+![Load the Script](path/to/screenshot4.png)  
+*Steps to locate and open the script file in the Script Editor.*
+
+---
+
+### Step 5: Run the Script
+
+1. Run the script:
+   - Click the **Run Script** button (green play icon) in the Script Editor.
+
+![Run the Script](path/to/screenshot5.png)  
+*Executing the script to begin processing the data.*
+
+---
+
+### Step 6: Select the ‘Connections’ Shapefile
+
+1. A file dialog will prompt you to select the `Connections` shapefile:
+   - Navigate to the folder containing your shapefiles.
+   - Select `` `Connections.shp` `` and click **Open**.
+
+![Select Connections Shapefile](path/to/screenshot6.png)  
+*Example of selecting the `Connections.shp` file.*
+
+---
+
+### Step 7: Select the ‘Nodes’ Shapefile
+
+1. A file dialog will prompt you to select the `Nodes` shapefile:
+   - Navigate to the folder containing your shapefiles.
+   - Select `` `Nodes.shp` `` and click **Open**.
+
+![Select Nodes Shapefile](path/to/screenshot7.png)  
+*Example of selecting the `Nodes.shp` file.*
+
+---
+
+### Step 8: Script Execution
+
+1. The script will:
+   - Automatically load the shapefiles.
+   - Select specific features.
+   - Export the processed features into new shapefiles.
+2. A new folder named **Sttar Inputs** will be created in the same directory as your input shapefiles.
+
+> **Outcome**: The folder **Sttar Inputs** now contains newly processed shapefiles, ready for Sttar.
+
+![Script Execution](path/to/screenshot8.png)  
+*Overview of the script execution and output folder creation.*
+
+---
+
+### Step 9: Verify the Output
+
+1. Check the output folder:
+   - Navigate to the folder containing your input shapefiles.
+   - Open the **Sttar Inputs** folder to verify the creation of new shapefiles, such as:
+     - `` `input_aerial_routes.shp` ``
+     - `` `input_poles.shp` ``
+
+![Verify the Output](path/to/screenshot9.png)  
+*Example of verified output files in the Sttar Inputs folder.*
+
+---
+
+## Opening Sttar and Preparing for Data Input
+
+---
+
+### Step 1: Open Sttar Software
+
+1. Launch the Sttar software. Choose between:
+   - **Sttar Advanced Designer**: For extended capabilities, including modifying design rules or configurations.
+   - **Sttar Planner**: Recommended for executing designs without advanced configuration adjustments.
+2. **Note**: This guide focuses on **Sttar Advanced Designer** due to its extended features.
+
+![Open Sttar Software](path/to/screenshot1.png)  
+*Example of the Sttar software main interface upon launching.*
+
+---
+
+### Step 2: Import Configuration or Project File
+
+1. Open the configuration file (`` `.sdconfig` ``) corresponding to your design area.
+2. Save it as a project file (`` `.sdproj` ``) to prevent modifications to the original configuration.
+
+> **Tip**: Always save your project immediately to preserve the original configuration.
+
+![Import Configuration File](path/to/screenshot2.png)  
+*Steps to open and save the configuration file for use in Sttar.*
+
+---
+
+## Final Notes
+
+*This guide is designed to help professionals streamline their design workflows through precise instructions and automated tools. If you need further assistance, feel free to contact the **Continuous Improvement and Automation team.*
+
+---
+</div>

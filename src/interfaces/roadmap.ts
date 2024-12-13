@@ -2,11 +2,17 @@ export interface CardType {
   id: string;
   title: string;
   description: string;
+  category?: RoadmapCardCategory;
   color: string;
   position: number;
   createdAt: string;
   updatedAt: string;
   projects: ProjectType[];
+}
+
+export interface RoadmapCardCategory {
+  id: string;
+  name: string;
 }
 
 export interface SortableItemProps {

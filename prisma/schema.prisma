@@ -207,14 +207,22 @@ model Note {
 }
 
 model RoadmapCard {
-  id          String           @id @default(cuid())
-  title       String
-  description String
-  color       String
-  position    Int              @default(0)
-  createdAt   DateTime         @default(now())
-  updatedAt   DateTime         @updatedAt
-  projects    RoadmapProject[] @relation("CardProjects")
+  id                    String              @id @default(cuid())
+  title                 String
+  description           String
+  category              RoadmapCardCategory? @relation(fields: [roadmapCardCategoryId], references: [id], name : "CardCategory", map: "CardCategory_roadmapCardCategoryId_fkey")
+  color                 String
+  position              Int                 @default(0)
+  createdAt             DateTime            @default(now())
+  updatedAt             DateTime            @updatedAt
+  projects              RoadmapProject[]    @relation("CardProjects")
+  roadmapCardCategoryId String?
+}
+
+model RoadmapCardCategory {
+  id    String        @id @default(cuid())
+  name  String
+  cards RoadmapCard[] @relation("CardCategory")
 }
 
 model RoadmapProject {

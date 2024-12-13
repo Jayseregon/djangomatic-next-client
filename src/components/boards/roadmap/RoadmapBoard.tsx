@@ -24,8 +24,10 @@ import {
   Save,
   CircleX,
   FolderOpenDot,
+  ListFilterPlus,
 } from "lucide-react";
 
+import { createRoadmapCardCategory } from "@/src/action/prisma/action";
 import { CardType, ProjectType } from "@/interfaces/roadmap";
 import { NonceContext } from "@/src/app/providers";
 
@@ -38,7 +40,9 @@ export default function RoadmapBoard() {
   const [cards, setCards] = useState<CardType[]>([]);
   const [projects, setProjects] = useState<ProjectType[]>([]);
   const [projectName, setProjectName] = useState("");
+  const [categoryName, setCategoryName] = useState("");
   const [showProjectInput, setShowProjectInput] = useState(false);
+  const [showCategoryInput, setShowCategoryInput] = useState(false);
 
   const sensors = useSensors(useSensor(MouseSensor), useSensor(TouchSensor));
 
@@ -221,6 +225,17 @@ export default function RoadmapBoard() {
       });
   }, [projectName]);
 
+  const addCategory = useCallback(() => {
+    if (!categoryName.trim()) return;
+    const createCategory = async () => {
+      await createRoadmapCardCategory(categoryName);
+      setCategoryName("");
+      setShowCategoryInput(false);
+    };
+
+    createCategory();
+  }, [categoryName]);
+
   const viewProject = useCallback((projectId: string) => {
     router.push(`/boards/roadmap/projects/${projectId}`);
   }, []);
@@ -244,6 +259,13 @@ export default function RoadmapBoard() {
           >
             <FolderPlus />
           </Button>
+          <Button
+            isIconOnly
+            color="primary"
+            onClick={() => setShowCategoryInput(true)}
+          >
+            <ListFilterPlus />
+          </Button>
         </div>
         {showProjectInput && (
           <div className="flex items-center gap-2">
@@ -259,6 +281,25 @@ export default function RoadmapBoard() {
               isIconOnly
               color="danger"
               onClick={() => setShowProjectInput(false)}
+            >
+              <CircleX />
+            </Button>
+          </div>
+        )}
+        {showCategoryInput && (
+          <div className="flex items-center gap-2">
+            <Input
+              placeholder="Category Name"
+              value={categoryName}
+              onChange={(e) => setCategoryName(e.target.value)}
+            />
+            <Button isIconOnly color="success" onClick={addCategory}>
+              <Save />
+            </Button>
+            <Button
+              isIconOnly
+              color="danger"
+              onClick={() => setShowCategoryInput(false)}
             >
               <CircleX />
             </Button>
@@ -293,7 +334,7 @@ export default function RoadmapBoard() {
             top: "22.5rem",
             left: "1.5rem",
             width: "30rem",
-            maxHeight: "calc(100vh - 22.5rem)", // Adjust for top offset
+            maxHeight: "calc(95vh - 22.5rem)", // Adjust for top offset
             overflowY: "auto",
             zIndex: 30,
           }}
@@ -342,7 +383,7 @@ export default function RoadmapBoard() {
             top: "22.5rem",
             right: "1.5rem",
             width: "calc(100% - 33rem)", // Adjust for left offset
-            maxHeight: "calc(100vh - 22.5rem)", // Adjust for top offset
+            maxHeight: "calc(95vh - 22.5rem)", // Adjust for top offset
             overflowY: "auto",
             zIndex: 30,
             marginLeft: "32rem",

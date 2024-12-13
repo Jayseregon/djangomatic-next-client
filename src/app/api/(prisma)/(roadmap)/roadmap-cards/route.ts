@@ -8,7 +8,7 @@ const prisma = new PrismaClient();
 export async function GET() {
   try {
     const cards = await prisma.roadmapCard.findMany({
-      include: { projects: true },
+      include: { projects: true, category: true },
       orderBy: { position: "asc" },
     });
 

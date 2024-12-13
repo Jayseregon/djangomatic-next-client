@@ -89,6 +89,13 @@ export function titleCase(str: string): string {
     .join(" ");
 }
 
+export function capitalizeFirstLetters(str: string): string {
+  return str
+    .split(" ")
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(" ");
+}
+
 /**
  * Strip HTML tags from a string and return only the text content.
  *

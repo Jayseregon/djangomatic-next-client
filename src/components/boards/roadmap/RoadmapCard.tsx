@@ -1,4 +1,6 @@
-import React, { useCallback } from "react";
+"use client";
+
+import React, { useCallback, useEffect } from "react";
 import {
   Card,
   CardHeader,
@@ -13,7 +15,8 @@ import {
 import { Trash2 } from "lucide-react";
 import { useDebouncedCallback } from "use-debounce";
 
-import { CardType } from "@/interfaces/roadmap";
+import { getRoadmapCardCategories } from "@/src/action/prisma/action";
+import { CardType, RoadmapCardCategory } from "@/interfaces/roadmap";
 import { cn } from "@/src/lib/utils";
 
 // Define the custom Badge component
@@ -23,7 +26,7 @@ const Badge: React.FC<{ color: string }> = ({ color }) => (
       aria-label={`${color} badge`}
       className={`inline-block rounded-full bg-${color}-400 w-4 h-4`}
     />
-    <span className="text-background">{color}</span>
+    <span className={`text-${color}-400`}>{color}</span>
   </div>
 );
 
@@ -34,6 +37,18 @@ function RoadmapCard({
   card: CardType;
   setCards: React.Dispatch<React.SetStateAction<CardType[]>>;
 }) {
+  const [categories, setCategories] = React.useState<RoadmapCardCategory[]>([]);
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      const res = await getRoadmapCardCategories();
+
+      setCategories(res ?? []);
+    };
+
+    fetchCategories();
+  }, []);
+
   const debouncedUpdate = useDebouncedCallback((field, value) => {
     fetch("/api/roadmap-cards/update", {
       method: "PUT",
@@ -52,6 +67,26 @@ function RoadmapCard({
       debouncedUpdate("title", newTitle);
     },
     [card, setCards, debouncedUpdate],
+  );
+
+  const handleCategoryChange = useCallback(
+    (newCategoryId: string) => {
+      const updatedCategory = categories.find(
+        (cat) => cat.id === newCategoryId,
+      );
+
+      const updatedCard = {
+        ...card,
+        roadmapCardCategoryId: newCategoryId,
+        category: updatedCategory,
+      };
+
+      setCards((items) =>
+        items.map((item) => (item.id === card.id ? updatedCard : item)),
+      );
+      debouncedUpdate("roadmapCardCategoryId", newCategoryId);
+    },
+    [card, setCards, debouncedUpdate, categories],
   );
 
   const handleDescriptionChange = useCallback(
@@ -122,11 +157,10 @@ function RoadmapCard({
         card.color ? `text-${card.color}-950` : "text-foreground",
       )}
     >
-      <CardHeader className="flex flex-row items-center">
+      <CardHeader className="flex flex-col items-center gap-1">
         <Input
           isClearable
           aria-label="Title"
-          // className="basis-3/4"
           classNames={{
             input: "border-0 focus:ring-0 m-0 p-0",
             inputWrapper: card.color
@@ -155,47 +189,95 @@ function RoadmapCard({
           onValueChange={handleDescriptionChange}
         />
       </CardBody>
-      <CardFooter className="flex items-center justify-between">
-        <Select
-          aria-label="Background Color"
-          className="basis-1/2 p-0 m-0"
-          classNames={{
-            trigger: card.color
-              ? "border-0 text-background border border-background/50"
-              : "border-0 text-foreground border border-foreground/50",
-            label: "text-center",
-            popoverContent: "bg-background",
-          }}
-          renderValue={() => <Badge color={card.color} />}
-          selectedKeys={card.color ? new Set([card.color]) : new Set()}
-          variant="bordered"
-          onSelectionChange={(keys) => {
-            const selectedKey = keys.currentKey as string;
+      <CardFooter className="flex flex-col gap-1">
+        {categories.length > 0 && (
+          <Select
+            aria-label="Category"
+            className="p-0 m-0"
+            classNames={{
+              value: `text-${card.color}-900`,
+              trigger: card.color
+                ? "border-0 text-background border border-background/50"
+                : "border-0 text-foreground border border-foreground/50",
+              label: "text-center",
+              popoverContent: "bg-background",
+            }}
+            renderValue={() => (
+              <div className={`text-${card.color}-900`}>
+                {card.category?.name}
+              </div>
+            )}
+            selectedKeys={
+              card.category ? new Set([card.category.id]) : new Set()
+            }
+            size="sm"
+            variant="bordered"
+            onSelectionChange={(keys) => {
+              const selectedKey = Array.from(keys)[0] as string;
 
-            handleColorChange(selectedKey);
-          }}
-        >
-          {colorOptions.map((color) => (
-            <SelectItem
-              key={color}
-              classNames={{
-                base: "hover:!bg-foreground/30 focus:!bg-foreground/30",
-              }}
-              textValue={color}
-              value={color}
-            >
-              <Badge color={color} />
-            </SelectItem>
-          ))}
-        </Select>
-        <Button
-          isIconOnly
-          color="danger"
-          variant="light"
-          onPress={handleDelete}
-        >
-          <Trash2 />
-        </Button>
+              handleCategoryChange(selectedKey);
+            }}
+          >
+            {categories.map((category) => (
+              <SelectItem
+                key={category.id}
+                classNames={{
+                  base: "hover:!bg-foreground/30 focus:!bg-foreground/30",
+                }}
+                textValue={category.name}
+                value={category.id}
+              >
+                {category.name}
+              </SelectItem>
+            ))}
+          </Select>
+        )}
+        <div className="flex w-full items-center justify-between">
+          <Select
+            aria-label="Background Color"
+            className="basis-1/2 p-0 m-0"
+            classNames={{
+              trigger: card.color
+                ? "border-0 text-background border border-background/50"
+                : "border-0 text-foreground border border-foreground/50",
+              label: "text-center",
+              popoverContent: "bg-background",
+            }}
+            renderValue={() => (
+              <div className={`text-${card.color}-900`}>{card.color}</div>
+            )}
+            selectedKeys={card.color ? new Set([card.color]) : new Set()}
+            size="sm"
+            variant="bordered"
+            onSelectionChange={(keys) => {
+              const selectedKey = keys.currentKey as string;
+
+              handleColorChange(selectedKey);
+            }}
+          >
+            {colorOptions.map((color) => (
+              <SelectItem
+                key={color}
+                classNames={{
+                  base: "hover:!bg-foreground/30 focus:!bg-foreground/30",
+                }}
+                textValue={color}
+                value={color}
+              >
+                <Badge color={color} />
+              </SelectItem>
+            ))}
+          </Select>
+          <Button
+            isIconOnly
+            color="danger"
+            size="sm"
+            variant="light"
+            onPress={handleDelete}
+          >
+            <Trash2 />
+          </Button>
+        </div>
       </CardFooter>
     </Card>
   );

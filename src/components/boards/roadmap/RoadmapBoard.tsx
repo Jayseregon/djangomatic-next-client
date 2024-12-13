@@ -27,8 +27,17 @@ import {
   ListFilterPlus,
 } from "lucide-react";
 
-import { createRoadmapCardCategory } from "@/src/action/prisma/action";
-import { CardType, ProjectType } from "@/interfaces/roadmap";
+import {
+  createRoadmapCardCategory,
+  getRoadmapCardCategories,
+  getRoadmapCards,
+  getRoadmapProjects,
+} from "@/src/action/prisma/action";
+import {
+  CardType,
+  ProjectType,
+  RoadmapCardCategory,
+} from "@/interfaces/roadmap";
 import { NonceContext } from "@/src/app/providers";
 
 import RoadmapCard from "./RoadmapCard";
@@ -39,6 +48,7 @@ export default function RoadmapBoard() {
   const nonce = useContext(NonceContext);
   const [cards, setCards] = useState<CardType[]>([]);
   const [projects, setProjects] = useState<ProjectType[]>([]);
+  const [categories, setCategories] = React.useState<RoadmapCardCategory[]>([]);
   const [projectName, setProjectName] = useState("");
   const [categoryName, setCategoryName] = useState("");
   const [showProjectInput, setShowProjectInput] = useState(false);
@@ -47,23 +57,25 @@ export default function RoadmapBoard() {
   const sensors = useSensors(useSensor(MouseSensor), useSensor(TouchSensor));
 
   useEffect(() => {
-    fetch("/api/roadmap-cards")
-      .then((res) => res.json())
-      .then((data) => {
-        setCards(
-          data.sort((a: CardType, b: CardType) => a.position - b.position),
-        );
-      });
+    const fetchCards = async () => {
+      const res = await getRoadmapCards();
+      const sorted = res?.sort((a, b) => a.position - b.position);
+      setCards(sorted as unknown as CardType[]);
+    };
+    fetchCards();
 
-    fetch("/api/roadmap-projects")
-      .then((res) => res.json())
-      .then((data) => {
-        setProjects(
-          data.sort(
-            (a: ProjectType, b: ProjectType) => a.position - b.position,
-          ),
-        );
-      });
+    const fetchProjects = async () => {
+      const res = await getRoadmapProjects();
+      const sorted = res?.sort((a, b) => a.position - b.position);
+      setProjects(sorted as unknown as ProjectType[]);
+    };
+    fetchProjects();
+
+    const fetchCategories = async () => {
+      const res = await getRoadmapCardCategories();
+      setCategories(res ?? []);
+    };
+    fetchCategories();
   }, []);
 
   const handleDragEnd = (event: DragEndEvent) => {
@@ -80,7 +92,7 @@ export default function RoadmapBoard() {
     if (activeType === "project" && overType === "project") {
       if (activeId !== overId) {
         const oldIndex = projects.findIndex(
-          (project) => project.id === activeId,
+          (project) => project.id === activeId
         );
         const newIndex = projects.findIndex((project) => project.id === overId);
 
@@ -163,8 +175,8 @@ export default function RoadmapBoard() {
                   ...project,
                   cards: [...project.cards, card],
                 }
-              : project,
-          ),
+              : project
+          )
         );
 
         // Do not remove the card from the main view
@@ -185,8 +197,8 @@ export default function RoadmapBoard() {
                     ...project,
                     cards: project.cards.filter((c) => c.id !== card.id),
                   }
-                : project,
-            ),
+                : project
+            )
           );
         });
       }
@@ -246,24 +258,24 @@ export default function RoadmapBoard() {
       <div
         className="flex flex-row gap-10 my-3"
         nonce={nonce}
-        style={{ marginLeft: "31rem" }}
-      >
+        style={{ marginLeft: "31rem" }}>
         <div className="flex gap-3">
-          <Button isIconOnly color="success" onClick={addCard}>
+          <Button
+            isIconOnly
+            color="success"
+            onClick={addCard}>
             <Grid2x2Plus />
           </Button>
           <Button
             isIconOnly
             color="primary"
-            onClick={() => setShowProjectInput(true)}
-          >
+            onClick={() => setShowProjectInput(true)}>
             <FolderPlus />
           </Button>
           <Button
             isIconOnly
             color="primary"
-            onClick={() => setShowCategoryInput(true)}
-          >
+            onClick={() => setShowCategoryInput(true)}>
             <ListFilterPlus />
           </Button>
         </div>
@@ -274,14 +286,16 @@ export default function RoadmapBoard() {
               value={projectName}
               onChange={(e) => setProjectName(e.target.value)}
             />
-            <Button isIconOnly color="success" onClick={addProject}>
+            <Button
+              isIconOnly
+              color="success"
+              onClick={addProject}>
               <Save />
             </Button>
             <Button
               isIconOnly
               color="danger"
-              onClick={() => setShowProjectInput(false)}
-            >
+              onClick={() => setShowProjectInput(false)}>
               <CircleX />
             </Button>
           </div>
@@ -293,14 +307,16 @@ export default function RoadmapBoard() {
               value={categoryName}
               onChange={(e) => setCategoryName(e.target.value)}
             />
-            <Button isIconOnly color="success" onClick={addCategory}>
+            <Button
+              isIconOnly
+              color="success"
+              onClick={addCategory}>
               <Save />
             </Button>
             <Button
               isIconOnly
               color="danger"
-              onClick={() => setShowCategoryInput(false)}
-            >
+              onClick={() => setShowCategoryInput(false)}>
               <CircleX />
             </Button>
           </div>
@@ -315,8 +331,7 @@ export default function RoadmapBoard() {
           left: "1.5rem",
           width: "30rem",
           zIndex: 30,
-        }}
-      >
+        }}>
         <h2 className="text-foreground text-2xl font-semibold">Projects</h2>
       </div>
 
@@ -324,8 +339,7 @@ export default function RoadmapBoard() {
         collisionDetection={pointerWithin}
         modifiers={[]} // Remove any existing modifiers that might cause flickering
         sensors={sensors}
-        onDragEnd={handleDragEnd}
-      >
+        onDragEnd={handleDragEnd}>
         {/* Fixed position side projects container */}
         <div
           nonce={nonce}
@@ -337,21 +351,18 @@ export default function RoadmapBoard() {
             maxHeight: "calc(95vh - 22.5rem)", // Adjust for top offset
             overflowY: "auto",
             zIndex: 30,
-          }}
-        >
+          }}>
           {/* side content with projects as drop targets */}
           <div className="flex flex-col gap-4">
             <SortableContext
               items={projects.map((project) => project.id)}
-              strategy={verticalListSortingStrategy}
-            >
+              strategy={verticalListSortingStrategy}>
               <div className="flex flex-col gap-5">
                 {projects.map((project) => (
                   <SortableItem
                     key={project.id}
                     data={{ type: "project" }}
-                    id={project.id}
-                  >
+                    id={project.id}>
                     <div className="flex px-2 py-8 border border-foreground rounded-md justify-between">
                       <div className="flex flex-col text-left ps-3">
                         <h3 className="capitalize">{project.name}</h3>
@@ -363,8 +374,7 @@ export default function RoadmapBoard() {
                         isIconOnly
                         color="primary"
                         variant="light"
-                        onClick={() => viewProject(project.id)}
-                      >
+                        onClick={() => viewProject(project.id)}>
                         <FolderOpenDot />
                       </Button>
                     </div>
@@ -387,23 +397,23 @@ export default function RoadmapBoard() {
             overflowY: "auto",
             zIndex: 30,
             marginLeft: "32rem",
-          }}
-        >
+          }}>
           {/* main content to display all cards */}
           <div className="flex-grow px-4">
             <div className="w-full">
               <SortableContext
                 items={cards.map((card) => card.id)}
-                strategy={rectSortingStrategy}
-              >
+                strategy={rectSortingStrategy}>
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                   {cards.map((card) => (
                     <SortableItem
                       key={card.id}
                       data={{ type: "card", card, projectId: null }}
-                      id={card.id}
-                    >
-                      <RoadmapCard card={card} setCards={setCards} />
+                      id={card.id}>
+                      <RoadmapCard
+                        card={card}
+                        setCards={setCards}
+                      />
                     </SortableItem>
                   ))}
                 </div>

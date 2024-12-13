@@ -44,3 +44,33 @@ export async function getRoadmapCardCategories() {
     await prisma.$disconnect();
   }
 }
+
+export async function getRoadmapCards() {
+  try {
+    const cards = await prisma.roadmapCard.findMany({
+      include: { projects: true, category: true },
+      orderBy: { position: "asc" },
+    });
+
+    return cards;
+  } catch (error: any) {
+    console.log("Error getting cards:", error);
+  } finally {
+    await prisma.$disconnect();
+  }
+}
+
+export async function getRoadmapProjects() {
+  try {
+    const projects = await prisma.roadmapProject.findMany({
+      include: { cards: true },
+      orderBy: { position: "asc" },
+    });
+
+    return projects;
+  } catch (error: any) {
+    console.log("Error getting projects:", error);
+  } finally {
+    await prisma.$disconnect();
+  }
+}

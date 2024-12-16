@@ -2,7 +2,7 @@
 
 import React, { useCallback, useContext, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Button } from "@nextui-org/react";
+import { Button, Input } from "@nextui-org/react";
 import {
   DndContext,
   MouseSensor,
@@ -21,6 +21,8 @@ import {
 import {
   Grid2x2Plus,
   FolderPlus,
+  Save,
+  CircleX,
   FolderOpenDot,
   ListFilterPlus,
 } from "lucide-react";
@@ -40,7 +42,6 @@ import { NonceContext } from "@/src/app/providers";
 
 import RoadmapCard from "./RoadmapCard";
 import SortableItem from "./SortableItem";
-import AddInput from "./AddInput";
 
 export default function RoadmapBoard() {
   const router = useRouter();
@@ -58,8 +59,9 @@ export default function RoadmapBoard() {
   useEffect(() => {
     const fetchCards = async () => {
       const res = await getRoadmapCards();
+      const sorted = res?.sort((a, b) => a.position - b.position);
 
-      setCards(res as unknown as CardType[]);
+      setCards(sorted as unknown as CardType[]);
     };
 
     fetchCards();
@@ -76,87 +78,24 @@ export default function RoadmapBoard() {
     const fetchCategories = async () => {
       const res = await getRoadmapCardCategories();
 
-      setCategories(res || []);
+      setCategories(res ?? []);
     };
 
     fetchCategories();
   }, []);
-
-  // Group cards by category
-  const cardsByCategory = categories
-    .map((category) => ({
-      category,
-      cards: cards
-        .filter((card) => card.category?.id === category.id)
-        .sort((a, b) => a.position - b.position),
-    }))
-    .filter(({ cards }) => cards.length > 0);
-
-  // Add grouping for uncategorized cards
-  const uncategorizedCards = cards
-    .filter((card) => !card.category)
-    .sort((a, b) => a.position - b.position);
 
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
 
     if (!over) return;
 
+    const activeType = active.data.current?.type;
+    const overType = over.data.current?.type;
+
     const activeId = active.id as string;
     const overId = over.id as string;
 
-    const activeData = active.data.current;
-    const overData = over.data.current;
-
-    if (activeData?.type === "card" && overData?.type === "card") {
-      const activeCategoryId = activeData.categoryId;
-      const overCategoryId = overData.categoryId;
-
-      if (activeCategoryId === overCategoryId) {
-        const categoryId = activeCategoryId;
-        const categoryCards = cards
-          .filter((card) => card.category?.id === categoryId)
-          .sort((a, b) => a.position - b.position);
-
-        const oldIndex = categoryCards.findIndex(
-          (card) => card.id === activeId,
-        );
-        const newIndex = categoryCards.findIndex((card) => card.id === overId);
-
-        if (oldIndex !== newIndex) {
-          const newCategoryCards = arrayMove(categoryCards, oldIndex, newIndex);
-
-          // Update positions in state
-          setCards((prevCards) =>
-            prevCards.map((card) => {
-              if (card.category?.id === categoryId) {
-                const index = newCategoryCards.findIndex(
-                  (c) => c.id === card.id,
-                );
-
-                return { ...card, position: index };
-              }
-
-              return card;
-            }),
-          );
-
-          // Update positions in the database
-          const updates = newCategoryCards.map((card) => ({
-            id: card.id,
-            position: card.position,
-          }));
-
-          fetch("/api/roadmap-cards/update-positions", {
-            method: "PATCH",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ updates }),
-          });
-        }
-      }
-    }
-
-    if (activeData?.type === "project" && overData?.type === "project") {
+    if (activeType === "project" && overType === "project") {
       if (activeId !== overId) {
         const oldIndex = projects.findIndex(
           (project) => project.id === activeId,
@@ -189,10 +128,10 @@ export default function RoadmapBoard() {
       return;
     }
 
-    if (activeData?.type === "card") {
-      if (overData?.type === "card") {
-        const activeProjectId = activeData.projectId;
-        const overProjectId = overData.projectId;
+    if (activeType === "card") {
+      if (overType === "card") {
+        const activeProjectId = active.data.current?.projectId;
+        const overProjectId = over.data.current?.projectId;
 
         if (!activeProjectId && !overProjectId) {
           if (activeId !== overId) {
@@ -220,9 +159,9 @@ export default function RoadmapBoard() {
         }
       }
 
-      if (overData?.type === "project") {
+      if (overType === "project") {
         const projectId = overId;
-        const card = activeData.card;
+        const card = active.data.current?.card;
 
         // Check if card already exists in the target project
         const targetProject = projects.find((p) => p.id === projectId);
@@ -348,24 +287,40 @@ export default function RoadmapBoard() {
         </div>
         {showProjectInput && (
           <div className="flex items-center gap-2">
-            <AddInput
-              inputValue={projectName}
+            <Input
               placeholder="Project Name"
-              setInputValue={setProjectName}
-              setShowInput={setShowProjectInput}
-              onClick={addProject}
+              value={projectName}
+              onChange={(e) => setProjectName(e.target.value)}
             />
+            <Button isIconOnly color="success" onClick={addProject}>
+              <Save />
+            </Button>
+            <Button
+              isIconOnly
+              color="danger"
+              onClick={() => setShowProjectInput(false)}
+            >
+              <CircleX />
+            </Button>
           </div>
         )}
         {showCategoryInput && (
           <div className="flex items-center gap-2">
-            <AddInput
-              inputValue={categoryName}
+            <Input
               placeholder="Category Name"
-              setInputValue={setCategoryName}
-              setShowInput={setShowCategoryInput}
-              onClick={addCategory}
+              value={categoryName}
+              onChange={(e) => setCategoryName(e.target.value)}
             />
+            <Button isIconOnly color="success" onClick={addCategory}>
+              <Save />
+            </Button>
+            <Button
+              isIconOnly
+              color="danger"
+              onClick={() => setShowCategoryInput(false)}
+            >
+              <CircleX />
+            </Button>
           </div>
         )}
       </div>
@@ -453,54 +408,24 @@ export default function RoadmapBoard() {
           }}
         >
           {/* main content to display all cards */}
-
-          {/* Render categorized cards */}
           <div className="flex-grow px-4">
             <div className="w-full">
-              {/* Render uncategorized cards */}
-              {uncategorizedCards.length > 0 && (
-                <div key="uncategorized">
-                  <SortableContext
-                    items={uncategorizedCards.map((card) => card.id)}
-                    strategy={rectSortingStrategy}
-                  >
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                      {uncategorizedCards.map((card) => (
-                        <SortableItem
-                          key={card.id}
-                          data={{ type: "card", categoryId: null }}
-                          id={card.id}
-                        >
-                          <RoadmapCard card={card} setCards={setCards} />
-                        </SortableItem>
-                      ))}
-                    </div>
-                  </SortableContext>
+              <SortableContext
+                items={cards.map((card) => card.id)}
+                strategy={rectSortingStrategy}
+              >
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                  {cards.map((card) => (
+                    <SortableItem
+                      key={card.id}
+                      data={{ type: "card", card, projectId: null }}
+                      id={card.id}
+                    >
+                      <RoadmapCard card={card} setCards={setCards} />
+                    </SortableItem>
+                  ))}
                 </div>
-              )}
-              {cardsByCategory.map(({ category, cards }) => (
-                <div key={category.id}>
-                  <h3 className="text-foreground text-2xl pt-8 pb-4 font-semibold">
-                    {category.name}
-                  </h3>
-                  <SortableContext
-                    items={cards.map((card) => card.id)}
-                    strategy={rectSortingStrategy}
-                  >
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                      {cards.map((card) => (
-                        <SortableItem
-                          key={card.id}
-                          data={{ type: "card", categoryId: category.id }}
-                          id={card.id}
-                        >
-                          <RoadmapCard card={card} setCards={setCards} />
-                        </SortableItem>
-                      ))}
-                    </div>
-                  </SortableContext>
-                </div>
-              ))}
+              </SortableContext>
             </div>
           </div>
         </div>

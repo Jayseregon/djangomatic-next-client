@@ -29,3 +29,11 @@ export interface ProjectType {
   updatedAt: string;
   cards: CardType[];
 }
+
+export interface AddInputProps {
+  placeholder: string;
+  inputValue: string;
+  setInputValue: (value: string) => void;
+  setShowInput: (value: boolean) => void;
+  onClick: () => void;
+}

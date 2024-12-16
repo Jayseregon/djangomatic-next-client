@@ -7,16 +7,6 @@ import { capitalizeFirstLetters } from "@/src/lib/utils";
 
 const prisma = new PrismaClient();
 
-// export default async function PostPage(props: {
-//   params: Promise<{ slug: string }>;
-// }) {
-//   const { slug } = await props.params;
-//   const postDb = await prisma.blogPost.findUnique({
-//     where: {
-//       slug: slug,
-//     },
-//   });
-
 export async function createRoadmapCardCategory(categoryName: string) {
   try {
     const capitalizedCategoryName = capitalizeFirstLetters(categoryName);

@@ -42,8 +42,10 @@ function RoadmapCard({
   useEffect(() => {
     const fetchCategories = async () => {
       const res = await getRoadmapCardCategories();
+
       setCategories(res ?? []);
     };
+
     fetchCategories();
   }, []);
 
@@ -60,17 +62,17 @@ function RoadmapCard({
       const updatedCard = { ...card, title: newTitle };
 
       setCards((items) =>
-        items.map((item) => (item.id === card.id ? updatedCard : item))
+        items.map((item) => (item.id === card.id ? updatedCard : item)),
       );
       debouncedUpdate("title", newTitle);
     },
-    [card, setCards, debouncedUpdate]
+    [card, setCards, debouncedUpdate],
   );
 
   const handleCategoryChange = useCallback(
     (newCategoryId: string) => {
       const updatedCategory = categories.find(
-        (cat) => cat.id === newCategoryId
+        (cat) => cat.id === newCategoryId,
       );
 
       const updatedCard = {
@@ -80,11 +82,20 @@ function RoadmapCard({
       };
 
       setCards((items) =>
-        items.map((item) => (item.id === card.id ? updatedCard : item))
+        items.map((item) => (item.id === card.id ? updatedCard : item)),
       );
-      debouncedUpdate("roadmapCardCategoryId", newCategoryId);
+
+      // Send the PUT request immediately
+      fetch("/api/roadmap-cards/update", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          id: card.id,
+          roadmapCardCategoryId: newCategoryId,
+        }),
+      });
     },
-    [card, setCards, debouncedUpdate, categories]
+    [card, setCards, categories],
   );
 
   const handleDescriptionChange = useCallback(
@@ -92,11 +103,11 @@ function RoadmapCard({
       const updatedCard = { ...card, description: newDescription };
 
       setCards((items) =>
-        items.map((item) => (item.id === card.id ? updatedCard : item))
+        items.map((item) => (item.id === card.id ? updatedCard : item)),
       );
       debouncedUpdate("description", newDescription);
     },
-    [card, setCards, debouncedUpdate]
+    [card, setCards, debouncedUpdate],
   );
 
   const handleColorChange = useCallback(
@@ -104,7 +115,7 @@ function RoadmapCard({
       const updatedCard = { ...card, color: newColor };
 
       setCards((items) =>
-        items.map((item) => (item.id === card.id ? updatedCard : item))
+        items.map((item) => (item.id === card.id ? updatedCard : item)),
       );
       fetch("/api/roadmap-cards/update", {
         method: "PUT",
@@ -112,7 +123,7 @@ function RoadmapCard({
         body: JSON.stringify({ id: card.id, color: newColor }),
       });
     },
-    [card, setCards]
+    [card, setCards],
   );
 
   const handleDelete = useCallback(() => {
@@ -152,8 +163,9 @@ function RoadmapCard({
           : "border border-foreground",
         "w-full",
         "h-full",
-        card.color ? `text-${card.color}-950` : "text-foreground"
-      )}>
+        card.color ? `text-${card.color}-950` : "text-foreground",
+      )}
+    >
       <CardHeader className="flex flex-col items-center gap-1">
         <Input
           isClearable
@@ -213,7 +225,8 @@ function RoadmapCard({
               const selectedKey = Array.from(keys)[0] as string;
 
               handleCategoryChange(selectedKey);
-            }}>
+            }}
+          >
             {categories.map((category) => (
               <SelectItem
                 key={category.id}
@@ -221,7 +234,8 @@ function RoadmapCard({
                   base: "hover:!bg-foreground/30 focus:!bg-foreground/30",
                 }}
                 textValue={category.name}
-                value={category.id}>
+                value={category.id}
+              >
                 {category.name}
               </SelectItem>
             ))}
@@ -248,7 +262,8 @@ function RoadmapCard({
               const selectedKey = keys.currentKey as string;
 
               handleColorChange(selectedKey);
-            }}>
+            }}
+          >
             {colorOptions.map((color) => (
               <SelectItem
                 key={color}
@@ -256,7 +271,8 @@ function RoadmapCard({
                   base: "hover:!bg-foreground/30 focus:!bg-foreground/30",
                 }}
                 textValue={color}
-                value={color}>
+                value={color}
+              >
                 <Badge color={color} />
               </SelectItem>
             ))}
@@ -266,7 +282,8 @@ function RoadmapCard({
             color="danger"
             size="sm"
             variant="light"
-            onPress={handleDelete}>
+            onPress={handleDelete}
+          >
             <Trash2 />
           </Button>
         </div>

@@ -50,7 +50,7 @@
       }
     },
     "roadmap": {
-      "title": "Roadmap",
+      "title": "Roadmaps",
       "subtitle": "Track the progress of our projects and upcoming features",
       "tableColumns": {
         "created": "Created",
@@ -61,10 +61,6 @@
         "owner": "Owner",
         "dueDate": "Due Date",
         "completedAt": "Completed At"
-      },
-      "modal": {
-        "addNew": "Add New Roadmap Item",
-        "editRoadmap": "Edit Roadmap Item"
       }
     }
   },

@@ -27,7 +27,6 @@ export default function AllCardsView({ session }: { session: any }) {
       <div className="space-y-10">
         <div>
           <h1 className={title()}>{t("title")}</h1>
-          <h2 className={subtitle({ class: "mt-4" })}>{t("subtitle")}</h2>
         </div>
         <RoadmapBoard />
       </div>

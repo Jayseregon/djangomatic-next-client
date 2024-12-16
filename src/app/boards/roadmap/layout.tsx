@@ -5,7 +5,7 @@ export default function RoadmapLayout({
 }) {
   return (
     <div className="flex h-fit">
-      <section className="flex-grow flex flex-col items-center py-8 md:py-10">
+      <section className="flex-grow flex flex-col items-center">
         <div className="inline-block w-full text-center justify-center">
           {children}
         </div>

@@ -16,7 +16,13 @@ export async function GET(request: Request) {
   try {
     const project = await prisma.roadmapProject.findUnique({
       where: { id },
-      include: { cards: true },
+      include: {
+        projectCards: {
+          include: {
+            card: true,
+          },
+        },
+      },
     });
 
     if (!project) {
@@ -34,21 +40,12 @@ export async function GET(request: Request) {
 export async function POST(request: Request) {
   try {
     const data = await request.json();
-    const { name } = data;
-
-    // Get the current max position
-    const maxPosition = await prisma.roadmapProject.aggregate({
-      _max: {
-        position: true,
-      },
-    });
-
-    const newPosition = (maxPosition._max.position ?? 0) + 1;
+    const { name, position } = data;
 
     const newProject = await prisma.roadmapProject.create({
       data: {
         name,
-        position: newPosition,
+        position: position || 0,
       },
     });
 
@@ -62,7 +59,8 @@ export async function POST(request: Request) {
 
 export async function PATCH(request: Request) {
   try {
-    const { updates } = await request.json();
+    const data = await request.json();
+    const { updates } = data;
 
     const result = await prisma.$transaction(
       updates.map(({ id, position }: { id: string; position: number }) =>
@@ -79,4 +77,8 @@ export async function PATCH(request: Request) {
   } finally {
     await prisma.$disconnect();
   }
+}
+
+export async function OPTIONS() {
+  return new NextResponse("Method Not Allowed", { status: 405 });
 }

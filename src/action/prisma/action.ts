@@ -38,7 +38,14 @@ export async function getRoadmapCardCategories() {
 export async function getRoadmapCards() {
   try {
     const cards = await prisma.roadmapCard.findMany({
-      include: { projects: true, category: true },
+      include: {
+        projectCards: {
+          include: {
+            project: true, // Include project details if needed
+          },
+        },
+        category: true,
+      },
       orderBy: { position: "asc" },
     });
 
@@ -53,7 +60,17 @@ export async function getRoadmapCards() {
 export async function getRoadmapProjects() {
   try {
     const projects = await prisma.roadmapProject.findMany({
-      include: { cards: true },
+      include: {
+        projectCards: {
+          include: {
+            card: {
+              include: {
+                category: true,
+              },
+            },
+          },
+        },
+      },
       orderBy: { position: "asc" },
     });
 

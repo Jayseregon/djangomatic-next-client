@@ -207,16 +207,16 @@ model Note {
 }
 
 model RoadmapCard {
-  id                    String              @id @default(cuid())
+  id                    String               @id @default(cuid())
   title                 String
   description           String
-  category              RoadmapCardCategory? @relation(fields: [roadmapCardCategoryId], references: [id], name : "CardCategory", map: "CardCategory_roadmapCardCategoryId_fkey")
+  category              RoadmapCardCategory? @relation(fields: [roadmapCardCategoryId], references: [id], name: "CardCategory", map: "CardCategory_roadmapCardCategoryId_fkey")
   color                 String
-  position              Int                 @default(0)
-  createdAt             DateTime            @default(now())
-  updatedAt             DateTime            @updatedAt
-  projects              RoadmapProject[]    @relation("CardProjects")
+  position              Int                  @default(0)
+  createdAt             DateTime             @default(now())
+  updatedAt             DateTime             @updatedAt
   roadmapCardCategoryId String?
+  projectCards          RoadmapProjectCard[]
 }
 
 model RoadmapCardCategory {
@@ -226,10 +226,21 @@ model RoadmapCardCategory {
 }
 
 model RoadmapProject {
-  id        String        @id @default(cuid())
-  name      String
-  position  Int           @default(0)
-  createdAt DateTime      @default(now())
-  updatedAt DateTime      @updatedAt
-  cards     RoadmapCard[] @relation("CardProjects")
+  id           String               @id @default(cuid())
+  name         String
+  position     Int
+  createdAt    DateTime             @default(now())
+  updatedAt    DateTime             @updatedAt
+  projectCards RoadmapProjectCard[]
+}
+
+model RoadmapProjectCard {
+  id        String         @id @default(cuid())
+  project   RoadmapProject @relation(fields: [projectId], references: [id])
+  projectId String
+  card      RoadmapCard    @relation(fields: [cardId], references: [id])
+  cardId    String
+  position  Int            @default(0)
+
+  @@unique([projectId, cardId])
 }

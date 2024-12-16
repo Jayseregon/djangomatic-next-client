@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { Prisma } from "@prisma/client";
 
 export const handlePrismaError = (error: any): NextResponse => {
-  console.error("Prisma Error:", error);
+  console.error("Prisma Error:", error.message);
 
   const message = error?.message || "Unknown error";
 

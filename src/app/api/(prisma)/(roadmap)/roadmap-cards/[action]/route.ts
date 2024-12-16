@@ -16,7 +16,15 @@ export async function GET(request: Request) {
   try {
     const card = await prisma.roadmapCard.findUnique({
       where: { id },
-      include: { projects: true, category: true },
+      // include: { projects: true, category: true },
+      include: {
+        projectCards: {
+          include: {
+            project: true,
+          },
+        },
+        category: true,
+      },
     });
 
     return NextResponse.json(card);
@@ -61,21 +69,65 @@ export async function POST(request: Request) {
 export async function PUT(request: Request) {
   try {
     const data = await request.json();
-    const { id, projectId, ...updateData } = data;
+    const { id, projectId, categoryId, position, ...updateData } = data;
 
+    const updateOps: any = {
+      ...updateData,
+    };
+
+    if (categoryId !== undefined) {
+      updateOps.category = categoryId
+        ? { connect: { id: categoryId } }
+        : { disconnect: true };
+      updateOps.position = position;
+    }
+
+    // Handle project assignment with upsert
+    if (projectId) {
+      // First, update the card's basic info
+      const updatedCard = await prisma.roadmapCard.update({
+        where: { id },
+        data: updateOps,
+        include: {
+          category: true,
+          projectCards: {
+            include: {
+              project: true,
+            },
+          },
+        },
+      });
+
+      // Then, handle the project card relationship separately
+      await prisma.roadmapProjectCard.upsert({
+        where: {
+          projectId_cardId: {
+            projectId,
+            cardId: id,
+          },
+        },
+        create: {
+          projectId,
+          cardId: id,
+          position: 0,
+        },
+        update: {}, // No updates needed if it exists
+      });
+
+      return NextResponse.json(updatedCard);
+    }
+
+    // If no project assignment, just update the card
     const updatedCard = await prisma.roadmapCard.update({
       where: { id },
-      data: {
-        ...updateData,
-        projects: projectId
-          ? {
-              connect: [{ id: projectId }],
-            }
-          : undefined,
-      },
+      data: updateOps,
       include: {
-        projects: true,
         category: true,
+        projectCards: {
+          include: {
+            project: true,
+          },
+        },
       },
     });
 
@@ -105,7 +157,6 @@ export async function PATCH(request: Request) {
   try {
     const { updates } = await request.json();
 
-    // Use transaction to ensure all position updates succeed or none do
     const result = await prisma.$transaction(
       updates.map(({ id, position }: { id: string; position: number }) =>
         prisma.roadmapCard.update({

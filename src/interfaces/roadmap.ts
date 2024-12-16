@@ -4,10 +4,11 @@ export interface CardType {
   description: string;
   category?: RoadmapCardCategory;
   color: string;
-  position: number;
+  position: number; // Position within category
   createdAt: string;
   updatedAt: string;
   projects: ProjectType[];
+  projectCards: RoadmapProjectCardType[];
 }
 
 export interface RoadmapCardCategory {
@@ -24,10 +25,19 @@ export interface SortableItemProps {
 export interface ProjectType {
   id: string;
   name: string;
-  position: number; // Add this line
+  position: number;
   createdAt: string;
   updatedAt: string;
-  cards: CardType[];
+  projectCards: RoadmapProjectCardType[]; // This is the main collection we use now
+}
+
+export interface RoadmapProjectCardType {
+  id: string;
+  projectId: string;
+  cardId: string;
+  position: number;
+  card?: CardType;
+  project?: ProjectType;
 }
 
 export interface AddInputProps {

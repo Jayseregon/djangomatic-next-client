@@ -78,7 +78,7 @@ export default function ProjectView({
       boardType="canAccessRoadmapBoard"
       email={session.user.email}
     >
-      <div>
+      <div className="p-4">
         <Button onClick={() => router.back()}>Back</Button>
         <h1>{project.name}</h1>
         <DndContext
@@ -87,11 +87,11 @@ export default function ProjectView({
           onDragEnd={handleDragEnd}
         >
           <SortableContext
-            items={project.cards.map((card: CardType) => card.id)}
+            items={project.projectCards.map((card: CardType) => card.id)}
             strategy={rectSortingStrategy}
           >
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              {project.cards.map((card: CardType) => (
+              {project.projectCards.map((card: CardType) => (
                 <SortableItem key={card.id} id={card.id}>
                   <RoadmapCard card={card} setCards={() => {}} />
                 </SortableItem>

@@ -3,7 +3,7 @@
 import { useTranslations } from "next-intl";
 import dynamic from "next/dynamic";
 
-import { title, subtitle } from "@/components/primitives";
+import { title } from "@/components/primitives";
 import { UnAuthenticated } from "@/components/auth/unAuthenticated";
 import UserAccessBoards from "@/src/components/boards/UserAccess";
 

@@ -83,6 +83,28 @@ export async function PATCH(request: Request) {
   }
 }
 
+export async function PUT(request: Request) {
+  try {
+    const data = await request.json();
+    const { id, ...fields } = data;
+
+    if (!id) {
+      return new NextResponse("Project ID is required", { status: 400 });
+    }
+
+    const updatedProject = await prisma.roadmapProject.update({
+      where: { id },
+      data: fields,
+    });
+
+    return NextResponse.json(updatedProject);
+  } catch (error: any) {
+    return handlePrismaError(error);
+  } finally {
+    await prisma.$disconnect();
+  }
+}
+
 export async function OPTIONS() {
   return new NextResponse("Method Not Allowed", { status: 405 });
 }

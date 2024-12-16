@@ -3,6 +3,7 @@ import { twMerge } from "tailwind-merge";
 
 import { RnDTeamTask, Status } from "@/interfaces/lib";
 import { BugStatus, BugReport, BugPriority } from "@/interfaces/bugs";
+import { ProjectType } from "@/interfaces/roadmap";
 
 /**
  * Merge Tailwind CSS classes with clsx.
@@ -131,6 +132,15 @@ export const convertBugsDates = (bug: any): BugReport => ({
   assignedDate: bug.assignedDate ? new Date(bug.assignedDate) : undefined,
   completedDate: bug.completedDate ? new Date(bug.completedDate) : undefined,
 });
+
+export function convertProjectDates(project: any): ProjectType {
+  return {
+    ...project,
+    dueDate: project.dueDate ? new Date(project.dueDate) : null,
+    startedAt: project.startedAt ? new Date(project.startedAt) : null,
+    completedAt: project.completedAt ? new Date(project.completedAt) : null,
+  };
+}
 
 export const statusColorMap: Record<
   Status,

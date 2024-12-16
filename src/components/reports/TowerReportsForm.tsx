@@ -474,7 +474,7 @@ export const TowerReportForm = ({
           />
           <div className="h-full w-full content-end">
             <Button
-              className="bg-primary text-white w-full w-full h-10"
+              className="bg-primary text-white w-full h-10"
               isDisabled={
                 !formData.jde_work_order || formData.jde_work_order?.length < 6
               }

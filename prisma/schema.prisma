@@ -229,8 +229,13 @@ model RoadmapProject {
   id           String               @id @default(cuid())
   name         String
   position     Int
+  comment      String?
+  members      String?
   createdAt    DateTime             @default(now())
   updatedAt    DateTime             @updatedAt
+  dueDate      DateTime?
+  startedAt    DateTime?
+  completedAt  DateTime?
   projectCards RoadmapProjectCard[]
 }
 

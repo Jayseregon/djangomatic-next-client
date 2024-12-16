@@ -1,8 +1,16 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
-import { Button } from "@nextui-org/react";
+import {
+  Button,
+  Input,
+  Textarea,
+  DatePicker,
+  Card,
+  CardBody,
+  CardHeader,
+} from "@nextui-org/react";
 import {
   DndContext,
   rectIntersection,
@@ -17,10 +25,14 @@ import {
   SortableContext,
   rectSortingStrategy,
 } from "@dnd-kit/sortable";
+import { useDebouncedCallback } from "use-debounce";
+import { parseDate, getLocalTimeZone } from "@internationalized/date";
+import { DoorOpen } from "lucide-react";
 
 import UserAccessBoards from "@/src/components/boards/UserAccess";
 import { UnAuthenticated } from "@/components/auth/unAuthenticated";
 import { ProjectType, CardType } from "@/interfaces/roadmap";
+import { convertProjectDates } from "@/lib/utils";
 
 import RoadmapCard from "./RoadmapCard";
 import SortableItem from "./SortableItem";
@@ -36,6 +48,26 @@ export default function ProjectView({
   const sensors = useSensors(useSensor(MouseSensor), useSensor(TouchSensor));
   const router = useRouter();
 
+  // Move all hooks before any conditional returns
+  const debouncedUpdate = useDebouncedCallback((field, value) => {
+    fetch("/api/roadmap-projects/update", {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id: project!.id, [field]: value }),
+    });
+  }, 500);
+
+  const handleFieldChange = useCallback(
+    (field: string, value: any) => {
+      if (!project) return;
+      const updatedProject = { ...project, [field]: value };
+
+      setProject(updatedProject);
+      debouncedUpdate(field, value);
+    },
+    [project, debouncedUpdate],
+  );
+
   useEffect(() => {
     const fetchProject = async () => {
       try {
@@ -46,7 +78,7 @@ export default function ProjectView({
         if (!response.ok) throw new Error("Failed to fetch project");
         const data = await response.json();
 
-        setProject(data);
+        setProject(convertProjectDates(data));
       } catch (error) {
         console.error("Error fetching project:", error);
       }
@@ -57,6 +89,7 @@ export default function ProjectView({
     }
   }, [projectId]);
 
+  // Conditional returns after hooks
   if (!session) return <UnAuthenticated />;
   if (!project) return <div>Loading...</div>;
 
@@ -147,8 +180,140 @@ export default function ProjectView({
       email={session.user.email}
     >
       <div className="mx-10">
-        <Button onClick={() => router.back()}>Back</Button>
-        <h1>{project!.name}</h1>
+        <Card className="bg-background border border-foreground/50 mb-10 p-2">
+          <CardHeader className="grid grid-cols-[1fr_auto] gap-10">
+            {/* Project Name */}
+            <Input
+              classNames={{
+                input: "border-0 focus:ring-0",
+                inputWrapper: "border-foreground/50 hover:!border-foreground",
+              }}
+              label="Project Name"
+              labelPlacement="outside"
+              value={project.name}
+              variant="bordered"
+              onChange={(e) => handleFieldChange("name", e.target.value)}
+            />
+            <div className="h-full content-end">
+              <Button
+                isIconOnly
+                className="bg-primary text-white w-full"
+                color="primary"
+                onPress={() => router.back()}
+              >
+                <DoorOpen />
+              </Button>
+            </div>
+          </CardHeader>
+          <CardBody className="flex flex-col text-start gap-10">
+            {/* Members Input */}
+            <Input
+              classNames={{
+                input: "border-0 focus:ring-0",
+                inputWrapper: "border-foreground/50 hover:!border-foreground",
+              }}
+              label="Members"
+              labelPlacement="outside"
+              value={project.members || ""}
+              variant="bordered"
+              onChange={(e) => handleFieldChange("members", e.target.value)}
+            />
+
+            {/* Date Inputs */}
+            <div className="flex flex-row gap-5">
+              <DatePicker
+                aria-label="Due Date"
+                classNames={{
+                  selectorIcon: "text-foreground",
+                }}
+                dateInputClassNames={{
+                  inputWrapper:
+                    "border-foreground/50 rounded-full hover:border-foreground",
+                }}
+                label="Due Date"
+                labelPlacement="outside"
+                name="dueDate"
+                value={
+                  project.dueDate
+                    ? parseDate(project.dueDate.toISOString().split("T")[0])
+                    : null
+                }
+                variant="bordered"
+                onChange={(value) =>
+                  handleFieldChange(
+                    "dueDate",
+                    value ? value.toDate(getLocalTimeZone()) : null,
+                  )
+                }
+              />
+              <DatePicker
+                aria-label="Started At"
+                classNames={{
+                  selectorIcon: "text-foreground",
+                }}
+                dateInputClassNames={{
+                  inputWrapper:
+                    "border-foreground/50 rounded-full hover:border-foreground",
+                }}
+                label="Started At"
+                labelPlacement="outside"
+                name="startedAt"
+                value={
+                  project.startedAt
+                    ? parseDate(project.startedAt.toISOString().split("T")[0])
+                    : null
+                }
+                variant="bordered"
+                onChange={(value) =>
+                  handleFieldChange(
+                    "startedAt",
+                    value ? value.toDate(getLocalTimeZone()) : null,
+                  )
+                }
+              />
+              <DatePicker
+                aria-label="Completed At"
+                classNames={{
+                  selectorIcon: "text-foreground",
+                }}
+                dateInputClassNames={{
+                  inputWrapper:
+                    "border-foreground/50 rounded-full hover:border-foreground",
+                }}
+                label="Completed At"
+                labelPlacement="outside"
+                name="completedAt"
+                value={
+                  project.completedAt
+                    ? parseDate(project.completedAt.toISOString().split("T")[0])
+                    : null
+                }
+                variant="bordered"
+                onChange={(value) =>
+                  handleFieldChange(
+                    "completedAt",
+                    value ? value.toDate(getLocalTimeZone()) : null,
+                  )
+                }
+              />
+            </div>
+
+            {/* Comment Textarea */}
+            <Textarea
+              classNames={{
+                input: "border-0 focus:ring-0",
+                inputWrapper: "border-foreground/50 hover:!border-foreground",
+              }}
+              label="Project Comments"
+              labelPlacement="outside"
+              minRows={5}
+              value={project.comment || ""}
+              variant="bordered"
+              onChange={(e) => handleFieldChange("comment", e.target.value)}
+            />
+          </CardBody>
+        </Card>
+
         <DndContext
           collisionDetection={rectIntersection}
           sensors={sensors}

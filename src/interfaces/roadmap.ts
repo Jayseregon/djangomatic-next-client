@@ -26,8 +26,13 @@ export interface ProjectType {
   id: string;
   name: string;
   position: number;
-  createdAt: string;
-  updatedAt: string;
+  comment?: string;
+  members?: string;
+  createdAt: Date;
+  updatedAt: Date;
+  dueDate?: Date | null;
+  startedAt?: Date | null;
+  completedAt?: Date | null;
   projectCards: RoadmapProjectCardType[]; // This is the main collection we use now
 }
 

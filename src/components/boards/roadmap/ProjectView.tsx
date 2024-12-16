@@ -20,7 +20,7 @@ import {
 
 import UserAccessBoards from "@/src/components/boards/UserAccess";
 import { UnAuthenticated } from "@/components/auth/unAuthenticated";
-import { CardType } from "@/interfaces/roadmap";
+import { ProjectType, RoadmapProjectCardType } from "@/interfaces/roadmap";
 
 import RoadmapCard from "./RoadmapCard";
 import SortableItem from "./SortableItem";
@@ -32,46 +32,66 @@ export default function ProjectView({
   projectId: string;
   session: any;
 }) {
-  const [project, setProject] = useState<any>(null);
+  const [project, setProject] = useState<ProjectType | null>(null);
   const sensors = useSensors(useSensor(MouseSensor), useSensor(TouchSensor));
   const router = useRouter();
 
   useEffect(() => {
-    fetch(`/api/roadmap-projects/find?id=${projectId}`)
-      .then((res) => res.json())
-      .then((data) => {
+    const fetchProject = async () => {
+      try {
+        const response = await fetch(`/api/roadmap-projects/find?id=${projectId}`);
+        if (!response.ok) throw new Error('Failed to fetch project');
+        const data = await response.json();
         setProject(data);
-      });
+      } catch (error) {
+        console.error('Error fetching project:', error);
+      }
+    };
+
+    if (projectId) {
+      fetchProject();
+    }
   }, [projectId]);
 
   if (!session) return <UnAuthenticated />;
+  if (!project) return <div>Loading...</div>;
 
-  const handleDragEnd = (event: DragEndEvent) => {
+  const handleDragEnd = async (event: DragEndEvent) => {
     const { active, over } = event;
 
     if (over && active.id !== over.id) {
-      const oldIndex = project.cards.findIndex(
-        (item: CardType) => item.id === active.id,
+      const oldIndex = project.projectCards.findIndex(
+        (item: RoadmapProjectCardType) => item.id === active.id
       );
-      const newIndex = project.cards.findIndex(
-        (item: CardType) => item.id === over.id,
+      const newIndex = project.projectCards.findIndex(
+        (item: RoadmapProjectCardType) => item.id === over.id
       );
-      const newCards = arrayMove(project.cards, oldIndex, newIndex);
-
-      // Update positions in the database
-      (newCards as CardType[]).forEach((item: CardType, index: number) => {
-        fetch("/api/roadmap-cards/update", {
-          method: "PUT",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ id: item.id, position: index }),
-        });
+      
+      const newProjectCards = arrayMove(project.projectCards, oldIndex, newIndex);
+      
+      // Update local state
+      setProject({
+        ...project,
+        projectCards: newProjectCards
       });
 
-      setProject({ ...project, cards: newCards });
+      // Update positions in the database
+      const updates = newProjectCards.map((card, index) => ({
+        id: card.id,
+        position: index,
+      }));
+
+      try {
+        await fetch("/api/roadmap-project-cards/update", {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ updates }),
+        });
+      } catch (error) {
+        console.error('Error updating card positions:', error);
+      }
     }
   };
-
-  if (!project) return <div>Loading...</div>;
 
   return (
     <UserAccessBoards
@@ -87,13 +107,20 @@ export default function ProjectView({
           onDragEnd={handleDragEnd}
         >
           <SortableContext
-            items={project.projectCards.map((card: CardType) => card.id)}
+            items={project.projectCards.map((projectCard) => projectCard.id)}
             strategy={rectSortingStrategy}
           >
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              {project.projectCards.map((card: CardType) => (
-                <SortableItem key={card.id} id={card.id}>
-                  <RoadmapCard card={card} setCards={() => {}} />
+              {project.projectCards.map((projectCard) => (
+                <SortableItem 
+                  key={projectCard.id} 
+                  id={projectCard.id}
+                  data={projectCard}
+                >
+                  <RoadmapCard 
+                    card={projectCard.card!} 
+                    setCards={() => {}} 
+                  />
                 </SortableItem>
               ))}
             </div>

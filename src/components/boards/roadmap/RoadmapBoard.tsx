@@ -264,65 +264,6 @@ export default function RoadmapBoard() {
 
       return;
     }
-
-    // CASE 4: ProjectCard-to-ProjectCard interaction (Reordering cards within a project)
-    if (
-      activeData?.type === "projectCard" &&
-      overData?.type === "projectCard"
-    ) {
-      const projectId = activeData.projectId;
-
-      // Only handle reordering if both cards are in the same project
-      if (projectId === overData.projectId) {
-        const project = projects.find((p) => p.id === projectId);
-
-        if (!project) return;
-
-        // Get current order of cards in the project
-        const projectCards = project.projectCards
-          .slice()
-          .sort((a, b) => a.position - b.position);
-
-        // Find positions of dragged and target cards
-        const oldIndex = projectCards.findIndex((pc) => pc.cardId === activeId);
-        const newIndex = projectCards.findIndex((pc) => pc.cardId === overId);
-
-        if (oldIndex !== newIndex) {
-          // Calculate new order of cards in project
-          const newProjectCards = arrayMove(projectCards, oldIndex, newIndex);
-
-          // Optimistic update: Update card positions in local state
-          setProjects((prevProjects) =>
-            prevProjects.map((p) => {
-              if (p.id === projectId) {
-                return {
-                  ...p,
-                  projectCards: newProjectCards.map((pc, index) => ({
-                    ...pc,
-                    position: index,
-                  })),
-                };
-              }
-
-              return p;
-            }),
-          );
-
-          // Persist new card positions to database
-          const updates = newProjectCards.map((pc, index) => ({
-            projectId,
-            cardId: pc.cardId,
-            position: index,
-          }));
-
-          fetch("/api/roadmap-projects/update-card-positions", {
-            method: "PATCH",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ updates }),
-          });
-        }
-      }
-    }
   };
 
   const addCard = useCallback(() => {

@@ -19,7 +19,11 @@ export async function GET(request: Request) {
       include: {
         projectCards: {
           include: {
-            card: true,
+            card: {
+              include: {
+                category: true, // Include the category relation
+              },
+            },
           },
         },
       },

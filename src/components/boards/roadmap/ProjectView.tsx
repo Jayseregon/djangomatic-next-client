@@ -36,12 +36,11 @@ import { UnAuthenticated } from "@/components/auth/unAuthenticated";
 import {
   ProjectType,
   CardType,
-  RoadmapCardCategory,
+  RoadmapProjectCardType,
 } from "@/interfaces/roadmap";
 import { convertProjectDates } from "@/lib/utils";
 import {
   deletegRoadmapProject,
-  getRoadmapCardCategories,
   updateCardPositions,
 } from "@/src/actions/prisma/roadmap/action";
 
@@ -90,14 +89,14 @@ export default function ProjectView({
       setProject(updatedProject);
       debouncedUpdate(field, value);
     },
-    [project, debouncedUpdate]
+    [project, debouncedUpdate],
   );
 
   useEffect(() => {
     const fetchProject = async () => {
       try {
         const response = await fetch(
-          `/api/roadmap-projects/find?id=${projectId}`
+          `/api/roadmap-projects/find?id=${projectId}`,
         );
 
         if (!response.ok) throw new Error("Failed to fetch project");
@@ -149,17 +148,17 @@ export default function ProjectView({
 
     if (over && active.id !== over.id && project) {
       const oldIndex = project.projectCards.findIndex(
-        (pc) => pc.id === active.id
+        (pc) => pc.id === active.id,
       );
       const newIndex = project.projectCards.findIndex(
-        (pc) => pc.id === over.id
+        (pc) => pc.id === over.id,
       );
 
       if (oldIndex !== newIndex) {
         const newProjectCards = arrayMove(
           project.projectCards,
           oldIndex,
-          newIndex
+          newIndex,
         );
 
         // Optimistic update
@@ -180,6 +179,8 @@ export default function ProjectView({
         try {
           const result = await updateCardPositions(updates);
 
+          console.log("Server action result:", result);
+
           // Update with server response
           if (result && Array.isArray(result)) {
             const updatedProjectCards = result.map((pc) => ({
@@ -189,15 +190,25 @@ export default function ProjectView({
               position: pc.position,
               card: {
                 ...pc.card,
+                category: pc.card.category || undefined, // Convert null to undefined
                 projectCards: [], // Add empty array to satisfy type
               },
             }));
 
-            setProject((prev) => prev ? {
-              ...prev,
-              projectCards: updatedProjectCards,
-            } : null);
+            console.log("Updated project cards:", updatedProjectCards);
+
+            setProject((prev) => {
+              console.log("Previous project:", prev);
+              if (!prev) return null;
+              console.log("Updating project cards...");
+
+              return {
+                ...prev,
+                projectCards: updatedProjectCards as RoadmapProjectCardType[],
+              };
+            });
           }
+          console.log("Updated project:", project);
         } catch (error) {
           console.error("Failed to update card positions:", error);
           // Revert optimistic update
@@ -213,7 +224,7 @@ export default function ProjectView({
     setProject({
       ...project,
       projectCards: project.projectCards.map((pc) =>
-        pc.card?.id === updatedCard.id ? { ...pc, card: updatedCard } : pc
+        pc.card?.id === updatedCard.id ? { ...pc, card: updatedCard } : pc,
       ),
     });
   };
@@ -232,7 +243,8 @@ export default function ProjectView({
   return (
     <UserAccessBoards
       boardType="canAccessRoadmapBoard"
-      email={session.user.email}>
+      email={session.user.email}
+    >
       <div className="mx-10">
         <Card className="bg-background border border-foreground/50 mb-10 p-2">
           <CardHeader className="grid grid-cols-[1fr_auto] gap-5">
@@ -255,7 +267,8 @@ export default function ProjectView({
                   isIconOnly
                   className="text-white w-full"
                   color="primary"
-                  onPress={() => router.back()}>
+                  onPress={() => router.back()}
+                >
                   <DoorOpen />
                 </Button>
               </div>
@@ -264,7 +277,8 @@ export default function ProjectView({
                   isIconOnly
                   className="text-white w-full"
                   color="danger"
-                  onPress={handleDeleteProject}>
+                  onPress={handleDeleteProject}
+                >
                   <Trash />
                 </Button>
               </div>
@@ -299,7 +313,8 @@ export default function ProjectView({
                       key={index}
                       color="primary"
                       variant="flat"
-                      onClose={() => handleRemoveMember(index)}>
+                      onClose={() => handleRemoveMember(index)}
+                    >
                       {member}
                     </Chip>
                   ))}
@@ -330,7 +345,7 @@ export default function ProjectView({
                 onChange={(value) =>
                   handleFieldChange(
                     "dueDate",
-                    value ? value.toDate(getLocalTimeZone()) : null
+                    value ? value.toDate(getLocalTimeZone()) : null,
                   )
                 }
               />
@@ -355,7 +370,7 @@ export default function ProjectView({
                 onChange={(value) =>
                   handleFieldChange(
                     "startedAt",
-                    value ? value.toDate(getLocalTimeZone()) : null
+                    value ? value.toDate(getLocalTimeZone()) : null,
                   )
                 }
               />
@@ -380,7 +395,7 @@ export default function ProjectView({
                 onChange={(value) =>
                   handleFieldChange(
                     "completedAt",
-                    value ? value.toDate(getLocalTimeZone()) : null
+                    value ? value.toDate(getLocalTimeZone()) : null,
                   )
                 }
               />
@@ -392,6 +407,7 @@ export default function ProjectView({
                 input: "border-0 focus:ring-0",
                 inputWrapper: "border-foreground/50 hover:!border-foreground",
               }}
+              disableAutosize={false}
               label={t("projectCardPlaceholders.pComments")}
               labelPlacement="outside"
               minRows={5}
@@ -405,10 +421,12 @@ export default function ProjectView({
         <DndContext
           collisionDetection={rectIntersection}
           sensors={sensors}
-          onDragEnd={handleDragEnd}>
+          onDragEnd={handleDragEnd}
+        >
           <SortableContext
             items={project!.projectCards.map((pc) => pc.id)}
-            strategy={rectSortingStrategy}>
+            strategy={rectSortingStrategy}
+          >
             <div className="grid grid-cols-3 md:grid-cols-6 gap-4">
               {project!.projectCards.map((projectCard) => (
                 <SortableItem
@@ -418,7 +436,8 @@ export default function ProjectView({
                     projectId: project!.id,
                     cardId: projectCard.card!.id,
                   }}
-                  id={projectCard.id}>
+                  id={projectCard.id}
+                >
                   <RoadmapCard
                     card={projectCard.card!}
                     // providedCategories={categories}

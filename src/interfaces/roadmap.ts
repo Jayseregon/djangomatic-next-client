@@ -2,7 +2,7 @@ export interface CardType {
   id: string;
   title: string;
   description: string;
-  category?: RoadmapCardCategory;
+  category?: RoadmapCardCategory | null; // Allow null
   color: string;
   position: number; // Position within category
   createdAt: Date;
@@ -41,8 +41,8 @@ export interface RoadmapProjectCardType {
   projectId: string;
   cardId: string;
   position: number;
-  card?: CardType;
-  project?: ProjectType;
+  card?: CardType | null; // Allow null
+  project?: ProjectType | null; // Allow null
 }
 
 export interface AddInputProps {

@@ -112,7 +112,9 @@ export async function deletegRoadmapProject(id: string) {
   }
 }
 
-export async function updateCardPositions(updates: Array<{ projectId: string; cardId: string; position: number }>) {
+export async function updateCardPositions(
+  updates: Array<{ projectId: string; cardId: string; position: number }>,
+) {
   try {
     if (!updates || !Array.isArray(updates)) {
       throw new Error("Invalid updates format");
@@ -123,7 +125,7 @@ export async function updateCardPositions(updates: Array<{ projectId: string; ca
       (update) =>
         update.projectId &&
         update.cardId &&
-        typeof update.position === "number"
+        typeof update.position === "number",
     );
 
     if (!validUpdates) {
@@ -139,10 +141,14 @@ export async function updateCardPositions(updates: Array<{ projectId: string; ca
           },
           data: { position },
           include: {
-            card: true,
+            card: {
+              include: {
+                category: true, // Include category data
+              },
+            },
             project: true,
           },
-        })
+        }),
       );
 
       const results = await Promise.all(updatePromises);
@@ -155,6 +161,7 @@ export async function updateCardPositions(updates: Array<{ projectId: string; ca
     }
 
     revalidatePath("/");
+
     return result;
   } catch (error: any) {
     console.error("Error updating card positions:", error);

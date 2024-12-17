@@ -33,21 +33,23 @@ const Badge: React.FC<{ color: string }> = ({ color }) => (
 function RoadmapCard({
   card,
   setCards,
+  categories,
 }: {
   card: CardType;
   setCards: React.Dispatch<React.SetStateAction<CardType[]>>;
+  categories: RoadmapCardCategory[];
 }) {
-  const [categories, setCategories] = React.useState<RoadmapCardCategory[]>([]);
+  // const [categories, setCategories] = React.useState<RoadmapCardCategory[]>([]);
 
-  useEffect(() => {
-    const fetchCategories = async () => {
-      const res = await getRoadmapCardCategories();
+  // useEffect(() => {
+  //   const fetchCategories = async () => {
+  //     const res = await getRoadmapCardCategories();
 
-      setCategories(res ?? []);
-    };
+  //     setCategories(res ?? []);
+  //   };
 
-    fetchCategories();
-  }, []);
+  //   fetchCategories();
+  // }, []);
 
   const debouncedUpdate = useDebouncedCallback((field, value) => {
     fetch("/api/roadmap-cards/update", {

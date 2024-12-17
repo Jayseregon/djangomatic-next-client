@@ -55,25 +55,22 @@ export default function RoadmapBoard() {
 
   const sensors = useSensors(useSensor(MouseSensor), useSensor(TouchSensor));
 
+  const fetchCards = async () => {
+    const res = await getRoadmapCards();
+    setCards(res as unknown as CardType[]);
+  };
+
+  const fetchProjects = async () => {
+    const res = await getRoadmapProjects();
+    setProjects(res as unknown as ProjectType[]);
+  };
+
+  const fetchCategories = async () => {
+    const res = await getRoadmapCardCategories();
+    setCategories(res || []);
+  };
+
   useEffect(() => {
-    const fetchCards = async () => {
-      const res = await getRoadmapCards();
-
-      setCards(res as unknown as CardType[]);
-    };
-
-    const fetchProjects = async () => {
-      const res = await getRoadmapProjects();
-
-      setProjects(res as unknown as ProjectType[]);
-    };
-
-    const fetchCategories = async () => {
-      const res = await getRoadmapCardCategories();
-
-      setCategories(res || []);
-    };
-
     fetchCards();
     fetchProjects();
     fetchCategories();
@@ -302,6 +299,7 @@ export default function RoadmapBoard() {
     if (!categoryName.trim()) return;
     const createCategory = async () => {
       await createRoadmapCardCategory(categoryName);
+      fetchCategories();
       setCategoryName("");
       setShowCategoryInput(false);
     };
@@ -465,7 +463,7 @@ export default function RoadmapBoard() {
                           data={{ type: "card", categoryId: null }}
                           id={card.id}
                         >
-                          <RoadmapCard card={card} setCards={setCards} />
+                          <RoadmapCard card={card} setCards={setCards} categories={categories} />
                         </SortableItem>
                       ))}
                     </div>
@@ -488,7 +486,7 @@ export default function RoadmapBoard() {
                           data={{ type: "card", categoryId: category.id }}
                           id={card.id}
                         >
-                          <RoadmapCard card={card} setCards={setCards} />
+                          <RoadmapCard card={card} setCards={setCards} categories={categories}/>
                         </SortableItem>
                       ))}
                     </div>

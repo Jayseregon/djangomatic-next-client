@@ -41,7 +41,7 @@ export interface RoadmapProjectCardType {
   projectId: string;
   cardId: string;
   position: number;
-  card?: CardType | null; // Allow null
+  card: CardType; // Make this required
   project?: Omit<ProjectType, "projectCards"> | null; // Remove projectCards from nested project
 }
 

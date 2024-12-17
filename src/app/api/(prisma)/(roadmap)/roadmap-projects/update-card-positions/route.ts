@@ -5,6 +5,7 @@ import { handlePrismaError } from "@/src/lib/prismaErrorHandler";
 
 const prisma = new PrismaClient();
 
+// TODO - Remove PATCH method and create server action
 export async function PATCH(request: Request) {
   try {
     const { updates } = await request.json();
@@ -59,8 +60,4 @@ export async function PATCH(request: Request) {
   } finally {
     await prisma.$disconnect();
   }
-}
-
-export async function OPTIONS() {
-  return new NextResponse("Method Not Allowed", { status: 405 });
 }

@@ -5,6 +5,7 @@ import { handlePrismaError } from "@/src/lib/prismaErrorHandler";
 
 const prisma = new PrismaClient();
 
+// TODO - Remove GET method and create server action
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const id = searchParams.get("id");
@@ -41,26 +42,7 @@ export async function GET(request: Request) {
   }
 }
 
-export async function POST(request: Request) {
-  try {
-    const data = await request.json();
-    const { name, position } = data;
-
-    const newProject = await prisma.roadmapProject.create({
-      data: {
-        name,
-        position: position || 0,
-      },
-    });
-
-    return NextResponse.json(newProject);
-  } catch (error: any) {
-    return handlePrismaError(error);
-  } finally {
-    await prisma.$disconnect();
-  }
-}
-
+// TODO - Remove PATCH method and create server action
 export async function PATCH(request: Request) {
   try {
     const data = await request.json();
@@ -83,6 +65,7 @@ export async function PATCH(request: Request) {
   }
 }
 
+// TODO - Remove PUT method and create server action
 export async function PUT(request: Request) {
   try {
     const data = await request.json();
@@ -103,8 +86,4 @@ export async function PUT(request: Request) {
   } finally {
     await prisma.$disconnect();
   }
-}
-
-export async function OPTIONS() {
-  return new NextResponse("Method Not Allowed", { status: 405 });
 }

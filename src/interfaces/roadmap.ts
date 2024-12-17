@@ -26,8 +26,8 @@ export interface ProjectType {
   id: string;
   name: string;
   position: number;
-  comment?: string;
-  members?: string;
+  comment?: string | null;
+  members?: string | null;
   createdAt: Date;
   updatedAt: Date;
   dueDate?: Date | null;

@@ -2,6 +2,7 @@
 
 import { PrismaClient } from "@prisma/client";
 import { z } from "zod";
+import { revalidatePath } from "next/cache";
 
 import { capitalizeFirstLetters } from "@/src/lib/utils";
 
@@ -16,6 +17,7 @@ export async function createRoadmapCardCategory(categoryName: string) {
         name: z.string().parse(capitalizedCategoryName),
       },
     });
+    revalidatePath("/");
   } catch (error: any) {
     console.log("Error creating category:", error);
   }
@@ -74,6 +76,24 @@ export async function getRoadmapProjects() {
   }
 }
 
+export async function createRoadmapProject(name: string, position?: number) {
+  try {
+    const newProject = await prisma.roadmapProject.create({
+      data: {
+        name,
+        position: position || 0,
+      },
+    });
+
+    revalidatePath("/");
+
+    return newProject;
+  } catch (error: any) {
+    console.error("Error creating project:", error);
+    throw error;
+  }
+}
+
 export async function deletegRoadmapProject(id: string) {
   try {
     // Delete related RoadmapProjectCard entries
@@ -85,6 +105,7 @@ export async function deletegRoadmapProject(id: string) {
     await prisma.roadmapProject.delete({
       where: { id },
     });
+    revalidatePath("/");
   } catch (error: any) {
     console.error("Error deleting project:", error);
     throw error;

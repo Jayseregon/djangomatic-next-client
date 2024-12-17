@@ -31,6 +31,7 @@ import {
   getRoadmapCardCategories,
   getRoadmapCards,
   getRoadmapProjects,
+  createRoadmapProject,
 } from "@/src/actions/prisma/roadmap/action";
 import {
   CardType,
@@ -282,22 +283,21 @@ export default function RoadmapBoard() {
       });
   }, []);
 
-  const addProject = useCallback(() => {
+  const addProject = useCallback(async () => {
     if (!projectName.trim()) return;
 
-    fetch("/api/roadmap-projects/create", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ name: projectName }),
-    })
-      .then((res) => res.json())
-      .then((createdProject) => {
-        setProjects((items) => [...items, { ...createdProject, cards: [] }]);
-        setProjectName("");
-        setShowProjectInput(false);
-      });
+    try {
+      const createdProject = await createRoadmapProject(projectName);
+
+      setProjects((items) => [
+        ...items,
+        { ...createdProject, projectCards: [] },
+      ]);
+      setProjectName("");
+      setShowProjectInput(false);
+    } catch (error) {
+      console.error("Error adding project:", error);
+    }
   }, [projectName]);
 
   const addCategory = useCallback(() => {

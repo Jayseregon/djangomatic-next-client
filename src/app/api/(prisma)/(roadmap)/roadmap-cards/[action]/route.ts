@@ -5,6 +5,8 @@ import { handlePrismaError } from "@/src/lib/prismaErrorHandler";
 
 const prisma = new PrismaClient();
 
+// TODDO - Remove methods and create server actions
+
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const id = searchParams.get("id");

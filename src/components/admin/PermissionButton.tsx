@@ -36,7 +36,7 @@ export const PermissionButton = ({
         radius="full"
         size="sm"
         variant="light"
-        onClick={() => handleToggle(user.id, fieldName, !user[fieldName])}
+        onPress={() => handleToggle(user.id, fieldName, !user[fieldName])}
       >
         {/* Render the appropriate icon based on the user's permission state */}
         {user[fieldName] ? <CheckIcon size={24} /> : <UncheckIcon size={24} />}

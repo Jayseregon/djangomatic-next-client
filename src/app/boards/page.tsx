@@ -20,7 +20,7 @@ function BoardsPageContent({ session }: { session: any }) {
   if (!session) return <UnAuthenticated />;
 
   return (
-    <div className="mx-auto space-y-16">
+    <div className="mx-auto space-y-16 max-w-7xl">
       <div>
         <h1 className={title()}>{t("title")}</h1>
         <h2 className={subtitle({ className: "text-foreground, mt-4" })}>

@@ -57,7 +57,7 @@ const PDFViewer = ({
         disabled={!blob}
         radius="full"
         variant="solid"
-        onClick={handleDownload}
+        onPress={handleDownload}
       >
         Download PDF
       </Button>

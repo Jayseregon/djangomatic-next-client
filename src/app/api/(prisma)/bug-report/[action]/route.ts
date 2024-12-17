@@ -15,7 +15,7 @@ export async function GET(request: Request) {
 
   try {
     const bug = await prisma.bugReport.findUnique({
-      where: { id: id },
+      where: { id },
     });
 
     if (!bug) {

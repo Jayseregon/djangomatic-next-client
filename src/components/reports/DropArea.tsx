@@ -81,8 +81,7 @@ export const DropArea = ({
         isDisabled={isDisabled}
         radius="full"
         variant="light"
-        onClick={(e) => {
-          e.stopPropagation(); // Prevent the click event from bubbling up to the div
+        onPress={() => {
           const fileInput = document.getElementById(`file-input-${index}`);
 
           if (fileInput) {

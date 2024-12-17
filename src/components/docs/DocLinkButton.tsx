@@ -41,7 +41,7 @@ export default function DocLinkButton({
         zIndex: 50,
       }}
     >
-      <Button isIconOnly color="secondary" onClick={handleClick}>
+      <Button isIconOnly color="secondary" onPress={handleClick}>
         <BookText />
       </Button>
     </div>

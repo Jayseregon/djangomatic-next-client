@@ -165,7 +165,7 @@ export const StartTaskButton = (): JSX.Element => {
         isDisabled={taskData.isLoading}
         radius="full"
         variant="solid"
-        onClick={handleTask}
+        onPress={handleTask}
       >
         {taskData.isLoading ? (
           <Spinner aria-label="upload-spinner" color="white" size="sm" />

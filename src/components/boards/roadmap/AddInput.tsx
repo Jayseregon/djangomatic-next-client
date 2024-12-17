@@ -22,10 +22,10 @@ export default function AddInput({
         variant="bordered"
         onChange={(e) => setInputValue(e.target.value)}
       />
-      <Button isIconOnly color="success" onClick={onClick}>
+      <Button isIconOnly color="success" onPress={onClick}>
         <Save />
       </Button>
-      <Button isIconOnly color="danger" onClick={() => setShowInput(false)}>
+      <Button isIconOnly color="danger" onPress={() => setShowInput(false)}>
         <CircleX />
       </Button>
     </>

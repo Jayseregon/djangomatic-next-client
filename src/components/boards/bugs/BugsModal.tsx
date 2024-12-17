@@ -197,7 +197,7 @@ export const BugsModal = ({
               aria-label="Delete Bug"
               color="danger"
               variant="light"
-              onClick={handleDelete}
+              onPress={handleDelete}
             >
               <Trash2 />
             </Button>
@@ -478,7 +478,7 @@ export const BugsModal = ({
               aria-label="Save Bug"
               color="success"
               isDisabled={!bug.title && !bug.description}
-              onClick={handleSaveClick}
+              onPress={handleSaveClick}
             >
               <Save />
             </Button>
@@ -487,7 +487,7 @@ export const BugsModal = ({
               aria-label="Close Modal"
               color="danger"
               variant="bordered"
-              onClick={onClose}
+              onPress={onClose}
             >
               <CircleOff />
             </Button>

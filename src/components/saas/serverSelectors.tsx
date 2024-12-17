@@ -1,6 +1,6 @@
 "use client";
 
-import React, { ChangeEvent, useState, MouseEvent } from "react";
+import React, { ChangeEvent, useState } from "react";
 import { useTranslations } from "next-intl";
 import {
   Dropdown,
@@ -253,11 +253,9 @@ export const ArcGISControls = (): JSX.Element => {
    * Handles the control change event for the buttons.
    * Toggles the state of the corresponding control based on the button ID.
    *
-   * @param {MouseEvent<HTMLButtonElement>} event - The click event object.
+   * @param {string} id - The ID of the button clicked.
    */
-  const handleControlChange = (event: MouseEvent<HTMLButtonElement>) => {
-    const { id } = event.currentTarget;
-
+  const handleControlChange = (id: string) => {
     if (id === "arcgisErase") {
       setInputData((prevDataChoices: InputDataProps) => ({
         ...prevDataChoices,
@@ -281,12 +279,10 @@ export const ArcGISControls = (): JSX.Element => {
           id="arcgisErase"
           name="arcgisErase"
           variant="bordered"
-          onClick={handleControlChange}
+          onPress={() => handleControlChange("arcgisErase")}
         >
           {inputData.arcgisErase ? <ThumbsUpIcon /> : <ThumbsDownIcon />}
         </Button>
-      </div>
-      <div className="flex flex-col items-center gap-1">
         <p className="text-center">{t("control_snap")}</p>
         <Button
           isIconOnly
@@ -294,7 +290,7 @@ export const ArcGISControls = (): JSX.Element => {
           id="arcgisSnapshot"
           name="arcgisSnapshot"
           variant="bordered"
-          onClick={handleControlChange}
+          onPress={() => handleControlChange("arcgisSnapshot")}
         >
           {inputData.arcgisSnapshot ? <ThumbsUpIcon /> : <ThumbsDownIcon />}
         </Button>
@@ -339,7 +335,7 @@ export const SuperVersionControl = ({
           color={inputData.willOverride ? "success" : "danger"}
           id="versionControle"
           variant="bordered"
-          onClick={handleControlChange}
+          onPress={handleControlChange}
         >
           {inputData.willOverride ? <ThumbsUpIcon /> : <ThumbsDownIcon />}
         </Button>
@@ -650,7 +646,7 @@ export const InputTelusZipfileButton = (): JSX.Element => {
             disabled={isUploading}
             isDisabled={isUploading}
             radius="full"
-            onClick={handleUpload}
+            onPress={handleUpload}
           >
             {isUploading ? (
               <Spinner aria-label="upload-spinner" color="white" size="sm" />

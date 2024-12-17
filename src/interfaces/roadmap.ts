@@ -52,3 +52,9 @@ export interface AddInputProps {
   setShowInput: (value: boolean) => void;
   onClick: () => void;
 }
+
+export interface RoadmapCardProps {
+  card: CardType;
+  setCards: React.Dispatch<React.SetStateAction<CardType[]>>;
+  categories: RoadmapCardCategory[];
+}

@@ -27,7 +27,7 @@ import {
 } from "@dnd-kit/sortable";
 import { useDebouncedCallback } from "use-debounce";
 import { parseDate, getLocalTimeZone } from "@internationalized/date";
-import { DoorOpen } from "lucide-react";
+import { DoorOpen, Trash } from "lucide-react";
 
 import UserAccessBoards from "@/src/components/boards/UserAccess";
 import { UnAuthenticated } from "@/components/auth/unAuthenticated";
@@ -37,10 +37,13 @@ import {
   RoadmapCardCategory,
 } from "@/interfaces/roadmap";
 import { convertProjectDates } from "@/lib/utils";
+import {
+  deletegRoadmapProject,
+  getRoadmapCardCategories,
+} from "@/src/actions/prisma/roadmap/action";
 
 import RoadmapCard from "./RoadmapCard";
 import SortableItem from "./SortableItem";
-import { getRoadmapCardCategories } from "@/src/action/prisma/action";
 
 export default function ProjectView({
   projectId,
@@ -81,14 +84,14 @@ export default function ProjectView({
       setProject(updatedProject);
       debouncedUpdate(field, value);
     },
-    [project, debouncedUpdate]
+    [project, debouncedUpdate],
   );
 
   useEffect(() => {
     const fetchProject = async () => {
       try {
         const response = await fetch(
-          `/api/roadmap-projects/find?id=${projectId}`
+          `/api/roadmap-projects/find?id=${projectId}`,
         );
 
         if (!response.ok) throw new Error("Failed to fetch project");
@@ -114,17 +117,17 @@ export default function ProjectView({
 
     if (over && active.id !== over.id && project) {
       const oldIndex = project.projectCards.findIndex(
-        (pc) => pc.id === active.id
+        (pc) => pc.id === active.id,
       );
       const newIndex = project.projectCards.findIndex(
-        (pc) => pc.id === over.id
+        (pc) => pc.id === over.id,
       );
 
       if (oldIndex !== newIndex) {
         const newProjectCards = arrayMove(
           project.projectCards,
           oldIndex,
-          newIndex
+          newIndex,
         );
 
         // Optimistic update
@@ -149,7 +152,7 @@ export default function ProjectView({
               method: "PATCH",
               headers: { "Content-Type": "application/json" },
               body: JSON.stringify({ updates }),
-            }
+            },
           );
           const result = await response.json();
 
@@ -185,18 +188,30 @@ export default function ProjectView({
     setProject({
       ...project,
       projectCards: project.projectCards.map((pc) =>
-        pc.card?.id === updatedCard.id ? { ...pc, card: updatedCard } : pc
+        pc.card?.id === updatedCard.id ? { ...pc, card: updatedCard } : pc,
       ),
     });
+  };
+
+  const handleDeleteProject = async () => {
+    if (!project) return;
+
+    try {
+      await deletegRoadmapProject(project.id);
+      router.back();
+    } catch (error) {
+      console.error("Failed to delete project:", error);
+    }
   };
 
   return (
     <UserAccessBoards
       boardType="canAccessRoadmapBoard"
-      email={session.user.email}>
+      email={session.user.email}
+    >
       <div className="mx-10">
         <Card className="bg-background border border-foreground/50 mb-10 p-2">
-          <CardHeader className="grid grid-cols-[1fr_auto] gap-10">
+          <CardHeader className="grid grid-cols-[1fr_auto] gap-5">
             {/* Project Name */}
             <Input
               classNames={{
@@ -209,14 +224,27 @@ export default function ProjectView({
               variant="bordered"
               onChange={(e) => handleFieldChange("name", e.target.value)}
             />
-            <div className="h-full content-end">
-              <Button
-                isIconOnly
-                className="bg-primary text-white w-full"
-                color="primary"
-                onPress={() => router.back()}>
-                <DoorOpen />
-              </Button>
+            <div className="grid grid-cols-2 h-full gap-5">
+              <div className="h-full content-end">
+                <Button
+                  isIconOnly
+                  className="text-white w-full"
+                  color="primary"
+                  onPress={() => router.back()}
+                >
+                  <DoorOpen />
+                </Button>
+              </div>
+              <div className="h-full content-end">
+                <Button
+                  isIconOnly
+                  className="text-white w-full"
+                  color="danger"
+                  onPress={handleDeleteProject}
+                >
+                  <Trash />
+                </Button>
+              </div>
             </div>
           </CardHeader>
           <CardBody className="flex flex-col text-start gap-10">
@@ -256,7 +284,7 @@ export default function ProjectView({
                 onChange={(value) =>
                   handleFieldChange(
                     "dueDate",
-                    value ? value.toDate(getLocalTimeZone()) : null
+                    value ? value.toDate(getLocalTimeZone()) : null,
                   )
                 }
               />
@@ -281,7 +309,7 @@ export default function ProjectView({
                 onChange={(value) =>
                   handleFieldChange(
                     "startedAt",
-                    value ? value.toDate(getLocalTimeZone()) : null
+                    value ? value.toDate(getLocalTimeZone()) : null,
                   )
                 }
               />
@@ -306,7 +334,7 @@ export default function ProjectView({
                 onChange={(value) =>
                   handleFieldChange(
                     "completedAt",
-                    value ? value.toDate(getLocalTimeZone()) : null
+                    value ? value.toDate(getLocalTimeZone()) : null,
                   )
                 }
               />
@@ -331,10 +359,12 @@ export default function ProjectView({
         <DndContext
           collisionDetection={rectIntersection}
           sensors={sensors}
-          onDragEnd={handleDragEnd}>
+          onDragEnd={handleDragEnd}
+        >
           <SortableContext
             items={project!.projectCards.map((pc) => pc.id)}
-            strategy={rectSortingStrategy}>
+            strategy={rectSortingStrategy}
+          >
             <div className="grid grid-cols-3 md:grid-cols-6 gap-4">
               {project!.projectCards.map((projectCard) => (
                 <SortableItem
@@ -344,9 +374,11 @@ export default function ProjectView({
                     projectId: project!.id,
                     cardId: projectCard.card!.id,
                   }}
-                  id={projectCard.id}>
+                  id={projectCard.id}
+                >
                   <RoadmapCard
                     card={projectCard.card!}
+                    categories={categories}
                     setCards={(cards) => {
                       if (typeof cards === "function") {
                         const updatedCard = cards([projectCard.card!])[0];
@@ -356,7 +388,6 @@ export default function ProjectView({
                         handleCardUpdate(cards[0]);
                       }
                     }}
-                    categories={categories}
                   />
                 </SortableItem>
               ))}

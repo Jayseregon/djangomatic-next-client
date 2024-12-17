@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useCallback, useEffect } from "react";
+import React, { useCallback } from "react";
 import {
   Card,
   CardHeader,
@@ -15,8 +15,7 @@ import {
 import { Trash2 } from "lucide-react";
 import { useDebouncedCallback } from "use-debounce";
 
-import { getRoadmapCardCategories } from "@/src/action/prisma/action";
-import { CardType, RoadmapCardCategory } from "@/interfaces/roadmap";
+import { RoadmapCardProps } from "@/interfaces/roadmap";
 import { cn } from "@/src/lib/utils";
 
 // Define the custom Badge component
@@ -30,27 +29,7 @@ const Badge: React.FC<{ color: string }> = ({ color }) => (
   </div>
 );
 
-function RoadmapCard({
-  card,
-  setCards,
-  categories,
-}: {
-  card: CardType;
-  setCards: React.Dispatch<React.SetStateAction<CardType[]>>;
-  categories: RoadmapCardCategory[];
-}) {
-  // const [categories, setCategories] = React.useState<RoadmapCardCategory[]>([]);
-
-  // useEffect(() => {
-  //   const fetchCategories = async () => {
-  //     const res = await getRoadmapCardCategories();
-
-  //     setCategories(res ?? []);
-  //   };
-
-  //   fetchCategories();
-  // }, []);
-
+function RoadmapCard({ card, setCards, categories }: RoadmapCardProps) {
   const debouncedUpdate = useDebouncedCallback((field, value) => {
     fetch("/api/roadmap-cards/update", {
       method: "PUT",

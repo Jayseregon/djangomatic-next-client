@@ -135,7 +135,7 @@ export const ImageRotateModal = ({
             aria-label="cancel"
             color="danger"
             variant="light"
-            onClick={onClose}
+            onPress={onClose}
           >
             <ImageOff />
           </Button>
@@ -144,7 +144,7 @@ export const ImageRotateModal = ({
               isIconOnly
               aria-label="rotate Left"
               variant="light"
-              onClick={rotateLeft}
+              onPress={rotateLeft}
             >
               <RotateCcw />
             </Button>
@@ -152,7 +152,7 @@ export const ImageRotateModal = ({
               isIconOnly
               aria-label="rotate right"
               variant="light"
-              onClick={rotateRight}
+              onPress={rotateRight}
             >
               <RotateCw />
             </Button>
@@ -162,7 +162,7 @@ export const ImageRotateModal = ({
             aria-label="confirm"
             color="success"
             variant="solid"
-            onClick={handleConfirm}
+            onPress={handleConfirm}
           >
             <Save />
           </Button>

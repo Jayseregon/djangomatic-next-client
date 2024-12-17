@@ -30,7 +30,7 @@ import {
   getRoadmapCardCategories,
   getRoadmapCards,
   getRoadmapProjects,
-} from "@/src/action/prisma/action";
+} from "@/src/actions/prisma/roadmap/action";
 import {
   CardType,
   ProjectType,
@@ -57,16 +57,19 @@ export default function RoadmapBoard() {
 
   const fetchCards = async () => {
     const res = await getRoadmapCards();
+
     setCards(res as unknown as CardType[]);
   };
 
   const fetchProjects = async () => {
     const res = await getRoadmapProjects();
+
     setProjects(res as unknown as ProjectType[]);
   };
 
   const fetchCategories = async () => {
     const res = await getRoadmapCardCategories();
+
     setCategories(res || []);
   };
 
@@ -320,20 +323,20 @@ export default function RoadmapBoard() {
         style={{ marginLeft: "31rem" }}
       >
         <div className="flex gap-3">
-          <Button isIconOnly color="success" onClick={addCard}>
+          <Button isIconOnly color="success" onPress={addCard}>
             <Grid2x2Plus />
           </Button>
           <Button
             isIconOnly
             color="primary"
-            onClick={() => setShowProjectInput(true)}
+            onPress={() => setShowProjectInput(true)}
           >
             <FolderPlus />
           </Button>
           <Button
             isIconOnly
             color="primary"
-            onClick={() => setShowCategoryInput(true)}
+            onPress={() => setShowCategoryInput(true)}
           >
             <ListFilterPlus />
           </Button>
@@ -418,7 +421,7 @@ export default function RoadmapBoard() {
                         isIconOnly
                         color="primary"
                         variant="light"
-                        onClick={() => viewProject(project.id)}
+                        onPress={() => viewProject(project.id)}
                       >
                         <FolderOpenDot />
                       </Button>
@@ -463,7 +466,11 @@ export default function RoadmapBoard() {
                           data={{ type: "card", categoryId: null }}
                           id={card.id}
                         >
-                          <RoadmapCard card={card} setCards={setCards} categories={categories} />
+                          <RoadmapCard
+                            card={card}
+                            categories={categories}
+                            setCards={setCards}
+                          />
                         </SortableItem>
                       ))}
                     </div>
@@ -486,7 +493,11 @@ export default function RoadmapBoard() {
                           data={{ type: "card", categoryId: category.id }}
                           id={card.id}
                         >
-                          <RoadmapCard card={card} setCards={setCards} categories={categories}/>
+                          <RoadmapCard
+                            card={card}
+                            categories={categories}
+                            setCards={setCards}
+                          />
                         </SortableItem>
                       ))}
                     </div>

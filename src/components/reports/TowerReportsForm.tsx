@@ -480,7 +480,7 @@ export const TowerReportForm = ({
               }
               radius="full"
               variant="solid"
-              onClick={handleSearchQB}
+              onPress={handleSearchQB}
             >
               Search QB
             </Button>
@@ -691,7 +691,7 @@ export const TowerReportForm = ({
             color="success"
             type="button"
             variant="bordered"
-            onClick={handleSaveAndContinue}
+            onPress={handleSaveAndContinue}
           >
             <Save />
           </Button>
@@ -701,7 +701,7 @@ export const TowerReportForm = ({
               color="primary"
               type="button"
               variant="bordered"
-              onClick={handleGeneratePDF}
+              onPress={handleGeneratePDF}
             >
               <FileText />
             </Button>
@@ -711,7 +711,7 @@ export const TowerReportForm = ({
             color="danger"
             type="button"
             variant="bordered"
-            onClick={handleCancelClick}
+            onPress={handleCancelClick}
           >
             <CircleOff />
           </Button>

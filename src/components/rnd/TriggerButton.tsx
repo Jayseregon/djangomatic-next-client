@@ -9,7 +9,7 @@ export const TriggerButton = ({ onClick }: { onClick: () => void }) => {
       color="success"
       size="sm"
       variant="bordered"
-      onClick={onClick}
+      onPress={onClick}
     >
       <ListPlus />
     </Button>

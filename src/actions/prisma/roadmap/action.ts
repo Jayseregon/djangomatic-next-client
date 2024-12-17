@@ -18,8 +18,6 @@ export async function createRoadmapCardCategory(categoryName: string) {
     });
   } catch (error: any) {
     console.log("Error creating category:", error);
-  } finally {
-    await prisma.$disconnect();
   }
 }
 
@@ -30,8 +28,6 @@ export async function getRoadmapCardCategories() {
     return categories;
   } catch (error: any) {
     console.log("Error getting categories:", error);
-  } finally {
-    await prisma.$disconnect();
   }
 }
 
@@ -52,8 +48,6 @@ export async function getRoadmapCards() {
     return cards;
   } catch (error: any) {
     console.log("Error getting cards:", error);
-  } finally {
-    await prisma.$disconnect();
   }
 }
 
@@ -77,7 +71,22 @@ export async function getRoadmapProjects() {
     return projects;
   } catch (error: any) {
     console.log("Error getting projects:", error);
-  } finally {
-    await prisma.$disconnect();
+  }
+}
+
+export async function deletegRoadmapProject(id: string) {
+  try {
+    // Delete related RoadmapProjectCard entries
+    await prisma.roadmapProjectCard.deleteMany({
+      where: { projectId: id },
+    });
+
+    // Delete the RoadmapProject
+    await prisma.roadmapProject.delete({
+      where: { id },
+    });
+  } catch (error: any) {
+    console.error("Error deleting project:", error);
+    throw error;
   }
 }

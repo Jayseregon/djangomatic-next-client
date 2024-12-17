@@ -1,19 +1,21 @@
 "use client";
 
 import { Link } from "@nextui-org/react";
-import React from "react";
+import React, { useContext } from "react";
 import { useTranslations } from "next-intl";
 import { usePathname } from "next/navigation";
 import { Accordion, AccordionItem } from "@nextui-org/react";
 
 import { siteConfig } from "@/config/site";
 import { docsData } from "@/config/docsData";
-import { AppItem, SidebarProps, AppCategory } from "@/interfaces/ui";
+import { AppItem, AppCategory } from "@/interfaces/ui";
 import {
   linkTagStyling,
   SidebarSection,
   SidebarVideosSection,
+  SidebarSoftwareSection,
 } from "@/components/ui/sidebars/helper";
+import { NonceContext } from "@/src/app/providers";
 
 /**
  * SidebarDocs component renders a sidebar with categorized documentation sections.
@@ -23,9 +25,8 @@ import {
  * @param {string} [props.nonce] - An optional nonce for the Link component.
  * @returns {JSX.Element} The rendered SidebarDocs component.
  */
-export const SidebarDocs: React.FC<SidebarProps> = ({
-  nonce,
-}: SidebarProps): JSX.Element => {
+export const SidebarDocs = (): JSX.Element => {
+  const nonce = useContext(NonceContext);
   const t = useTranslations("SaasSidebar");
   const currentPath = usePathname();
   const docsPath = siteConfig.navItemsBase.filter(
@@ -92,6 +93,19 @@ export const SidebarDocs: React.FC<SidebarProps> = ({
             </Link>
           </AccordionItem>
 
+          {/* Knowledge Corner Section */}
+          <AccordionItem
+            key="Software"
+            aria-label="Software"
+            title={
+              <h2 className="text-xl font-black text-foreground indent-2 mt-3 mb-1">
+                Knowledge Corner
+              </h2>
+            }
+          >
+            <SidebarSoftwareSection />
+          </AccordionItem>
+
           {/* Admin Section */}
           <AccordionItem
             key="Admin"
@@ -104,7 +118,6 @@ export const SidebarDocs: React.FC<SidebarProps> = ({
           >
             <SidebarSection
               categories={getDocsCategories({ docDataTarget: "admin_docs" })}
-              nonce={nonce}
             />
           </AccordionItem>
 
@@ -120,7 +133,6 @@ export const SidebarDocs: React.FC<SidebarProps> = ({
           >
             <SidebarSection
               categories={getDocsCategories({ docDataTarget: "cogeco_docs" })}
-              nonce={nonce}
             />
           </AccordionItem>
 
@@ -136,7 +148,6 @@ export const SidebarDocs: React.FC<SidebarProps> = ({
           >
             <SidebarSection
               categories={getDocsCategories({ docDataTarget: "comcast_docs" })}
-              nonce={nonce}
             />
           </AccordionItem>
 
@@ -152,7 +163,6 @@ export const SidebarDocs: React.FC<SidebarProps> = ({
           >
             <SidebarSection
               categories={getDocsCategories({ docDataTarget: "tds_docs" })}
-              nonce={nonce}
             />
           </AccordionItem>
 
@@ -170,7 +180,6 @@ export const SidebarDocs: React.FC<SidebarProps> = ({
               categories={getDocsCategories({
                 docDataTarget: "vistabeam_docs",
               })}
-              nonce={nonce}
             />
           </AccordionItem>
 
@@ -186,7 +195,6 @@ export const SidebarDocs: React.FC<SidebarProps> = ({
           >
             <SidebarSection
               categories={getDocsCategories({ docDataTarget: "xplore_docs" })}
-              nonce={nonce}
             />
           </AccordionItem>
 

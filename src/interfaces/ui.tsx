@@ -1,7 +1,3 @@
-export interface SidebarProps {
-  nonce?: string;
-}
-
 export interface AppItem {
   label: string;
   href: string;
@@ -24,7 +20,6 @@ export interface AppCategory {
 
 export interface SidebarSectionProps {
   categories: AppCategory[];
-  nonce?: string;
 }
 
 export interface ThemeSwitchProps {

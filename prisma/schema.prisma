@@ -45,6 +45,8 @@ model User {
   canAccessDocsXplore            Boolean       @default(false)
   canAccessDocsComcast           Boolean       @default(false)
   canAccessDocsAdmin             Boolean       @default(false)
+  canAccessDocsKC                Boolean       @default(false)
+  canAccessDocsKCSecure          Boolean       @default(false)
   canAccessVideoAdmin            Boolean       @default(true)
   canAccessVideoGIS              Boolean       @default(true)
   canAccessVideoCAD              Boolean       @default(true)
@@ -202,4 +204,48 @@ model Note {
   towerReportDeficiencyId String?
   towerReportAntenna      TowerReport? @relation(fields: [towerReportAntennaId], references: [id], name: "AntennaNotes", map: "AntennaNotes_towerReportAntennaId_fkey")
   towerReportDeficiency   TowerReport? @relation(fields: [towerReportDeficiencyId], references: [id], name: "DeficiencyNotes", map: "DeficiencyNotes_towerReportDeficiencyId_fkey")
+}
+
+model RoadmapCard {
+  id                    String               @id @default(cuid())
+  title                 String
+  description           String
+  category              RoadmapCardCategory? @relation(fields: [roadmapCardCategoryId], references: [id], name: "CardCategory", map: "CardCategory_roadmapCardCategoryId_fkey")
+  color                 String
+  position              Int                  @default(0)
+  createdAt             DateTime             @default(now())
+  updatedAt             DateTime             @updatedAt
+  roadmapCardCategoryId String?
+  projectCards          RoadmapProjectCard[]
+}
+
+model RoadmapCardCategory {
+  id    String        @id @default(cuid())
+  name  String
+  cards RoadmapCard[] @relation("CardCategory")
+}
+
+model RoadmapProject {
+  id           String               @id @default(cuid())
+  name         String
+  position     Int
+  comment      String?
+  members      String?
+  createdAt    DateTime             @default(now())
+  updatedAt    DateTime             @updatedAt
+  dueDate      DateTime?
+  startedAt    DateTime?
+  completedAt  DateTime?
+  projectCards RoadmapProjectCard[]
+}
+
+model RoadmapProjectCard {
+  id        String         @id @default(cuid())
+  project   RoadmapProject @relation(fields: [projectId], references: [id])
+  projectId String
+  card      RoadmapCard    @relation(fields: [cardId], references: [id])
+  cardId    String
+  position  Int            @default(0)
+
+  @@unique([projectId, cardId])
 }

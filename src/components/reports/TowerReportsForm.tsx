@@ -474,13 +474,13 @@ export const TowerReportForm = ({
           />
           <div className="h-full w-full content-end">
             <Button
-              className="bg-primary text-white w-full w-full h-10"
+              className="bg-primary text-white w-full h-10"
               isDisabled={
                 !formData.jde_work_order || formData.jde_work_order?.length < 6
               }
               radius="full"
               variant="solid"
-              onClick={handleSearchQB}
+              onPress={handleSearchQB}
             >
               Search QB
             </Button>
@@ -691,7 +691,7 @@ export const TowerReportForm = ({
             color="success"
             type="button"
             variant="bordered"
-            onClick={handleSaveAndContinue}
+            onPress={handleSaveAndContinue}
           >
             <Save />
           </Button>
@@ -701,7 +701,7 @@ export const TowerReportForm = ({
               color="primary"
               type="button"
               variant="bordered"
-              onClick={handleGeneratePDF}
+              onPress={handleGeneratePDF}
             >
               <FileText />
             </Button>
@@ -711,7 +711,7 @@ export const TowerReportForm = ({
             color="danger"
             type="button"
             variant="bordered"
-            onClick={handleCancelClick}
+            onPress={handleCancelClick}
           >
             <CircleOff />
           </Button>

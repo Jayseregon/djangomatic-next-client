@@ -27,18 +27,20 @@ export const PermissionButton = ({
   disabled = false,
 }: PermissionSwitchProps): JSX.Element => {
   return (
-    <Button
-      isIconOnly
-      className="ps-0.5 pt-0.5"
-      color={user[fieldName] ? "success" : "danger"}
-      disabled={disabled}
-      radius="full"
-      size="sm"
-      variant="light"
-      onClick={() => handleToggle(user.id, fieldName, !user[fieldName])}
-    >
-      {/* Render the appropriate icon based on the user's permission state */}
-      {user[fieldName] ? <CheckIcon size={24} /> : <UncheckIcon size={24} />}
-    </Button>
+    <div className="flex justify-center items-center">
+      <Button
+        isIconOnly
+        className="ps-0.5 pt-0.5"
+        color={user[fieldName] ? "success" : "danger"}
+        disabled={disabled}
+        radius="full"
+        size="sm"
+        variant="light"
+        onPress={() => handleToggle(user.id, fieldName, !user[fieldName])}
+      >
+        {/* Render the appropriate icon based on the user's permission state */}
+        {user[fieldName] ? <CheckIcon size={24} /> : <UncheckIcon size={24} />}
+      </Button>
+    </div>
   );
 };

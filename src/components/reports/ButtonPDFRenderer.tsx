@@ -17,7 +17,7 @@ export default function ButtonPDFRenderer() {
       className="mt-4"
       color="primary"
       type="button"
-      onClick={handleRedirect}
+      onPress={handleRedirect}
     >
       <PDFFileIcon />
     </Button>

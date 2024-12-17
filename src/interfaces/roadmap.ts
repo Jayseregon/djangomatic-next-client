@@ -42,7 +42,7 @@ export interface RoadmapProjectCardType {
   cardId: string;
   position: number;
   card?: CardType | null; // Allow null
-  project?: ProjectType | null; // Allow null
+  project?: Omit<ProjectType, "projectCards"> | null; // Remove projectCards from nested project
 }
 
 export interface AddInputProps {

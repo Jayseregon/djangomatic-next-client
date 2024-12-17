@@ -154,21 +154,12 @@ export default function ProjectView({
         (pc) => pc.id === over.id,
       );
 
-      if (oldIndex !== newIndex) {
+      if (oldIndex !== -1 && newIndex !== -1) {
         const newProjectCards = arrayMove(
           project.projectCards,
           oldIndex,
           newIndex,
         );
-
-        // Optimistic update
-        setProject({
-          ...project,
-          projectCards: newProjectCards.map((pc, index) => ({
-            ...pc,
-            position: index,
-          })),
-        });
 
         const updates = newProjectCards.map((pc, index) => ({
           projectId: project.id,
@@ -177,38 +168,45 @@ export default function ProjectView({
         }));
 
         try {
+          // Optimistic update
+          setProject((prev) => {
+            if (!prev) return null;
+
+            return {
+              ...prev,
+              projectCards: newProjectCards.map((pc, index) => ({
+                ...pc,
+                position: index,
+              })),
+            };
+          });
+
+          // Call server action
           const result = await updateCardPositions(updates);
 
-          console.log("Server action result:", result);
+          if (!result || !Array.isArray(result)) {
+            throw new Error("Invalid server response");
+          }
 
           // Update with server response
-          if (result && Array.isArray(result)) {
-            const updatedProjectCards = result.map((pc) => ({
-              id: pc.id,
-              projectId: pc.projectId,
-              cardId: pc.cardId,
-              position: pc.position,
-              card: {
-                ...pc.card,
-                category: pc.card.category || undefined, // Convert null to undefined
-                projectCards: [], // Add empty array to satisfy type
-              },
-            }));
+          setProject((prev) => {
+            if (!prev) return null;
+            const updatedProjectCards: RoadmapProjectCardType[] = result.map(
+              (pc) => ({
+                id: pc.id,
+                projectId: pc.projectId,
+                cardId: pc.cardId,
+                position: pc.position,
+                card: pc.card || undefined,
+                project: prev, // Use the current project without projectCards
+              }),
+            );
 
-            console.log("Updated project cards:", updatedProjectCards);
-
-            setProject((prev) => {
-              console.log("Previous project:", prev);
-              if (!prev) return null;
-              console.log("Updating project cards...");
-
-              return {
-                ...prev,
-                projectCards: updatedProjectCards as RoadmapProjectCardType[],
-              };
-            });
-          }
-          console.log("Updated project:", project);
+            return {
+              ...prev,
+              projectCards: updatedProjectCards,
+            };
+          });
         } catch (error) {
           console.error("Failed to update card positions:", error);
           // Revert optimistic update

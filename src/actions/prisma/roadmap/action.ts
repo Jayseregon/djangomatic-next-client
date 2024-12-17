@@ -116,41 +116,44 @@ export async function updateCardPositions(
   updates: Array<{ projectId: string; cardId: string; position: number }>,
 ) {
   try {
-    // Get the projectId from first update (they should all be for same project)
     const projectId = updates[0]?.projectId;
 
     if (!projectId) throw new Error("No project ID provided");
 
+    // Begin transaction
     const result = await prisma.$transaction(async (tx) => {
-      // First, get all existing cards for this project to verify the update
-      const existingCards = await tx.roadmapProjectCard.findMany({
-        where: { projectId },
-        orderBy: { position: "asc" },
-      });
-
-      if (existingCards.length !== updates.length) {
-        throw new Error("Update array length mismatch with existing cards");
-      }
-
-      // Perform the updates
-      const updatePromises = updates.map(({ projectId, cardId, position }) =>
-        tx.roadmapProjectCard.update({
-          where: { projectId_cardId: { projectId, cardId } },
-          data: { position },
-          include: {
-            card: {
-              include: { category: true },
-            },
-          },
-        }),
+      // First update all positions
+      await Promise.all(
+        updates.map(({ projectId, cardId, position }) =>
+          tx.roadmapProjectCard.update({
+            where: { projectId_cardId: { projectId, cardId } },
+            data: { position },
+          }),
+        ),
       );
 
-      return await Promise.all(updatePromises);
+      // Then fetch the updated project with cards in correct order
+      const updatedProject = await tx.roadmapProject.findUnique({
+        where: { id: projectId },
+        include: {
+          projectCards: {
+            orderBy: { position: "asc" },
+            include: {
+              card: {
+                include: { category: true },
+              },
+            },
+          },
+        },
+      });
+
+      if (!updatedProject) throw new Error("Project not found");
+
+      return updatedProject;
     });
 
-    // Revalidate both the project view and the main roadmap view
     revalidatePath("/boards/roadmap");
-    revalidatePath(`/boards/roadmap/projects/${updates[0].projectId}`);
+    revalidatePath(`/boards/roadmap/projects/${projectId}`);
 
     return result;
   } catch (error) {

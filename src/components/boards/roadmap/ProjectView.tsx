@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 import {
   Button,
   Input,
@@ -52,6 +53,7 @@ export default function ProjectView({
   projectId: string;
   session: any;
 }) {
+  const t = useTranslations("Boards.roadmap");
   const [project, setProject] = useState<ProjectType | null>(null);
   const sensors = useSensors(useSensor(MouseSensor), useSensor(TouchSensor));
   const router = useRouter();
@@ -214,11 +216,12 @@ export default function ProjectView({
           <CardHeader className="grid grid-cols-[1fr_auto] gap-5">
             {/* Project Name */}
             <Input
+              aria-label="Project Name"
               classNames={{
                 input: "border-0 focus:ring-0",
                 inputWrapper: "border-foreground/50 hover:!border-foreground",
               }}
-              label="Project Name"
+              label={t("projectCardPlaceholders.pName")}
               labelPlacement="outside"
               value={project.name}
               variant="bordered"
@@ -250,11 +253,12 @@ export default function ProjectView({
           <CardBody className="flex flex-col text-start gap-10">
             {/* Members Input */}
             <Input
+              aria-label="Members"
               classNames={{
                 input: "border-0 focus:ring-0",
                 inputWrapper: "border-foreground/50 hover:!border-foreground",
               }}
-              label="Members"
+              label={t("projectCardPlaceholders.pMembers")}
               labelPlacement="outside"
               value={project.members || ""}
               variant="bordered"
@@ -272,7 +276,7 @@ export default function ProjectView({
                   inputWrapper:
                     "border-foreground/50 rounded-full hover:border-foreground",
                 }}
-                label="Due Date"
+                label={t("projectCardPlaceholders.pDueDate")}
                 labelPlacement="outside"
                 name="dueDate"
                 value={
@@ -297,7 +301,7 @@ export default function ProjectView({
                   inputWrapper:
                     "border-foreground/50 rounded-full hover:border-foreground",
                 }}
-                label="Started At"
+                label={t("projectCardPlaceholders.pStartedDate")}
                 labelPlacement="outside"
                 name="startedAt"
                 value={
@@ -322,7 +326,7 @@ export default function ProjectView({
                   inputWrapper:
                     "border-foreground/50 rounded-full hover:border-foreground",
                 }}
-                label="Completed At"
+                label={t("projectCardPlaceholders.pCompletedDate")}
                 labelPlacement="outside"
                 name="completedAt"
                 value={
@@ -346,7 +350,7 @@ export default function ProjectView({
                 input: "border-0 focus:ring-0",
                 inputWrapper: "border-foreground/50 hover:!border-foreground",
               }}
-              label="Project Comments"
+              label={t("projectCardPlaceholders.pComments")}
               labelPlacement="outside"
               minRows={5}
               value={project.comment || ""}

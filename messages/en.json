@@ -52,15 +52,23 @@
     "roadmap": {
       "title": "Roadmaps",
       "subtitle": "Track the progress of our projects and upcoming features",
-      "tableColumns": {
-        "created": "Created",
-        "title": "Title",
-        "description": "Description",
-        "status": "Status",
-        "priority": "Priority",
-        "owner": "Owner",
-        "dueDate": "Due Date",
-        "completedAt": "Completed At"
+      "projectSidebar": "Projects",
+      "controlButtons": {
+        "newCard" : "Card",
+        "newProject" : "Project",
+        "newCategory" : "Category", 
+        "inputPlaceholders": {
+          "projectName": "Project Name",
+          "categoryName": "Category Name"
+        }
+      }, 
+      "projectCardPlaceholders": {
+        "pName": "Project Name",
+        "pMembers": "Project Members",
+        "pDueDate": "Due Date",
+        "pStartedDate": "Started At",
+        "pCompletedDate": "Completed At",
+        "pComments": "Project Comments"
       }
     }
   },

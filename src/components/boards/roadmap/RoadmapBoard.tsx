@@ -2,6 +2,7 @@
 
 import React, { useCallback, useContext, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 import { Button } from "@nextui-org/react";
 import {
   DndContext,
@@ -43,6 +44,7 @@ import SortableItem from "./SortableItem";
 import AddInput from "./AddInput";
 
 export default function RoadmapBoard() {
+  const t = useTranslations("Boards.roadmap");
   const router = useRouter();
   const nonce = useContext(NonceContext);
   const [cards, setCards] = useState<CardType[]>([]);
@@ -323,29 +325,33 @@ export default function RoadmapBoard() {
         style={{ marginLeft: "31rem" }}
       >
         <div className="flex gap-3">
-          <Button isIconOnly color="success" onPress={addCard}>
-            <Grid2x2Plus />
+          <Button
+            color="success"
+            startContent={<Grid2x2Plus />}
+            onPress={addCard}
+          >
+            {t("controlButtons.newCard")}
           </Button>
           <Button
-            isIconOnly
             color="primary"
+            startContent={<FolderPlus />}
             onPress={() => setShowProjectInput(true)}
           >
-            <FolderPlus />
+            {t("controlButtons.newProject")}
           </Button>
           <Button
-            isIconOnly
             color="primary"
+            startContent={<ListFilterPlus />}
             onPress={() => setShowCategoryInput(true)}
           >
-            <ListFilterPlus />
+            {t("controlButtons.newCategory")}
           </Button>
         </div>
         {showProjectInput && (
           <div className="flex items-center gap-2">
             <AddInput
               inputValue={projectName}
-              placeholder="Project Name"
+              placeholder={t("controlButtons.inputPlaceholders.projectName")}
               setInputValue={setProjectName}
               setShowInput={setShowProjectInput}
               onClick={addProject}
@@ -356,7 +362,7 @@ export default function RoadmapBoard() {
           <div className="flex items-center gap-2">
             <AddInput
               inputValue={categoryName}
-              placeholder="Category Name"
+              placeholder={t("controlButtons.inputPlaceholders.categoryName")}
               setInputValue={setCategoryName}
               setShowInput={setShowCategoryInput}
               onClick={addCategory}
@@ -375,7 +381,9 @@ export default function RoadmapBoard() {
           zIndex: 30,
         }}
       >
-        <h2 className="text-foreground text-2xl font-semibold">Projects</h2>
+        <h2 className="text-foreground text-2xl font-semibold">
+          {t("projectSidebar")}
+        </h2>
       </div>
 
       <DndContext

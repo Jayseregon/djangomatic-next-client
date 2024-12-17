@@ -52,15 +52,23 @@
     "roadmap": {
       "title": "Feuilles de route",
       "subtitle": "Suivez la progression de nos projets et des fonctionnalités à venir",
-      "tableColumns": {
-        "created": "Créé",
-        "title": "Titre",
-        "description": "Description",
-        "status": "Statut",
-        "priority": "Priorité",
-        "owner": "Propriétaire",
-        "dueDate": "Date d'échéance",
-        "completedAt": "Terminé le"
+      "projectSidebar": "Projets",
+      "controlButtons": {
+        "newCard" : "Carte",
+        "newProject" : "Projet",
+        "newCategory" : "Catégorie",
+        "inputPlaceholders": {
+          "projectName": "Nom du projet",
+          "categoryName": "Nom de la catégorie"
+        }
+      },
+      "projectCardPlaceholders": {
+        "pName": "Nom du projet",
+        "pMembers": "Membres du projet",
+        "pDueDate": "Date d'échéance",
+        "pStartedDate": "Commencé le",
+        "pCompletedDate": "Terminé le",
+        "pComments": "Commentaires sur le projet"
       }
     }
   },

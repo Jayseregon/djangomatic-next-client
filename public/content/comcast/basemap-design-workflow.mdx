@@ -1,0 +1,168 @@
+---
+title: Basemap Design Workflow
+slug: basemap-design-workflow
+---
+<div>
+
+## Overview
+
+This guide provides step-by-step instructions to prepare survey data in QGIS and importing it into a basemap in AutoCAD Map 3D. It is designed to streamline the conversion and organization of data layers, ensuring a smooth workflow from data preparation in QGIS to final integration in AutoCAD. The primary tasks include downloading survey data, preparing shapefiles, processing them in QGIS, and finally importing them into AutoCAD.
+
+## Requirements
+
+- **QGIS software** for data preparation
+- **AutoCAD Map 3D** for data import and visualization
+- Survey data files (<Snippet>Nodes</Snippet> and <Snippet>Connections</Snippet> shapefiles) from **Katapult**
+- **Python script** named <Snippet>basemap_data_prep.py</Snippet> for automation and data processing
+
+---
+
+## Step-by-Step Instructions
+
+### Step 1: Download Survey Data
+
+1. Access the **Katapult** website and log in with your credentials.
+2. Navigate to the survey data section and download the required data.
+3. Ensure you have two <Snippet>.shp</Snippet> files: <Snippet>Nodes.shp</Snippet> and <Snippet>Connections.shp</Snippet>.
+
+<LoadDynamicImage imageName="basemap-design-workflow/katapult_download_manager" width={700} />
+
+*Explanation of where to find the data download section on Katapult.*
+
+---
+
+### Step 2: Open QGIS
+
+1. Launch **QGIS**.
+2. Prepare the <Snippet>Connections</Snippet> and <Snippet>Nodes</Snippet> shapefiles:
+   - **Merge** the shapefies if necessary.
+   - **Reproject** both shapefiles to the correct **Coordinate Reference System (CRS)** for your project.
+
+<LoadDynamicImage imageName="basemap-design-workflow/qgis_reproject" width={700} /> 
+
+*Details on setting up CRS.*
+
+---
+
+### Step 3: Open the Python Console
+
+1. Access the Python Console:
+   - In the top menu, go to **Plugins > Python Console**.
+
+<LoadDynamicImage imageName="basemap-design-workflow/open_python_console" width={700} /> 
+ 
+*Location of the Python Console option under Plugins.*
+
+---
+
+### Step 4: Open the Script Editor
+
+1. Open the Script Editor:
+   - In the Python Console, click on the **Show Editor** button (a paper and pencil icon).
+
+<LoadDynamicImage imageName="basemap-design-workflow/python_script_editor" width={700} /> 
+
+*Show where to find the "Show Editor" button in the Python Console.*
+
+---
+
+### Step 5: Load the Script
+
+1. Load the script into the Editor:
+   - In the Script Editor, click the **Open Script** button (a folder icon).
+   - Navigate to the location where you saved <Snippet>basemap_data_prep.py</Snippet>.
+   - Select the <Snippet>basemap_data_prep.py</Snippet> file and click **Open**.
+
+<LoadDynamicImage imageName="basemap-design-workflow/qgis_load_script" width={700} />
+
+*Details on selecting the script file and loading it into the Script Editor.*
+
+---
+
+### Step 6: Run the Script
+
+1. Run the script:
+   - In the Script Editor, click the **Run Script** button (a green play button).
+
+<LoadDynamicImage imageName="basemap-design-workflow/run_script" width={700} />  
+ 
+*Explanation of where to find the Run button and what output to expect.*
+
+---
+
+### Step 7: Select the 'Nodes' Shapefile
+
+1. Select the <Snippet>Nodes</Snippet> shapefile:
+   - Another file dialog will appear, prompting you to select the <Snippet>Nodes</Snippet> shapefile.
+   - Navigate to the folder containing your shapefiles.
+   - Select the <Snippet>Nodes.shp</Snippet> file and click **Open**.
+
+<LoadDynamicImage imageName="basemap-design-workflow/select_nodes_shapefile" width={700} />
+  
+*Details on selecting the Nodes shapefile from your file directory.*
+
+---
+
+### Step 8 : Select the 'Connections' Shapefile
+
+1. Select the <Snippet>Connections</Snippet> shapefile:
+   - A file dialog will appear, prompting you to select the <Snippet>Connections</Snippet> shapefile.
+   - Navigate to the folder containing your shapefiles.
+   - Select the <Snippet>Connections.shp</Snippet> file and click **Open**.
+ 
+*Details on selecting the Connections shapefile described in previous step.*
+
+---
+
+### Step 9: Importing Data into AutoCAD Map 3D
+
+1. **Open AutoCAD Map 3D**:
+   - Start AutoCAD Map 3D, which supports <Snippet>.shp</Snippet> file imports, and open your project.
+   - Set your AutoCAD project to the appropriate **Coordinate System (CRS)**.
+
+<LoadDynamicImage imageName="basemap-design-workflow/autocad_crs" width={700} />
+
+2. **Initiate Import**:
+   - Type **<Snippet>MAPIMPORT</Snippet>** in the command line and press **Enter**.
+   - When the import menu appears, select all shapefiles prepared earlier for import and click **OK**.
+
+<LoadDynamicImage imageName="basemap-design-workflow/autocad_mapimport" width={700} />
+
+3. **Assign Layers to Drawing Layers**:
+   - When prompted, assign each <Snippet>.shp</Snippet> layer to its corresponding "Drawing Layer" and block in AutoCAD.
+   - Use the import profile <Snippet>comcast_profile.ipf</Snippet> to automatically populate this menu.
+
+4. **Finalize Import**:
+   - Click **OK** to complete the import.
+
+<LoadDynamicImage imageName="basemap-design-workflow/autocad_import" width={700} />
+  
+*Steps to set the Coordinate System, import shapefiles, and assign layers.*
+
+---
+
+### Step 10: Synchronizing Blocks in AutoCAD
+
+1. **Sync Attributes**:
+   - After importing the data, type **<Snippet>ATTSYNC</Snippet>** in the AutoCAD command line and press Enter.
+<LoadDynamicImage imageName="basemap-design-workflow/autocad_attsync" width={400} />
+   - Set the command to <Snippet>Select</Snippet> mode, press **Enter**, then click the block you wish to synchronize.
+<LoadDynamicImage imageName="basemap-design-workflow/autocad_attsync_1" width={400} />
+<LoadDynamicImage imageName="basemap-design-workflow/autocad_attsync_2" width={400} />
+
+   - Confirm by pressing <Snippet>Yes</Snippet> to update the block's attributes based on the newly imported data.
+
+<LoadDynamicImage imageName="basemap-design-workflow/autocad_attsync_3" width={400} />
+
+
+2. **Repeat for All Blocks**:
+   - Continue the **<Snippet>ATTSYNC</Snippet>** process for each block that requires synchronization to ensure all data displays correctly.
+
+3. **Completion and Verification**:
+   - Once all blocks are synchronized, review your network design to confirm that all **layers**, **blocks**, and **attributes** are correctly placed and visible.
+   - Save your AutoCAD project to preserve the imported data and the work completed during synchronization.
+
+*Instructions for syncing attributes and verifying correct data placement.*
+
+---
+</div>

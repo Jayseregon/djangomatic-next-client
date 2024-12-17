@@ -42,6 +42,7 @@ import { convertProjectDates } from "@/lib/utils";
 import {
   deletegRoadmapProject,
   getRoadmapCardCategories,
+  updateCardPositions,
 } from "@/src/actions/prisma/roadmap/action";
 
 import RoadmapCard from "./RoadmapCard";
@@ -58,19 +59,19 @@ export default function ProjectView({
   const [project, setProject] = useState<ProjectType | null>(null);
   const sensors = useSensors(useSensor(MouseSensor), useSensor(TouchSensor));
   const router = useRouter();
-  const [categories, setCategories] = React.useState<RoadmapCardCategory[]>([]);
+  // const [categories, setCategories] = React.useState<RoadmapCardCategory[]>([]);
   const [memberInput, setMemberInput] = useState("");
   const [membersList, setMembersList] = useState<string[]>([]);
 
-  useEffect(() => {
-    const fetchCategories = async () => {
-      const res = await getRoadmapCardCategories();
+  // useEffect(() => {
+  //   const fetchCategories = async () => {
+  //     const res = await getRoadmapCardCategories();
 
-      setCategories(res ?? []);
-    };
+  //     setCategories(res ?? []);
+  //   };
 
-    fetchCategories();
-  }, []);
+  //   fetchCategories();
+  // }, []);
 
   // Move all hooks before any conditional returns
   const debouncedUpdate = useDebouncedCallback((field, value) => {
@@ -89,14 +90,14 @@ export default function ProjectView({
       setProject(updatedProject);
       debouncedUpdate(field, value);
     },
-    [project, debouncedUpdate],
+    [project, debouncedUpdate]
   );
 
   useEffect(() => {
     const fetchProject = async () => {
       try {
         const response = await fetch(
-          `/api/roadmap-projects/find?id=${projectId}`,
+          `/api/roadmap-projects/find?id=${projectId}`
         );
 
         if (!response.ok) throw new Error("Failed to fetch project");
@@ -148,17 +149,17 @@ export default function ProjectView({
 
     if (over && active.id !== over.id && project) {
       const oldIndex = project.projectCards.findIndex(
-        (pc) => pc.id === active.id,
+        (pc) => pc.id === active.id
       );
       const newIndex = project.projectCards.findIndex(
-        (pc) => pc.id === over.id,
+        (pc) => pc.id === over.id
       );
 
       if (oldIndex !== newIndex) {
         const newProjectCards = arrayMove(
           project.projectCards,
           oldIndex,
-          newIndex,
+          newIndex
         );
 
         // Optimistic update
@@ -177,32 +178,25 @@ export default function ProjectView({
         }));
 
         try {
-          const response = await fetch(
-            "/api/roadmap-projects/update-card-positions",
-            {
-              method: "PATCH",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({ updates }),
-            },
-          );
-          const result = await response.json();
-
-          if (!response.ok) {
-            throw new Error("Failed to update positions");
-          }
+          const result = await updateCardPositions(updates);
 
           // Update with server response
           if (result && Array.isArray(result)) {
-            setProject((prev) => ({
-              ...prev!,
-              projectCards: result.map((pc) => ({
-                id: pc.id,
-                projectId: pc.projectId,
-                cardId: pc.cardId,
-                position: pc.position,
-                card: pc.card,
-              })),
+            const updatedProjectCards = result.map((pc) => ({
+              id: pc.id,
+              projectId: pc.projectId,
+              cardId: pc.cardId,
+              position: pc.position,
+              card: {
+                ...pc.card,
+                projectCards: [], // Add empty array to satisfy type
+              },
             }));
+
+            setProject((prev) => prev ? {
+              ...prev,
+              projectCards: updatedProjectCards,
+            } : null);
           }
         } catch (error) {
           console.error("Failed to update card positions:", error);
@@ -219,7 +213,7 @@ export default function ProjectView({
     setProject({
       ...project,
       projectCards: project.projectCards.map((pc) =>
-        pc.card?.id === updatedCard.id ? { ...pc, card: updatedCard } : pc,
+        pc.card?.id === updatedCard.id ? { ...pc, card: updatedCard } : pc
       ),
     });
   };
@@ -238,8 +232,7 @@ export default function ProjectView({
   return (
     <UserAccessBoards
       boardType="canAccessRoadmapBoard"
-      email={session.user.email}
-    >
+      email={session.user.email}>
       <div className="mx-10">
         <Card className="bg-background border border-foreground/50 mb-10 p-2">
           <CardHeader className="grid grid-cols-[1fr_auto] gap-5">
@@ -262,8 +255,7 @@ export default function ProjectView({
                   isIconOnly
                   className="text-white w-full"
                   color="primary"
-                  onPress={() => router.back()}
-                >
+                  onPress={() => router.back()}>
                   <DoorOpen />
                 </Button>
               </div>
@@ -272,8 +264,7 @@ export default function ProjectView({
                   isIconOnly
                   className="text-white w-full"
                   color="danger"
-                  onPress={handleDeleteProject}
-                >
+                  onPress={handleDeleteProject}>
                   <Trash />
                 </Button>
               </div>
@@ -308,8 +299,7 @@ export default function ProjectView({
                       key={index}
                       color="primary"
                       variant="flat"
-                      onClose={() => handleRemoveMember(index)}
-                    >
+                      onClose={() => handleRemoveMember(index)}>
                       {member}
                     </Chip>
                   ))}
@@ -340,7 +330,7 @@ export default function ProjectView({
                 onChange={(value) =>
                   handleFieldChange(
                     "dueDate",
-                    value ? value.toDate(getLocalTimeZone()) : null,
+                    value ? value.toDate(getLocalTimeZone()) : null
                   )
                 }
               />
@@ -365,7 +355,7 @@ export default function ProjectView({
                 onChange={(value) =>
                   handleFieldChange(
                     "startedAt",
-                    value ? value.toDate(getLocalTimeZone()) : null,
+                    value ? value.toDate(getLocalTimeZone()) : null
                   )
                 }
               />
@@ -390,7 +380,7 @@ export default function ProjectView({
                 onChange={(value) =>
                   handleFieldChange(
                     "completedAt",
-                    value ? value.toDate(getLocalTimeZone()) : null,
+                    value ? value.toDate(getLocalTimeZone()) : null
                   )
                 }
               />
@@ -415,12 +405,10 @@ export default function ProjectView({
         <DndContext
           collisionDetection={rectIntersection}
           sensors={sensors}
-          onDragEnd={handleDragEnd}
-        >
+          onDragEnd={handleDragEnd}>
           <SortableContext
             items={project!.projectCards.map((pc) => pc.id)}
-            strategy={rectSortingStrategy}
-          >
+            strategy={rectSortingStrategy}>
             <div className="grid grid-cols-3 md:grid-cols-6 gap-4">
               {project!.projectCards.map((projectCard) => (
                 <SortableItem
@@ -430,11 +418,10 @@ export default function ProjectView({
                     projectId: project!.id,
                     cardId: projectCard.card!.id,
                   }}
-                  id={projectCard.id}
-                >
+                  id={projectCard.id}>
                   <RoadmapCard
                     card={projectCard.card!}
-                    categories={categories}
+                    // providedCategories={categories}
                     setCards={(cards) => {
                       if (typeof cards === "function") {
                         const updatedCard = cards([projectCard.card!])[0];

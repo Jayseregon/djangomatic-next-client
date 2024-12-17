@@ -121,7 +121,7 @@ export default function RoadmapBoard() {
           .sort((a, b) => a.position - b.position);
 
         const oldIndex = categoryCards.findIndex(
-          (card) => card.id === activeId,
+          (card) => card.id === activeId
         );
         const newIndex = categoryCards.findIndex((card) => card.id === overId);
 
@@ -134,14 +134,14 @@ export default function RoadmapBoard() {
             prevCards.map((card) => {
               if ((card.category?.id || null) === categoryId) {
                 const index = newCategoryCards.findIndex(
-                  (c) => c.id === card.id,
+                  (c) => c.id === card.id
                 );
 
                 return { ...card, position: index };
               }
 
               return card;
-            }),
+            })
           );
 
           // Persist changes to database
@@ -163,7 +163,7 @@ export default function RoadmapBoard() {
     if (activeData?.type === "project" && overData?.type === "project") {
       if (activeId !== overId) {
         const oldIndex = projects.findIndex(
-          (project) => project.id === activeId,
+          (project) => project.id === activeId
         );
         const newIndex = projects.findIndex((project) => project.id === overId);
 
@@ -203,7 +203,7 @@ export default function RoadmapBoard() {
         prevProjects.map((project) => {
           if (project.id === projectId) {
             const exists = project.projectCards.some(
-              (pc) => pc.cardId === cardId,
+              (pc) => pc.cardId === cardId
             );
 
             if (!exists) {
@@ -224,7 +224,7 @@ export default function RoadmapBoard() {
           }
 
           return project;
-        }),
+        })
       );
 
       // Persist card-to-project assignment in database
@@ -242,8 +242,8 @@ export default function RoadmapBoard() {
           // Refresh the card data in the UI if needed
           setCards((prevCards) =>
             prevCards.map((card) =>
-              card.id === cardId ? { ...card, ...updatedCard } : card,
-            ),
+              card.id === cardId ? { ...card, ...updatedCard } : card
+            )
           );
         })
         .catch((error) => {
@@ -255,13 +255,13 @@ export default function RoadmapBoard() {
                 return {
                   ...project,
                   projectCards: project.projectCards.filter(
-                    (pc) => pc.cardId !== cardId,
+                    (pc) => pc.cardId !== cardId
                   ),
                 };
               }
 
               return project;
-            }),
+            })
           );
         });
 
@@ -322,28 +322,24 @@ export default function RoadmapBoard() {
       <div
         className="flex flex-row gap-10 my-3"
         nonce={nonce}
-        style={{ marginLeft: "31rem" }}
-      >
+        style={{ marginLeft: "31rem" }}>
         <div className="flex gap-3">
           <Button
             color="success"
             startContent={<Grid2x2Plus />}
-            onPress={addCard}
-          >
+            onPress={addCard}>
             {t("controlButtons.newCard")}
           </Button>
           <Button
             color="primary"
             startContent={<FolderPlus />}
-            onPress={() => setShowProjectInput(true)}
-          >
+            onPress={() => setShowProjectInput(true)}>
             {t("controlButtons.newProject")}
           </Button>
           <Button
             color="primary"
             startContent={<ListFilterPlus />}
-            onPress={() => setShowCategoryInput(true)}
-          >
+            onPress={() => setShowCategoryInput(true)}>
             {t("controlButtons.newCategory")}
           </Button>
         </div>
@@ -379,8 +375,7 @@ export default function RoadmapBoard() {
           left: "1.5rem",
           width: "30rem",
           zIndex: 30,
-        }}
-      >
+        }}>
         <h2 className="text-foreground text-2xl font-semibold">
           {t("projectSidebar")}
         </h2>
@@ -390,8 +385,7 @@ export default function RoadmapBoard() {
         collisionDetection={pointerWithin}
         modifiers={[]} // Remove any existing modifiers that might cause flickering
         sensors={sensors}
-        onDragEnd={handleDragEnd}
-      >
+        onDragEnd={handleDragEnd}>
         {/* Fixed position side projects container */}
         <div
           nonce={nonce}
@@ -403,21 +397,18 @@ export default function RoadmapBoard() {
             maxHeight: "calc(95vh - 18rem)", // Adjust for top offset
             overflowY: "auto",
             zIndex: 30,
-          }}
-        >
+          }}>
           {/* side content with projects as drop targets */}
           <div className="flex flex-col gap-4">
             <SortableContext
               items={projects.map((project) => project.id)}
-              strategy={verticalListSortingStrategy}
-            >
+              strategy={verticalListSortingStrategy}>
               <div className="flex flex-col gap-5">
                 {projects.map((project) => (
                   <SortableItem
                     key={project.id}
                     data={{ type: "project" }}
-                    id={project.id}
-                  >
+                    id={project.id}>
                     <div className="flex px-2 py-8 border border-foreground rounded-md justify-between">
                       <div className="flex flex-col text-left ps-3">
                         <h3 className="capitalize">{project.name}</h3>
@@ -429,8 +420,7 @@ export default function RoadmapBoard() {
                         isIconOnly
                         color="primary"
                         variant="light"
-                        onPress={() => viewProject(project.id)}
-                      >
+                        onPress={() => viewProject(project.id)}>
                         <FolderOpenDot />
                       </Button>
                     </div>
@@ -453,8 +443,7 @@ export default function RoadmapBoard() {
             overflowY: "auto",
             zIndex: 30,
             marginLeft: "32rem",
-          }}
-        >
+          }}>
           {/* main content to display all cards */}
 
           {/* Render categorized cards */}
@@ -465,18 +454,16 @@ export default function RoadmapBoard() {
                 <div key="uncategorized">
                   <SortableContext
                     items={uncategorizedCards.map((card) => card.id)}
-                    strategy={rectSortingStrategy}
-                  >
+                    strategy={rectSortingStrategy}>
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                       {uncategorizedCards.map((card) => (
                         <SortableItem
                           key={card.id}
                           data={{ type: "card", categoryId: null }}
-                          id={card.id}
-                        >
+                          id={card.id}>
                           <RoadmapCard
                             card={card}
-                            categories={categories}
+                            providedCategories={categories}
                             setCards={setCards}
                           />
                         </SortableItem>
@@ -492,18 +479,16 @@ export default function RoadmapBoard() {
                   </h3>
                   <SortableContext
                     items={cards.map((card) => card.id)}
-                    strategy={rectSortingStrategy}
-                  >
+                    strategy={rectSortingStrategy}>
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                       {cards.map((card) => (
                         <SortableItem
                           key={card.id}
                           data={{ type: "card", categoryId: category.id }}
-                          id={card.id}
-                        >
+                          id={card.id}>
                           <RoadmapCard
                             card={card}
-                            categories={categories}
+                            providedCategories={categories}
                             setCards={setCards}
                           />
                         </SortableItem>

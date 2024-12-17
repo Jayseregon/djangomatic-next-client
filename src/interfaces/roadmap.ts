@@ -5,10 +5,10 @@ export interface CardType {
   category?: RoadmapCardCategory;
   color: string;
   position: number; // Position within category
-  createdAt: string;
-  updatedAt: string;
-  projects: ProjectType[];
-  projectCards: RoadmapProjectCardType[];
+  createdAt: Date;
+  updatedAt: Date;
+  roadmapCardCategoryId?: string | null;
+  projectCards?: RoadmapProjectCardType[]; // Make this optional
 }
 
 export interface RoadmapCardCategory {
@@ -56,5 +56,5 @@ export interface AddInputProps {
 export interface RoadmapCardProps {
   card: CardType;
   setCards: React.Dispatch<React.SetStateAction<CardType[]>>;
-  categories: RoadmapCardCategory[];
+  providedCategories?: RoadmapCardCategory[];
 }

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useCallback } from "react";
+import React, { useCallback, useEffect } from "react";
 import {
   Card,
   CardHeader,
@@ -15,8 +15,9 @@ import {
 import { Trash2 } from "lucide-react";
 import { useDebouncedCallback } from "use-debounce";
 
-import { RoadmapCardProps } from "@/interfaces/roadmap";
+import { RoadmapCardCategory, RoadmapCardProps } from "@/interfaces/roadmap";
 import { cn } from "@/src/lib/utils";
+import { getRoadmapCardCategories } from "@/src/actions/prisma/roadmap/action";
 
 // Define the custom Badge component
 const Badge: React.FC<{ color: string }> = ({ color }) => (
@@ -29,7 +30,8 @@ const Badge: React.FC<{ color: string }> = ({ color }) => (
   </div>
 );
 
-function RoadmapCard({ card, setCards, categories }: RoadmapCardProps) {
+function RoadmapCard({ card, setCards, providedCategories }: RoadmapCardProps) {
+  const [categories, setCategories] = React.useState<RoadmapCardCategory[]>([]);
   const debouncedUpdate = useDebouncedCallback((field, value) => {
     fetch("/api/roadmap-cards/update", {
       method: "PUT",
@@ -38,22 +40,34 @@ function RoadmapCard({ card, setCards, categories }: RoadmapCardProps) {
     });
   }, 500);
 
+  useEffect(() => {
+    const fetchCategories = async () => {
+      const res = await getRoadmapCardCategories();
+      setCategories(res ?? []);
+    };
+    if (providedCategories) {
+      setCategories(providedCategories);
+    } else {
+      fetchCategories();
+    }
+  }, []);
+
   const handleTitleChange = useCallback(
     (newTitle: string) => {
       const updatedCard = { ...card, title: newTitle };
 
       setCards((items) =>
-        items.map((item) => (item.id === card.id ? updatedCard : item)),
+        items.map((item) => (item.id === card.id ? updatedCard : item))
       );
       debouncedUpdate("title", newTitle);
     },
-    [card, setCards, debouncedUpdate],
+    [card, setCards, debouncedUpdate]
   );
 
   const handleCategoryChange = useCallback(
     (newCategoryId: string) => {
       const updatedCategory = categories.find(
-        (cat) => cat.id === newCategoryId,
+        (cat) => cat.id === newCategoryId
       );
 
       const updatedCard = {
@@ -63,7 +77,7 @@ function RoadmapCard({ card, setCards, categories }: RoadmapCardProps) {
       };
 
       setCards((items) =>
-        items.map((item) => (item.id === card.id ? updatedCard : item)),
+        items.map((item) => (item.id === card.id ? updatedCard : item))
       );
 
       // Send the PUT request immediately
@@ -76,7 +90,7 @@ function RoadmapCard({ card, setCards, categories }: RoadmapCardProps) {
         }),
       });
     },
-    [card, setCards, categories],
+    [card, setCards, categories]
   );
 
   const handleDescriptionChange = useCallback(
@@ -84,11 +98,11 @@ function RoadmapCard({ card, setCards, categories }: RoadmapCardProps) {
       const updatedCard = { ...card, description: newDescription };
 
       setCards((items) =>
-        items.map((item) => (item.id === card.id ? updatedCard : item)),
+        items.map((item) => (item.id === card.id ? updatedCard : item))
       );
       debouncedUpdate("description", newDescription);
     },
-    [card, setCards, debouncedUpdate],
+    [card, setCards, debouncedUpdate]
   );
 
   const handleColorChange = useCallback(
@@ -96,7 +110,7 @@ function RoadmapCard({ card, setCards, categories }: RoadmapCardProps) {
       const updatedCard = { ...card, color: newColor };
 
       setCards((items) =>
-        items.map((item) => (item.id === card.id ? updatedCard : item)),
+        items.map((item) => (item.id === card.id ? updatedCard : item))
       );
       fetch("/api/roadmap-cards/update", {
         method: "PUT",
@@ -104,7 +118,7 @@ function RoadmapCard({ card, setCards, categories }: RoadmapCardProps) {
         body: JSON.stringify({ id: card.id, color: newColor }),
       });
     },
-    [card, setCards],
+    [card, setCards]
   );
 
   const handleDelete = useCallback(() => {
@@ -144,9 +158,8 @@ function RoadmapCard({ card, setCards, categories }: RoadmapCardProps) {
           : "border border-foreground",
         "w-full",
         "h-full",
-        card.color ? `text-${card.color}-950` : "text-foreground",
-      )}
-    >
+        card.color ? `text-${card.color}-950` : "text-foreground"
+      )}>
       <CardHeader className="flex flex-col items-center gap-1">
         <Input
           isClearable
@@ -206,8 +219,7 @@ function RoadmapCard({ card, setCards, categories }: RoadmapCardProps) {
               const selectedKey = Array.from(keys)[0] as string;
 
               handleCategoryChange(selectedKey);
-            }}
-          >
+            }}>
             {categories.map((category) => (
               <SelectItem
                 key={category.id}
@@ -215,8 +227,7 @@ function RoadmapCard({ card, setCards, categories }: RoadmapCardProps) {
                   base: "hover:!bg-foreground/30 focus:!bg-foreground/30",
                 }}
                 textValue={category.name}
-                value={category.id}
-              >
+                value={category.id}>
                 {category.name}
               </SelectItem>
             ))}
@@ -243,8 +254,7 @@ function RoadmapCard({ card, setCards, categories }: RoadmapCardProps) {
               const selectedKey = keys.currentKey as string;
 
               handleColorChange(selectedKey);
-            }}
-          >
+            }}>
             {colorOptions.map((color) => (
               <SelectItem
                 key={color}
@@ -252,8 +262,7 @@ function RoadmapCard({ card, setCards, categories }: RoadmapCardProps) {
                   base: "hover:!bg-foreground/30 focus:!bg-foreground/30",
                 }}
                 textValue={color}
-                value={color}
-              >
+                value={color}>
                 <Badge color={color} />
               </SelectItem>
             ))}
@@ -263,8 +272,7 @@ function RoadmapCard({ card, setCards, categories }: RoadmapCardProps) {
             color="danger"
             size="sm"
             variant="light"
-            onPress={handleDelete}
-          >
+            onPress={handleDelete}>
             <Trash2 />
           </Button>
         </div>

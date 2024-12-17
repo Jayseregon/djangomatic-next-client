@@ -269,7 +269,7 @@ export const BlobStorage = (): JSX.Element => {
             disabled={isUploading}
             isDisabled={isUploading}
             radius="full"
-            onClick={handleUpload}
+            onPress={handleUpload}
           >
             {isUploading ? (
               <Spinner aria-label="upload-spinner" color="white" size="sm" />
@@ -368,7 +368,7 @@ export const BlobStorage = (): JSX.Element => {
                       color="danger"
                       size="sm"
                       variant="bordered"
-                      onClick={() => handleDelete(item.name)}
+                      onPress={() => handleDelete(item.name)}
                     >
                       <TrashIcon size={13} />
                     </Button>

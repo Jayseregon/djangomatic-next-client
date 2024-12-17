@@ -138,7 +138,7 @@ export const TowerReportsDashboard = ({
           className="bg-primary text-white h-10"
           radius="full"
           variant="solid"
-          onClick={handleCreate}
+          onPress={handleCreate}
         >
           Create New Report
         </Button>
@@ -239,7 +239,7 @@ export const TowerReportsDashboard = ({
                       color="success"
                       size="sm"
                       variant="bordered"
-                      onClick={() => handleEdit(report.id)}
+                      onPress={() => handleEdit(report.id)}
                     >
                       <Pencil />
                     </Button>
@@ -249,7 +249,7 @@ export const TowerReportsDashboard = ({
                       size="sm"
                       type="button"
                       variant="bordered"
-                      onClick={() => handleGeneratePDF(report.id)}
+                      onPress={() => handleGeneratePDF(report.id)}
                     >
                       <FileText />
                     </Button>
@@ -259,7 +259,7 @@ export const TowerReportsDashboard = ({
                         color="danger"
                         size="sm"
                         variant="bordered"
-                        onClick={() => handleDelete(report.id)}
+                        onPress={() => handleDelete(report.id)}
                       >
                         <Trash2 />
                       </Button>

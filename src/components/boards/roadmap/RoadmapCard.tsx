@@ -1,88 +1,138 @@
+"use client";
+
 import React, { useCallback } from "react";
 import {
   Card,
   CardHeader,
   CardBody,
+  CardFooter,
   Input,
   Textarea,
   Select,
   SelectItem,
+  Button,
 } from "@nextui-org/react";
+import { Trash2 } from "lucide-react";
+import { useDebouncedCallback } from "use-debounce";
 
-import { CardType } from "@/interfaces/roadmap";
+import { RoadmapCardProps } from "@/interfaces/roadmap";
 import { cn } from "@/src/lib/utils";
 
 // Define the custom Badge component
 const Badge: React.FC<{ color: string }> = ({ color }) => (
-  <span
-    aria-label={`${color} badge`}
-    className={`inline-block rounded-full bg-${color}-400 w-4 h-4`}
-  />
+  <div className="flex flex-row gap-1">
+    <span
+      aria-label={`${color} badge`}
+      className={`inline-block rounded-full bg-${color}-400 w-4 h-4`}
+    />
+    <span className={`text-${color}-400`}>{color}</span>
+  </div>
 );
 
-function RoadmapCard({
-  card,
-  setCards,
-}: {
-  card: CardType;
-  setCards: React.Dispatch<React.SetStateAction<CardType[]>>;
-}) {
+function RoadmapCard({ card, setCards, categories }: RoadmapCardProps) {
+  const debouncedUpdate = useDebouncedCallback((field, value) => {
+    fetch("/api/roadmap-cards/update", {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id: card.id, [field]: value }),
+    });
+  }, 500);
+
   const handleTitleChange = useCallback(
     (newTitle: string) => {
-      setCards((items: any[]) =>
-        items.map((item) =>
-          item.id === card.id ? { ...item, title: newTitle } : item,
-        ),
+      const updatedCard = { ...card, title: newTitle };
+
+      setCards((items) =>
+        items.map((item) => (item.id === card.id ? updatedCard : item)),
       );
+      debouncedUpdate("title", newTitle);
     },
-    [card.id, setCards],
+    [card, setCards, debouncedUpdate],
+  );
+
+  const handleCategoryChange = useCallback(
+    (newCategoryId: string) => {
+      const updatedCategory = categories.find(
+        (cat) => cat.id === newCategoryId,
+      );
+
+      const updatedCard = {
+        ...card,
+        roadmapCardCategoryId: newCategoryId,
+        category: updatedCategory,
+      };
+
+      setCards((items) =>
+        items.map((item) => (item.id === card.id ? updatedCard : item)),
+      );
+
+      // Send the PUT request immediately
+      fetch("/api/roadmap-cards/update", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          id: card.id,
+          roadmapCardCategoryId: newCategoryId,
+        }),
+      });
+    },
+    [card, setCards, categories],
   );
 
   const handleDescriptionChange = useCallback(
     (newDescription: string) => {
-      setCards((items: any[]) =>
-        items.map((item) =>
-          item.id === card.id ? { ...item, description: newDescription } : item,
-        ),
+      const updatedCard = { ...card, description: newDescription };
+
+      setCards((items) =>
+        items.map((item) => (item.id === card.id ? updatedCard : item)),
       );
+      debouncedUpdate("description", newDescription);
     },
-    [card.id, setCards],
+    [card, setCards, debouncedUpdate],
   );
 
   const handleColorChange = useCallback(
     (newColor: string) => {
-      setCards((items: any[]) =>
-        items.map((item) =>
-          item.id === card.id ? { ...item, color: newColor } : item,
-        ),
+      const updatedCard = { ...card, color: newColor };
+
+      setCards((items) =>
+        items.map((item) => (item.id === card.id ? updatedCard : item)),
       );
+      fetch("/api/roadmap-cards/update", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id: card.id, color: newColor }),
+      });
     },
-    [card.id, setCards],
+    [card, setCards],
   );
 
+  const handleDelete = useCallback(() => {
+    fetch("/api/roadmap-cards/delete", {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id: card.id }),
+    }).then(() => {
+      setCards((items) => items.filter((item) => item.id !== card.id));
+    });
+  }, [card.id, setCards]);
+
   const colorOptions = [
-    "slate",
     "gray",
-    "zinc",
-    "neutral",
-    "stone",
     "red",
     "orange",
-    "amber",
     "yellow",
     "lime",
     "green",
     "emerald",
     "teal",
     "cyan",
-    "sky",
     "blue",
     "indigo",
     "violet",
     "purple",
     "fuchsia",
     "pink",
-    "rose",
   ];
 
   return (
@@ -97,13 +147,12 @@ function RoadmapCard({
         card.color ? `text-${card.color}-950` : "text-foreground",
       )}
     >
-      <CardHeader className="flex flex-row items-center gap-2">
+      <CardHeader className="flex flex-col items-center gap-1">
         <Input
           isClearable
           aria-label="Title"
-          className="basis-3/4"
           classNames={{
-            input: "border-0 focus:ring-0",
+            input: "border-0 focus:ring-0 m-0 p-0",
             inputWrapper: card.color
               ? "border-background/50 hover:!border-background"
               : "border-foreground/50 hover:!border-foreground",
@@ -113,56 +162,113 @@ function RoadmapCard({
           variant="bordered"
           onValueChange={handleTitleChange}
         />
-        <Select
-          aria-label="Background Color"
-          className="basis-1/4"
-          classNames={{
-            trigger: card.color
-              ? "border-0 text-background border border-background/50"
-              : "border-0 text-foreground border border-foreground/50",
-            label: "text-center",
-            popoverContent: "bg-background",
-          }}
-          renderValue={() => <Badge color={card.color} />}
-          selectedKeys={card.color ? new Set([card.color]) : new Set()}
-          variant="bordered"
-          onSelectionChange={(keys) => {
-            const selectedKey = keys.currentKey as string;
-
-            handleColorChange(selectedKey);
-          }}
-        >
-          {colorOptions.map((color) => (
-            <SelectItem
-              key={color}
-              classNames={{
-                base: "hover:!bg-foreground/30 focus:!bg-foreground/30",
-              }}
-              textValue={color}
-              value={color}
-            >
-              <Badge color={color} />
-            </SelectItem>
-          ))}
-        </Select>
       </CardHeader>
       <CardBody>
         <Textarea
           aria-label="Description"
           classNames={{
-            input: "border-0 focus:ring-0",
+            input: "border-0 focus:ring-0 p-0 m-0",
             inputWrapper: card.color
               ? "border-background/50 hover:!border-background"
               : "border-foreground/50 hover:!border-foreground",
           }}
-          maxRows={9}
-          minRows={3}
+          minRows={2}
           placeholder="Description"
           value={card.description}
           variant="bordered"
           onValueChange={handleDescriptionChange}
         />
       </CardBody>
+      <CardFooter className="flex flex-col gap-1">
+        {categories.length > 0 && (
+          <Select
+            aria-label="Category"
+            className="p-0 m-0"
+            classNames={{
+              value: `text-${card.color}-900`,
+              trigger: card.color
+                ? "border-0 text-background border border-background/50"
+                : "border-0 text-foreground border border-foreground/50",
+              label: "text-center",
+              popoverContent: "bg-background",
+            }}
+            renderValue={() => (
+              <div className={`text-${card.color}-900`}>
+                {card.category?.name}
+              </div>
+            )}
+            selectedKeys={
+              card.category ? new Set([card.category.id]) : new Set()
+            }
+            size="sm"
+            variant="bordered"
+            onSelectionChange={(keys) => {
+              const selectedKey = Array.from(keys)[0] as string;
+
+              handleCategoryChange(selectedKey);
+            }}
+          >
+            {categories.map((category) => (
+              <SelectItem
+                key={category.id}
+                classNames={{
+                  base: "hover:!bg-foreground/30 focus:!bg-foreground/30",
+                }}
+                textValue={category.name}
+                value={category.id}
+              >
+                {category.name}
+              </SelectItem>
+            ))}
+          </Select>
+        )}
+        <div className="flex w-full items-center justify-between">
+          <Select
+            aria-label="Background Color"
+            className="basis-1/2 p-0 m-0"
+            classNames={{
+              trigger: card.color
+                ? "border-0 text-background border border-background/50"
+                : "border-0 text-foreground border border-foreground/50",
+              label: "text-center",
+              popoverContent: "bg-background",
+            }}
+            renderValue={() => (
+              <div className={`text-${card.color}-900`}>{card.color}</div>
+            )}
+            selectedKeys={card.color ? new Set([card.color]) : new Set()}
+            size="sm"
+            variant="bordered"
+            onSelectionChange={(keys) => {
+              const selectedKey = keys.currentKey as string;
+
+              handleColorChange(selectedKey);
+            }}
+          >
+            {colorOptions.map((color) => (
+              <SelectItem
+                key={color}
+                classNames={{
+                  base: "hover:!bg-foreground/30 focus:!bg-foreground/30",
+                }}
+                textValue={color}
+                value={color}
+              >
+                <Badge color={color} />
+              </SelectItem>
+            ))}
+          </Select>
+          <Button
+            isIconOnly
+            color="danger"
+            size="sm"
+            variant="light"
+            onPress={handleDelete}
+          >
+            <Trash2 />
+          </Button>
+        </div>
+      </CardFooter>
     </Card>
   );
 }

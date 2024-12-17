@@ -222,7 +222,7 @@ export const TrashButton = ({
       color="danger"
       radius="full"
       variant="light"
-      onClick={onClick}
+      onPress={onClick}
     >
       <CircleMinus />
     </Button>
@@ -243,7 +243,7 @@ export const CopyButton = ({
       color="primary"
       radius="full"
       variant="light"
-      onClick={onClick}
+      onPress={onClick}
     >
       <Copy />
     </Button>
@@ -268,7 +268,7 @@ export const AddButton = ({
       radius="lg"
       type="button"
       variant="ghost"
-      onClick={onClick}
+      onPress={onClick}
     >
       {label}
     </Button>

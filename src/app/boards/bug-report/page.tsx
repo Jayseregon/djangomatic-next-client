@@ -1,6 +1,6 @@
 import { useTranslations } from "next-intl";
 
-import { title, subtitle } from "@/components/primitives";
+import { title } from "@/components/primitives";
 import { auth } from "@/auth";
 import { UnAuthenticated } from "@/components/auth/unAuthenticated";
 import { BugsManager } from "@/src/components/boards/bugs/BugsManager";
@@ -26,7 +26,6 @@ function BoardsPageContent({ session }: { session: any }) {
     >
       <div>
         <h1 className={title()}>{t("title")}</h1>
-        <h2 className={subtitle({ class: "mt-4" })}>{t("subtitle")}</h2>
         <BugsManager sessionUsername={session.user.name} />
       </div>
     </UserAccessBoards>

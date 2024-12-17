@@ -111,3 +111,62 @@ export async function deletegRoadmapProject(id: string) {
     throw error;
   }
 }
+
+export async function updateCardPositions(
+  updates: Array<{ projectId: string; cardId: string; position: number }>,
+) {
+  try {
+    if (!updates || !Array.isArray(updates)) {
+      throw new Error("Invalid updates format");
+    }
+
+    // Validate updates array
+    const validUpdates = updates.every(
+      (update) =>
+        update.projectId &&
+        update.cardId &&
+        typeof update.position === "number",
+    );
+
+    if (!validUpdates) {
+      throw new Error("Missing required fields in updates");
+    }
+
+    // Perform all updates in a transaction
+    const result = await prisma.$transaction(async (tx) => {
+      const updatePromises = updates.map(({ projectId, cardId, position }) =>
+        tx.roadmapProjectCard.update({
+          where: {
+            projectId_cardId: { projectId, cardId },
+          },
+          data: { position },
+          include: {
+            card: {
+              include: {
+                category: true, // Include category data
+              },
+            },
+            project: true,
+          },
+        }),
+      );
+
+      const results = await Promise.all(updatePromises);
+
+      return results;
+    });
+
+    if (!result || result.length === 0) {
+      throw new Error("Failed to update positions");
+    }
+
+    revalidatePath("/");
+
+    return result;
+  } catch (error: any) {
+    console.error("Error updating card positions:", error);
+    throw error;
+  } finally {
+    await prisma.$disconnect();
+  }
+}

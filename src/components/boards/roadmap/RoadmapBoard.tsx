@@ -476,7 +476,7 @@ export default function RoadmapBoard() {
                         >
                           <RoadmapCard
                             card={card}
-                            categories={categories}
+                            providedCategories={categories}
                             setCards={setCards}
                           />
                         </SortableItem>
@@ -503,7 +503,7 @@ export default function RoadmapBoard() {
                         >
                           <RoadmapCard
                             card={card}
-                            categories={categories}
+                            providedCategories={categories}
                             setCards={setCards}
                           />
                         </SortableItem>

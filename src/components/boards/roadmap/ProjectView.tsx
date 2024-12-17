@@ -36,12 +36,12 @@ import { UnAuthenticated } from "@/components/auth/unAuthenticated";
 import {
   ProjectType,
   CardType,
-  RoadmapCardCategory,
+  RoadmapProjectCardType,
 } from "@/interfaces/roadmap";
 import { convertProjectDates } from "@/lib/utils";
 import {
   deletegRoadmapProject,
-  getRoadmapCardCategories,
+  updateCardPositions,
 } from "@/src/actions/prisma/roadmap/action";
 
 import RoadmapCard from "./RoadmapCard";
@@ -58,19 +58,19 @@ export default function ProjectView({
   const [project, setProject] = useState<ProjectType | null>(null);
   const sensors = useSensors(useSensor(MouseSensor), useSensor(TouchSensor));
   const router = useRouter();
-  const [categories, setCategories] = React.useState<RoadmapCardCategory[]>([]);
+  // const [categories, setCategories] = React.useState<RoadmapCardCategory[]>([]);
   const [memberInput, setMemberInput] = useState("");
   const [membersList, setMembersList] = useState<string[]>([]);
 
-  useEffect(() => {
-    const fetchCategories = async () => {
-      const res = await getRoadmapCardCategories();
+  // useEffect(() => {
+  //   const fetchCategories = async () => {
+  //     const res = await getRoadmapCardCategories();
 
-      setCategories(res ?? []);
-    };
+  //     setCategories(res ?? []);
+  //   };
 
-    fetchCategories();
-  }, []);
+  //   fetchCategories();
+  // }, []);
 
   // Move all hooks before any conditional returns
   const debouncedUpdate = useDebouncedCallback((field, value) => {
@@ -177,33 +177,38 @@ export default function ProjectView({
         }));
 
         try {
-          const response = await fetch(
-            "/api/roadmap-projects/update-card-positions",
-            {
-              method: "PATCH",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({ updates }),
-            },
-          );
-          const result = await response.json();
+          const result = await updateCardPositions(updates);
 
-          if (!response.ok) {
-            throw new Error("Failed to update positions");
-          }
+          console.log("Server action result:", result);
 
           // Update with server response
           if (result && Array.isArray(result)) {
-            setProject((prev) => ({
-              ...prev!,
-              projectCards: result.map((pc) => ({
-                id: pc.id,
-                projectId: pc.projectId,
-                cardId: pc.cardId,
-                position: pc.position,
-                card: pc.card,
-              })),
+            const updatedProjectCards = result.map((pc) => ({
+              id: pc.id,
+              projectId: pc.projectId,
+              cardId: pc.cardId,
+              position: pc.position,
+              card: {
+                ...pc.card,
+                category: pc.card.category || undefined, // Convert null to undefined
+                projectCards: [], // Add empty array to satisfy type
+              },
             }));
+
+            console.log("Updated project cards:", updatedProjectCards);
+
+            setProject((prev) => {
+              console.log("Previous project:", prev);
+              if (!prev) return null;
+              console.log("Updating project cards...");
+
+              return {
+                ...prev,
+                projectCards: updatedProjectCards as RoadmapProjectCardType[],
+              };
+            });
           }
+          console.log("Updated project:", project);
         } catch (error) {
           console.error("Failed to update card positions:", error);
           // Revert optimistic update
@@ -402,6 +407,7 @@ export default function ProjectView({
                 input: "border-0 focus:ring-0",
                 inputWrapper: "border-foreground/50 hover:!border-foreground",
               }}
+              disableAutosize={false}
               label={t("projectCardPlaceholders.pComments")}
               labelPlacement="outside"
               minRows={5}
@@ -434,7 +440,7 @@ export default function ProjectView({
                 >
                   <RoadmapCard
                     card={projectCard.card!}
-                    categories={categories}
+                    // providedCategories={categories}
                     setCards={(cards) => {
                       if (typeof cards === "function") {
                         const updatedCard = cards([projectCard.card!])[0];

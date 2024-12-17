@@ -65,6 +65,7 @@
       "projectCardPlaceholders": {
         "pName": "Project Name",
         "pMembers": "Project Members",
+        "pAddMember": "Add a project member...",
         "pDueDate": "Due Date",
         "pStartedDate": "Started At",
         "pCompletedDate": "Completed At",

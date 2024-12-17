@@ -11,6 +11,7 @@ import {
   Card,
   CardBody,
   CardHeader,
+  Chip,
 } from "@nextui-org/react";
 import {
   DndContext,
@@ -58,6 +59,8 @@ export default function ProjectView({
   const sensors = useSensors(useSensor(MouseSensor), useSensor(TouchSensor));
   const router = useRouter();
   const [categories, setCategories] = React.useState<RoadmapCardCategory[]>([]);
+  const [memberInput, setMemberInput] = useState("");
+  const [membersList, setMembersList] = useState<string[]>([]);
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -109,6 +112,32 @@ export default function ProjectView({
       fetchProject();
     }
   }, [projectId]);
+
+  useEffect(() => {
+    if (project?.members) {
+      setMembersList(project.members.split(",").map((name) => name.trim()));
+    }
+  }, [project]);
+
+  const handleAddMember = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter" || e.key === ",") {
+      e.preventDefault();
+      if (memberInput.trim() !== "") {
+        const newMembersList = [...membersList, memberInput.trim()];
+
+        setMembersList(newMembersList);
+        setMemberInput("");
+        handleFieldChange("members", newMembersList.join(", "));
+      }
+    }
+  };
+
+  const handleRemoveMember = (index: number) => {
+    const newMembersList = membersList.filter((_, i) => i !== index);
+
+    setMembersList(newMembersList);
+    handleFieldChange("members", newMembersList.join(", "));
+  };
 
   // Conditional returns after hooks
   if (!session) return <UnAuthenticated />;
@@ -252,18 +281,41 @@ export default function ProjectView({
           </CardHeader>
           <CardBody className="flex flex-col text-start gap-10">
             {/* Members Input */}
-            <Input
-              aria-label="Members"
-              classNames={{
-                input: "border-0 focus:ring-0",
-                inputWrapper: "border-foreground/50 hover:!border-foreground",
-              }}
-              label={t("projectCardPlaceholders.pMembers")}
-              labelPlacement="outside"
-              value={project.members || ""}
-              variant="bordered"
-              onChange={(e) => handleFieldChange("members", e.target.value)}
-            />
+            <div className="flex flex-col gap-2">
+              <span className="text-sm">
+                {t("projectCardPlaceholders.pMembers")}
+              </span>
+              <div className="grid grid-cols-3 gap-5">
+                <Input
+                  aria-label="Members"
+                  className="col-span-1"
+                  classNames={{
+                    input: "border-0 focus:ring-0",
+                    inputWrapper:
+                      "border-foreground/50 hover:!border-foreground",
+                  }}
+                  placeholder={t("projectCardPlaceholders.pAddMember")}
+                  // label={t("projectCardPlaceholders.pMembers")}
+                  // labelPlacement="outside"
+                  value={memberInput}
+                  variant="bordered"
+                  onChange={(e) => setMemberInput(e.target.value)}
+                  onKeyDown={handleAddMember}
+                />
+                <div className="flex flex-row gap-2 col-span-2 my-auto">
+                  {membersList.map((member, index) => (
+                    <Chip
+                      key={index}
+                      color="primary"
+                      variant="flat"
+                      onClose={() => handleRemoveMember(index)}
+                    >
+                      {member}
+                    </Chip>
+                  ))}
+                </div>
+              </div>
+            </div>
 
             {/* Date Inputs */}
             <div className="flex flex-row gap-5">

@@ -111,3 +111,50 @@ export async function deletegRoadmapProject(id: string) {
     throw error;
   }
 }
+
+export async function updateCardPositions(
+  updates: Array<{ projectId: string; cardId: string; position: number }>,
+) {
+  try {
+    // Get the projectId from first update (they should all be for same project)
+    const projectId = updates[0]?.projectId;
+
+    if (!projectId) throw new Error("No project ID provided");
+
+    const result = await prisma.$transaction(async (tx) => {
+      // First, get all existing cards for this project to verify the update
+      const existingCards = await tx.roadmapProjectCard.findMany({
+        where: { projectId },
+        orderBy: { position: "asc" },
+      });
+
+      if (existingCards.length !== updates.length) {
+        throw new Error("Update array length mismatch with existing cards");
+      }
+
+      // Perform the updates
+      const updatePromises = updates.map(({ projectId, cardId, position }) =>
+        tx.roadmapProjectCard.update({
+          where: { projectId_cardId: { projectId, cardId } },
+          data: { position },
+          include: {
+            card: {
+              include: { category: true },
+            },
+          },
+        }),
+      );
+
+      return await Promise.all(updatePromises);
+    });
+
+    // Revalidate both the project view and the main roadmap view
+    revalidatePath("/boards/roadmap");
+    revalidatePath(`/boards/roadmap/projects/${updates[0].projectId}`);
+
+    return result;
+  } catch (error) {
+    console.error("Error updating card positions:", error);
+    throw error;
+  }
+}

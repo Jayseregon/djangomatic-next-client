@@ -37,6 +37,7 @@ import {
   CardType,
   ProjectType,
   RoadmapCardCategory,
+  RoadmapProjectCardType,
 } from "@/interfaces/roadmap";
 import { NonceContext } from "@/src/app/providers";
 
@@ -198,6 +199,11 @@ export default function RoadmapBoard() {
       const projectId = overId;
       const cardId = activeId;
 
+      // Find the card first and check if it exists
+      const cardToAdd = cards.find((card) => card.id === cardId);
+
+      if (!cardToAdd) return; // Exit if card not found
+
       // Optimistic update: Add card to project in local state
       setProjects((prevProjects) =>
         prevProjects.map((project) => {
@@ -207,18 +213,17 @@ export default function RoadmapBoard() {
             );
 
             if (!exists) {
+              const newProjectCard: RoadmapProjectCardType = {
+                id: `temp_${Date.now()}`, // Temporary ID until server responds
+                projectId,
+                cardId,
+                position: project.projectCards.length,
+                card: cardToAdd, // We know cardToAdd exists here
+              };
+
               return {
                 ...project,
-                projectCards: [
-                  ...project.projectCards,
-                  {
-                    id: "",
-                    projectId,
-                    cardId,
-                    position: project.projectCards.length,
-                    card: cards.find((card) => card.id === cardId),
-                  },
-                ],
+                projectCards: [...project.projectCards, newProjectCard],
               };
             }
           }

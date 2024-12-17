@@ -33,11 +33,7 @@ import { DoorOpen, Trash } from "lucide-react";
 
 import UserAccessBoards from "@/src/components/boards/UserAccess";
 import { UnAuthenticated } from "@/components/auth/unAuthenticated";
-import {
-  ProjectType,
-  CardType,
-  RoadmapProjectCardType,
-} from "@/interfaces/roadmap";
+import { ProjectType, CardType } from "@/interfaces/roadmap";
 import { convertProjectDates } from "@/lib/utils";
 import {
   deletegRoadmapProject,
@@ -146,72 +142,70 @@ export default function ProjectView({
   const handleDragEnd = async (event: DragEndEvent) => {
     const { active, over } = event;
 
-    if (over && active.id !== over.id && project) {
-      const oldIndex = project.projectCards.findIndex(
-        (pc) => pc.id === active.id,
+    if (!over || !project || active.id === over.id) return;
+
+    const oldIndex = project.projectCards.findIndex(
+      (pc) => pc.id === active.id,
+    );
+    const newIndex = project.projectCards.findIndex((pc) => pc.id === over.id);
+
+    if (oldIndex === -1 || newIndex === -1) return;
+
+    try {
+      const newProjectCards = arrayMove(
+        project.projectCards,
+        oldIndex,
+        newIndex,
       );
-      const newIndex = project.projectCards.findIndex(
-        (pc) => pc.id === over.id,
+
+      // Prepare updates with explicit positions
+      const updates = newProjectCards.map((pc, index) => ({
+        projectId: project.id,
+        cardId: pc.card!.id,
+        position: index,
+      }));
+
+      // Optimistic update
+      setProject((prevProject) => {
+        if (!prevProject) return null;
+
+        return {
+          ...prevProject,
+          projectCards: newProjectCards.map((pc, index) => ({
+            ...pc,
+            position: index,
+          })),
+        };
+      });
+
+      // Call server action
+      const result = await updateCardPositions(updates);
+
+      console.log("Update result:", result);
+
+      // Refresh the project data after server update
+      const response = await fetch(
+        `/api/roadmap-projects/find?id=${projectId}`,
       );
 
-      if (oldIndex !== -1 && newIndex !== -1) {
-        const newProjectCards = arrayMove(
-          project.projectCards,
-          oldIndex,
-          newIndex,
-        );
+      if (!response.ok) throw new Error("Failed to refresh project data");
 
-        const updates = newProjectCards.map((pc, index) => ({
-          projectId: project.id,
-          cardId: pc.card!.id,
-          position: index,
-        }));
+      const refreshedData = await response.json();
 
-        try {
-          // Optimistic update
-          setProject((prev) => {
-            if (!prev) return null;
+      console.log("Refreshed data:", refreshedData);
 
-            return {
-              ...prev,
-              projectCards: newProjectCards.map((pc, index) => ({
-                ...pc,
-                position: index,
-              })),
-            };
-          });
+      setProject(convertProjectDates(refreshedData));
+    } catch (error) {
+      console.error("Failed to update card positions:", error);
+      // Fetch fresh data on error
+      const response = await fetch(
+        `/api/roadmap-projects/find?id=${projectId}`,
+      );
 
-          // Call server action
-          const result = await updateCardPositions(updates);
+      if (response.ok) {
+        const freshData = await response.json();
 
-          if (!result || !Array.isArray(result)) {
-            throw new Error("Invalid server response");
-          }
-
-          // Update with server response
-          setProject((prev) => {
-            if (!prev) return null;
-            const updatedProjectCards: RoadmapProjectCardType[] = result.map(
-              (pc) => ({
-                id: pc.id,
-                projectId: pc.projectId,
-                cardId: pc.cardId,
-                position: pc.position,
-                card: pc.card || undefined,
-                project: prev, // Use the current project without projectCards
-              }),
-            );
-
-            return {
-              ...prev,
-              projectCards: updatedProjectCards,
-            };
-          });
-        } catch (error) {
-          console.error("Failed to update card positions:", error);
-          // Revert optimistic update
-          setProject(project);
-        }
+        setProject(convertProjectDates(freshData));
       }
     }
   };

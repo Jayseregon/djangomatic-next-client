@@ -133,9 +133,9 @@ export async function updateCardPositions(
     }
 
     // Perform all updates in a transaction
-    const result = await prisma.$transaction(async (tx) => {
-      const updatePromises = updates.map(({ projectId, cardId, position }) =>
-        tx.roadmapProjectCard.update({
+    const result = await prisma.$transaction(
+      updates.map(({ projectId, cardId, position }) =>
+        prisma.roadmapProjectCard.update({
           where: {
             projectId_cardId: { projectId, cardId },
           },
@@ -143,30 +143,24 @@ export async function updateCardPositions(
           include: {
             card: {
               include: {
-                category: true, // Include category data
+                category: true,
               },
             },
             project: true,
           },
         }),
-      );
-
-      const results = await Promise.all(updatePromises);
-
-      return results;
-    });
+      ),
+    );
 
     if (!result || result.length === 0) {
       throw new Error("Failed to update positions");
     }
 
-    revalidatePath("/");
+    revalidatePath("/"); // Add path specific to your roadmap route
 
     return result;
   } catch (error: any) {
     console.error("Error updating card positions:", error);
     throw error;
-  } finally {
-    await prisma.$disconnect();
   }
 }

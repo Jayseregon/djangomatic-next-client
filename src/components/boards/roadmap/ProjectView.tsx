@@ -161,9 +161,11 @@ export default function ProjectView({
       // Prepare updates with explicit positions
       const updates = newProjectCards.map((pc, index) => ({
         projectId: project.id,
-        cardId: pc.card!.id,
+        cardId: pc.card.id,
         position: index,
       }));
+
+      console.log("Updates to perform:", updates);
 
       // Optimistic update
       setProject((prevProject) => {
@@ -178,35 +180,18 @@ export default function ProjectView({
         };
       });
 
-      // Call server action
+      // Call server action and update with returned data
       const result = await updateCardPositions(updates);
 
-      console.log("Update result:", result);
+      console.log("Result from server:", result);
 
-      // Refresh the project data after server update
-      const response = await fetch(
-        `/api/roadmap-projects/find?id=${projectId}`,
-      );
-
-      if (!response.ok) throw new Error("Failed to refresh project data");
-
-      const refreshedData = await response.json();
-
-      console.log("Refreshed data:", refreshedData);
-
-      setProject(convertProjectDates(refreshedData));
+      if (result) {
+        setProject(convertProjectDates(result));
+      }
     } catch (error) {
       console.error("Failed to update card positions:", error);
-      // Fetch fresh data on error
-      const response = await fetch(
-        `/api/roadmap-projects/find?id=${projectId}`,
-      );
-
-      if (response.ok) {
-        const freshData = await response.json();
-
-        setProject(convertProjectDates(freshData));
-      }
+      // Revert to original project state on error
+      setProject(project);
     }
   };
 

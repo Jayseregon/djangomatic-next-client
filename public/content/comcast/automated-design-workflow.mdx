@@ -20,13 +20,18 @@ slug: automated-design-workflow
   - [Step 3: Open the Script Editor](#step-3-open-the-script-editor)
   - [Step 4: Load the Script](#step-4-load-the-script)
   - [Step 5: Run the Script](#step-5-run-the-script)
-  - [Step 6: Select the ‘Connections’ Shapefile](#step-6-select-the-connections-shapefile)
-  - [Step 7: Select the ‘Nodes’ Shapefile](#step-7-select-the-nodes-shapefile)
+  - [Step 6: Select the &apos;Connections&apos; Shapefile](#step-6-select-the-connections-shapefile)
+  - [Step 7: Select the &apos;Nodes&apos; Shapefile](#step-7-select-the-nodes-shapefile)
   - [Step 8: Script Execution](#step-8-script-execution)
   - [Step 9: Verify the Output](#step-9-verify-the-output)
 - [Opening Sttar and Preparing for Data Input](#opening-sttar-and-preparing-for-data-input)
   - [Step 1: Open Sttar Software](#step-1-open-sttar-software)
   - [Step 2: Import Configuration or Project File](#step-2-import-configuration-or-project-file)
+  - [Step 3: Adding Feed Data](#step-3-adding-feed-data)
+  - [Step 4: Adding Strands Data](#step-4-adding-strands-data)
+  - [Step 5: Adding Underground Data](#step-5-adding-underground-data)
+- [Configuring the Architecture Tab](#configuring-the-architecture-tab)
+- [Overview of Sttar Tools and Layers](#overview-of-sttar-tools-and-layers)
 
 ---
 
@@ -106,7 +111,7 @@ This guide provides step-by-step instructions for processing a Geopackage using 
 
 ---
 
-### Step 6: Select the ‘Connections’ Shapefile
+### Step 6: Select the &apos;Connections&apos; Shapefile
 
 1. A file dialog will prompt you to select the `Connections` shapefile:
    - Navigate to the folder containing your shapefiles.
@@ -117,7 +122,7 @@ This guide provides step-by-step instructions for processing a Geopackage using 
 
 ---
 
-### Step 7: Select the ‘Nodes’ Shapefile
+### Step 7: Select the &apos;Nodes&apos; Shapefile
 
 1. A file dialog will prompt you to select the `Nodes` shapefile:
    - Navigate to the folder containing your shapefiles.
@@ -156,37 +161,84 @@ This guide provides step-by-step instructions for processing a Geopackage using 
 
 ---
 
-## Opening Sttar and Preparing for Data Input
+## Overview of Sttar Tools and Layers
+
+Sttar provides a comprehensive suite of tools and features to help you interact with and modify your network map effectively. Below is an overview of the main tools and layers available in Sttar.
+
+### Tools Overview
+
+The tools in Sttar are designed to make it easy to manipulate elements on the map and compute network designs efficiently. Here&apos;s a summary of the main tools:
+
+- **Map Access**:  
+  Access the map interface via **`Project > Map`** to view and edit your network design.
+
+  ![Open Sttar Map](path/to/screenshot15.png)  
+  *The map interface in Sttar provides a visual representation of your network design.*
+
+- **Select/Unselect Tools**:  
+  These tools let you select or deselect elements on the map for editing.
+
+- **Create/Modify Tools**:  
+  Use these tools to add or adjust features on the map, such as creating new OLTs, modifying splitters, or adjusting connections.
+
+- **Assign to Parent Node Tool**:  
+  This tool allows you to link a point feature (e.g., an address or HP) to a parent node (e.g., a splitter or OLT) within the network hierarchy.
+
+- **Delete Tool**:  
+  Removes selected elements from the map. Use this in conjunction with the selection tool.
+
+- **Pan Mode**:  
+  Navigate across the map smoothly by enabling this mode.
+
+- **Compute Automated Design**:  
+  This feature recalculates the network design based on recent changes and generates updated results.
+
+  ![Sttar Tools Overview](path/to/screenshot16.png)  
+  *An overview of tools available in Sttar for managing your network design.*
 
 ---
 
-### Step 1: Open Sttar Software
+### Layers Overview
 
-1. Launch the Sttar software. Choose between:
-   - **Sttar Advanced Designer**: For extended capabilities, including modifying design rules or configurations.
-   - **Sttar Planner**: Recommended for executing designs without advanced configuration adjustments.
-2. **Note**: This guide focuses on **Sttar Advanced Designer** due to its extended features.
+Sttar organizes network components into layers, each representing a distinct aspect of your design. These layers make it easy to manage and analyze the network structure. Key layers include:
 
-![Open Sttar Software](path/to/screenshot1.png)  
-*Example of the Sttar software main interface upon launching.*
+- **Network Nodes**:  
+  Represent critical equipment in your network, such as OLTs and splitters.
+
+- **Network Endpoints**:  
+  Represent addresses (HPs) that are endpoints in your network.
+
+- **Service Areas**:  
+  Polygons that define the boundaries of service areas for each design architecture level:
+  - **Level 1**: OLT
+  - **Level 2**: Primary splitters
+  - **Level 5**: Secondary splitters
+  - **Level 6**: Tertiary splitters
+
+  ![Sttar Layers](path/to/screenshot17.png)  
+  *Visualization of network layers in Sttar.*
 
 ---
 
-### Step 2: Import Configuration or Project File
+### Customizing Layer Symbology
 
-1. Open the configuration file (`` `.sdconfig` ``) corresponding to your design area.
-2. Save it as a project file (`` `.sdproj` ``) to prevent modifications to the original configuration.
+To better visualize the network components, you can customize the symbology of layers.  
+- Right-click on a layer and select **`Symbology`** to adjust the colors, symbols, or styles representing network elements.
 
-> **Tip**: Always save your project immediately to preserve the original configuration.
+  ![Modify Symbology](path/to/screenshot18.png)  
+  *Steps to modify layer symbology for enhanced clarity.*
 
-![Import Configuration File](path/to/screenshot2.png)  
-*Steps to open and save the configuration file for use in Sttar.*
+---
+
+### Summary
+
+The tools and layers in Sttar provide a robust framework for network design and analysis. From editing individual features to recalculating network designs, these features ensure that your workflow is both efficient and accurate.
 
 ---
 
 ## Final Notes
 
-*This guide is designed to help professionals streamline their design workflows through precise instructions and automated tools. If you need further assistance, feel free to contact the **Continuous Improvement and Automation team.*
+*This guide is designed to help professionals streamline their design workflows through precise instructions and automated tools. If you need further assistance, feel free to contact the **Continuous Improvement and Automation team**.*
 
 ---
 </div>

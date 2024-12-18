@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, type JSX } from "react";
 import { Input } from "@nextui-org/react";
 
 import { SearchIcon } from "@/components/icons";

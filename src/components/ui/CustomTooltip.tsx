@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, type JSX } from "react";
 
 interface CustomTooltipProps {
   content: string | number | undefined;

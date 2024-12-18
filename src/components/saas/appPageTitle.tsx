@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, type JSX } from "react";
 import { usePathname } from "next/navigation";
 
 import { title } from "@/components/primitives";

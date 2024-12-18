@@ -1,3 +1,4 @@
+import type { JSX } from "react";
 /**
  * VerticalText component renders a given text vertically.
  * Each character of the text is displayed in a separate line.

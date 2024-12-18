@@ -1,3 +1,5 @@
+import type { JSX } from "react";
+
 import { auth } from "@/auth";
 import { UnAuthenticated } from "@/components/auth/unAuthenticated";
 import { DashboardManager } from "@/src/components/reports/DashboardManager";

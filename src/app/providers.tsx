@@ -5,7 +5,7 @@ import { NextUIProvider } from "@nextui-org/system";
 import { useRouter } from "next/navigation";
 import { ThemeProvider as NextThemesProvider } from "next-themes";
 import { ThemeProviderProps } from "next-themes";
-import { createContext } from "react";
+import { createContext, type JSX } from "react";
 import { SessionProvider } from "next-auth/react";
 
 // Create the NonceContext

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, type JSX } from "react";
 import { SortDescriptor } from "@react-types/shared";
 import { useAsyncList } from "@react-stately/data";
 import {

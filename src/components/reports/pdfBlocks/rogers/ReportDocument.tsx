@@ -10,10 +10,10 @@ import TableOfContentsPage from "./TableOfContentsPage";
 import ScopeOfWorkPage from "./ScopeOfWorkPage";
 import AntennaInventoryPage from "./AntennaInventoryPage";
 import DeficienciesPage from "./DeficienciesPage";
-import SitePhotosPage from "./SitePhotosPage";
 import AppendixA from "./AppendixA";
 import AppendixB from "./AppendixB";
 import AppendixC from "./AppendixC";
+import SitePhotosPage from "./SitePhotosPage";
 
 const ReportDocument = ({
   report,
@@ -47,11 +47,12 @@ const ReportDocument = ({
       tocSections,
       willCaptureToc,
     }),
-    ...SitePhotosPage({
-      report,
-      tocSections,
-      willCaptureToc,
-    }),
+    <SitePhotosPage
+      key="site-photos"
+      report={report}
+      tocSections={tocSections}
+      willCaptureToc={willCaptureToc}
+    />,
     ...AppendixA({
       tocSections,
       willCaptureToc,

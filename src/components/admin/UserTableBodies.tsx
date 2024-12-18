@@ -1,3 +1,5 @@
+import type { JSX } from "react";
+
 import { TableRow, TableCell } from "@nextui-org/react";
 
 import { UserSchema } from "@/interfaces/lib";

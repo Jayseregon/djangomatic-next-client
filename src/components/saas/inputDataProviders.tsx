@@ -7,6 +7,7 @@ import React, {
   useEffect,
   ReactNode,
   useRef,
+  type JSX,
 } from "react";
 
 import { stripHtmlTags, maskPassword } from "@/src/lib/utils";

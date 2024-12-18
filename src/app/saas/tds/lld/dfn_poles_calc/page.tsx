@@ -1,3 +1,5 @@
+import type { JSX } from "react";
+
 import { UnAuthenticated } from "@/components/auth/unAuthenticated";
 import { auth } from "@/auth";
 import {

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, type JSX } from "react";
 import { Tabs, Tab } from "@nextui-org/react";
 
 import { fetchUser } from "@/lib/getUserPermission";

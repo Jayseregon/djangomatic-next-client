@@ -1,7 +1,7 @@
 "use client";
 
 import { Button, Spinner } from "@nextui-org/react";
-import React, { useEffect } from "react";
+import React, { useEffect, type JSX } from "react";
 import { useTranslations } from "next-intl";
 
 import { startTask, checkTaskStatus } from "@/lib/dbRequests";

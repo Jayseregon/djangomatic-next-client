@@ -1,3 +1,5 @@
+import type { JSX } from "react";
+
 import { redirect } from "next/navigation";
 // import { headers } from "next/headers";
 // import { Button } from "@nextui-org/react";

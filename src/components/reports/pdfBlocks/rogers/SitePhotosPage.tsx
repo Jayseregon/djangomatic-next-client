@@ -17,7 +17,7 @@ const SitePhotosPage = ({
   report: TowerReport;
   tocSections: TOCSections[];
   willCaptureToc: boolean;
-}) => {
+}): React.ReactElement[] => {
   const [imageDataUrls, setImageDataUrls] = useState<{ [key: string]: string }>(
     {},
   );
@@ -32,15 +32,25 @@ const SitePhotosPage = ({
     loadImages();
   }, [report.site_images]);
 
-  const pages = [];
-  // Sort the site_images by imgIndex
   const sortedSiteImages = [...report.site_images].sort(
     (a, b) => a.imgIndex - b.imgIndex,
   );
 
-  // Introduction Page
-  pages.push(
-    <View key="site-photos-intro" wrap={false}>
+  const siteImagePairs = sortedSiteImages.reduce(
+    (pairs: any[][], image, index) => {
+      if (index % 2 === 0) {
+        pairs.push([image]);
+      } else {
+        pairs[pairs.length - 1].push(image);
+      }
+
+      return pairs;
+    },
+    [],
+  );
+
+  const introPage = (
+    <View key="site-photos-intro" break wrap={false}>
       <View style={StylesPDF.sectionTitleContainer}>
         <TOCSectionPDF
           id="site-photos"
@@ -51,45 +61,34 @@ const SitePhotosPage = ({
           Site Photos
         </TOCSectionPDF>
       </View>
-      {/* Footer can be added here if needed */}
-    </View>,
+    </View>
   );
 
-  // Group images into pairs
-  const siteImagePairs = [];
+  const photoPages = siteImagePairs.map((pair, index) => (
+    <View
+      key={`site-photo-pair-${index}`}
+      break
+      style={StylesPDF.imageColumn}
+      wrap={false}
+    >
+      {pair.map((image, idx) => (
+        <View key={`${index}-${idx}`} style={StylesPDF.imageContainer}>
+          <PdfImg
+            src={
+              imageDataUrls[image.url] ||
+              `/api/proxy-image?url=${encodeURIComponent(image.url)}`
+            }
+            style={StylesPDF.image}
+          />
+          <Text style={StylesPDF.label}>
+            {image.imgIndex + 1 + ". " + image.label}
+          </Text>
+        </View>
+      ))}
+    </View>
+  ));
 
-  for (let i = 0; i < sortedSiteImages.length; i += 2) {
-    siteImagePairs.push(sortedSiteImages.slice(i, i + 2));
-  }
-
-  // Create pages for each pair
-  siteImagePairs.forEach((pair, index) => {
-    pages.push(
-      <View
-        key={`site-photo-pair-${index}`}
-        style={StylesPDF.imageColumn}
-        wrap={false}
-      >
-        {pair.map((image, idx) => (
-          <View key={idx} style={StylesPDF.imageContainer}>
-            <PdfImg
-              src={
-                imageDataUrls[image.url] ||
-                `/api/proxy-image?url=${encodeURIComponent(image.url)}`
-              }
-              style={StylesPDF.image}
-            />
-            <Text style={StylesPDF.label}>
-              {image.imgIndex + 1 + ". " + image.label}
-            </Text>
-          </View>
-        ))}
-        {/* Footer can be added here if needed */}
-      </View>,
-    );
-  });
-
-  return pages;
+  return [introPage, ...photoPages];
 };
 
 export default SitePhotosPage;

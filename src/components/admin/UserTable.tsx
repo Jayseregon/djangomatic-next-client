@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, type JSX } from "react";
 import { Table, TableBody, RadioGroup, Radio } from "@nextui-org/react";
 
 import { UserSchema } from "@/interfaces/lib";

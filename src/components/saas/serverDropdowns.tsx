@@ -8,7 +8,7 @@ import {
   Button,
 } from "@nextui-org/react";
 import { useTranslations } from "next-intl";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, type JSX } from "react";
 
 import { availableDatabases } from "@/src/config/saasDatabases";
 import { cn } from "@/lib/utils";

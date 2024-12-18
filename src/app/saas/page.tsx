@@ -1,3 +1,5 @@
+import type { JSX } from "react";
+
 import { useTranslations } from "next-intl";
 
 import { title } from "@/components/primitives";

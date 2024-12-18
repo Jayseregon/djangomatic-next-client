@@ -15,7 +15,7 @@ import {
   Avatar,
   Link,
 } from "@nextui-org/react";
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useState, useMemo, type JSX } from "react";
 import { useTranslations } from "next-intl";
 import { usePathname } from "next/navigation";
 
@@ -108,7 +108,6 @@ export const Navbar = ({ nonce, session }: NavbarProps): JSX.Element | null => {
           </Link>
         </NavbarBrand>
       </NavbarContent>
-
       {/* navbar menu  */}
       <NavbarContent justify="center" nonce={nonce}>
         {/* toggle menu */}
@@ -138,7 +137,6 @@ export const Navbar = ({ nonce, session }: NavbarProps): JSX.Element | null => {
           ))}
         </ul>
       </NavbarContent>
-
       {/* avatar menu with theme switch and search */}
       <NavbarContent justify="end" nonce={nonce}>
         {/* <NavbarItem
@@ -216,7 +214,6 @@ export const Navbar = ({ nonce, session }: NavbarProps): JSX.Element | null => {
           </DropdownMenu>
         </Dropdown>
       </NavbarContent>
-
       {/* menu definition when toggled */}
       <NavbarMenu nonce={nonce}>
         {/* <SearchInput alwaysExpanded={true} /> */}

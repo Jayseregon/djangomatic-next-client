@@ -25,8 +25,10 @@ const TOCSectionPDF = ({
         render={({ pageNumber }) => {
           const title =
             React.isValidElement(children) &&
-            typeof children.props.children === "string"
-              ? children.props.children
+            "props" in children &&
+            typeof (children as { props: { children: unknown } }).props
+              .children === "string"
+              ? (children as { props: { children: string } }).props.children
               : String(children);
 
           // Remove any existing entry with the same title

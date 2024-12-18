@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, type JSX } from "react";
 
 /**
  * Error component renders an error message and a button to reset the error state.

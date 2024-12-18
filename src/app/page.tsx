@@ -3,7 +3,7 @@ import { useTranslations } from "next-intl";
 import { setRequestLocale } from "next-intl/server";
 import Link from "next/link";
 import { Bug, SquareArrowOutUpRight } from "lucide-react";
-import { Suspense } from "react";
+import { Suspense, type JSX } from "react";
 
 import { title, subtitle } from "@/components/primitives";
 import { UnAuthenticated } from "@/components/auth/unAuthenticated";

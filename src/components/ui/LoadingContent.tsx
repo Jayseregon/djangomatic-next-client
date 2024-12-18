@@ -1,3 +1,5 @@
+import type { JSX } from "react";
+
 import { Spinner } from "@nextui-org/react";
 
 export const LoadingContent = (): JSX.Element => {

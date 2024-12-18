@@ -2,7 +2,7 @@
 
 import { useLocale, useTranslations } from "next-intl";
 import { Button } from "@nextui-org/react";
-import { useTransition } from "react";
+import { useTransition, type JSX } from "react";
 
 import { locales } from "@/config";
 import { setUserLocale } from "@/lib/locale";

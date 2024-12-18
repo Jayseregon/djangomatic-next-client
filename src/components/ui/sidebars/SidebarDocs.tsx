@@ -1,7 +1,7 @@
 "use client";
 
 import { Link } from "@nextui-org/react";
-import React, { useContext } from "react";
+import React, { useContext, type JSX } from "react";
 import { useTranslations } from "next-intl";
 import { usePathname } from "next/navigation";
 import { Accordion, AccordionItem } from "@nextui-org/react";

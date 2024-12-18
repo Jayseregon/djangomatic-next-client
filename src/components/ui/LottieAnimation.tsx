@@ -1,6 +1,6 @@
 "use client";
 
-import { useContext, useState, useEffect } from "react";
+import { useContext, useState, useEffect, type JSX } from "react";
 import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 
 import { NonceContext } from "@/src/app/providers";

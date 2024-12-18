@@ -227,7 +227,7 @@ export const TaskModal: React.FC<TaskModalProps> = ({
               aria-label="Delete Task"
               color="danger"
               variant="light"
-              onClick={handleDelete}
+              onPress={handleDelete}
             >
               <Trash2 />
             </Button>
@@ -478,7 +478,7 @@ export const TaskModal: React.FC<TaskModalProps> = ({
               aria-label="Save Task"
               color="success"
               isDisabled={!task.task || !task.owner}
-              onClick={handleSaveClick}
+              onPress={handleSaveClick}
             >
               <Save />
             </Button>
@@ -487,7 +487,7 @@ export const TaskModal: React.FC<TaskModalProps> = ({
               aria-label="Close Modal"
               color="danger"
               variant="bordered"
-              onClick={onClose}
+              onPress={onClose}
             >
               <CircleOff />
             </Button>

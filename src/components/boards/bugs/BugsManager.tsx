@@ -68,7 +68,7 @@ export const BugsManager = ({
 
   return (
     <>
-      <div className="space-y-10">
+      <div className="space-y-10 max-w-7xl mx-auto">
         <BugsBoard
           bugsUpdated={bugUpdated}
           handleRowAction={handleRowAction}

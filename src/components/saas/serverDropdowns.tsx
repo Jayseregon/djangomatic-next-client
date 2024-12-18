@@ -476,7 +476,7 @@ export const DownloadButton = ({
           nonce={nonce}
           radius="full"
           variant="solid"
-          onClick={handleDownload}
+          onPress={handleDownload}
         >
           Download
         </Button>

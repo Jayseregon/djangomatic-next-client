@@ -253,6 +253,24 @@ export const Link = ({
   </a>
 );
 
+export const Spinner = ({
+  label,
+  color,
+  ...props
+}: BaseProps & {
+  label?: string;
+  color?: string;
+}) => (
+  <div
+    data-color={color}
+    data-testid="loading-spinner"
+    role="progressbar"
+    {...props}
+  >
+    {label}
+  </div>
+);
+
 // Add a test to satisfy Jest's requirement
 describe("NextUI Mocks", () => {
   it("exists", () => {

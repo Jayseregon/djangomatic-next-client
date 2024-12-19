@@ -38,6 +38,11 @@ const config: Config = {
     "^@/data/(.*)$": "<rootDir>/src/data/$1",
     "^@/(.*)$": "<rootDir>/src/$1",
     "^#site/content$": "<rootDir>/.velite",
+    "^@nextui-org/react$": "<rootDir>/src/__tests__/__mocks__/nextui.tsx",
+    "^@nextui-org/button$": "<rootDir>/src/__tests__/__mocks__/nextui.tsx",
+    "^@nextui-org/navbar$": "<rootDir>/src/__tests__/__mocks__/nextui.tsx",
+    "^@nextui-org/link$": "<rootDir>/src/__tests__/__mocks__/nextui.tsx",
+    "^@nextui-org/dropdown$": "<rootDir>/src/__tests__/__mocks__/nextui.tsx",
   },
   testMatch: [
     "**/__tests__/**/*.[jt]s?(x)",
@@ -56,6 +61,7 @@ const config: Config = {
   },
   transformIgnorePatterns: [
     "/node_modules/(?!(next-auth|@auth)/)",
+    "/node_modules/(?!(@nextui-org|@radix-ui|framer-motion)/)",
   ],
   // Uncomment the next line to limit workers if needed
   // maxWorkers: 2,

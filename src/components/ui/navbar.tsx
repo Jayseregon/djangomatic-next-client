@@ -43,6 +43,21 @@ interface NavbarProps {
   session?: any;
 }
 
+// Create a utility function to handle press events
+const handlePress = (
+  handler?: (e: React.MouseEvent | React.KeyboardEvent) => void,
+) => ({
+  onClick: handler,
+  onKeyDown: (e: React.KeyboardEvent) => {
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      handler?.(e);
+    }
+  },
+  tabIndex: 0,
+  role: "button",
+});
+
 /**
  * Navbar component renders the navigation bar with various items and user profile options.
  * It includes a brand logo, navigation links, theme switcher, locale switcher, and user profile dropdown.
@@ -226,9 +241,9 @@ export const Navbar = ({ nonce, session }: NavbarProps): JSX.Element | null => {
                 href={item.href}
                 nonce={nonce}
                 size="lg"
-                onPress={() => {
+                {...handlePress(() => {
                   setIsMenuOpen((prev) => !prev);
-                }}
+                })}
               >
                 {item.label}
               </Link>

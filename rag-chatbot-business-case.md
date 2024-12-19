@@ -48,14 +48,14 @@ The following criteria were used to evaluate the three options:
 ### **Option 1: Moov.ai**
 
 - **Description**: A local vendor offering RAG chatbot implementation.
-- **Strengths**: Familiarity with the stack; option to handle backend work.
-- **Weaknesses**: High cost; potential delays; reliance on vendor for key elements.
+- **Strengths**: Familiarity with the stack; option to handle backend work; a team of several experts.
+- **Weaknesses**: High cost; reliance on vendor for key elements; resources not fully dedicated (likely 50% allocation).
 
 ### **Option 2: Uzinakod**
 
 - **Description**: Another local vendor with RAG chatbot expertise.
 - **Strengths**: Cost-effective MVP estimate; prior experience with chatbots.
-- **Weaknesses**: Preference for Azure-only stack; potential delays due to limited developer availability.
+- **Weaknesses**: Preference for Azure-only stack; limited team (2 developers, not fully allocated); potential delays due to availability constraints.
 
 ### **Option 3: Internal Development**
 
@@ -67,23 +67,24 @@ The following criteria were used to evaluate the three options:
 
 ## **Detailed Comparison**
 
-| **Criteria**    | **Moov.ai**                                     | **Uzinakod**                                                     | **Internal Development**                                    |
-| --------------- | ----------------------------------------------- | ---------------------------------------------------------------- | ----------------------------------------------------------- |
-| **Cost**        | 100k–150k  CAD for MVP; ~400k CAD for full project    | 45k–55k CAD for MVP; ~30–50% extra for full project              | ~5k CAD for MVP; <15k CAD total |
-| **Timeline**    | 2-3 months for MVP; 4–6 months for full project | 30–45 business days for MVP; timeline uncertain for full project | 2–3 weeks for MVP; iterative updates thereafter             |
-| **Integration** | Moderate; requires vendor familiarization       | Challenging; relies on Azure-only stack                          | Seamless; team is already familiar with stack               |
-| **Flexibility** | Limited; vendor-dependent refinements           | Limited; vendor-dependent refinements                            | High; in-house refinement and prompt engineering possible   |
-| **Performance** | Supports preferred LLMs (OpenAI, Gemini)        | Limited by Azure stack and models                                | Full access to preferred LLMs                               |
-| **Risk**        | High cost; dependency on vendor timelines       | Delays due to resource availability                              | Minimal; fully controlled internally                        |
+| **Criteria**          | **Moov.ai**               | **Uzinakod**             | **Internal Development**   |
+|------------------------|---------------------------|---------------------------|-----------------------------|
+| **Cost**              | 149,600 CAD for full project | 45k–55k CAD for MVP; ~30–50% extra for full project | ~5k CAD for MVP (120 hours @ 30 CAD/hour); <15k CAD total |
+| **Timeline**          | 4–5 months for full project; shared resources may cause delays | 30–45 business days for MVP; undefined for full project | 2–3 weeks for MVP (full-time); longer if concurrent tasks |
+| **Integration**       | Moderate; reliant on Azure stack | Challenging; strong reliance on Azure-only stack | Seamless; team fully familiar with stack |
+| **Flexibility**       | Moderate; collaborative approach but vendor-dependent | Low; vendor-dependent with resource uncertainty | High; fully customizable and flexible internally |
+| **Performance**       | Supports modern AI models but reliant on Azure services | Limited by Azure stack and models | Full access to preferred LLMs and modern tools |
+| **Risk**              | Medium; high cost and dependency on vendor timelines | High; potential delays due to limited resources | Low; internally controlled timelines and deliverables |
+| **Responsiveness**    | Delivered proposal in time but last-minute effort raises concerns | Delayed responses, proposal unavailable before decision | Immediate access to results and adjustments by the internal team |
+| **Tools/Resources**   | Agile, SCRUM-based with external experts (50% allocated) | Agile; reliance on 2 vendor developers (part-time) | Scrum sprints, leverages GitHub Copilot, Workspace for AI-assisted development |
 
----
 ---
 
 ## **Technical Analysis**
 
 ### **Preferred Tech Stack**
 
-- **Moov.ai**: Adheres to existing stack with support for modern tools.
+- **Moov.ai**: Prefers Azure but adheres to existing stack with support for modern tools.
 - **Uzinakod**: Prefers Azure-only, potentially limiting LLM capabilities.
 - **Internal Development**: Uses Vercel AI SDK, LangChain, LlamaIndex, OpenAI API, and Postgres with vector extension for seamless integration and flexibility.
 
@@ -97,12 +98,6 @@ The following criteria were used to evaluate the three options:
 
 An additional advantage of pursuing internal development is our ability to leverage AI tools to streamline and accelerate the process. Specifically, we can utilize **GitHub Copilot** as a development assistant directly within VS Code, enabling rapid code generation, error handling, and implementation of complex logic. This tool can significantly enhance developer productivity by providing contextual suggestions, improving code quality, and reducing manual effort.
 
-Furthermore, as a developer with beta access to **GitHub Copilot for Workspaces**, I can harness its capabilities to:
-
-- Brainstorm and outline the development plan collaboratively with AI assistance.
-- Create and test a dedicated MVP branch with suggested implementations and features.
-- Iterate quickly by integrating feedback into the generated codebase for further refinement.
-
 These features allow us to accelerate MVP delivery while maintaining flexibility and control over the development process. The use of AI-powered tools also reduces overall costs and time compared to external vendor development, which lacks these optimized AI integrations tailored to our needs.
 
 ---
@@ -111,7 +106,7 @@ These features allow us to accelerate MVP delivery while maintaining flexibility
 
 ### **Costs**
 
-- **Moov.ai**: ~400k CAD for full implementation.
+- **Moov.ai**: ~150k CAD for full implementation.
 - **Uzinakod**: ~90k CAD total (MVP + refinements).
 - **Internal Development**: <15k CAD (team cost only).
 
@@ -130,7 +125,7 @@ Internal development offers the highest ROI by minimizing upfront costs and ensu
 ### **Moov.ai**
 
 - MVP: 2.5 months
-- Full Project: 4–6 months
+- Full Project: 4–5 months
 
 ### **Uzinakod**
 
@@ -159,14 +154,14 @@ Internal development offers the highest ROI by minimizing upfront costs and ensu
 
 The responsiveness of both vendors during the initial engagement phase has provided insights into their potential reliability as partners:
 
-- **Moov.ai**: Although they initially provided a rough estimate, their last-minute email offering to send the detailed estimation just hours before the business case presentation raises concerns about their proactiveness and preparedness. While this shows they are trying to accommodate us, it may indicate potential issues with timely communication and delivery under tight deadlines in future engagements.
-
-- **Uzinakod**: Their inability to deliver even a rough estimation until January due to bandwidth constraints suggests challenges in prioritization and resource allocation. While they expressed confidence in their technical capabilities, these delays could translate to future risks, especially in time-sensitive projects.
+- **Moov.ai**: Although they initially provided a rough estimate, their last-minute email offering to send the detailed estimation just hours before the business case presentation raises concerns about their proactiveness and preparedness. Furthermore, their resources are shared across multiple projects, with approximately 50% allocation to this project.
+- **Uzinakod**: Their inability to deliver even a rough estimation until January due to bandwidth constraints suggests challenges in prioritization and resource allocation. With only two developers assigned part-time, resource availability is a significant risk.
 
 Additionally, while the proposed 2-3 weeks MVP timeline for internal development assumes full-time dedication, handling other tasks in parallel could extend this timeline. However, even in such a scenario, the timeline would likely remain significantly shorter than the delivery schedules proposed by external vendors. This flexibility allows for better alignment with ongoing projects without compromising overall progress.
 
 These responsiveness issues highlight the risks associated with relying on external vendors, particularly when internal support or rapid iteration is required. Building the chatbot internally ensures that we maintain full control over timelines and deliverables, reducing dependency on external parties with unpredictable availability.
 
+---
 
 ## **Recommendation**
 
@@ -197,3 +192,15 @@ These responsiveness issues highlight the risks associated with relying on exter
 - Technical stack documentation.
 
 
+
+
+60 /h 
+
+etienne 15% a 100/h
+simon 50/h
+estimation avec personnes add 
+
+add steps future dev and future of AI 
+advantages of internal dev: quick win, demonstrate usage, etc..
+
+envoyer meeting tracking djangomatic

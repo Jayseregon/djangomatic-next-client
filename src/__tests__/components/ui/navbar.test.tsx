@@ -73,9 +73,10 @@ describe("Navbar component", () => {
 
     // Check for the environment-specific app name
     expect(screen.getByText("Djangomatic Pro [local]")).toBeInTheDocument();
-    expect(
-      screen.getByRole("button", { name: /demo user/i }),
-    ).toBeInTheDocument();
+    expect(screen.getByTestId("avatar-image")).toHaveAttribute(
+      "data-name",
+      "Demo User",
+    );
   });
 
   it("renders admin navigation items for admin user", async () => {
@@ -103,8 +104,17 @@ describe("Navbar component", () => {
     });
 
     await waitFor(() => {
-      expect(screen.getByRole("link", { name: /admin/i })).toBeInTheDocument();
-      expect(screen.getByRole("link", { name: /r&d/i })).toBeInTheDocument();
+      // Use getAllByRole to handle multiple matches and check for the specific one we want
+      const adminLinks = screen.getAllByRole("link", { name: /admin/i });
+      const desktopAdminLink = adminLinks.find((link) =>
+        link.className.includes("underline decoration-foreground"),
+      );
+
+      expect(desktopAdminLink).toBeInTheDocument();
+
+      const rndLink = screen.getAllByRole("link", { name: /r&d/i })[0];
+
+      expect(rndLink).toBeInTheDocument();
     });
   });
 });

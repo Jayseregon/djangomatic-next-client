@@ -28,13 +28,15 @@ const config: Config = {
     "node",
   ],
   moduleNameMapper: {
-    "^@/(.*)$": "<rootDir>/$1",
     "^@/components/(.*)$": "<rootDir>/src/components/$1",
     "^@/config/(.*)$": "<rootDir>/src/config/$1",
     "^@/types/(.*)$": "<rootDir>/src/types/$1",
     "^@/interfaces/(.*)$": "<rootDir>/src/interfaces/$1",
     "^@/contexts/(.*)$": "<rootDir>/src/contexts/$1",
     "^@/lib/(.*)$": "<rootDir>/src/lib/$1",
+    "^@/hooks/(.*)$": "<rootDir>/src/hooks/$1",
+    "^@/data/(.*)$": "<rootDir>/src/data/$1",
+    "^@/(.*)$": "<rootDir>/src/$1",
     "^#site/content$": "<rootDir>/.velite",
   },
   testMatch: [
@@ -48,6 +50,12 @@ const config: Config = {
     "<rootDir>/out/",
     "<rootDir>/public/",
     "<rootDir>/coverage/",
+  ],
+  transform: {
+    "^.+\\.(js|jsx|ts|tsx)$": "babel-jest",
+  },
+  transformIgnorePatterns: [
+    "/node_modules/(?!(next-auth|@auth)/)",
   ],
   // Uncomment the next line to limit workers if needed
   // maxWorkers: 2,

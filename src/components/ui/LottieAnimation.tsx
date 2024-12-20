@@ -29,19 +29,29 @@ export default function LottieAnimation({
   const handleError = (error: any) => {
     console.error("Lottie Animation Error:", error);
     setError(true);
-    setLoading(false);
+    setLoading(false); // Ensure we're not in loading state when error occurs
   };
 
   useEffect(() => {
-    // Simulate loading completion
-    setLoading(false);
-  }, []);
+    // Reset states when src changes
+    setLoading(true);
+    setError(false);
 
-  if (loading) {
-    return <LoadingContent />;
-  }
+    // Attempt to load the animation
+    const timer = setTimeout(() => {
+      if (!error) {
+        // Only set loading false if no error occurred
+        setLoading(false);
+      }
+    }, 100);
 
-  if (error) {
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [src, error]); // Add error to dependencies
+
+  // Show loading spinner for both loading and error states
+  if (loading || error) {
     return <LoadingContent />;
   }
 

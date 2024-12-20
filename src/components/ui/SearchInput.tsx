@@ -78,7 +78,11 @@ export const SearchInput = ({
           type="search"
         />
       ) : (
-        <SearchIcon className="cursor-pointer" onClick={toggleSearch} />
+        <SearchIcon
+          className="cursor-pointer"
+          data-testid="search-trigger"
+          onClick={toggleSearch}
+        />
       )}
     </div>
   );

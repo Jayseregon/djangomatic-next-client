@@ -271,6 +271,39 @@ export const Spinner = ({
   </div>
 );
 
+// Add the Input component mock
+export const Input = ({
+  classNames,
+  labelPlacement = "inside", // Set default value
+  placeholder,
+  startContent,
+  type,
+  ...props
+}: BaseProps & {
+  placeholder?: string;
+  type?: string;
+  startContent?: React.ReactNode;
+  labelPlacement?: "inside" | "outside" | "outside-left";
+  classNames?: { input?: string };
+  "aria-label"?: string;
+}) => (
+  <div
+    className={classNames?.input}
+    data-label-placement={labelPlacement} // Use labelPlacement to position label
+  >
+    {startContent}
+    <input
+      aria-label={props["aria-label"]}
+      className={classNames?.input}
+      placeholder={placeholder} // Remove the labelPlacement condition here
+      role="searchbox"
+      type={type}
+      {...props}
+    />
+    {labelPlacement !== "inside" && placeholder && <label>{placeholder}</label>}
+  </div>
+);
+
 // Add a test to satisfy Jest's requirement
 describe("NextUI Mocks", () => {
   it("exists", () => {

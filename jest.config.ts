@@ -43,6 +43,8 @@ const config: Config = {
     "^@nextui-org/navbar$": "<rootDir>/src/__tests__/__mocks__/nextui.tsx",
     "^@nextui-org/link$": "<rootDir>/src/__tests__/__mocks__/nextui.tsx",
     "^@nextui-org/dropdown$": "<rootDir>/src/__tests__/__mocks__/nextui.tsx",
+    "^@lottiefiles/dotlottie-react$": "<rootDir>/src/__tests__/__mocks__/lottie.tsx",
+    "^next-auth/react$": "<rootDir>/src/__tests__/__mocks__/next-auth-react.tsx",
   },
   testMatch: [
     "**/__tests__/**/*.[jt]s?(x)",
@@ -61,7 +63,7 @@ const config: Config = {
   },
   transformIgnorePatterns: [
     "/node_modules/(?!(next-auth|@auth)/)",
-    "/node_modules/(?!(@nextui-org|@radix-ui|framer-motion)/)",
+    "/node_modules/(?!(@nextui-org|@radix-ui|framer-motion|next-auth|@auth|@lottiefiles|@auth/core)/)",
   ],
   // Uncomment the next line to limit workers if needed
   // maxWorkers: 2,

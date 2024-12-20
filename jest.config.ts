@@ -45,6 +45,7 @@ const config: Config = {
     "^@nextui-org/dropdown$": "<rootDir>/src/__tests__/__mocks__/nextui.tsx",
     "^@lottiefiles/dotlottie-react$": "<rootDir>/src/__tests__/__mocks__/lottie.tsx",
     "^next-auth/react$": "<rootDir>/src/__tests__/__mocks__/next-auth-react.tsx",
+    "^@/src/(.*)$": "<rootDir>/src/$1", // Add this line
   },
   testMatch: [
     "**/__tests__/**/*.[jt]s?(x)",

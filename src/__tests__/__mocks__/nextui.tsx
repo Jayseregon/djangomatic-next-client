@@ -46,6 +46,7 @@ export const Button = ({
   "aria-label": ariaLabel,
   isIconOnly,
   onPress,
+  color,
   ...props
 }: ButtonProps) => {
   const pressHandlers = createPressHandlers(onPress);
@@ -54,6 +55,8 @@ export const Button = ({
     <button
       aria-label={ariaLabel}
       className={className}
+      color={color} // Keep the original color prop
+      data-color={color} // Also add data-color for testing
       data-icon-only={isIconOnly}
       nonce={nonce}
       type="button"
@@ -301,6 +304,39 @@ export const Input = ({
       {...props}
     />
     {labelPlacement !== "inside" && placeholder && <label>{placeholder}</label>}
+  </div>
+);
+
+export const Tooltip = ({
+  children,
+  content,
+  color,
+  offset = 7, // Add default value
+  placement,
+  ...props
+}: BaseProps & {
+  content: React.ReactNode;
+  color?: string;
+  offset?: number;
+  placement?: string;
+}) => (
+  <div className="relative inline-block" data-testid="tooltip-wrapper">
+    {children}
+    <div
+      className="absolute bottom-full left-1/2 transform -translate-x-1/2 -mb-2 z-10 py-0.5 px-3 bg-blue-500 text-white dark:text-black text-sm rounded-full shadow-lg text-nowrap transition-opacity duration-500 ease-in-out opacity-0"
+      data-color={color}
+      data-content={content}
+      data-offset={offset} // Add offset to data attributes
+      data-placement={placement}
+      data-testid="tooltip"
+      style={{
+        // Use offset in positioning
+        marginBottom: `-${offset}px`,
+      }}
+      {...props}
+    >
+      {typeof content === "string" ? content : null}
+    </div>
   </div>
 );
 

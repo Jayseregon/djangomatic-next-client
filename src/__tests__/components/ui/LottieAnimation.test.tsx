@@ -45,40 +45,54 @@ describe("LottieAnimation", () => {
       </NonceContext.Provider>,
     );
 
-    // Wait for loading to complete
+    // Wait for loading to complete (now 500ms)
     await act(async () => {
-      jest.advanceTimersByTime(100);
+      jest.advanceTimersByTime(500);
     });
 
     const lottieAnimation = screen.getByTestId("lottie-animation");
 
     expect(lottieAnimation).toBeInTheDocument();
     expect(screen.queryByTestId("loading-spinner")).not.toBeInTheDocument();
+
+    // Test default dimensions
+    expect(lottieAnimation).toHaveStyle({
+      width: "400px",
+      height: "400px",
+    });
   });
 
-  it("applies custom className and style", async () => {
+  it("applies custom dimensions, className and style", async () => {
     const customClass = "test-class";
-    const customStyle = { width: "100px" };
+    const customStyle = { backgroundColor: "red" };
+    const width = 600;
+    const height = 400;
 
     render(
       <NonceContext.Provider value={mockNonce}>
         <LottieAnimation
           className={customClass}
+          height={height}
           src={mockSrc}
           style={customStyle}
+          width={width}
         />
       </NonceContext.Provider>,
     );
 
     // Wait for loading to complete
     await act(async () => {
-      jest.advanceTimersByTime(100);
+      jest.advanceTimersByTime(500);
     });
 
     const animation = screen.getByTestId("lottie-animation");
 
     expect(animation).toHaveClass(customClass);
-    expect(animation).toHaveStyle(customStyle);
+    expect(animation).toHaveStyle({
+      backgroundColor: "red",
+      width: "600px",
+      height: "400px",
+    });
   });
 
   it("shows loading content on error", async () => {
@@ -89,6 +103,10 @@ describe("LottieAnimation", () => {
         <LottieAnimation src="invalid-src" />
       </NonceContext.Provider>,
     );
+
+    await act(async () => {
+      jest.advanceTimersByTime(500);
+    });
 
     // First render will trigger the error in useEffect
     await act(async () => {

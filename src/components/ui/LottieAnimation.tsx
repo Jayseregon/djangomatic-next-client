@@ -13,6 +13,8 @@ interface LottiePlayerProps {
   style?: React.CSSProperties;
   autoplay?: boolean;
   loop?: boolean;
+  width?: number;
+  height?: number;
 }
 
 export default function LottieAnimation({
@@ -21,6 +23,8 @@ export default function LottieAnimation({
   style = {},
   autoplay = true,
   loop = true,
+  width = 400,
+  height = 400,
 }: LottiePlayerProps): JSX.Element {
   const nonce = useContext(NonceContext);
   const [error, setError] = useState(false);
@@ -43,7 +47,7 @@ export default function LottieAnimation({
         // Only set loading false if no error occurred
         setLoading(false);
       }
-    }, 100);
+    }, 500); // Increased timeout to ensure proper loading
 
     return () => {
       clearTimeout(timer);
@@ -62,7 +66,11 @@ export default function LottieAnimation({
       loop={loop}
       nonce={nonce}
       src={src}
-      style={style}
+      style={{
+        ...style,
+        width: `${width}px`,
+        height: `${height}px`,
+      }}
       onError={handleError}
     />
   );

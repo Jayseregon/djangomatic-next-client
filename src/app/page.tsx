@@ -62,7 +62,12 @@ function HomeContent({ session }: { session: any }): JSX.Element {
       </div>
 
       <Suspense fallback={<LoadingContent />}>
-        <LottieAnimation className="max-w-3xl" src="/lottie/animation.lottie" />
+        <LottieAnimation
+          className="max-w-3xl"
+          height={600}
+          src="/lottie/animation.lottie"
+          width={800}
+        />
       </Suspense>
 
       <div className="max-w-3xl text-justify space-y-4">

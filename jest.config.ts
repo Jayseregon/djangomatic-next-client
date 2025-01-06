@@ -45,7 +45,9 @@ const config: Config = {
     "^@nextui-org/dropdown$": "<rootDir>/src/__tests__/__mocks__/nextui.tsx",
     "^@lottiefiles/dotlottie-react$": "<rootDir>/src/__tests__/__mocks__/lottie.tsx",
     "^next-auth/react$": "<rootDir>/src/__tests__/__mocks__/next-auth-react.tsx",
-    "^@/src/(.*)$": "<rootDir>/src/$1", // Add this line
+    "^@/src/(.*)$": "<rootDir>/src/$1",
+    "^@/auth$": "<rootDir>/src/__tests__/__mocks__/auth.ts",
+    "^next-intl/server$": "<rootDir>/src/__tests__/__mocks__/next-intl-server.ts",
   },
   testMatch: [
     "**/__tests__/**/*.[jt]s?(x)",
@@ -63,8 +65,7 @@ const config: Config = {
     "^.+\\.(js|jsx|ts|tsx)$": "babel-jest",
   },
   transformIgnorePatterns: [
-    "/node_modules/(?!(next-auth|@auth)/)",
-    "/node_modules/(?!(@nextui-org|@radix-ui|framer-motion|next-auth|@auth|@lottiefiles|@auth/core)/)",
+    "/node_modules/(?!(@auth/core|next-auth|@panva/hkdf|jose|oauth|openid-client|preact|uuid)/)"
   ],
   // Uncomment the next line to limit workers if needed
   // maxWorkers: 2,

@@ -44,7 +44,7 @@ export default async function RootPage(props: {
  * @param {any} props.session - The session object containing user information.
  * @returns {JSX.Element} The rendered HomeContent component.
  */
-function HomeContent({ session }: { session: any }): JSX.Element {
+export function HomeContent({ session }: { session: any }): JSX.Element {
   const t = useTranslations("HomePage");
 
   if (!session) return <UnAuthenticated />;

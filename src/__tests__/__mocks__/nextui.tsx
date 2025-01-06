@@ -14,6 +14,9 @@ interface ButtonProps extends BaseProps {
   color?: string;
   size?: string;
   variant?: string;
+  id?: string;
+  isDisabled?: boolean; // Add isDisabled prop
+  disabled?: boolean; // Add standard HTML disabled prop
 }
 
 // Add a type for event handlers
@@ -47,6 +50,8 @@ export const Button = ({
   isIconOnly,
   onPress,
   color,
+  id,
+  isDisabled,
   ...props
 }: ButtonProps) => {
   const pressHandlers = createPressHandlers(onPress);
@@ -58,6 +63,9 @@ export const Button = ({
       color={color} // Keep the original color prop
       data-color={color} // Also add data-color for testing
       data-icon-only={isIconOnly}
+      data-testid={id} // Add this line to use id as testid
+      disabled={isDisabled} // Use isDisabled as HTML disabled attribute
+      id={id}
       nonce={nonce}
       type="button"
       {...pressHandlers}
@@ -179,24 +187,69 @@ export const DropdownTrigger = ({ children, ...props }: BaseProps) => (
   </div>
 );
 
+interface DropdownMenuProps extends Omit<BaseProps, "children"> {
+  disallowEmptySelection?: boolean;
+  selectedKeys?: Set<string>;
+  selectionMode?: string;
+  onSelectionChange?: (keys: Set<string>) => void;
+  items?: Array<{ value: string; label: string }>;
+  children?:
+    | React.ReactNode
+    | ((item: { value: string; label: string }) => React.ReactNode);
+  disabledKeys?: string[]; // Add disabledKeys prop
+}
+
 export const DropdownMenu = ({
   children,
-  disabledKeys,
-  "aria-label": ariaLabel,
+  disallowEmptySelection,
+  selectedKeys,
+  selectionMode,
+  onSelectionChange,
+  items,
+  disabledKeys = [], // Provide default empty array
   ...props
-}: BaseProps & {
-  disabledKeys?: string[];
-  "aria-label"?: string;
-}) => (
-  <div
-    aria-label={ariaLabel}
-    data-disabled-keys={disabledKeys?.join(",")}
-    role="menu"
-    {...props}
-  >
-    {children}
-  </div>
-);
+}: DropdownMenuProps) => {
+  // Handle function children with explicit type checking
+  const renderChildren = (): React.ReactNode => {
+    if (typeof children === "function" && items) {
+      return (
+        <>
+          {items.map((item) =>
+            (
+              children as (item: {
+                value: string;
+                label: string;
+              }) => React.ReactNode
+            )(item),
+          )}
+        </>
+      );
+    }
+
+    return typeof children === "function" ? null : children;
+  };
+
+  return (
+    <div
+      {...props}
+      aria-disabled={disabledKeys?.length > 0}
+      data-disabled-keys={disabledKeys?.join(",")}
+      data-disallow-empty={disallowEmptySelection}
+      data-selected-keys={Array.from(selectedKeys || []).join(",")}
+      data-selection-mode={selectionMode}
+      role="menu"
+      tabIndex={0}
+      onClick={() => onSelectionChange?.(new Set(["test"]))}
+      onKeyDown={(e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          onSelectionChange?.(new Set(["test"]));
+        }
+      }}
+    >
+      {renderChildren()}
+    </div>
+  );
+};
 
 interface DropdownItemProps extends BaseProps {
   textValue?: string;
@@ -256,21 +309,44 @@ export const Link = ({
   </a>
 );
 
+interface SpinnerProps extends BaseProps {
+  label?: string;
+  color?: string;
+  size?: string;
+  "aria-label"?: string;
+}
+
 export const Spinner = ({
   label,
   color,
+  size,
+  "aria-label": ariaLabel,
   ...props
-}: BaseProps & {
-  label?: string;
-  color?: string;
-}) => (
+}: SpinnerProps) => (
   <div
+    aria-label={ariaLabel}
     data-color={color}
+    data-size={size}
     data-testid="loading-spinner"
     role="progressbar"
     {...props}
   >
     {label}
+  </div>
+);
+
+export const Progress = ({
+  value,
+  className,
+  "aria-label": ariaLabel,
+}: any) => (
+  <div
+    aria-label={ariaLabel}
+    className={className}
+    data-testid="mock-progress"
+    role="progressbar"
+  >
+    {value}%
   </div>
 );
 

@@ -1,4 +1,10 @@
-import { render, screen, fireEvent, waitFor } from "@testing-library/react";
+import {
+  render,
+  screen,
+  fireEvent,
+  waitFor,
+  act,
+} from "@testing-library/react";
 import { useParams } from "next/navigation";
 import React from "react";
 
@@ -111,13 +117,43 @@ describe("PDFViewerPage", () => {
   });
 
   it("shows loading state while fetching report", async () => {
-    render(<PDFViewerPage />);
+    // Create a promise that we can resolve manually
+    let resolvePromise: (value: any) => void;
+    const fetchPromise = new Promise((resolve) => {
+      resolvePromise = resolve;
+    });
 
+    // Override the fetch mock for this test
+    (global.fetch as jest.Mock).mockImplementation(() => fetchPromise);
+
+    await act(async () => {
+      render(<PDFViewerPage />);
+    });
+
+    // Now we can check for loading state before resolving the fetch
     expect(screen.getByTestId("loading-content")).toBeInTheDocument();
+
+    // Resolve the fetch promise
+    await act(async () => {
+      resolvePromise({
+        json: () => Promise.resolve(mockReport),
+      });
+    });
+
+    // Wait for loading to complete
+    await waitFor(() => {
+      expect(screen.queryByTestId("loading-content")).not.toBeInTheDocument();
+    });
   });
 
   it("renders PDF viewer with correct file name when report is loaded", async () => {
-    const { container } = render(<PDFViewerPage />);
+    let container!: HTMLElement;
+
+    await act(async () => {
+      const result = render(<PDFViewerPage />);
+
+      container = result.container;
+    });
 
     // Wait for loading to complete
     await waitFor(
@@ -127,7 +163,6 @@ describe("PDFViewerPage", () => {
       { timeout: 3000 },
     );
 
-    // Use getByText instead of getByRole for more reliable button finding
     expect(screen.getByText(/download pdf/i)).toBeInTheDocument();
 
     const iframe = container.querySelector("iframe");
@@ -141,7 +176,9 @@ describe("PDFViewerPage", () => {
     const appendChildSpy = jest.spyOn(document.body, "appendChild");
     const removeChildSpy = jest.spyOn(document.body, "removeChild");
 
-    render(<PDFViewerPage />);
+    await act(async () => {
+      render(<PDFViewerPage />);
+    });
 
     await waitFor(
       () => {
@@ -150,11 +187,13 @@ describe("PDFViewerPage", () => {
       { timeout: 3000 },
     );
 
-    // Use getByText instead of getByRole
     const downloadButton = screen.getByText(/download pdf/i);
 
     expect(downloadButton).toBeInTheDocument();
-    fireEvent.click(downloadButton);
+
+    await act(async () => {
+      fireEvent.click(downloadButton);
+    });
 
     expect(createElementSpy).toHaveBeenCalledWith("a");
     expect(appendChildSpy).toHaveBeenCalled();
@@ -166,7 +205,9 @@ describe("PDFViewerPage", () => {
 
     (global.fetch as jest.Mock).mockRejectedValue(new Error("Fetch failed"));
 
-    render(<PDFViewerPage />);
+    await act(async () => {
+      render(<PDFViewerPage />);
+    });
 
     await waitFor(() => {
       expect(consoleErrorSpy).toHaveBeenCalledWith(
@@ -190,9 +231,10 @@ describe("PDFViewerPage", () => {
       }),
     );
 
-    render(<PDFViewerPage />);
+    await act(async () => {
+      render(<PDFViewerPage />);
+    });
 
-    // Wait for loading to complete and PDF to generate
     await waitFor(
       () => {
         expect(screen.queryByTestId("loading-content")).not.toBeInTheDocument();

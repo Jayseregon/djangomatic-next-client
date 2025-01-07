@@ -2,7 +2,7 @@ import type { JSX } from "react";
 
 import { auth } from "@/auth";
 import { UnAuthenticated } from "@/components/auth/unAuthenticated";
-import { DashboardManager } from "@/src/components/reports/DashboardManager";
+import { DashboardManager } from "@/components/reports/DashboardManager";
 
 /**
  * ReportsPage - The main component for the reports page.
@@ -14,10 +14,10 @@ export default async function ReportsPage(): Promise<JSX.Element> {
   // Fetch the current session to check if the user is authenticated
   const session = await auth();
 
-  // If there is no session, render the UnAuthenticated component
-  if (!session) return <UnAuthenticated />;
+  // Add validation for session and user email
+  if (!session?.user?.email) return <UnAuthenticated />;
 
-  // If the user is authenticated, render the ReportsPageContent component
+  // Only pass the session if it's valid
   return <ReportsPageContent session={session} />;
 }
 
@@ -30,8 +30,8 @@ export default async function ReportsPage(): Promise<JSX.Element> {
  * @returns {JSX.Element} The reports page content or an unauthenticated message.
  */
 function ReportsPageContent({ session }: { session: any }): JSX.Element {
-  // If there is no session, render the UnAuthenticated component
-  if (!session) return <UnAuthenticated />;
+  // Double-check session validity (defensive programming)
+  if (!session?.user?.email) return <UnAuthenticated />;
 
   // Render the reports dashboard
   return <DashboardManager email={session.user.email} />;

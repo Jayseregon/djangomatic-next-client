@@ -45,9 +45,12 @@ const config: Config = {
     "^@nextui-org/dropdown$": "<rootDir>/src/__tests__/__mocks__/nextui.tsx",
     "^@lottiefiles/dotlottie-react$": "<rootDir>/src/__tests__/__mocks__/lottie.tsx",
     "^next-auth/react$": "<rootDir>/src/__tests__/__mocks__/next-auth-react.tsx",
+    "^next-auth$": "<rootDir>/src/__tests__/__mocks__/next-auth-react.tsx",
+    "^next-auth/jwt$": "<rootDir>/src/__tests__/__mocks__/next-auth-react.tsx",
     "^@/src/(.*)$": "<rootDir>/src/$1",
-    "^@/auth$": "<rootDir>/src/__tests__/__mocks__/auth.ts",
+    "^@/auth$": "<rootDir>/src/__tests__/__mocks__/next-auth-react.tsx",
     "^next-intl/server$": "<rootDir>/src/__tests__/__mocks__/next-intl-server.ts",
+    "^next-auth/providers/(.*)$": "<rootDir>/src/__tests__/__mocks__/next-auth-providers.ts",
   },
   testMatch: [
     "**/__tests__/**/*.[jt]s?(x)",
@@ -65,7 +68,7 @@ const config: Config = {
     "^.+\\.(js|jsx|ts|tsx)$": "babel-jest",
   },
   transformIgnorePatterns: [
-    "/node_modules/(?!(@auth/core|next-auth|@panva/hkdf|jose|oauth|openid-client|preact|uuid)/)"
+    "/node_modules/(?!(@auth/core|next-auth|@panva/hkdf|jose|oauth|openid-client|preact|uuid|next-intl|@auth/core/providers|next-auth/providers))/"
   ],
   // Uncomment the next line to limit workers if needed
   // maxWorkers: 2,

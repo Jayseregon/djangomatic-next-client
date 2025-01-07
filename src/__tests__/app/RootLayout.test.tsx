@@ -2,7 +2,7 @@ import { render, screen } from "@testing-library/react";
 
 import RootLayout from "@/app/layout";
 
-import { auth } from "../__mocks__/auth";
+import auth from "../__mocks__/next-auth-react";
 
 // Mock next-intl
 jest.mock("next-intl", () => ({

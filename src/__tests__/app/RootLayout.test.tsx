@@ -43,13 +43,13 @@ jest.mock("@/app/providers", () => ({
 }));
 
 // Mock components
-jest.mock("@/components/ui/navbar", () => ({
+jest.mock("@/src/components/root/Navbar", () => ({
   Navbar: ({ children }: { children?: React.ReactNode }) => (
     <div data-testid="mock-navbar">{children}</div>
   ),
 }));
 
-jest.mock("@/components/ui/footer", () => ({
+jest.mock("@/src/components/root/Footer", () => ({
   Footer: ({ children }: { children?: React.ReactNode }) => (
     <div data-testid="mock-footer">{children}</div>
   ),

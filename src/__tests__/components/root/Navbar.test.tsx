@@ -6,7 +6,7 @@ import { act } from "@testing-library/react";
 import { waitFor } from "@testing-library/dom";
 
 import { fetchUser } from "@/lib/getUserPermission";
-import { Navbar } from "@/src/components/ui/navbar";
+import { Navbar } from "@/src/components/root/Navbar";
 
 jest.mock("next/navigation", () => ({
   usePathname: jest.fn(),

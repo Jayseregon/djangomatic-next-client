@@ -1,6 +1,6 @@
 import { render, screen } from "@testing-library/react";
 
-import { Footer } from "@/src/components/ui/footer";
+import { Footer } from "@/src/components/root/Footer";
 
 describe("Footer component", () => {
   const mockDate = new Date(2024, 0, 1); // January 1, 2024

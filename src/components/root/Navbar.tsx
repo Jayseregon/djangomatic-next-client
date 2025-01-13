@@ -22,12 +22,12 @@ import { usePathname } from "next/navigation";
 import { fetchUser } from "@/lib/getUserPermission";
 import { UserSchema } from "@/interfaces/lib";
 import { siteConfig } from "@/config/site";
-import { ThemeSwitch } from "@/components/ui/ThemeSwitch";
+import { ThemeSwitch } from "@/src/components/root/ThemeSwitch";
 import { Logo } from "@/components/icons";
 import { cn } from "@/src/lib/utils";
 
-import { SignOut } from "./sign-in";
-import LocaleSwitcher from "./LocaleSwitcher";
+import { SignOut } from "../ui/sign-in";
+import LocaleSwitcher from "../ui/LocaleSwitcher";
 // import { SearchInput } from "@/components/SearchInput";
 
 const appEnv = process.env.NEXT_PUBLIC_APP_ENV;

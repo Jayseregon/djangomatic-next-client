@@ -29,6 +29,7 @@ const config: Config = {
   ],
   moduleNameMapper: {
     "^@/components/(.*)$": "<rootDir>/src/components/$1",
+    "^@/src/components/(.*)$": "<rootDir>/src/components/$1",
     "^@/config/(.*)$": "<rootDir>/src/config/$1",
     "^@/types/(.*)$": "<rootDir>/src/types/$1",
     "^@/interfaces/(.*)$": "<rootDir>/src/interfaces/$1",
@@ -48,7 +49,8 @@ const config: Config = {
     "^next-auth$": "<rootDir>/src/__tests__/__mocks__/next-auth-react.tsx",
     "^next-auth/jwt$": "<rootDir>/src/__tests__/__mocks__/next-auth-react.tsx",
     "^@/src/(.*)$": "<rootDir>/src/$1",
-    "^@/auth$": "<rootDir>/src/__tests__/__mocks__/next-auth-react.tsx",
+    "^@/auth$": "<rootDir>/auth.ts",
+    "^@/src/auth$": "<rootDir>/auth.ts",
     "^next-intl/server$": "<rootDir>/src/__tests__/__mocks__/next-intl-server.ts",
     "^next-auth/providers/(.*)$": "<rootDir>/src/__tests__/__mocks__/next-auth-providers.ts",
   },
@@ -68,7 +70,7 @@ const config: Config = {
     "^.+\\.(js|jsx|ts|tsx)$": "babel-jest",
   },
   transformIgnorePatterns: [
-    "/node_modules/(?!(@auth/core|next-auth|@panva/hkdf|jose|oauth|openid-client|preact|uuid|next-intl|@auth/core/providers|next-auth/providers))/"
+    "/node_modules/(?!(@auth/core|next-auth|@panva/hkdf|jose|oauth|openid-client|preact|uuid|next-intl|@auth/core/providers|next-auth/providers|lucide-react))/"
   ],
   // Uncomment the next line to limit workers if needed
   // maxWorkers: 2,

@@ -106,7 +106,7 @@ export const DropDownSelector = ({
         {(item) => (
           <DropdownItem
             key={item.value}
-            onClick={() => handleSelect(item.value)}
+            onPress={() => handleSelect(item.value)}
           >
             {item.label}
           </DropdownItem>

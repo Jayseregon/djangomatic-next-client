@@ -1,8 +1,8 @@
 import axios from "axios";
 import { LRUCache } from "lru-cache";
 import DOMPurify from "isomorphic-dompurify";
-import { jwtDecode } from "jwt-decode";
 
+import { getServerTokens } from "@/actions/django/action";
 import {
   checkTaskStatusProps,
   fetchDbSchemasProps,
@@ -13,7 +13,6 @@ import {
 
 const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
 // const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
-// https://docker-djangomatic.azurewebsites.net
 
 // cache settings
 const tablesCache = new LRUCache<string, any>({
@@ -38,90 +37,15 @@ export const getMiddlewareCsrfToken = async (): Promise<string> => {
   return data.csrfToken || "missing";
 };
 
-export const makeServerLoginRequest = async (backendUser: string) => {
-  try {
-    const response = await fetch("/api/django-auth", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ backendUser }),
-    });
+// Helper function to ensure token exists
+const ensureToken = async (backendUser: string): Promise<string> => {
+  const tokens = await getServerTokens(backendUser);
 
-    if (!response.ok) {
-      throw new Error("Login failed");
-    }
-
-    const data = await response.json();
-
-    return data;
-  } catch (error) {
-    console.error("Error during login request:", error);
-  }
-};
-
-const fetchTokens = async (backendUser: string) => {
-  const endpoint = "/api/django-jwt";
-  let response = await fetch(endpoint);
-
-  if (response.status === 404) {
-    await makeServerLoginRequest(backendUser);
-    response = await fetch(endpoint);
+  if (!tokens?.djAuthToken) {
+    throw new Error("Failed to obtain valid authentication token");
   }
 
-  if (!response.ok) {
-    throw new Error("Failed to retrieve tokens");
-  }
-
-  return response.json();
-};
-
-const validateTokens = (token: string) => {
-  // check if the token is expired
-  const isTokenValid = token && !isTokenExpired(token);
-
-  return isTokenValid;
-};
-
-const isTokenExpired = (token: string) => {
-  // decode jwt token
-  try {
-    const decodedToken = jwtDecode(token);
-
-    if (!decodedToken || !decodedToken.exp) {
-      return true;
-    }
-    const expiryDate = new Date(decodedToken.exp * 1000);
-
-    return expiryDate < new Date();
-  } catch (error) {
-    console.error("Error decoding token:", error);
-
-    return true;
-  }
-};
-
-export const getServerTokens = async (backendUser: string) => {
-  try {
-    let tokens = await fetchTokens(backendUser);
-    const usedBackendUser = tokens.usedBackendUser;
-
-    if (usedBackendUser !== backendUser) {
-      await makeServerLoginRequest(backendUser);
-      tokens = await fetchTokens(backendUser);
-    }
-
-    if (!validateTokens(tokens.djAuthToken)) {
-      await makeServerLoginRequest(backendUser);
-      tokens = await fetchTokens(backendUser);
-    }
-
-    return tokens;
-  } catch (error: any) {
-    console.error("Error getting ironSession tokens:", error);
-
-    return null;
-  }
+  return tokens.djAuthToken;
 };
 
 export const fetchDbSchemas = async ({
@@ -130,7 +54,7 @@ export const fetchDbSchemas = async ({
 }: fetchDbSchemasProps) => {
   const cacheKey = `${target_db}`;
   const cachedData = schemasCache.get(cacheKey);
-  const { djAuthToken } = await getServerTokens(backendUser);
+  const djAuthToken = await ensureToken(backendUser);
 
   if (cachedData) {
     return cachedData;
@@ -186,7 +110,7 @@ export const fetchSchemaTables = async ({
 }: fetchSchemaTablesProps) => {
   const cacheKey = `${target_db}-${schema_choice}-${user_pattern}`;
   const cachedData = tablesCache.get(cacheKey);
-  const { djAuthToken } = await getServerTokens(backendUser);
+  const djAuthToken = await ensureToken(backendUser);
 
   if (cachedData) {
     return cachedData;
@@ -201,7 +125,6 @@ export const fetchSchemaTables = async ({
     }
 
     // define request params
-    // const endpoint = "/saas/tds/ajax/query-poles-tables-from-schema/";
     const payload = {
       target_db: target_db,
       schema_choice: schema_choice,
@@ -241,7 +164,7 @@ export const startTask = async (taskOptions: startTaskProps) => {
   if (!taskOptions.backendUser) {
     throw new Error("backendUser is required");
   }
-  const { djAuthToken } = await getServerTokens(taskOptions.backendUser);
+  const djAuthToken = await ensureToken(taskOptions.backendUser);
 
   try {
     // get the csrf token from server
@@ -435,8 +358,7 @@ export const checkTaskStatus = async ({
   if (!backendUser) {
     throw new Error("backendUser is required");
   }
-  const { djAuthToken } = await getServerTokens(backendUser);
-  // const { appendToConsole } = useConsoleData();
+  const djAuthToken = await ensureToken(backendUser);
 
   try {
     // get the csrf token from server

@@ -63,6 +63,7 @@ const config: Config = {
   watchPathIgnorePatterns: [
     "<rootDir>/node_modules/",
     "<rootDir>/.next/",
+    "<rootDir>/.next/standalone/",
     "<rootDir>/out/",
     "<rootDir>/public/",
     "<rootDir>/coverage/",

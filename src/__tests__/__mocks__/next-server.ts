@@ -24,10 +24,24 @@ export class NextRequest {
 export class NextResponse {
   headers: Headers;
   status: number;
+  private data: any;
 
   constructor(body?: BodyInit | null, init?: ResponseInit) {
     this.headers = new Headers(init?.headers);
     this.status = init?.status || 200;
+    this.data = body;
+  }
+
+  static json(data: any, init?: ResponseInit): NextResponse {
+    const response = new NextResponse(null, init);
+
+    response.data = data;
+
+    return response;
+  }
+
+  _getData(): string {
+    return JSON.stringify(this.data);
   }
 }
 

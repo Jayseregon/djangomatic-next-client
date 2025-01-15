@@ -59,7 +59,10 @@ const config: Config = {
     "**/__tests__/**/*.[jt]s?(x)",
     "**/?(*.)+(spec|test).[tj]s?(x)",
   ],
-  testPathIgnorePatterns: ["/node_modules/"],
+  testPathIgnorePatterns: [
+    "/node_modules/",
+    "<rootDir>/src/__tests__/__mocks__/"
+  ],
   watchPathIgnorePatterns: [
     "<rootDir>/node_modules/",
     "<rootDir>/.next/",

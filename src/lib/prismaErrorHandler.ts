@@ -2,9 +2,12 @@ import { NextResponse } from "next/server";
 import { Prisma } from "@prisma/client";
 
 export const handlePrismaError = (error: any): NextResponse => {
-  console.error("Prisma Error:", error.message);
-
   const message = error?.message || "Unknown error";
+  const isPrismaError =
+    error instanceof Prisma.PrismaClientKnownRequestError ||
+    error instanceof Prisma.PrismaClientValidationError;
+
+  console.error(isPrismaError ? "Prisma Error:" : "Error:", message);
 
   if (error instanceof Prisma.PrismaClientKnownRequestError) {
     switch (error.code) {

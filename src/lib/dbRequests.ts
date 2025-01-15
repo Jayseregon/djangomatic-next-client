@@ -3,6 +3,7 @@ import { LRUCache } from "lru-cache";
 import DOMPurify from "isomorphic-dompurify";
 
 import { getServerTokens } from "@/actions/django/action";
+import { getServerCsrfToken } from "@/actions/generic/action";
 import {
   checkTaskStatusProps,
   fetchDbSchemasProps,
@@ -30,13 +31,6 @@ export const axiosInstance = axios.create({
   withCredentials: true,
 });
 
-export const getMiddlewareCsrfToken = async (): Promise<string> => {
-  const response = await fetch("/api/csrf-token");
-  const data = await response.json();
-
-  return data.csrfToken || "missing";
-};
-
 // Helper function to ensure token exists
 const ensureToken = async (backendUser: string): Promise<string> => {
   const tokens = await getServerTokens(backendUser);
@@ -60,8 +54,7 @@ export const fetchDbSchemas = async ({
     return cachedData;
   }
   try {
-    // get the csrf token from server
-    const csrfToken = await getMiddlewareCsrfToken();
+    const csrfToken = await getServerCsrfToken();
 
     if (!csrfToken) {
       throw new Error("Failed to retrieve CSRF token");
@@ -117,8 +110,7 @@ export const fetchSchemaTables = async ({
   }
 
   try {
-    // get the csrf token from server
-    const csrfToken = await getMiddlewareCsrfToken();
+    const csrfToken = await getServerCsrfToken();
 
     if (!csrfToken) {
       throw new Error("Failed to retrieve CSRF token");
@@ -167,8 +159,7 @@ export const startTask = async (taskOptions: startTaskProps) => {
   const djAuthToken = await ensureToken(taskOptions.backendUser);
 
   try {
-    // get the csrf token from server
-    const csrfToken = await getMiddlewareCsrfToken();
+    const csrfToken = await getServerCsrfToken();
 
     if (!csrfToken) {
       throw new Error("Failed to retrieve CSRF token");
@@ -361,8 +352,7 @@ export const checkTaskStatus = async ({
   const djAuthToken = await ensureToken(backendUser);
 
   try {
-    // get the csrf token from server
-    const csrfToken = await getMiddlewareCsrfToken();
+    const csrfToken = await getServerCsrfToken();
 
     if (!csrfToken) {
       throw new Error("Failed to retrieve CSRF token");

@@ -2,7 +2,6 @@ import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import { NextIntlClientProvider } from "next-intl";
-// ...existing imports...
 
 import {
   DatabaseDropdown,
@@ -13,8 +12,6 @@ import {
   DownloadButton,
   DisplayFieldChoiceHtml,
 } from "@/components/saas/serverDropdowns";
-
-// ...existing code for mocks, if necessary...
 
 describe("DatabaseDropdown", () => {
   it("renders default label and triggers handleSelect on item click", () => {

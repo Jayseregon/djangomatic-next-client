@@ -53,6 +53,7 @@ const config: Config = {
     "^@/src/auth$": "<rootDir>/auth.ts",
     "^next-intl/server$": "<rootDir>/src/__tests__/__mocks__/next-intl-server.ts",
     "^next-auth/providers/(.*)$": "<rootDir>/src/__tests__/__mocks__/next-auth-providers.ts",
+    '^next/server$': '<rootDir>/src/__tests__/__mocks__/next-server.ts',
   },
   testMatch: [
     "**/__tests__/**/*.[jt]s?(x)",

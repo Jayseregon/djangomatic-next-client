@@ -3,6 +3,12 @@
 import { cookies } from "next/headers";
 import { createCsrfMiddleware } from "@edge-csrf/nextjs";
 import { NextRequest } from "next/server";
+import { PrismaClient } from "@prisma/client";
+import { z } from "zod";
+
+import { UserSchema } from "@/src/interfaces/lib";
+
+const prisma = new PrismaClient();
 
 const csrfMiddleware = createCsrfMiddleware({
   cookie: {
@@ -55,5 +61,24 @@ export async function getServerCsrfToken(): Promise<string> {
     console.error("CSRF token retrieval/generation failed:", error.message);
 
     return "missing";
+  }
+}
+
+export async function fetchUserServer(
+  email: string,
+): Promise<UserSchema | null> {
+  try {
+    const user = await prisma.user.findUnique({
+      where: { email: z.string().parse(email) },
+    });
+
+    if (!user) return null;
+
+    // Return an empty rndTasks array to satisfy UserSchema
+    return { ...user, rndTasks: [] };
+  } catch (error: any) {
+    console.error("Failed to fetch user:", error);
+
+    return null;
   }
 }

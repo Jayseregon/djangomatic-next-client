@@ -19,7 +19,7 @@ import { useEffect, useState, useMemo, type JSX } from "react";
 import { useTranslations } from "next-intl";
 import { usePathname } from "next/navigation";
 
-import { fetchUser } from "@/lib/getUserPermission";
+import { fetchUserServer } from "@/actions/generic/action";
 import { UserSchema } from "@/interfaces/lib";
 import { siteConfig } from "@/config/site";
 import { ThemeSwitch } from "@/src/components/root/ThemeSwitch";
@@ -84,7 +84,7 @@ export const Navbar = ({ nonce, session }: NavbarProps): JSX.Element | null => {
   useEffect(() => {
     async function fetchData() {
       try {
-        const data = await fetchUser(session.user.email as string);
+        const data = await fetchUserServer(session.user.email as string);
 
         setUser(data);
       } catch (error) {

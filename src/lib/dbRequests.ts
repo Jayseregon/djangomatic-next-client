@@ -45,14 +45,17 @@ const ensureToken = async (backendUser: string): Promise<string> => {
 async function getCredentials(backendUser: string) {
   const djAuthToken = await ensureToken(backendUser);
   const csrfToken = await getServerCsrfToken();
+
   if (!csrfToken) {
     throw new Error("Failed to retrieve CSRF token");
   }
+
   return { djAuthToken, csrfToken };
 }
 
 function buildFormData(taskOptions: startTaskProps): FormData {
   const payload = new FormData();
+
   // Append base fields
   payload.append("db_choice", taskOptions.db_choice);
   payload.append("schema_choice", taskOptions.schema_choice);
@@ -163,8 +166,7 @@ function buildFormData(taskOptions: startTaskProps): FormData {
   }
 
   if (
-    taskOptions.endpoint ===
-    "/saas/tds/ajax/super/query-change-ownership-uniq/"
+    taskOptions.endpoint === "/saas/tds/ajax/super/query-change-ownership-uniq/"
   ) {
     if (taskOptions.is_override) {
       payload.append("assign_uniq", "yes");
@@ -285,7 +287,9 @@ export const fetchSchemaTables = async ({
 };
 
 export const startTask = async (taskOptions: startTaskProps) => {
-  const { djAuthToken, csrfToken } = await getCredentials(taskOptions.backendUser!);
+  const { djAuthToken, csrfToken } = await getCredentials(
+    taskOptions.backendUser!,
+  );
 
   try {
     const payload = buildFormData(taskOptions);

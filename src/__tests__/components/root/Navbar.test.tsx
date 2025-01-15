@@ -5,7 +5,7 @@ import { useSession } from "next-auth/react";
 import { act } from "@testing-library/react";
 import { waitFor } from "@testing-library/dom";
 
-import { fetchUser } from "@/lib/getUserPermission";
+import { fetchUserServer } from "@/actions/generic/action";
 import { Navbar } from "@/src/components/root/Navbar";
 
 jest.mock("next/navigation", () => ({
@@ -17,8 +17,8 @@ jest.mock("next-intl", () => ({
   useLocale: jest.fn(),
 }));
 
-jest.mock("@/lib/getUserPermission", () => ({
-  fetchUser: jest.fn(),
+jest.mock("@/actions/generic/action", () => ({
+  fetchUserServer: jest.fn(),
 }));
 
 jest.mock("next-auth/react", () => ({
@@ -63,7 +63,7 @@ describe("Navbar component", () => {
       },
     };
 
-    (fetchUser as jest.Mock).mockResolvedValue({
+    (fetchUserServer as jest.Mock).mockResolvedValue({
       isAdmin: false,
     });
 
@@ -90,7 +90,7 @@ describe("Navbar component", () => {
       },
     };
 
-    (fetchUser as jest.Mock).mockResolvedValue({
+    (fetchUserServer as jest.Mock).mockResolvedValue({
       isAdmin: true,
       id: "test-id",
       email: "admin@example.com",

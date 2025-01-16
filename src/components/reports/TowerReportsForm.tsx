@@ -27,6 +27,7 @@ import ToastNotification, {
 import { FormInput } from "@/components/ui/formInput";
 import NotesInputs from "@/components/reports/NotesInputs";
 import DocLinkButton from "@/components/docs/DocLinkButton";
+import { getQuickbaseReportData } from "@/src/actions/quickbase/action";
 
 import FormSectionAccordion from "./FormSectionAccordion";
 import QuickbaseInputs from "./QuickbaseInputs";
@@ -346,10 +347,7 @@ export const TowerReportForm = ({
   };
 
   const handleSearchQB = async () => {
-    const response = await fetch(
-      `/api/quickbase?id=${formData.jde_work_order}`,
-    );
-    const data = await response.json();
+    const data = await getQuickbaseReportData(formData.jde_work_order);
 
     if (data) {
       setFormData((prev) => ({

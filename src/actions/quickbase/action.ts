@@ -1,21 +1,19 @@
-// pages/api/quickbase.ts
+"use server";
 
-import { NextResponse } from "next/server";
-
+import { RecordData } from "@/src/interfaces/reports";
 import { QueryBuilderQB, QBHelper } from "@/src/lib/quickbase";
 
-export async function GET(request: Request) {
-  const { searchParams } = new URL(request.url);
-  const id = searchParams.get("id");
-
+export async function getQuickbaseReportData(
+  id: string | undefined,
+): Promise<RecordData> {
   if (!id) {
-    return new NextResponse("ID is required", { status: 400 });
+    throw new Error("No ID provided for QuickBase report data retrieval.");
   }
 
   const apiToken = process.env.QB_API_TOKEN;
 
   if (!apiToken) {
-    return new NextResponse("API token is required", { status: 400 });
+    throw new Error("Quickbase API token is required.");
   }
 
   // Configure search parameters for report project
@@ -113,12 +111,12 @@ export async function GET(request: Request) {
 
     refinedRecordData["1048"] = pEng;
 
-    // console.log("Record Data: ", refinedRecordData);
+    console.log("Record Data: ", refinedRecordData);
 
-    return NextResponse.json(refinedRecordData);
+    return refinedRecordData;
   } catch (error) {
-    return new NextResponse(`Error: ${(error as Error).message}`, {
-      status: 500,
-    });
+    throw new Error(
+      `Error fetching report data from QuickBase: ${(error as Error).message}`,
+    );
   }
 }

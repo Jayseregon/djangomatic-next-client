@@ -35,6 +35,7 @@ const config: Config = {
     "^@/interfaces/(.*)$": "<rootDir>/src/interfaces/$1",
     "^@/contexts/(.*)$": "<rootDir>/src/contexts/$1",
     "^@/lib/(.*)$": "<rootDir>/src/lib/$1",
+    "^@/src/lib/(.*)$": "<rootDir>/src/lib/$1",
     "^@/hooks/(.*)$": "<rootDir>/src/hooks/$1",
     "^@/data/(.*)$": "<rootDir>/src/data/$1",
     "^@/(.*)$": "<rootDir>/src/$1",

@@ -145,7 +145,7 @@ export const DatabaseDropdown = ({
       const newOptions = [];
 
       if (availableDatabases[dbClass]) {
-        for (let key in availableDatabases[dbClass]) {
+        for (const key in availableDatabases[dbClass]) {
           if (appType === "hld" && key.includes("_main")) {
             newOptions.push({
               value: key,

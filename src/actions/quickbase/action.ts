@@ -111,8 +111,6 @@ export async function getQuickbaseReportData(
 
     refinedRecordData["1048"] = pEng;
 
-    console.log("Record Data: ", refinedRecordData);
-
     return refinedRecordData;
   } catch (error) {
     throw new Error(

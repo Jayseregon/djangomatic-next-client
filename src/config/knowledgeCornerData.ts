@@ -16,6 +16,11 @@ export const knowledgeHubData = {
       software: "qgis",
     },
     {
+      label: "Preparing Road Data in QGIS",
+      href: "/docs/knowledge-corner/qgis/kc-preparing-road-data-qgis",
+      software: "qgis",
+    },
+    {
       label: "AutoCAD Placeholder",
       href: "/docs/knowledge-corner/autocad/kc-autocad-placeholder",
       software: "autocad",

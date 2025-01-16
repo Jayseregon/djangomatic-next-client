@@ -1,0 +1,163 @@
+---
+title: Preparing Road Data in QGIS
+slug: kc-preparing-road-data-qgis
+---
+<div>
+---
+
+**Comprehensive Solutions for Efficient Data Preparation and Network Design**  
+*Empowering streamlined workflows with detailed, client-focused guides.*
+
+---
+
+  <TableOfContentsMdx
+    title="Table of Contents"
+    items={[
+      { title: "Overview", id: "overview" },
+      { title: "Requirements", id: "requirements" },
+      { title: "Step 1: Download Road Data", id: "step-1-download-road-data" },
+      { title: "Step 2: Open QGIS and Load Shapefiles", id: "step-2-open-qgis-and-load-shapefiles" },
+      { title: "Step 3: Create a New Temporary Scratch Layer", id: "step-3-create-a-new-temporary-scratch-layer" },
+      { title: "Step 4: Draw a Polygon Around Your Project Area", id: "step-4-draw-a-polygon-around-your-project-area" },
+      { title: "Step 5: Clip Roads to Isolate Needed Roads", id: "step-5-clip-roads-to-isolate-needed-roads" },
+      { title: "Step 6: Generate Points for Road Names", id: "step-6-generate-points-for-road-names" },
+      { title: "Step 7: Create a New Field for CAD Block Attribute", id: "step-7-create-a-new-field-for-cad-block-attribute" },
+      { title: "Step 8: Import to CAD Using MAPIMPORT", id: "step-8-import-to-cad-using-mapimport" }
+    ]}
+  />
+---  
+
+  <h2 id="overview">Overview</h2>
+
+  This guide walks you through the process of preparing road data in QGIS for seamless import into CAD software. It is designed for projects that require road geometries and attributes to be integrated into CAD drawings, ensuring accurate alignment and efficient workflows.
+
+  Key steps include downloading road data, isolating the relevant roads using spatial tools in QGIS, and creating point geometries for road names to align with CAD blocks.
+
+---
+
+  <h2 id="requirements">Requirements</h2>
+
+  Before you begin, ensure you have the following:
+    - **QGIS** (latest stable version recommended)
+    - A **CAD** software that supports <Snippet>**MAPIMPORT**</Snippet>, such as **AutoCAD Map 3D**
+    - Road data from [Geofabrik](https://download.geofabrik.de/north-america.html)
+    - Basic familiarity with **QGIS**, including using tools like **Clip** and **Field Calculator**
+    - Understanding of your CAD **project's layer and block structure**
+
+---
+
+  <h2 id="step-1-download-road-data">Step 1: Download Road Data</h2>
+
+  - Visit [Geofabrik](https://download.geofabrik.de/north-america.html) and **download** the road data for the relevant country and sub-region for your project.
+
+  <LoadDynamicImage imageName="kc-preparing-road-data-qgis/geofabrik_website_xl" width={1000} />
+
+> **Outcome**: You should have a <Snippet>**.zip**</Snippet> file containing the road data shapefiles.
+
+---
+
+  <h2 id="step-2-open-qgis-and-load-shapefiles">Step 2: Open QGIS and Load Shapefiles</h2>
+
+  - Launch **QGIS**.
+  - Extract and load the <Snippet>**gis_osm_roads_free_1.shp**</Snippet> shapefile from the downloaded <Snippet>**.zip**</Snippet> file.
+
+---
+
+  <h2 id="step-3-create-a-new-temporary-scratch-layer">Step 3: Create a New Temporary Scratch Layer</h2>
+
+  - Go to <Snippet>**Layer > Create Layer > New Temporary Scratch Layer**</Snippet>.
+  - In the pop-up, set the Geometry Type to **Polygon** using the drop-down menu.
+  - Set the **CRS** to match your project's coordinate system.
+  - Click **OK** to create a new polygon scratch layer.
+
+  <LoadDynamicImage imageName="kc-preparing-road-data-qgis/qgis_create_layer" width={700} />
+
+*Example of creating a new temporary scratch layer with a polygon geometry type.*
+
+---
+
+  <h2 id="step-4-draw-a-polygon-around-your-project-area">Step 4: Draw a Polygon Around Your Project Area</h2>
+
+  - Activate **Toggle Edit Mode** for your new scratch layer.
+  - Use the **Add Polygon Feature** tool to draw a polygon around the area of your project.
+
+  <LoadDynamicImage imageName="kc-preparing-road-data-qgis/qgis_add_polygon_features" width={500} />
+  <LoadDynamicImage imageName="kc-preparing-road-data-qgis/qgis_map_draw_polygon" width={500} />
+
+*Drawing a polygon to isolate your project's area in QGIS.*
+
+---
+
+  <h2 id="step-5-clip-roads-to-isolate-needed-roads">Step 5: Clip Roads to Isolate Needed Roads</h2>
+
+  - Open the **Clip** processing tool.
+  - Set the **Input Layer** to the roads shapefile <Snippet>**gis_osm_roads_free_1.shp**</Snippet> downloaded earlier.
+  - Set the **Overlay Layer** to the polygon you just drew.
+  - Specify the **output location** to save the new clipped road shapefile.
+
+  <LoadDynamicImage imageName="kc-preparing-road-data-qgis/qgis_clip" width={700} />
+
+*Clipping road data using your project area polygon.*
+
+---
+
+  <h2 id="step-6-generate-points-for-road-names">Step 6: Generate Points for Road Names</h2>
+
+  - Use the **Geometry by expression** processing tool.
+  - Set the **Input Layer** to the new isolated road layer.
+  - Set the **Output Geometry Type** to **Point**.
+  - Use the following expression in the **Geometry Expression**:
+
+  <pre>
+  <code>
+  line_interpolate_point($geometry, $length / 2)
+  </code>
+  </pre>
+
+  - Specify the output location to save the new <Snippet>**road_names**</Snippet> shapefile.
+
+  <LoadDynamicImage imageName="kc-preparing-road-data-qgis/qgis_geometrybyexpression" width={700} />
+
+*Generating points for road names using the Geometry by Expression tool.*
+
+---
+
+  <h2 id="step-7-create-a-new-field-for-cad-block-attribute">Step 7: Create a New Field in QGIS matching your CAD Block Attribute</h2>
+
+  - Open the **Field Calculator** for your <Snippet>**road_names**</Snippet> layer.
+  - Create a new field **that matches the attribute of the block used** for road names in your CAD drawing.
+  - For example, if the CAD block attribute is named <Snippet>**street_n**</Snippet>, create a new field with the same name and populate it using the road names already present in the attribute table.
+
+  <LoadDynamicImage imageName="kc-preparing-road-data-qgis/cad_block_attribute" width={700} />
+  <LoadDynamicImage imageName="kc-preparing-road-data-qgis/qgis_field_calc" width={700} />
+  
+
+*Creating a new field in QGIS to align with CAD block attributes*
+
+---
+
+  <h2 id="step-8-import-to-cad-using-mapimport">Step 8: Import to CAD Using MAPIMPORT</h2>
+
+  - Use the **MAPIMPORT** command in your CAD software.
+  - Select your shapefiles: assign the road layer to the correct layer and the `road_names` layer to the correct block.
+
+  <LoadDynamicImage imageName="kc-preparing-road-data-qgis/cad_mapimport" width={700} />
+
+  - Check the **Get attribute values from fields** to ensure the new field matches the block attribute.
+
+  <LoadDynamicImage imageName="kc-preparing-road-data-qgis/cad_mapimport_param" width={700} />
+
+  - Click **OK** to confirm the import.
+
+  
+
+*Importing shapefiles into CAD software using the MAPIMPORT command*
+
+---
+
+## Final Notes
+
+*This guide is crafted to help professionals streamline their design workflows with precise instructions and efficient tools. For further assistance, please contact the **Continuous Improvement and Automation Team**. If you encounter any issues or have suggestions, we encourage you to submit a report through our [Bug Report Form](https://djangomatic-pro.azurewebsites.net/boards/bug-report).*
+
+---
+</div>

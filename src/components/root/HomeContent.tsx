@@ -1,7 +1,4 @@
 import { useTranslations } from "next-intl";
-import { Snippet } from "@heroui/snippet";
-import Link from "next/link";
-import { Bug, SquareArrowOutUpRight } from "lucide-react";
 import { Suspense, type JSX } from "react";
 
 import { UnAuthenticated } from "@/components/auth/unAuthenticated";
@@ -9,6 +6,7 @@ import AppName from "@/components/ui/AppName";
 import LottieAnimation from "@/components/ui/LottieAnimation";
 import { LoadingContent } from "@/components/ui/LoadingContent";
 import { title, subtitle } from "@/components/primitives";
+import { BugReportNotice } from "@/components/root/BugReportNotice";
 
 export default function HomeContent({
   session,
@@ -46,17 +44,7 @@ export default function HomeContent({
         </h2>
       </div>
 
-      <Snippet hideCopyButton hideSymbol variant="flat">
-        <div className="inline-flex space-x-2 items-center">
-          <Bug color="#dc2626" />
-          <p className="text-center pt-1 text-red-800 dark:text-red-300 flex items-center">
-            {t("BugReport")}
-          </p>
-          <Link className="flex items-center" href="/boards/bug-report">
-            <SquareArrowOutUpRight color="#dc2626" />
-          </Link>
-        </div>
-      </Snippet>
+      <BugReportNotice />
     </section>
   );
 }

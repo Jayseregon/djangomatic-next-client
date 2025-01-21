@@ -11,6 +11,7 @@ import Snippet from "@/components/mdx/snippet";
 import LoadDynamicImage from "@/components/mdx/LoadDynamicImage";
 import Quote from "@/components/mdx/quote";
 import TableOfContentsMdx from "@/components/mdx/TableOfContentsMdx";
+import { BugReportNotice } from "@/components/root/BugReportNotice";
 
 const sharedComponents: MDXComponents = {
   Callout,
@@ -18,6 +19,7 @@ const sharedComponents: MDXComponents = {
   LoadDynamicImage,
   Quote,
   TableOfContentsMdx,
+  BugReportNotice,
 };
 
 export async function MDXRenderer({ source }: MdxRendererProps) {

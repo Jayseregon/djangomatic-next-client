@@ -148,3 +148,7 @@ export interface ImageRotateModalProps {
   onClose: () => void;
   onConfirm: (rotatedFile: File) => void;
 }
+
+export interface RecordData {
+  [key: string]: string | number;
+}

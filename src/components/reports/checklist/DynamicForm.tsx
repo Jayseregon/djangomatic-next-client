@@ -1,5 +1,5 @@
 import React from "react";
-import { RadioGroup, Radio } from "@nextui-org/react";
+import { RadioGroup, Radio } from "@heroui/react";
 
 import { ChecklistRow } from "@/types/reports";
 

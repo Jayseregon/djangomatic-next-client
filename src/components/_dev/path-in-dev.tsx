@@ -2,7 +2,7 @@
 import type { JSX } from "react";
 
 import { usePathname } from "next/navigation";
-import { Snippet } from "@nextui-org/snippet";
+import { Snippet } from "@heroui/snippet";
 
 import { title } from "@/components/primitives";
 

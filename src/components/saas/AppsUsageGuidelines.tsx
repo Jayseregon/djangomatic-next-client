@@ -38,7 +38,7 @@ const AppsUsageGuidelines = () => {
           {t("sections.permissionsAccess.title")}
         </h2>
         <p className="flex inline-block gap-2">
-          <ExclamationTriangleIcon />
+          <ExclamationTriangleIcon data-testid="warning-icon" />
           {t("sections.permissionsAccess.paragraph1")}
         </p>
         <p>{t("sections.permissionsAccess.paragraph2")}</p>

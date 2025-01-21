@@ -1,0 +1,244 @@
+---
+title: Automated Design Workflow
+slug: automated-design-workflow
+---
+<div>
+---
+
+**Comprehensive Solutions for Efficient Data Preparation and Network Design**  
+*Empowering streamlined workflows with detailed, client-focused guides.*
+
+---
+
+## Table of Contents
+
+- [Overview](#overview)
+- [Requirements](#requirements)
+- [Step-by-Step Instructions](#step-by-step-instructions)
+  - [Step 1: Open QGIS](#step-1-open-qgis)
+  - [Step 2: Open the Python Console](#step-2-open-the-python-console)
+  - [Step 3: Open the Script Editor](#step-3-open-the-script-editor)
+  - [Step 4: Load the Script](#step-4-load-the-script)
+  - [Step 5: Run the Script](#step-5-run-the-script)
+  - [Step 6: Select the &apos;Connections&apos; Shapefile](#step-6-select-the-connections-shapefile)
+  - [Step 7: Select the &apos;Nodes&apos; Shapefile](#step-7-select-the-nodes-shapefile)
+  - [Step 8: Script Execution](#step-8-script-execution)
+  - [Step 9: Verify the Output](#step-9-verify-the-output)
+- [Opening Sttar and Preparing for Data Input](#opening-sttar-and-preparing-for-data-input)
+  - [Step 1: Open Sttar Software](#step-1-open-sttar-software)
+  - [Step 2: Import Configuration or Project File](#step-2-import-configuration-or-project-file)
+  - [Step 3: Adding Feed Data](#step-3-adding-feed-data)
+  - [Step 4: Adding Strands Data](#step-4-adding-strands-data)
+  - [Step 5: Adding Underground Data](#step-5-adding-underground-data)
+- [Configuring the Architecture Tab](#configuring-the-architecture-tab)
+- [Overview of Sttar Tools and Layers](#overview-of-sttar-tools-and-layers)
+
+---
+
+## Overview
+
+This guide provides step-by-step instructions for processing a Geopackage using QGIS to prepare specific data layers for input into Sttar. The target data layers include:
+
+- **Aerial Drops**
+- **Underground Drops**
+- **Pedestal/Handholes**
+- **OLT**
+- **HP**
+- **Poles**
+- **Routes AER**
+- **Route UG**
+
+---
+
+## Requirements
+
+- **QGIS software**
+- Katapult `Nodes` and `Connections` shapefiles.
+- The Python script `` `comcast_data_preparation.py` ``.
+- The Python script `` `process_cad_imports.py` ``.
+
+---
+
+## Step-by-Step Instructions
+
+### Step 1: Open QGIS
+
+1. Launch QGIS.
+
+> **Outcome**: QGIS is successfully opened and ready for data preparation.
+
+---
+
+### Step 2: Open the Python Console
+
+1. Access the Python Console:
+   - Go to `` `Plugins > Python Console` `` in the top menu.
+
+![Open Python Console](path/to/screenshot2.png)  
+*Navigate to the Python Console to enable scripting features in QGIS.*
+
+---
+
+### Step 3: Open the Script Editor
+
+1. Open the Script Editor:
+   - In the Python Console, click the **Show Editor** button (paper and pencil icon).
+
+![Open Script Editor](path/to/screenshot3.png)  
+*Access the Script Editor to load your custom Python scripts.*
+
+---
+
+### Step 4: Load the Script
+
+1. Load the script into the editor:
+   - Click the **Open Script** button (folder icon) in the Script Editor.
+   - Navigate to the location where you saved `` `comcast_data_prep.py` ``.
+   - Select the file and click **Open**.
+
+![Load the Script](path/to/screenshot4.png)  
+*Steps to locate and open the script file in the Script Editor.*
+
+---
+
+### Step 5: Run the Script
+
+1. Run the script:
+   - Click the **Run Script** button (green play icon) in the Script Editor.
+
+![Run the Script](path/to/screenshot5.png)  
+*Executing the script to begin processing the data.*
+
+---
+
+### Step 6: Select the &apos;Connections&apos; Shapefile
+
+1. A file dialog will prompt you to select the `Connections` shapefile:
+   - Navigate to the folder containing your shapefiles.
+   - Select `` `Connections.shp` `` and click **Open**.
+
+![Select Connections Shapefile](path/to/screenshot6.png)  
+*Example of selecting the `Connections.shp` file.*
+
+---
+
+### Step 7: Select the &apos;Nodes&apos; Shapefile
+
+1. A file dialog will prompt you to select the `Nodes` shapefile:
+   - Navigate to the folder containing your shapefiles.
+   - Select `` `Nodes.shp` `` and click **Open**.
+
+![Select Nodes Shapefile](path/to/screenshot7.png)  
+*Example of selecting the `Nodes.shp` file.*
+
+---
+
+### Step 8: Script Execution
+
+1. The script will:
+   - Automatically load the shapefiles.
+   - Select specific features.
+   - Export the processed features into new shapefiles.
+2. A new folder named **Sttar Inputs** will be created in the same directory as your input shapefiles.
+
+> **Outcome**: The folder **Sttar Inputs** now contains newly processed shapefiles, ready for Sttar.
+
+![Script Execution](path/to/screenshot8.png)  
+*Overview of the script execution and output folder creation.*
+
+---
+
+### Step 9: Verify the Output
+
+1. Check the output folder:
+   - Navigate to the folder containing your input shapefiles.
+   - Open the **Sttar Inputs** folder to verify the creation of new shapefiles, such as:
+     - `` `input_aerial_routes.shp` ``
+     - `` `input_poles.shp` ``
+
+![Verify the Output](path/to/screenshot9.png)  
+*Example of verified output files in the Sttar Inputs folder.*
+
+---
+
+## Overview of Sttar Tools and Layers
+
+Sttar provides a comprehensive suite of tools and features to help you interact with and modify your network map effectively. Below is an overview of the main tools and layers available in Sttar.
+
+### Tools Overview
+
+The tools in Sttar are designed to make it easy to manipulate elements on the map and compute network designs efficiently. Here&apos;s a summary of the main tools:
+
+- **Map Access**:  
+  Access the map interface via **`Project > Map`** to view and edit your network design.
+
+  ![Open Sttar Map](path/to/screenshot15.png)  
+  *The map interface in Sttar provides a visual representation of your network design.*
+
+- **Select/Unselect Tools**:  
+  These tools let you select or deselect elements on the map for editing.
+
+- **Create/Modify Tools**:  
+  Use these tools to add or adjust features on the map, such as creating new OLTs, modifying splitters, or adjusting connections.
+
+- **Assign to Parent Node Tool**:  
+  This tool allows you to link a point feature (e.g., an address or HP) to a parent node (e.g., a splitter or OLT) within the network hierarchy.
+
+- **Delete Tool**:  
+  Removes selected elements from the map. Use this in conjunction with the selection tool.
+
+- **Pan Mode**:  
+  Navigate across the map smoothly by enabling this mode.
+
+- **Compute Automated Design**:  
+  This feature recalculates the network design based on recent changes and generates updated results.
+
+  ![Sttar Tools Overview](path/to/screenshot16.png)  
+  *An overview of tools available in Sttar for managing your network design.*
+
+---
+
+### Layers Overview
+
+Sttar organizes network components into layers, each representing a distinct aspect of your design. These layers make it easy to manage and analyze the network structure. Key layers include:
+
+- **Network Nodes**:  
+  Represent critical equipment in your network, such as OLTs and splitters.
+
+- **Network Endpoints**:  
+  Represent addresses (HPs) that are endpoints in your network.
+
+- **Service Areas**:  
+  Polygons that define the boundaries of service areas for each design architecture level:
+  - **Level 1**: OLT
+  - **Level 2**: Primary splitters
+  - **Level 5**: Secondary splitters
+  - **Level 6**: Tertiary splitters
+
+  ![Sttar Layers](path/to/screenshot17.png)  
+  *Visualization of network layers in Sttar.*
+
+---
+
+### Customizing Layer Symbology
+
+To better visualize the network components, you can customize the symbology of layers.  
+- Right-click on a layer and select **`Symbology`** to adjust the colors, symbols, or styles representing network elements.
+
+  ![Modify Symbology](path/to/screenshot18.png)  
+  *Steps to modify layer symbology for enhanced clarity.*
+
+---
+
+### Summary
+
+The tools and layers in Sttar provide a robust framework for network design and analysis. From editing individual features to recalculating network designs, these features ensure that your workflow is both efficient and accurate.
+
+---
+
+## Final Notes
+
+*This guide is designed to help professionals streamline their design workflows through precise instructions and automated tools. If you need further assistance, feel free to contact the **Continuous Improvement and Automation team**.*
+
+---
+</div>

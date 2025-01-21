@@ -2,7 +2,7 @@ import type { JSX } from "react";
 
 import { redirect } from "next/navigation";
 // import { headers } from "next/headers";
-// import { Button } from "@nextui-org/react";
+// import { Button } from "@heroui/react";
 
 import { title } from "@/components/primitives";
 import { signIn, auth, providerMap } from "@/auth";
@@ -57,10 +57,9 @@ export default async function SignInPage(): Promise<JSX.Element> {
               className="bg-gradient-to-tr from-[#b249f8] to-[#01cfea] text-white shadow-lg rounded-full px-4 py-2"
               type="submit"
             >
-              <span>
-                Sign in with{" "}
-                {provider.name === "Microsoft Entra ID" ? "SSO" : provider.name}
-              </span>
+              {provider.name === "Microsoft Entra ID"
+                ? "Sign in with SSO"
+                : `Sign in with ${provider.name}`}
             </button>
           </form>
         ))}

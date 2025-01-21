@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { NextUIProvider } from "@nextui-org/system";
+import { HeroUIProvider } from "@heroui/system";
 import { useRouter } from "next/navigation";
 import { ThemeProvider as NextThemesProvider } from "next-themes";
 import { ThemeProviderProps } from "next-themes";
@@ -20,7 +20,7 @@ export interface ProvidersProps {
 }
 
 /**
- * Providers component wraps its children with NextUIProvider and NextThemesProvider.
+ * Providers component wraps its children with HeroUIProvider and NextThemesProvider.
  * It provides theme and navigation context to the entire application.
  *
  * @param {Object} props - The props for the Providers component.
@@ -39,11 +39,11 @@ export function Providers({
   return (
     <SessionProvider>
       <NonceContext.Provider value={nonce}>
-        <NextUIProvider navigate={router.push}>
+        <HeroUIProvider navigate={router.push}>
           <NextThemesProvider {...themeProps} nonce={nonce}>
             {children}
           </NextThemesProvider>
-        </NextUIProvider>
+        </HeroUIProvider>
       </NonceContext.Provider>
     </SessionProvider>
   );

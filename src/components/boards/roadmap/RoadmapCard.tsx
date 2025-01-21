@@ -11,7 +11,7 @@ import {
   Select,
   SelectItem,
   Button,
-} from "@nextui-org/react";
+} from "@heroui/react";
 import { Trash2 } from "lucide-react";
 import { useDebouncedCallback } from "use-debounce";
 

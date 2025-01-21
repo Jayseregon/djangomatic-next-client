@@ -89,6 +89,12 @@ export const docsData = {
     },
     // temp doc placeholder, qgis doc: FALSE
     {
+      label: "Xplore BOM Workflow",
+      href: "/docs/xplore/xplore-bom-workflow",
+      is_qgis_doc: false,
+    },
+    // temp doc placeholder, qgis doc: FALSE
+    {
       label: "Xplore Doc Placeholder",
       href: "/docs/xplore/xplore-doc-placeholder",
       is_qgis_doc: false,

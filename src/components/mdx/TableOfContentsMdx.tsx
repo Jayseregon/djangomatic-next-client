@@ -21,7 +21,10 @@ export default function TableOfContentsMdx({
     const element = document.getElementById(id);
 
     if (element) {
-      element.scrollIntoView({ behavior: "smooth" });
+      const yOffset = -100; // Adjust this value based on your header height or desired offset
+      const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
+
+      window.scrollTo({ top: y, behavior: "smooth" });
     }
   };
 
@@ -40,3 +43,4 @@ export default function TableOfContentsMdx({
     </div>
   );
 }
+

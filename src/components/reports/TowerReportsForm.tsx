@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Button } from "@nextui-org/react";
+import { Button } from "@heroui/react";
 import { CircleOff, FileText, Save, SaveAll } from "lucide-react";
 import { v4 as uuidv4 } from "uuid";
 
@@ -27,6 +27,7 @@ import ToastNotification, {
 import { FormInput } from "@/components/ui/formInput";
 import NotesInputs from "@/components/reports/NotesInputs";
 import DocLinkButton from "@/components/docs/DocLinkButton";
+import { getQuickbaseReportData } from "@/src/actions/quickbase/action";
 
 import FormSectionAccordion from "./FormSectionAccordion";
 import QuickbaseInputs from "./QuickbaseInputs";
@@ -346,10 +347,7 @@ export const TowerReportForm = ({
   };
 
   const handleSearchQB = async () => {
-    const response = await fetch(
-      `/api/quickbase?id=${formData.jde_work_order}`,
-    );
-    const data = await response.json();
+    const data = await getQuickbaseReportData(formData.jde_work_order);
 
     if (data) {
       setFormData((prev) => ({

@@ -1,9 +1,9 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, type JSX } from "react";
 import { useTranslations } from "next-intl";
 
-import { fetchUser } from "@/lib/getUserPermission";
+import { fetchUserServer } from "@/actions/generic/action";
 import { UserSchema } from "@/interfaces/lib";
 
 interface WithPermissionOverlayProps {
@@ -36,7 +36,7 @@ export const WithPermissionOverlay = ({
      */
     async function fetchData() {
       try {
-        const data = await fetchUser(email);
+        const data = await fetchUserServer(email);
 
         setUser(data);
       } catch (error) {
@@ -91,7 +91,7 @@ export const WithPermissionOverlayDocs = ({
      */
     async function fetchData() {
       try {
-        const data = await fetchUser(email);
+        const data = await fetchUserServer(email);
 
         setUser(data);
       } catch (error) {

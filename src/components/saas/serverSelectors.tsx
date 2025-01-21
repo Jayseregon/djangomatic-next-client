@@ -1,6 +1,6 @@
 "use client";
 
-import React, { ChangeEvent, useState } from "react";
+import React, { ChangeEvent, useState, type JSX } from "react";
 import { useTranslations } from "next-intl";
 import {
   Dropdown,
@@ -10,7 +10,7 @@ import {
   Button,
   Progress,
   Spinner,
-} from "@nextui-org/react";
+} from "@heroui/react";
 import DOMPurify from "dompurify";
 import { v4 as uuidv4 } from "uuid";
 import axios from "axios";
@@ -275,6 +275,7 @@ export const ArcGISControls = (): JSX.Element => {
         <p className="text-center">{t("control_erase")}</p>
         <Button
           isIconOnly
+          aria-label={t("control_erase")}
           color={inputData.arcgisErase ? "success" : "danger"}
           id="arcgisErase"
           name="arcgisErase"
@@ -286,6 +287,7 @@ export const ArcGISControls = (): JSX.Element => {
         <p className="text-center">{t("control_snap")}</p>
         <Button
           isIconOnly
+          aria-label={t("control_snap")}
           color={inputData.arcgisSnapshot ? "success" : "danger"}
           id="arcgisSnapshot"
           name="arcgisSnapshot"

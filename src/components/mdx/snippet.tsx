@@ -1,6 +1,6 @@
 "use client";
 
-import { ReactNode, useContext } from "react";
+import { ReactNode, useContext, type JSX } from "react";
 
 import { NonceContext } from "@/src/app/providers";
 

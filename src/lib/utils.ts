@@ -70,7 +70,7 @@ export function extractAzureFileData(filePath: string): (string | undefined)[] {
 export function formatAzureDate(dateString: string): string {
   const date = new Date(dateString);
 
-  return date.toLocaleDateString(undefined, {
+  return date.toLocaleDateString("en-US", {
     year: "numeric",
     month: "2-digit",
     day: "2-digit",

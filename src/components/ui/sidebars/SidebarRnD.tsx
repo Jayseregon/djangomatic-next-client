@@ -1,9 +1,9 @@
 "use client";
 
-import { Link } from "@nextui-org/react";
-import React, { useEffect, useState } from "react";
+import { Link } from "@heroui/react";
+import React, { useEffect, useState, type JSX } from "react";
 import { useTranslations } from "next-intl";
-import { Accordion, AccordionItem } from "@nextui-org/react";
+import { Accordion, AccordionItem } from "@heroui/react";
 
 import { UnAuthorized } from "@/components/auth/unAuthorized";
 import { UserSchema } from "@/interfaces/lib";

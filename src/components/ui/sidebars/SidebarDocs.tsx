@@ -1,10 +1,10 @@
 "use client";
 
-import { Link } from "@nextui-org/react";
-import React, { useContext } from "react";
+import { Link } from "@heroui/react";
+import React, { useContext, type JSX } from "react";
 import { useTranslations } from "next-intl";
 import { usePathname } from "next/navigation";
-import { Accordion, AccordionItem } from "@nextui-org/react";
+import { Accordion, AccordionItem } from "@heroui/react";
 
 import { siteConfig } from "@/config/site";
 import { docsData } from "@/config/docsData";

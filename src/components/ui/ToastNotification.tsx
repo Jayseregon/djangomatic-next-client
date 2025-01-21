@@ -36,7 +36,16 @@ const ToastNotification: React.FC<ToastNotificationProps> = ({
           </div>
         </Toast.Description>
         <Toast.Close asChild className="absolute top-7 right-7">
-          <CircleX color={theme === "dark" ? "#831843" : "#f472b6"} />
+          <button
+            aria-label="Close notification"
+            className="cursor-pointer"
+            type="button"
+          >
+            <CircleX
+              color={theme === "dark" ? "#831843" : "#f472b6"}
+              data-testid="close-button"
+            />
+          </button>
         </Toast.Close>
       </Toast.Root>
       <Toast.Viewport className="fixed bottom-0 right-0 z-[2147483647] m-0 flex w-[390px] max-w-[100vw] list-none flex-col gap-2.5 p-[var(--viewport-padding)] outline-none [--viewport-padding:_25px]" />

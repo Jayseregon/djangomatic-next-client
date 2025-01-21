@@ -1,6 +1,7 @@
 "use client";
+import type { JSX } from "react";
 
-import { Spinner } from "@nextui-org/react";
+import { Spinner } from "@heroui/react";
 import { useParams } from "next/navigation";
 import { useTranslations } from "next-intl";
 

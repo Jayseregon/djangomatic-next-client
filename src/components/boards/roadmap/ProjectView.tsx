@@ -7,12 +7,11 @@ import {
   Button,
   Input,
   Textarea,
-  DatePicker,
   Card,
   CardBody,
   CardHeader,
   Chip,
-} from "@nextui-org/react";
+} from "@heroui/react";
 import {
   DndContext,
   rectIntersection,
@@ -28,21 +27,17 @@ import {
   rectSortingStrategy,
 } from "@dnd-kit/sortable";
 import { useDebouncedCallback } from "use-debounce";
-import { parseDate, getLocalTimeZone } from "@internationalized/date";
 import { DoorOpen, Trash } from "lucide-react";
 
 import UserAccessBoards from "@/src/components/boards/UserAccess";
 import { UnAuthenticated } from "@/components/auth/unAuthenticated";
-import {
-  ProjectType,
-  CardType,
-  RoadmapCardCategory,
-} from "@/interfaces/roadmap";
+import { ProjectType, CardType } from "@/interfaces/roadmap";
 import { convertProjectDates } from "@/lib/utils";
 import {
   deletegRoadmapProject,
-  getRoadmapCardCategories,
+  updateCardPositions,
 } from "@/src/actions/prisma/roadmap/action";
+import { DatePicker } from "@/components/ui/DatePicker";
 
 import RoadmapCard from "./RoadmapCard";
 import SortableItem from "./SortableItem";
@@ -58,19 +53,19 @@ export default function ProjectView({
   const [project, setProject] = useState<ProjectType | null>(null);
   const sensors = useSensors(useSensor(MouseSensor), useSensor(TouchSensor));
   const router = useRouter();
-  const [categories, setCategories] = React.useState<RoadmapCardCategory[]>([]);
+  // const [categories, setCategories] = React.useState<RoadmapCardCategory[]>([]);
   const [memberInput, setMemberInput] = useState("");
   const [membersList, setMembersList] = useState<string[]>([]);
 
-  useEffect(() => {
-    const fetchCategories = async () => {
-      const res = await getRoadmapCardCategories();
+  // useEffect(() => {
+  //   const fetchCategories = async () => {
+  //     const res = await getRoadmapCardCategories();
 
-      setCategories(res ?? []);
-    };
+  //     setCategories(res ?? []);
+  //   };
 
-    fetchCategories();
-  }, []);
+  //   fetchCategories();
+  // }, []);
 
   // Move all hooks before any conditional returns
   const debouncedUpdate = useDebouncedCallback((field, value) => {
@@ -146,70 +141,56 @@ export default function ProjectView({
   const handleDragEnd = async (event: DragEndEvent) => {
     const { active, over } = event;
 
-    if (over && active.id !== over.id && project) {
-      const oldIndex = project.projectCards.findIndex(
-        (pc) => pc.id === active.id,
-      );
-      const newIndex = project.projectCards.findIndex(
-        (pc) => pc.id === over.id,
+    if (!over || !project || active.id === over.id) return;
+
+    const oldIndex = project.projectCards.findIndex(
+      (pc) => pc.id === active.id,
+    );
+    const newIndex = project.projectCards.findIndex((pc) => pc.id === over.id);
+
+    if (oldIndex === -1 || newIndex === -1) return;
+
+    try {
+      const newProjectCards = arrayMove(
+        project.projectCards,
+        oldIndex,
+        newIndex,
       );
 
-      if (oldIndex !== newIndex) {
-        const newProjectCards = arrayMove(
-          project.projectCards,
-          oldIndex,
-          newIndex,
-        );
+      // Prepare updates with explicit positions
+      const updates = newProjectCards.map((pc, index) => ({
+        projectId: project.id,
+        cardId: pc.card.id,
+        position: index,
+      }));
 
-        // Optimistic update
-        setProject({
-          ...project,
+      console.log("Updates to perform:", updates);
+
+      // Optimistic update
+      setProject((prevProject) => {
+        if (!prevProject) return null;
+
+        return {
+          ...prevProject,
           projectCards: newProjectCards.map((pc, index) => ({
             ...pc,
             position: index,
           })),
-        });
+        };
+      });
 
-        const updates = newProjectCards.map((pc, index) => ({
-          projectId: project.id,
-          cardId: pc.card!.id,
-          position: index,
-        }));
+      // Call server action and update with returned data
+      const result = await updateCardPositions(updates);
 
-        try {
-          const response = await fetch(
-            "/api/roadmap-projects/update-card-positions",
-            {
-              method: "PATCH",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({ updates }),
-            },
-          );
-          const result = await response.json();
+      console.log("Result from server:", result);
 
-          if (!response.ok) {
-            throw new Error("Failed to update positions");
-          }
-
-          // Update with server response
-          if (result && Array.isArray(result)) {
-            setProject((prev) => ({
-              ...prev!,
-              projectCards: result.map((pc) => ({
-                id: pc.id,
-                projectId: pc.projectId,
-                cardId: pc.cardId,
-                position: pc.position,
-                card: pc.card,
-              })),
-            }));
-          }
-        } catch (error) {
-          console.error("Failed to update card positions:", error);
-          // Revert optimistic update
-          setProject(project);
-        }
+      if (result) {
+        setProject(convertProjectDates(result));
       }
+    } catch (error) {
+      console.error("Failed to update card positions:", error);
+      // Revert to original project state on error
+      setProject(project);
     }
   };
 
@@ -320,79 +301,25 @@ export default function ProjectView({
             {/* Date Inputs */}
             <div className="flex flex-row gap-5">
               <DatePicker
-                aria-label="Due Date"
-                classNames={{
-                  selectorIcon: "text-foreground",
-                }}
-                dateInputClassNames={{
-                  inputWrapper:
-                    "border-foreground/50 rounded-full hover:border-foreground",
-                }}
+                className="flex-1"
                 label={t("projectCardPlaceholders.pDueDate")}
-                labelPlacement="outside"
-                name="dueDate"
-                value={
-                  project.dueDate
-                    ? parseDate(project.dueDate.toISOString().split("T")[0])
-                    : null
-                }
-                variant="bordered"
-                onChange={(value) =>
-                  handleFieldChange(
-                    "dueDate",
-                    value ? value.toDate(getLocalTimeZone()) : null,
-                  )
-                }
+                placeholder={t("projectCardPlaceholders.pDueDate")}
+                value={project.dueDate}
+                onChange={(value) => handleFieldChange("dueDate", value)}
               />
               <DatePicker
-                aria-label="Started At"
-                classNames={{
-                  selectorIcon: "text-foreground",
-                }}
-                dateInputClassNames={{
-                  inputWrapper:
-                    "border-foreground/50 rounded-full hover:border-foreground",
-                }}
+                className="flex-1"
                 label={t("projectCardPlaceholders.pStartedDate")}
-                labelPlacement="outside"
-                name="startedAt"
-                value={
-                  project.startedAt
-                    ? parseDate(project.startedAt.toISOString().split("T")[0])
-                    : null
-                }
-                variant="bordered"
-                onChange={(value) =>
-                  handleFieldChange(
-                    "startedAt",
-                    value ? value.toDate(getLocalTimeZone()) : null,
-                  )
-                }
+                placeholder={t("projectCardPlaceholders.pStartedDate")}
+                value={project.startedAt}
+                onChange={(value) => handleFieldChange("startedAt", value)}
               />
               <DatePicker
-                aria-label="Completed At"
-                classNames={{
-                  selectorIcon: "text-foreground",
-                }}
-                dateInputClassNames={{
-                  inputWrapper:
-                    "border-foreground/50 rounded-full hover:border-foreground",
-                }}
+                className="flex-1"
                 label={t("projectCardPlaceholders.pCompletedDate")}
-                labelPlacement="outside"
-                name="completedAt"
-                value={
-                  project.completedAt
-                    ? parseDate(project.completedAt.toISOString().split("T")[0])
-                    : null
-                }
-                variant="bordered"
-                onChange={(value) =>
-                  handleFieldChange(
-                    "completedAt",
-                    value ? value.toDate(getLocalTimeZone()) : null,
-                  )
-                }
+                placeholder={t("projectCardPlaceholders.pCompletedDate")}
+                value={project.completedAt}
+                onChange={(value) => handleFieldChange("completedAt", value)}
               />
             </div>
 
@@ -402,6 +329,7 @@ export default function ProjectView({
                 input: "border-0 focus:ring-0",
                 inputWrapper: "border-foreground/50 hover:!border-foreground",
               }}
+              disableAutosize={false}
               label={t("projectCardPlaceholders.pComments")}
               labelPlacement="outside"
               minRows={5}
@@ -434,7 +362,7 @@ export default function ProjectView({
                 >
                   <RoadmapCard
                     card={projectCard.card!}
-                    categories={categories}
+                    // providedCategories={categories}
                     setCards={(cards) => {
                       if (typeof cards === "function") {
                         const updatedCard = cards([projectCard.card!])[0];

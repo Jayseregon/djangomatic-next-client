@@ -1,6 +1,6 @@
 import type { Config } from "tailwindcss";
 
-import { nextui } from "@nextui-org/theme";
+import { heroui } from "@heroui/theme";
 
 /** @type {import("tailwindcss").Config} */
 const config = {
@@ -8,7 +8,7 @@ const config = {
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/**/*.{js,ts,jsx,tsx,mdx,css}",
-    "./node_modules/@nextui-org/theme/dist/**/*.{js,ts,jsx,tsx}",
+    "./node_modules/@heroui/theme/dist/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
     extend: {
@@ -145,7 +145,7 @@ const config = {
   plugins: [
     require("@tailwindcss/typography"),
     require("@tailwindcss/forms"),
-    nextui({
+    heroui({
       themes: {
         light: {
           colors: {

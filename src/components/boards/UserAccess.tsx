@@ -1,8 +1,8 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, type JSX } from "react";
 
-import { fetchUser } from "@/lib/getUserPermission";
+import { fetchUserServer } from "@/actions/generic/action";
 import { UserSchema } from "@/interfaces/lib";
 
 import { UnAuthorized } from "../auth/unAuthorized";
@@ -32,7 +32,7 @@ export default function UserAccessBoards({
     // Fetches user data based on the provided email.
     async function fetchData() {
       try {
-        const data = await fetchUser(email);
+        const data = await fetchUserServer(email);
 
         setUser(data);
       } catch (error) {

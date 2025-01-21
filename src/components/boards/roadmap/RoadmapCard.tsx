@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useCallback } from "react";
+import React, { useCallback, useEffect } from "react";
 import {
   Card,
   CardHeader,
@@ -11,12 +11,13 @@ import {
   Select,
   SelectItem,
   Button,
-} from "@nextui-org/react";
+} from "@heroui/react";
 import { Trash2 } from "lucide-react";
 import { useDebouncedCallback } from "use-debounce";
 
-import { RoadmapCardProps } from "@/interfaces/roadmap";
+import { RoadmapCardCategory, RoadmapCardProps } from "@/interfaces/roadmap";
 import { cn } from "@/src/lib/utils";
+import { getRoadmapCardCategories } from "@/src/actions/prisma/roadmap/action";
 
 // Define the custom Badge component
 const Badge: React.FC<{ color: string }> = ({ color }) => (
@@ -29,7 +30,8 @@ const Badge: React.FC<{ color: string }> = ({ color }) => (
   </div>
 );
 
-function RoadmapCard({ card, setCards, categories }: RoadmapCardProps) {
+function RoadmapCard({ card, setCards, providedCategories }: RoadmapCardProps) {
+  const [categories, setCategories] = React.useState<RoadmapCardCategory[]>([]);
   const debouncedUpdate = useDebouncedCallback((field, value) => {
     fetch("/api/roadmap-cards/update", {
       method: "PUT",
@@ -37,6 +39,20 @@ function RoadmapCard({ card, setCards, categories }: RoadmapCardProps) {
       body: JSON.stringify({ id: card.id, [field]: value }),
     });
   }, 500);
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      const res = await getRoadmapCardCategories();
+
+      setCategories(res ?? []);
+    };
+
+    if (providedCategories) {
+      setCategories(providedCategories);
+    } else {
+      fetchCategories();
+    }
+  }, []);
 
   const handleTitleChange = useCallback(
     (newTitle: string) => {

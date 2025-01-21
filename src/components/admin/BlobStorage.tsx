@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, type JSX } from "react";
 import { SortDescriptor } from "@react-types/shared";
 import { useAsyncList } from "@react-stately/data";
 import {
@@ -13,7 +13,7 @@ import {
   TableColumn,
   TableRow,
   TableCell,
-} from "@nextui-org/react";
+} from "@heroui/react";
 import { v4 as uuidv4 } from "uuid";
 
 import { videosData } from "@/src/config/videosData";

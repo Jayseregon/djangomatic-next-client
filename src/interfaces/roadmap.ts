@@ -2,13 +2,13 @@ export interface CardType {
   id: string;
   title: string;
   description: string;
-  category?: RoadmapCardCategory;
+  category?: RoadmapCardCategory | null; // Allow null
   color: string;
   position: number; // Position within category
-  createdAt: string;
-  updatedAt: string;
-  projects: ProjectType[];
-  projectCards: RoadmapProjectCardType[];
+  createdAt: Date;
+  updatedAt: Date;
+  roadmapCardCategoryId?: string | null;
+  projectCards?: RoadmapProjectCardType[]; // Make this optional
 }
 
 export interface RoadmapCardCategory {
@@ -41,8 +41,8 @@ export interface RoadmapProjectCardType {
   projectId: string;
   cardId: string;
   position: number;
-  card?: CardType;
-  project?: ProjectType;
+  card: CardType; // Make this required
+  project?: Omit<ProjectType, "projectCards"> | null; // Remove projectCards from nested project
 }
 
 export interface AddInputProps {
@@ -56,5 +56,5 @@ export interface AddInputProps {
 export interface RoadmapCardProps {
   card: CardType;
   setCards: React.Dispatch<React.SetStateAction<CardType[]>>;
-  categories: RoadmapCardCategory[];
+  providedCategories?: RoadmapCardCategory[];
 }

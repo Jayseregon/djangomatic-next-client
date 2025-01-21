@@ -1,7 +1,7 @@
 "use client";
 
-import { Link } from "@nextui-org/react";
-import React, { useEffect, useState, useContext } from "react";
+import { Link } from "@heroui/react";
+import React, { useEffect, useState, useContext, type JSX } from "react";
 import { usePathname } from "next/navigation";
 
 import { NonceContext } from "@/src/app/providers";

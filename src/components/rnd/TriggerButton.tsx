@@ -1,5 +1,5 @@
 import React from "react";
-import { Button } from "@nextui-org/react";
+import { Button } from "@heroui/react";
 import { ListPlus } from "lucide-react";
 
 export const TriggerButton = ({ onClick }: { onClick: () => void }) => {

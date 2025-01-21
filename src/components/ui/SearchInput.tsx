@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
-import { Input } from "@nextui-org/react";
+import { useState, useRef, useEffect, type JSX } from "react";
+import { Input } from "@heroui/react";
 
 import { SearchIcon } from "@/components/icons";
 
@@ -78,7 +78,11 @@ export const SearchInput = ({
           type="search"
         />
       ) : (
-        <SearchIcon className="cursor-pointer" onClick={toggleSearch} />
+        <SearchIcon
+          className="cursor-pointer"
+          data-testid="search-trigger"
+          onClick={toggleSearch}
+        />
       )}
     </div>
   );

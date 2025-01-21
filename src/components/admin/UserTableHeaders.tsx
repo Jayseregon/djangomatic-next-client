@@ -1,4 +1,6 @@
-import { TableHeader, TableColumn } from "@nextui-org/react";
+import type { JSX } from "react";
+
+import { TableHeader, TableColumn } from "@heroui/react";
 import { FileLock } from "lucide-react";
 
 /**

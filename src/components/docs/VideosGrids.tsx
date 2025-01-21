@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, type JSX } from "react";
 
 import { extractAzureFileData, titleCase } from "@/src/lib/utils";
 

@@ -83,6 +83,12 @@ export const docsData = {
   xplore_docs: [
     // temp doc placeholder, qgis doc: FALSE
     {
+      label: "Automated Design Workflow",
+      href: "/docs/xplore/automated-design-workflow",
+      is_qgis_doc: false,
+    },
+    // temp doc placeholder, qgis doc: FALSE
+    {
       label: "Xplore Doc Placeholder",
       href: "/docs/xplore/xplore-doc-placeholder",
       is_qgis_doc: false,
@@ -95,6 +101,12 @@ export const docsData = {
     },
   ],
   comcast_docs: [
+    // Comcast Automated Design Workflow, qgis doc: FALSE
+    {
+      label: "Automated Design Workflow",
+      href: "/docs/comcast/automated-design-workflow",
+      is_qgis_doc: false,
+    },
     // Comcast Basemap Design Workflow, qgis doc: FALSE
     {
       label: "Basemap Design Workflow",

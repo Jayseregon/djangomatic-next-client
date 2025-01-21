@@ -1,8 +1,9 @@
 import axios from "axios";
 import { LRUCache } from "lru-cache";
 import DOMPurify from "isomorphic-dompurify";
-import { jwtDecode } from "jwt-decode";
 
+import { getServerTokens } from "@/actions/django/action";
+import { getServerCsrfToken } from "@/actions/generic/action";
 import {
   checkTaskStatusProps,
   fetchDbSchemasProps,
@@ -13,7 +14,6 @@ import {
 
 const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
 // const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
-// https://docker-djangomatic.azurewebsites.net
 
 // cache settings
 const tablesCache = new LRUCache<string, any>({
@@ -31,98 +31,162 @@ export const axiosInstance = axios.create({
   withCredentials: true,
 });
 
-export const getMiddlewareCsrfToken = async (): Promise<string> => {
-  const response = await fetch("/api/csrf-token");
-  const data = await response.json();
+// Helper function to ensure token exists
+const ensureToken = async (backendUser: string): Promise<string> => {
+  const tokens = await getServerTokens(backendUser);
 
-  return data.csrfToken || "missing";
+  if (!tokens?.djAuthToken) {
+    throw new Error("Failed to obtain valid authentication token");
+  }
+
+  return tokens.djAuthToken;
 };
 
-export const makeServerLoginRequest = async (backendUser: string) => {
-  try {
-    const response = await fetch("/api/django-auth", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ backendUser }),
+async function getCredentials(backendUser: string) {
+  const djAuthToken = await ensureToken(backendUser);
+  const csrfToken = await getServerCsrfToken();
+
+  if (!csrfToken) {
+    throw new Error("Failed to retrieve CSRF token");
+  }
+
+  return { djAuthToken, csrfToken };
+}
+
+function buildFormData(taskOptions: startTaskProps): FormData {
+  const payload = new FormData();
+
+  // Append base fields
+  payload.append("db_choice", taskOptions.db_choice);
+  payload.append("schema_choice", taskOptions.schema_choice);
+  payload.append("db_class", taskOptions.dbClass);
+
+  /**
+   * Mapping of taskOptions keys to payload keys, with conditions and transformations.
+   */
+  const optionsToPayloadMapping = [
+    {
+      optionKey: "file",
+      payloadKey: "file",
+      condition: (options: startTaskProps) => options.file instanceof File,
+    },
+    {
+      optionKey: "tdsUsername",
+      payloadKey: "db621_user",
+      condition: (options: startTaskProps) =>
+        !!options.tdsUsername && !!options.tdsPassword,
+    },
+    {
+      optionKey: "tdsPassword",
+      payloadKey: "db621_pwd",
+      condition: (options: startTaskProps) =>
+        !!options.tdsUsername && !!options.tdsPassword,
+    },
+    {
+      optionKey: "arcgisErase",
+      payloadKey: "erase_previous",
+      condition: (options: startTaskProps) =>
+        !!options.tdsUsername && !!options.tdsPassword,
+      transform: (value: boolean) => (value ? "yes" : "no"),
+    },
+    {
+      optionKey: "arcgisSnapshot",
+      payloadKey: "snapshot",
+      condition: (options: startTaskProps) =>
+        !!options.tdsUsername && !!options.tdsPassword,
+      transform: (value: boolean) => (value ? "yes" : "no"),
+    },
+    {
+      optionKey: "project_id",
+      payloadKey: "project_id",
+      condition: (options: startTaskProps) =>
+        !!options.project_id && !!options.project_num && !!options.file_path,
+    },
+    {
+      optionKey: "project_num",
+      payloadKey: "project_num",
+      condition: (options: startTaskProps) =>
+        !!options.project_id && !!options.project_num && !!options.file_path,
+    },
+    {
+      optionKey: "file_path",
+      payloadKey: "file_path",
+      condition: (options: startTaskProps) =>
+        !!options.project_id && !!options.project_num && !!options.file_path,
+    },
+    {
+      optionKey: "operationChoice",
+      payloadKey: "operation_choice",
+      condition: (options: startTaskProps) => !!options.operationChoice,
+    },
+  ];
+
+  // Append fields based on the mapping
+  optionsToPayloadMapping.forEach(
+    ({ optionKey, payloadKey, condition, transform }) => {
+      if (condition(taskOptions)) {
+        const value = taskOptions[optionKey as keyof startTaskProps];
+
+        if (value !== undefined) {
+          let finalValue: string | Blob;
+
+          if (transform && typeof value === "boolean") {
+            finalValue = transform(value);
+          } else if (value instanceof File) {
+            finalValue = value;
+          } else {
+            finalValue = String(value);
+          }
+          payload.append(payloadKey, finalValue);
+        }
+      }
+    },
+  );
+
+  // Handle special case for 'table_choice' which needs to be appended to multiple keys
+  if (taskOptions.table_choice) {
+    [
+      "pole_table_choice",
+      "table_choice",
+      "dfn_choice",
+      "pattern_choice",
+    ].forEach((key) => {
+      payload.append(key, taskOptions.table_choice as string);
     });
+  }
 
-    if (!response.ok) {
-      throw new Error("Login failed");
+  // Handle specific flags based on the endpoint
+  if (
+    taskOptions.endpoint === "/saas/tds/ajax/query-import-hld-to-postgres/" ||
+    taskOptions.endpoint === "/saas/tds/ajax/query-import-gps-to-postgres/"
+  ) {
+    if (taskOptions.is_override) {
+      payload.append("is_override", "yes");
     }
-
-    const data = await response.json();
-
-    return data;
-  } catch (error) {
-    console.error("Error during login request:", error);
-  }
-};
-
-const fetchTokens = async (backendUser: string) => {
-  const endpoint = "/api/django-jwt";
-  let response = await fetch(endpoint);
-
-  if (response.status === 404) {
-    await makeServerLoginRequest(backendUser);
-    response = await fetch(endpoint);
   }
 
-  if (!response.ok) {
-    throw new Error("Failed to retrieve tokens");
-  }
-
-  return response.json();
-};
-
-const validateTokens = (token: string) => {
-  // check if the token is expired
-  const isTokenValid = token && !isTokenExpired(token);
-
-  return isTokenValid;
-};
-
-const isTokenExpired = (token: string) => {
-  // decode jwt token
-  try {
-    const decodedToken = jwtDecode(token);
-
-    if (!decodedToken || !decodedToken.exp) {
-      return true;
+  if (
+    taskOptions.endpoint === "/saas/tds/ajax/super/query-change-ownership-uniq/"
+  ) {
+    if (taskOptions.is_override) {
+      payload.append("assign_uniq", "yes");
     }
-    const expiryDate = new Date(decodedToken.exp * 1000);
-
-    return expiryDate < new Date();
-  } catch (error) {
-    console.error("Error decoding token:", error);
-
-    return true;
   }
-};
 
-export const getServerTokens = async (backendUser: string) => {
-  try {
-    let tokens = await fetchTokens(backendUser);
-    const usedBackendUser = tokens.usedBackendUser;
-
-    if (usedBackendUser !== backendUser) {
-      await makeServerLoginRequest(backendUser);
-      tokens = await fetchTokens(backendUser);
+  if (taskOptions.endpoint === "/saas/tds/ajax/super/query-postgres-version/") {
+    if (taskOptions.is_override) {
+      payload.append("run_full_db", "yes");
     }
-
-    if (!validateTokens(tokens.djAuthToken)) {
-      await makeServerLoginRequest(backendUser);
-      tokens = await fetchTokens(backendUser);
-    }
-
-    return tokens;
-  } catch (error: any) {
-    console.error("Error getting ironSession tokens:", error);
-
-    return null;
   }
-};
+
+  // Set 'projectType' for poles calculations based on 'is_override'
+  if (taskOptions.endpoint === "/saas/tds/ajax/query-poles-dfn-calc/") {
+    payload.append("projectType", taskOptions.is_override ? "HLD" : "LLD");
+    payload.append("uuidPole", taskOptions.uuidPole || "");
+  }
+
+  return payload;
+}
 
 export const fetchDbSchemas = async ({
   target_db,
@@ -130,19 +194,12 @@ export const fetchDbSchemas = async ({
 }: fetchDbSchemasProps) => {
   const cacheKey = `${target_db}`;
   const cachedData = schemasCache.get(cacheKey);
-  const { djAuthToken } = await getServerTokens(backendUser);
+  const { djAuthToken, csrfToken } = await getCredentials(backendUser);
 
   if (cachedData) {
     return cachedData;
   }
   try {
-    // get the csrf token from server
-    const csrfToken = await getMiddlewareCsrfToken();
-
-    if (!csrfToken) {
-      throw new Error("Failed to retrieve CSRF token");
-    }
-
     // define request params
     const endpoint = "/saas/tds/ajax/query-schema-list/";
     const payload = {
@@ -186,22 +243,14 @@ export const fetchSchemaTables = async ({
 }: fetchSchemaTablesProps) => {
   const cacheKey = `${target_db}-${schema_choice}-${user_pattern}`;
   const cachedData = tablesCache.get(cacheKey);
-  const { djAuthToken } = await getServerTokens(backendUser);
+  const { djAuthToken, csrfToken } = await getCredentials(backendUser);
 
   if (cachedData) {
     return cachedData;
   }
 
   try {
-    // get the csrf token from server
-    const csrfToken = await getMiddlewareCsrfToken();
-
-    if (!csrfToken) {
-      throw new Error("Failed to retrieve CSRF token");
-    }
-
     // define request params
-    // const endpoint = "/saas/tds/ajax/query-poles-tables-from-schema/";
     const payload = {
       target_db: target_db,
       schema_choice: schema_choice,
@@ -238,153 +287,12 @@ export const fetchSchemaTables = async ({
 };
 
 export const startTask = async (taskOptions: startTaskProps) => {
-  if (!taskOptions.backendUser) {
-    throw new Error("backendUser is required");
-  }
-  const { djAuthToken } = await getServerTokens(taskOptions.backendUser);
+  const { djAuthToken, csrfToken } = await getCredentials(
+    taskOptions.backendUser!,
+  );
 
   try {
-    // get the csrf token from server
-    const csrfToken = await getMiddlewareCsrfToken();
-
-    if (!csrfToken) {
-      throw new Error("Failed to retrieve CSRF token");
-    }
-
-    // Initialize FormData
-    const payload = new FormData();
-
-    // Append base fields
-    payload.append("db_choice", taskOptions.db_choice);
-    payload.append("schema_choice", taskOptions.schema_choice);
-    payload.append("db_class", taskOptions.dbClass);
-
-    /**
-     * Mapping of taskOptions keys to payload keys, with conditions and transformations.
-     */
-    const optionsToPayloadMapping = [
-      {
-        optionKey: "file",
-        payloadKey: "file",
-        condition: (options: startTaskProps) => options.file instanceof File,
-      },
-      {
-        optionKey: "tdsUsername",
-        payloadKey: "db621_user",
-        condition: (options: startTaskProps) =>
-          !!options.tdsUsername && !!options.tdsPassword,
-      },
-      {
-        optionKey: "tdsPassword",
-        payloadKey: "db621_pwd",
-        condition: (options: startTaskProps) =>
-          !!options.tdsUsername && !!options.tdsPassword,
-      },
-      {
-        optionKey: "arcgisErase",
-        payloadKey: "erase_previous",
-        condition: (options: startTaskProps) =>
-          !!options.tdsUsername && !!options.tdsPassword,
-        transform: (value: boolean) => (value ? "yes" : "no"),
-      },
-      {
-        optionKey: "arcgisSnapshot",
-        payloadKey: "snapshot",
-        condition: (options: startTaskProps) =>
-          !!options.tdsUsername && !!options.tdsPassword,
-        transform: (value: boolean) => (value ? "yes" : "no"),
-      },
-      {
-        optionKey: "project_id",
-        payloadKey: "project_id",
-        condition: (options: startTaskProps) =>
-          !!options.project_id && !!options.project_num && !!options.file_path,
-      },
-      {
-        optionKey: "project_num",
-        payloadKey: "project_num",
-        condition: (options: startTaskProps) =>
-          !!options.project_id && !!options.project_num && !!options.file_path,
-      },
-      {
-        optionKey: "file_path",
-        payloadKey: "file_path",
-        condition: (options: startTaskProps) =>
-          !!options.project_id && !!options.project_num && !!options.file_path,
-      },
-      {
-        optionKey: "operationChoice",
-        payloadKey: "operation_choice",
-        condition: (options: startTaskProps) => !!options.operationChoice,
-      },
-    ];
-
-    // Append fields based on the mapping
-    optionsToPayloadMapping.forEach(
-      ({ optionKey, payloadKey, condition, transform }) => {
-        if (condition(taskOptions)) {
-          const value = taskOptions[optionKey as keyof startTaskProps];
-
-          if (value !== undefined) {
-            let finalValue: string | Blob;
-
-            if (transform && typeof value === "boolean") {
-              finalValue = transform(value);
-            } else if (value instanceof File) {
-              finalValue = value;
-            } else {
-              finalValue = String(value);
-            }
-            payload.append(payloadKey, finalValue);
-          }
-        }
-      },
-    );
-
-    // Handle special case for 'table_choice' which needs to be appended to multiple keys
-    if (taskOptions.table_choice) {
-      [
-        "pole_table_choice",
-        "table_choice",
-        "dfn_choice",
-        "pattern_choice",
-      ].forEach((key) => {
-        payload.append(key, taskOptions.table_choice as string);
-      });
-    }
-
-    // Handle specific flags based on the endpoint
-    if (
-      taskOptions.endpoint === "/saas/tds/ajax/query-import-hld-to-postgres/" ||
-      taskOptions.endpoint === "/saas/tds/ajax/query-import-gps-to-postgres/"
-    ) {
-      if (taskOptions.is_override) {
-        payload.append("is_override", "yes");
-      }
-    }
-
-    if (
-      taskOptions.endpoint ===
-      "/saas/tds/ajax/super/query-change-ownership-uniq/"
-    ) {
-      if (taskOptions.is_override) {
-        payload.append("assign_uniq", "yes");
-      }
-    }
-
-    if (
-      taskOptions.endpoint === "/saas/tds/ajax/super/query-postgres-version/"
-    ) {
-      if (taskOptions.is_override) {
-        payload.append("run_full_db", "yes");
-      }
-    }
-
-    // Set 'projectType' for poles calculations based on 'is_override'
-    if (taskOptions.endpoint === "/saas/tds/ajax/query-poles-dfn-calc/") {
-      payload.append("projectType", taskOptions.is_override ? "HLD" : "LLD");
-      payload.append("uuidPole", taskOptions.uuidPole || "");
-    }
+    const payload = buildFormData(taskOptions);
 
     const headers = {
       "X-CSRFToken": csrfToken,
@@ -435,17 +343,9 @@ export const checkTaskStatus = async ({
   if (!backendUser) {
     throw new Error("backendUser is required");
   }
-  const { djAuthToken } = await getServerTokens(backendUser);
-  // const { appendToConsole } = useConsoleData();
+  const { djAuthToken, csrfToken } = await getCredentials(backendUser);
 
   try {
-    // get the csrf token from server
-    const csrfToken = await getMiddlewareCsrfToken();
-
-    if (!csrfToken) {
-      throw new Error("Failed to retrieve CSRF token");
-    }
-
     // define request params
     const endpoint = "/saas/tds/ajax/check-task-status/";
     const payload = {

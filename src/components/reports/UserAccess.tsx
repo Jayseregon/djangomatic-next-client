@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 
-import { fetchUser } from "@/lib/getUserPermission";
+import { fetchUserServer } from "@/actions/generic/action";
 import { UserSchema } from "@/interfaces/lib";
 
 import { UnAuthorized } from "../auth/unAuthorized";
@@ -21,10 +21,12 @@ export default function UserAccessReports({
   useEffect(() => {
     async function fetchData() {
       try {
-        const data = await fetchUser(email);
+        const data = await fetchUserServer(email);
 
         setUser(data);
-        setCanDeleteReports(data.canDeleteReports);
+        if (data) {
+          setCanDeleteReports(data.canDeleteReports);
+        }
       } catch (error) {
         console.error("Failed to fetch user:", error);
       }

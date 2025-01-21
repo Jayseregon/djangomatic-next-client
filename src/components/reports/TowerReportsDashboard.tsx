@@ -11,7 +11,7 @@ import {
   TableCell,
   Button,
   Input,
-} from "@nextui-org/react";
+} from "@heroui/react";
 import { Cog, FileText, Pencil, Trash2 } from "lucide-react";
 
 import { TowerReport } from "@/src/types/reports";

@@ -7,19 +7,13 @@ import {
   ModalHeader,
   ModalBody,
   ModalFooter,
-  DatePicker,
   Select,
   SelectItem,
   Button,
   Input,
   Textarea,
   Chip,
-} from "@nextui-org/react";
-import {
-  DateValue,
-  parseDate,
-  getLocalTimeZone,
-} from "@internationalized/date";
+} from "@heroui/react";
 import { CircleOff, Save, Trash2 } from "lucide-react";
 
 import {
@@ -30,6 +24,7 @@ import {
 } from "@/interfaces/bugs";
 import { bugStatusColorMap, bugPriorityColorMap } from "@/lib/utils";
 import { UserSchema } from "@/interfaces/lib";
+import { DatePicker } from "@/components/ui/DatePicker";
 
 export const BugsModal = ({
   visible,
@@ -92,10 +87,10 @@ export const BugsModal = ({
   };
 
   const handleDateChange =
-    (field: "assignedDate" | "completedDate") => (value: DateValue | null) => {
+    (field: "assignedDate" | "completedDate") => (value: Date | null) => {
       setBug((prevBug) => ({
         ...prevBug,
-        [field]: value ? value.toDate(getLocalTimeZone()) : null,
+        [field]: value,
       }));
     };
 
@@ -136,9 +131,18 @@ export const BugsModal = ({
 
   const handleSaveClick = () => {
     if (mode === "add") {
-      onSave({ ...bug, createdBy: sessionUsername });
+      onSave({
+        ...bug,
+        createdBy: sessionUsername,
+        assignedDate: bug.assignedDate ? new Date(bug.assignedDate) : null,
+        completedDate: bug.completedDate ? new Date(bug.completedDate) : null,
+      });
     } else {
-      onSave(bug); // Do not modify 'createdBy' when editing
+      onSave({
+        ...bug,
+        assignedDate: bug.assignedDate ? new Date(bug.assignedDate) : null,
+        completedDate: bug.completedDate ? new Date(bug.completedDate) : null,
+      });
     }
   };
 
@@ -429,44 +433,16 @@ export const BugsModal = ({
 
           <div className="flex flex-row gap-2">
             <DatePicker
-              aria-label="Assigned Date"
-              classNames={{
-                selectorIcon: "text-foreground",
-              }}
-              dateInputClassNames={{
-                inputWrapper:
-                  "border-foreground/50 rounded-full hover:border-foreground",
-              }}
+              className="flex-1"
               label={t("tableColumns.assignedDate")}
-              labelPlacement="outside"
-              name="assignedDate"
-              value={
-                bug.assignedDate
-                  ? parseDate(bug.assignedDate.toISOString().split("T")[0])
-                  : null
-              }
-              variant="bordered"
+              value={bug.assignedDate}
               onChange={handleDateChange("assignedDate")}
             />
 
             <DatePicker
-              aria-label="Completed Date"
-              classNames={{
-                selectorIcon: "text-foreground",
-              }}
-              dateInputClassNames={{
-                inputWrapper:
-                  "border-foreground/50 rounded-full hover:border-foreground",
-              }}
+              className="flex-1"
               label={t("tableColumns.completedDate")}
-              labelPlacement="outside"
-              name="completedDate"
-              value={
-                bug.completedDate
-                  ? parseDate(bug.completedDate.toISOString().split("T")[0])
-                  : null
-              }
-              variant="bordered"
+              value={bug.completedDate}
               onChange={handleDateChange("completedDate")}
             />
           </div>

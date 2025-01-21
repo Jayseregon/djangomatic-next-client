@@ -1,6 +1,6 @@
 import type { JSX } from "react";
 
-import { Button } from "@nextui-org/react";
+import { Button } from "@heroui/react";
 
 import { CheckIcon, UncheckIcon } from "@/components/icons";
 

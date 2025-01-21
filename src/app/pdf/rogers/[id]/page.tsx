@@ -3,7 +3,7 @@
 import { useParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { Font, BlobProvider, pdf } from "@react-pdf/renderer";
-import { Button } from "@nextui-org/button";
+import { Button } from "@heroui/button";
 
 import { TowerReport, TOCSections } from "@/src/types/reports";
 import { LoadingContent } from "@/components/ui/LoadingContent";

@@ -7,21 +7,16 @@ import {
   ModalHeader,
   ModalBody,
   ModalFooter,
-  DatePicker,
   Select,
   SelectItem,
   Button,
   Input,
   Textarea,
   Chip,
-} from "@nextui-org/react";
-import {
-  DateValue,
-  parseDate,
-  getLocalTimeZone,
-} from "@internationalized/date";
+} from "@heroui/react";
 import { CircleOff, Save, Trash2 } from "lucide-react";
 
+import { DatePicker } from "@/components/ui/DatePicker";
 import { UserSchema, RnDTeamTask, Status } from "@/interfaces/lib";
 import { statusColorMap } from "@/lib/utils";
 
@@ -107,10 +102,10 @@ export const TaskModal: React.FC<TaskModalProps> = ({
 
   const handleDateChange =
     (field: "dueDate" | "startedAt" | "completedAt") =>
-    (value: DateValue | null) => {
+    (value: Date | null) => {
       setTask((prevTask) => ({
         ...prevTask,
-        [field]: value ? value.toDate(getLocalTimeZone()) : null,
+        [field]: value,
       }));
     };
 
@@ -410,63 +405,24 @@ export const TaskModal: React.FC<TaskModalProps> = ({
 
           <div className="flex flex-row gap-2">
             <DatePicker
-              aria-label="Due Date"
-              classNames={{
-                selectorIcon: "text-foreground",
-              }}
-              dateInputClassNames={{
-                inputWrapper:
-                  "border-foreground/50 rounded-full hover:border-foreground",
-              }}
+              className="flex-1"
               label={t("taskBoardColumns.dueDate")}
-              labelPlacement="outside"
-              name="dueDate"
-              value={
-                task.dueDate
-                  ? parseDate(task.dueDate.toISOString().split("T")[0])
-                  : null
-              }
-              variant="bordered"
+              placeholder={t("taskBoardColumns.dueDate")}
+              value={task.dueDate}
               onChange={handleDateChange("dueDate")}
             />
             <DatePicker
-              aria-label="Started At"
-              classNames={{
-                selectorIcon: "text-foreground",
-              }}
-              dateInputClassNames={{
-                inputWrapper:
-                  "border-foreground/50 rounded-full hover:border-foreground",
-              }}
+              className="flex-1"
               label={t("taskBoardColumns.startedAt")}
-              labelPlacement="outside"
-              name="startedAt"
-              value={
-                task.startedAt
-                  ? parseDate(task.startedAt.toISOString().split("T")[0])
-                  : null
-              }
-              variant="bordered"
+              placeholder={t("taskBoardColumns.startedAt")}
+              value={task.startedAt}
               onChange={handleDateChange("startedAt")}
             />
             <DatePicker
-              aria-label="Completed At"
-              classNames={{
-                selectorIcon: "text-foreground",
-              }}
-              dateInputClassNames={{
-                inputWrapper:
-                  "border-foreground/50 rounded-full hover:border-foreground",
-              }}
+              className="flex-1"
               label={t("taskBoardColumns.completedAt")}
-              labelPlacement="outside"
-              name="completedAt"
-              value={
-                task.completedAt
-                  ? parseDate(task.completedAt.toISOString().split("T")[0])
-                  : null
-              }
-              variant="bordered"
+              placeholder={t("taskBoardColumns.completedAt")}
+              value={task.completedAt}
               onChange={handleDateChange("completedAt")}
             />
           </div>

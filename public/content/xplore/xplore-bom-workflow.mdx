@@ -40,13 +40,14 @@ This guide outlines the step-by-step procedure to extract and export layers from
 
 Before starting, ensure you have the following:
 
-- **AutoCAD** software with MAPEXPORT functionality.
-- **Export Profiles** for Points ('xplore_points_exp_profile.epf') and Lines ('xplore_lines_exp_profile.epf').
+- **AutoCAD** software with <Snippet>**MAPEXPORT**</Snippet> functionality such as **AutoCAD Map 3D**.
+- **Export Profiles** for **Points** and **Lines**.
+   - <Snippet>**xplore_points_exp_profile.epf**</Snippet>
+   - <Snippet>**xplore_lines_exp_profile.epf**</Snippet>
 - **QGIS** (latest stable version recommended).
-- The Python script 'BOM_Data_Processing.py'.
-- A folder to store the extracted shapefiles (e.g., 'BOM_EXTRACT').
-- Access to the **Djangomatic** platform with an SSO account.
-- The BOM template for pasting the summary data.
+- The Python script <Snippet>**BOM_Data_Processing.py**</Snippet>.
+- **Access** to the [Djangomatic](https://djangomatic-pro.azurewebsites.net/) platform with an **SSO** account.
+- The **BOM template** for pasting the summary data.
 
 ---
 
@@ -60,12 +61,19 @@ Before starting, ensure you have the following:
 <h2 id="step-2-extract-layers">Step 2: Extract Layers</h2>
 
 1. Use the command **MAPEXPORT**.
-2. Perform two separate exports:
-   - For the **POINTS** features, load the profile 'xplore_points_exp_profile.epf'.
-   - For the **LINES** features, load the profile 'xplore_lines_exp_profile.epf'.
-3. Export the respective features using the loaded profiles. These profiles are pre-configured to extract the required layers and attributes for Points and Lines.
 
-<LoadDynamicImage imageName="autocad_mapexport" width={700} />
+<LoadDynamicImage imageName="xplore-bom-workflow/cad-mapexport-command" width={700} />
+
+2. Perform two separate exports:
+   - For the **POINTS** features, load the profile <Snippet>**xplore_points_exp_profile.epf**</Snippet>.
+   - For the **LINES** features, load the profile <Snippet>**xplore_lines_exp_profile.epf**</Snippet>.
+
+3. **Export** the respective features using the loaded profiles.
+
+<LoadDynamicImage imageName="xplore-bom-workflow/cad-mapexport-save-location" width={700} />
+<LoadDynamicImage imageName="xplore-bom-workflow/cad-mapexport-profile" width={700} />
+
+**Note:** *These profiles are pre-configured to extract the required layers and attributes for Points and Lines.*
 
 *Using the MAPEXPORT command in AutoCAD to extract layers.*
 
@@ -82,7 +90,7 @@ Before starting, ensure you have the following:
 1. Access the Python Console:
    - In the top menu, go to **Plugins > Python Console**.
 
-<LoadDynamicImage imageName="qgis_python_console" width={700} />
+<LoadDynamicImage imageName="xplore-bom-workflow/qgis-open-python-console" width={700} />
 
 *Accessing the Python Console in QGIS.*
 
@@ -93,7 +101,7 @@ Before starting, ensure you have the following:
 1. Open the **Script Editor**:
    - In the Python Console, click the **Show Editor** button (paper and pencil icon).
 
-<LoadDynamicImage imageName="qgis_script_editor" width={700} />
+<LoadDynamicImage imageName="xplore-bom-workflow/qgis-python-console-show-editor" width={1000} />
 
 *Opening the Script Editor in the QGIS Python Console.*
 
@@ -103,10 +111,10 @@ Before starting, ensure you have the following:
 
 1. Load the script into the editor:
    - Click the **Open Script** button (folder icon).
-   - Navigate to the location of the 'BOM_Data_Processing.py' script.
+   - Navigate to the location of the <Snippet>**BOM_Data_Processing.py**</Snippet> script.
    - Select the file and click **Open**.
 
-<LoadDynamicImage imageName="qgis_load_script" width={700} />
+<LoadDynamicImage imageName="xplore-bom-workflow/qgis-python-console-open-script" width={1000} />
 
 *Loading a script into the QGIS Script Editor.*
 
@@ -114,11 +122,13 @@ Before starting, ensure you have the following:
 
 <h2 id="step-7-run-script">Step 7: Run the Script</h2>
 
-1. Run the script:
+1. **Run** the script:
    - Click the **Run Script** button (green play icon).
 2. The script will prompt for the **POINTS** and **LINES** shapefiles and process them into separate shapefiles needed for the BOM app in Djangomatic.
 
-<LoadDynamicImage imageName="qgis_run_script" width={700} />
+<LoadDynamicImage imageName="xplore-bom-workflow/qgis-python-run-script" width={700} />
+
+<LoadDynamicImage imageName="xplore-bom-workflow/qgis-python-script-prompt" width={500} />
 
 *Running a script to process extracted layers in QGIS.*
 
@@ -127,11 +137,15 @@ Before starting, ensure you have the following:
 <h2 id="step-8-compress-shapefiles">Step 8: Compress Shapefiles into a ZIP File</h2>
 
 1. Navigate to the folder containing the extracted shapefiles (e.g., 'BOM_EXTRACT').
-2. Select all the shapefiles.
-3. Right-click and choose **Send to > Compressed (zipped) folder**.
-4. Name the ZIP file appropriately.
 
-<LoadDynamicImage imageName="compress_shapefiles" width={700} />
+<LoadDynamicImage imageName="xplore-bom-workflow/extracted-shapefiles-folder" width={700} />
+
+2. Select **all** the shapefiles.
+3. **Right-click** and choose **Send to > Compressed (zipped) folder**.
+
+<LoadDynamicImage imageName="xplore-bom-workflow/compress-zip-example" width={700} />
+
+4. Name the ZIP file appropriately.
 
 *Compressing shapefiles into a ZIP file for upload.*
 
@@ -139,14 +153,18 @@ Before starting, ensure you have the following:
 
 <h2 id="step-9-upload-zip-djangomatic">Step 9: Upload and Process the ZIP File on Djangomatic</h2>
 
-1. Go to the **Djangomatic** website.
-2. Log in using SSO.
-3. Under the **Apps** section, open the **XPLORE** drop-down menu and select the **Extract BOM Summary** app.
-4. Upload the ZIP file containing the shapefiles.
-5. Click **Start Task** and wait for the process to complete.
-6. Download the generated ZIP file containing the summary.
+1. Under the **Apps** section, open the **XPLORE** drop-down menu and select the **Extract BOM Summary** app.
 
-<LoadDynamicImage imageName="djangomatic_upload" width={700} />
+<LoadDynamicImage imageName="xplore-bom-workflow/djangomatic-apps-menu" width={700} />
+
+2. Upload the ZIP file containing the shapefiles.
+3. Click **Start Task** and wait for the process to complete.
+
+<LoadDynamicImage imageName="xplore-bom-workflow/djangomatic-input-zip-app" width={700} />
+
+4. **Download** the generated ZIP file containing the summary.
+
+<LoadDynamicImage imageName="xplore-bom-workflow/djangomatic-app-completed-process" width={700} />
 
 *Uploading and processing a ZIP file on Djangomatic.*
 
@@ -154,11 +172,14 @@ Before starting, ensure you have the following:
 
 <h2 id="step-10-copy-summary-bom-template">Step 10: Copy and Paste Summary into BOM Template</h2>
 
-1. Open the BOM template.
-2. Copy the relevant data from the extracted Excel summary.
-3. Paste the data into the BOM template under the appropriate FSA sheet and segment.
+1. Open the **BOM template**.
+2. **Copy** the relevant data from the extracted Excel summary.
 
-<LoadDynamicImage imageName="bom_template_copy" width={700} />
+<LoadDynamicImage imageName="xplore-bom-workflow/excel-app-summary" width={500} />
+
+3. **Paste** the data into the **BOM template** under the appropriate **FSA sheet and segment**.
+
+<LoadDynamicImage imageName="xplore-bom-workflow/paste-bom-quantity-to-template" width={1000} />
 
 *Copying data from the summary into the BOM template.*
 
@@ -166,7 +187,7 @@ Before starting, ensure you have the following:
 
 ## Final Notes
 
-*This guide aims to provide a comprehensive method for layer extraction and processing. For further assistance, contact the **Support Team** or refer to the [Djangomatic Help Center](https://djangomatic-help-center.example.com).*  
+*This guide is crafted to help professionals streamline their design workflows with precise instructions and efficient tools. For further assistance, please contact the **Continuous Improvement and Automation Team**. If you encounter any issues or have suggestions, we encourage you to submit a report through our [Bug Report Form](https://djangomatic-pro.azurewebsites.net/boards/bug-report).*  
 
 ---
 </div>

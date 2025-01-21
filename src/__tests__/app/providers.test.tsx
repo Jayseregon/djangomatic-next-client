@@ -10,10 +10,10 @@ jest.mock("next/navigation", () => ({
   }),
 }));
 
-// Mock NextUIProvider
-jest.mock("@nextui-org/system", () => ({
-  NextUIProvider: ({ children }: { children: React.ReactNode }) => (
-    <div data-testid="nextui-provider">{children}</div>
+// Mock HeroUIProvider
+jest.mock("@heroui/system", () => ({
+  HeroUIProvider: ({ children }: { children: React.ReactNode }) => (
+    <div data-testid="heroui-provider">{children}</div>
   ),
 }));
 
@@ -58,7 +58,7 @@ describe("Providers", () => {
 
     // Verify providers are rendered in the correct order
     expect(screen.getByTestId("session-provider")).toBeInTheDocument();
-    expect(screen.getByTestId("nextui-provider")).toBeInTheDocument();
+    expect(screen.getByTestId("heroui-provider")).toBeInTheDocument();
     expect(screen.getByTestId("theme-provider")).toBeInTheDocument();
 
     // Verify child content is rendered

@@ -1,5 +1,5 @@
 import React, { useEffect, useState, type JSX } from "react";
-import { Button } from "@nextui-org/react";
+import { Button } from "@heroui/react";
 import { useTheme } from "next-themes";
 
 import { SunThemeIcon, MoonThemeIcon } from "@/components/icons";

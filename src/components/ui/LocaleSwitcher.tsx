@@ -1,7 +1,7 @@
 "use client";
 
 import { useLocale, useTranslations } from "next-intl";
-import { Button } from "@nextui-org/react";
+import { Button } from "@heroui/react";
 import { useTransition, type JSX } from "react";
 
 import { locales } from "@/config";

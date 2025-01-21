@@ -62,7 +62,7 @@ jest.mock("@react-pdf/renderer", () => ({
 }));
 
 // Mock NextUI Button component
-jest.mock("@nextui-org/button", () => ({
+jest.mock("@heroui/button", () => ({
   Button: ({ children, onPress, ...props }: any) => (
     <button
       aria-label="Download PDF"

@@ -11,7 +11,7 @@ import {
   TableRow,
   Chip,
   SortDescriptor,
-} from "@nextui-org/react";
+} from "@heroui/react";
 
 import { useSortTasksList } from "@/hooks/useSortTasksList";
 import { LoadingContent } from "@/components/ui/LoadingContent";

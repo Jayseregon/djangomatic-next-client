@@ -416,8 +416,18 @@ export const Tooltip = ({
   </div>
 );
 
+export const Popover = ({ children }: { children: React.ReactNode }) => (
+  <div role="dialog">{children}</div>
+);
+export const PopoverTrigger = ({ children }: { children: React.ReactNode }) => (
+  <>{children}</>
+);
+export const PopoverContent = ({ children }: { children: React.ReactNode }) => (
+  <div>{children}</div>
+);
+
 // Add a test to satisfy Jest's requirement
-describe("NextUI Mocks", () => {
+describe("HeroUI Mocks", () => {
   it("exists", () => {
     expect(Button).toBeDefined();
   });

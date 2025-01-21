@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState, type JSX } from "react";
-import { Tabs, Tab } from "@nextui-org/react";
+import { Tabs, Tab } from "@heroui/react";
 
 import { fetchUserServer } from "@/actions/generic/action";
 import { UnAuthorized } from "@/components/auth/unAuthorized";

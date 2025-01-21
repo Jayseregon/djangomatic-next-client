@@ -2,7 +2,7 @@ import type { JSX } from "react";
 
 import { redirect } from "next/navigation";
 // import { headers } from "next/headers";
-// import { Button } from "@nextui-org/react";
+// import { Button } from "@heroui/react";
 
 import { title } from "@/components/primitives";
 import { signIn, auth, providerMap } from "@/auth";

@@ -1,6 +1,6 @@
 import type { JSX } from "react";
 
-import { Snippet } from "@nextui-org/snippet";
+import { Snippet } from "@heroui/snippet";
 
 import { siteConfig } from "@/config/site";
 import { title } from "@/components/primitives";

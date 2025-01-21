@@ -10,7 +10,7 @@ import {
   Button,
   Progress,
   Spinner,
-} from "@nextui-org/react";
+} from "@heroui/react";
 import DOMPurify from "dompurify";
 import { v4 as uuidv4 } from "uuid";
 import axios from "axios";

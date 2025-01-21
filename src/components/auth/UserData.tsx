@@ -1,6 +1,6 @@
 import type { JSX } from "react";
 
-import { Snippet } from "@nextui-org/snippet";
+import { Snippet } from "@heroui/snippet";
 
 /**
  * UserData component renders user session data in a formatted JSON snippet.

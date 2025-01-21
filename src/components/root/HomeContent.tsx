@@ -1,5 +1,5 @@
 import { useTranslations } from "next-intl";
-import { Snippet } from "@nextui-org/snippet";
+import { Snippet } from "@heroui/snippet";
 import Link from "next/link";
 import { Bug, SquareArrowOutUpRight } from "lucide-react";
 import { Suspense, type JSX } from "react";

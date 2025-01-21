@@ -14,7 +14,7 @@ import {
   DropdownItem,
   Avatar,
   Link,
-} from "@nextui-org/react";
+} from "@heroui/react";
 import { useEffect, useState, useMemo, type JSX } from "react";
 import { useTranslations } from "next-intl";
 import { usePathname } from "next/navigation";

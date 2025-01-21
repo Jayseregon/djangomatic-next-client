@@ -6,7 +6,7 @@ import {
   ModalBody,
   ModalFooter,
   Button,
-} from "@nextui-org/react";
+} from "@heroui/react";
 import { ImageOff, RotateCcw, RotateCw, Save } from "lucide-react";
 
 import { ImageRotateModalProps } from "@/interfaces/reports";

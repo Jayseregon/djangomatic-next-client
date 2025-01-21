@@ -7,12 +7,11 @@ import {
   Button,
   Input,
   Textarea,
-  DatePicker,
   Card,
   CardBody,
   CardHeader,
   Chip,
-} from "@nextui-org/react";
+} from "@heroui/react";
 import {
   DndContext,
   rectIntersection,
@@ -28,7 +27,6 @@ import {
   rectSortingStrategy,
 } from "@dnd-kit/sortable";
 import { useDebouncedCallback } from "use-debounce";
-import { parseDate, getLocalTimeZone } from "@internationalized/date";
 import { DoorOpen, Trash } from "lucide-react";
 
 import UserAccessBoards from "@/src/components/boards/UserAccess";
@@ -39,6 +37,7 @@ import {
   deletegRoadmapProject,
   updateCardPositions,
 } from "@/src/actions/prisma/roadmap/action";
+import { DatePicker } from "@/components/ui/DatePicker";
 
 import RoadmapCard from "./RoadmapCard";
 import SortableItem from "./SortableItem";
@@ -302,79 +301,25 @@ export default function ProjectView({
             {/* Date Inputs */}
             <div className="flex flex-row gap-5">
               <DatePicker
-                aria-label="Due Date"
-                classNames={{
-                  selectorIcon: "text-foreground",
-                }}
-                dateInputClassNames={{
-                  inputWrapper:
-                    "border-foreground/50 rounded-full hover:border-foreground",
-                }}
+                className="flex-1"
                 label={t("projectCardPlaceholders.pDueDate")}
-                labelPlacement="outside"
-                name="dueDate"
-                value={
-                  project.dueDate
-                    ? parseDate(project.dueDate.toISOString().split("T")[0])
-                    : null
-                }
-                variant="bordered"
-                onChange={(value) =>
-                  handleFieldChange(
-                    "dueDate",
-                    value ? value.toDate(getLocalTimeZone()) : null,
-                  )
-                }
+                placeholder={t("projectCardPlaceholders.pDueDate")}
+                value={project.dueDate}
+                onChange={(value) => handleFieldChange("dueDate", value)}
               />
               <DatePicker
-                aria-label="Started At"
-                classNames={{
-                  selectorIcon: "text-foreground",
-                }}
-                dateInputClassNames={{
-                  inputWrapper:
-                    "border-foreground/50 rounded-full hover:border-foreground",
-                }}
+                className="flex-1"
                 label={t("projectCardPlaceholders.pStartedDate")}
-                labelPlacement="outside"
-                name="startedAt"
-                value={
-                  project.startedAt
-                    ? parseDate(project.startedAt.toISOString().split("T")[0])
-                    : null
-                }
-                variant="bordered"
-                onChange={(value) =>
-                  handleFieldChange(
-                    "startedAt",
-                    value ? value.toDate(getLocalTimeZone()) : null,
-                  )
-                }
+                placeholder={t("projectCardPlaceholders.pStartedDate")}
+                value={project.startedAt}
+                onChange={(value) => handleFieldChange("startedAt", value)}
               />
               <DatePicker
-                aria-label="Completed At"
-                classNames={{
-                  selectorIcon: "text-foreground",
-                }}
-                dateInputClassNames={{
-                  inputWrapper:
-                    "border-foreground/50 rounded-full hover:border-foreground",
-                }}
+                className="flex-1"
                 label={t("projectCardPlaceholders.pCompletedDate")}
-                labelPlacement="outside"
-                name="completedAt"
-                value={
-                  project.completedAt
-                    ? parseDate(project.completedAt.toISOString().split("T")[0])
-                    : null
-                }
-                variant="bordered"
-                onChange={(value) =>
-                  handleFieldChange(
-                    "completedAt",
-                    value ? value.toDate(getLocalTimeZone()) : null,
-                  )
-                }
+                placeholder={t("projectCardPlaceholders.pCompletedDate")}
+                value={project.completedAt}
+                onChange={(value) => handleFieldChange("completedAt", value)}
               />
             </div>
 

@@ -3,7 +3,7 @@
 import React, { useCallback, useContext, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
-import { Button } from "@nextui-org/react";
+import { Button } from "@heroui/react";
 import {
   DndContext,
   MouseSensor,

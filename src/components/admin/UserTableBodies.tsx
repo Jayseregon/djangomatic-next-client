@@ -1,6 +1,6 @@
 import type { JSX } from "react";
 
-import { TableRow, TableCell } from "@nextui-org/react";
+import { TableRow, TableCell } from "@heroui/react";
 
 import { UserSchema } from "@/interfaces/lib";
 import { superUserEmails } from "@/config/superUser";

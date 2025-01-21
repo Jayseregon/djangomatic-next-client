@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, Spinner } from "@nextui-org/react";
+import { Button, Spinner } from "@heroui/react";
 import React, { useEffect, type JSX } from "react";
 import { useTranslations } from "next-intl";
 

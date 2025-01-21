@@ -13,7 +13,7 @@ import {
   TableColumn,
   TableRow,
   TableCell,
-} from "@nextui-org/react";
+} from "@heroui/react";
 import { v4 as uuidv4 } from "uuid";
 
 import { videosData } from "@/src/config/videosData";

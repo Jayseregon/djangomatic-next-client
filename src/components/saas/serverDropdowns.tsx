@@ -6,7 +6,7 @@ import {
   DropdownMenu,
   DropdownItem,
   Button,
-} from "@nextui-org/react";
+} from "@heroui/react";
 import { useTranslations } from "next-intl";
 import React, { useEffect, useState, type JSX } from "react";
 
@@ -106,7 +106,7 @@ export const DropDownSelector = ({
         {(item) => (
           <DropdownItem
             key={item.value}
-            onClick={() => handleSelect(item.value)}
+            onPress={() => handleSelect(item.value)}
           >
             {item.label}
           </DropdownItem>
@@ -145,7 +145,7 @@ export const DatabaseDropdown = ({
       const newOptions = [];
 
       if (availableDatabases[dbClass]) {
-        for (let key in availableDatabases[dbClass]) {
+        for (const key in availableDatabases[dbClass]) {
           if (appType === "hld" && key.includes("_main")) {
             newOptions.push({
               value: key,

@@ -11,8 +11,8 @@ import { setRequestLocale } from "next-intl/server";
 import { siteConfig } from "@/config/site";
 import { fontSans, fontMono } from "@/config/fonts";
 import { auth } from "@/auth";
-import { Navbar } from "@/src/components/ui/navbar";
-import { Footer } from "@/src/components/ui/footer";
+import { Navbar } from "@/src/components/root/Navbar";
+import { Footer } from "@/src/components/root/Footer";
 import { Providers } from "@/src/app/providers";
 
 type Props = {

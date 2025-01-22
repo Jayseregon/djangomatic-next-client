@@ -9,9 +9,9 @@ import { MdxRendererProps } from "@/interfaces/mdx";
 import LoadDynamicImage from "@/components/mdx/LoadDynamicImage";
 import TableOfContentsMdx from "@/components/mdx/TableOfContentsMdx";
 import { BugReportNotice } from "@/components/root/BugReportNotice";
-import Callout from "@/components/mdx/Callout";
-import Snippet from "@/components/mdx/Snippet";
-import Quote from "@/components/mdx/Quote";
+import Callout from "@/src/components/mdx/callout";
+import Snippet from "@/src/components/mdx/snippet";
+import Quote from "@/src/components/mdx/quote";
 
 const sharedComponents: MDXComponents = {
   Callout,

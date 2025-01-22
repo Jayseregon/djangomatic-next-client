@@ -1,7 +1,7 @@
 import { render, screen } from "@testing-library/react";
 
 import { NonceContext } from "@/src/app/providers";
-import Callout from "@/components/mdx/Callout";
+import Callout from "@/src/components/mdx/callout";
 
 describe("Callout", () => {
   const mockNonce = "test-nonce-123";

@@ -1,7 +1,7 @@
 import { render, screen } from "@testing-library/react";
 
 import { NonceContext } from "@/src/app/providers";
-import Quote from "@/components/mdx/Quote";
+import Quote from "@/src/components/mdx/quote";
 
 describe("Quote", () => {
   const mockNonce = "test-nonce-123";

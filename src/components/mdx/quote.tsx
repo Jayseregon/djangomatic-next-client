@@ -1,12 +1,9 @@
 "use client";
 
-import { ReactNode, useContext, type JSX } from "react";
+import { useContext, type JSX } from "react";
 
 import { NonceContext } from "@/src/app/providers";
-
-interface QuoteProps {
-  children?: ReactNode;
-}
+import { QuoteProps } from "@/src/interfaces/mdx";
 
 /**
  * Quote component renders a styled span element to display quoted text.

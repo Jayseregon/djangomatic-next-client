@@ -2,15 +2,7 @@
 
 import React from "react";
 
-interface TOCItem {
-  title: string;
-  id: string;
-}
-
-interface TableOfContentsMdxProps {
-  items: TOCItem[];
-  title: string;
-}
+import { TableOfContentsMdxProps } from "@/src/interfaces/mdx";
 
 export default function TableOfContentsMdx({
   items,

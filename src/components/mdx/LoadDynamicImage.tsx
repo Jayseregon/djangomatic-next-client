@@ -3,12 +3,7 @@ import Image from "next/image";
 import { useContext } from "react";
 
 import { NonceContext } from "@/src/app/providers";
-
-type LoadImageProps = {
-  imageName: string;
-  height?: number;
-  width?: number;
-};
+import { LoadImageProps } from "@/src/interfaces/mdx";
 
 /**
  * LoadDynamicImage component dynamically loads and displays an image.

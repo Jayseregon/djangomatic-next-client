@@ -12,3 +12,4 @@ if (typeof Response === 'undefined') {
     constructor(body?: BodyInit | null, init?: ResponseInit) {}
   } as any
 }
+Object.defineProperty(window, 'scrollTo', { value: jest.fn(), writable: true });

@@ -426,6 +426,34 @@ export const PopoverContent = ({ children }: { children: React.ReactNode }) => (
   <div>{children}</div>
 );
 
+// Add Snippet component mock
+export const Snippet = ({
+  children,
+  hideCopyButton,
+  hideSymbol,
+  variant,
+  ...props
+}: BaseProps & {
+  hideCopyButton?: boolean;
+  hideSymbol?: boolean;
+  variant?: string;
+}) => (
+  <div
+    className={`inline-flex items-center justify-between h-fit gap-2 px-3 py-1.5 text-small rounded-medium ${
+      variant === "flat" ? "bg-default/40" : ""
+    } text-default-700`}
+    data-hide-copy={hideCopyButton}
+    data-hide-symbol={hideSymbol}
+    data-testid="code-snippet"
+    data-variant={variant}
+    {...props}
+  >
+    <pre className="bg-transparent text-inherit font-mono font-normal inline-block whitespace-nowrap">
+      {children}
+    </pre>
+  </div>
+);
+
 // Add a test to satisfy Jest's requirement
 describe("HeroUI Mocks", () => {
   it("exists", () => {

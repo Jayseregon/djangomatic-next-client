@@ -8,10 +8,8 @@ import { useTranslations } from "next-intl";
 import { videosData } from "@/src/config/videosData";
 import { WithPermissionOverlayDocs } from "@/src/components/auth/withPermissionOverlay";
 import { UserSchema } from "@/interfaces/lib";
-
-import { title } from "../primitives";
-
-import { VideosGridFiltered } from "./VideosGrids";
+import { title } from "@/src/components/primitives";
+import { VideosGrids } from "@/components/docs/VideosGrids";
 
 /**
  * VideoPageContent component renders the content of the video page.
@@ -68,7 +66,7 @@ export const VideoPageContent = ({
         <div className="py-3" />
 
         {/* Render the filtered videos grid based on the selected category */}
-        <VideosGridFiltered selectedCategory={categoryKey as string} />
+        <VideosGrids selectedCategory={categoryKey as string} />
       </div>
     </WithPermissionOverlayDocs>
   );

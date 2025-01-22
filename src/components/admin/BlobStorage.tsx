@@ -23,22 +23,9 @@ import {
   formatAzureDate,
 } from "@/src/lib/utils";
 import { LoadingContent } from "@/components/ui/LoadingContent";
+import { BlobProps } from "@/src/interfaces/admin";
 
 import { TrashIcon, GearIcon } from "../icons";
-
-export interface BlobTagsProps {
-  clientName: string;
-  categoryName: string;
-  uuid: string;
-}
-
-export interface BlobProps {
-  name: string;
-  createdOn: Date;
-  contentType: string;
-  url: string;
-  tags: BlobTagsProps;
-}
 
 /**
  * BlobStorage component for managing Azure Blob Storage uploads and displaying blob list.

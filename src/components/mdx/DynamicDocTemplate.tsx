@@ -52,5 +52,7 @@ export async function generateMetadataTemplate({
 export async function generateStaticParamsTemplate(docType: string) {
   const files = fs.readdirSync(docsDirectory(docType));
 
-  return files.map((file) => ({ slug: file.replace(/\.mdx$/, "") }));
+  return files
+    .filter((file) => file.endsWith(".mdx"))
+    .map((file) => ({ slug: file.replace(/\.mdx$/, "") }));
 }

@@ -1,7 +1,7 @@
 import React from "react";
 
 import { AntennaTransmissionInputsProps } from "@/src/interfaces/reports";
-import { AntennaTransmissionLine } from "@/src/types/reports";
+import { AntennaTransmissionLine } from "@/src/interfaces/reports";
 import {
   AntennaFormInput,
   TrashButton,

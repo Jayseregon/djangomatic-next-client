@@ -17,6 +17,7 @@ const config: Config = {
   coverageProvider: "v8",
   testEnvironment: "jest-environment-jsdom",
   setupFilesAfterEnv: ["<rootDir>/jest.setup.ts"],
+  setupFiles: ["<rootDir>/src/__tests__/__mocks__/mediaElementMock.ts"],
   moduleFileExtensions: [
     "js",
     "mjs",

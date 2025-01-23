@@ -3,7 +3,7 @@ import { Text, View, Image as PdfImg } from "@react-pdf/renderer";
 
 import { titleCase } from "@/src/lib/utils";
 import { StylesPDF } from "@/styles/stylesPDF";
-import { TowerReport } from "@/src/types/reports";
+import { TowerReport } from "@/src/interfaces/reports";
 
 const FrontPage = ({ report }: { report: TowerReport }) => {
   return (

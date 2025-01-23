@@ -1,7 +1,7 @@
 import { Text } from "@react-pdf/renderer";
 
 import { StylesPDF } from "@/styles/stylesPDF";
-import { TowerReportImage } from "@/types/reports";
+import { TowerReportImage } from "@/src/interfaces/reports";
 
 export const parseTextBold = (text: string) => {
   const parts = text.split(/(\*\*[^\*]+\*\*)/g);

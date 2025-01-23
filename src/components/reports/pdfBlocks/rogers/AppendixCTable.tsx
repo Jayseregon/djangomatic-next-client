@@ -1,9 +1,8 @@
 import React from "react";
 import { View } from "@react-pdf/renderer";
 
-import { ChecklistRow } from "@/src/types/reports";
+import { ChecklistRow, ListItem } from "@/src/interfaces/reports";
 import { StylesPDF } from "@/styles/stylesPDF";
-import { ListItem } from "@/components/reports/checklist/DynamicForm";
 
 import AppendixCHeader from "./AppendixCHeader";
 import AppendixCRow from "./AppendixCRow";

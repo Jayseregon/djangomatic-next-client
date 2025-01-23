@@ -4,7 +4,7 @@ import { Grip } from "lucide-react";
 
 import { ImageUploadProps, LocalImages } from "@/src/interfaces/reports";
 import { AddButton } from "@/src/components/ui/formInput";
-import { TowerReportImage } from "@/types/reports";
+import { TowerReportImage } from "@/src/interfaces/reports";
 
 import { ImageRow } from "./ImageRow";
 import { FormInputRow } from "./FormInputRow";

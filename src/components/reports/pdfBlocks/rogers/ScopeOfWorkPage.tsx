@@ -2,7 +2,7 @@ import React from "react";
 import { Text, View } from "@react-pdf/renderer";
 
 import { StylesPDF } from "@/styles/stylesPDF";
-import { TOCSections, TowerReport } from "@/src/types/reports";
+import { TOCSections, TowerReport } from "@/src/interfaces/reports";
 
 import TOCSectionPDF from "./TOCSection";
 

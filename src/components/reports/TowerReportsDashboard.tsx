@@ -14,7 +14,7 @@ import {
 } from "@heroui/react";
 import { Cog, FileText, Pencil, Trash2 } from "lucide-react";
 
-import { TowerReport } from "@/src/types/reports";
+import { TowerReport } from "@/src/interfaces/reports";
 import { SearchIcon } from "@/components/icons";
 
 export const TowerReportsDashboard = ({

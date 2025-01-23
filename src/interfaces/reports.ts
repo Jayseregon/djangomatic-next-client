@@ -239,3 +239,10 @@ export interface Note {
   indexNumber: number;
   comment: string;
 }
+
+export interface FormActionsProps {
+  isNew: boolean;
+  onSaveAndContinue: () => void;
+  onCancel: () => void;
+  onGeneratePDF?: () => void;
+}

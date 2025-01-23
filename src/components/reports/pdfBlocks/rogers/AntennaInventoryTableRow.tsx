@@ -2,7 +2,7 @@ import React from "react";
 import { Text, View } from "@react-pdf/renderer";
 
 import { StylesPDF } from "@/styles/stylesPDF";
-import { AntennaTransmissionLine } from "@/src/types/reports";
+import { AntennaTransmissionLine } from "@/src/interfaces/reports";
 import { parseTextBold } from "@/lib/pdfRenderUtils";
 
 const AntennaInventoryTableRow = ({

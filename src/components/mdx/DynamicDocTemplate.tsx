@@ -1,5 +1,4 @@
 import fs from "fs";
-import path from "path";
 
 import { Metadata } from "next";
 import { Suspense } from "react";
@@ -12,15 +11,7 @@ import {
   DynamicDocTemplateProps,
   MetadataTemplateProps,
 } from "@/interfaces/mdx";
-
-const docsDirectory = (docType: string) =>
-  path.join(process.cwd(), `public/content/${docType}`);
-
-async function getDocContent(docType: string, slug: string) {
-  const filePath = path.join(docsDirectory(docType), `${slug}.mdx`);
-
-  return fs.promises.readFile(filePath, "utf8");
-}
+import { docsDirectory, getDocContent } from "@/src/lib/mdxUtils";
 
 export default async function DynamicDocTemplate({
   slug,
@@ -61,5 +52,7 @@ export async function generateMetadataTemplate({
 export async function generateStaticParamsTemplate(docType: string) {
   const files = fs.readdirSync(docsDirectory(docType));
 
-  return files.map((file) => ({ slug: file.replace(/\.mdx$/, "") }));
+  return files
+    .filter((file) => file.endsWith(".mdx"))
+    .map((file) => ({ slug: file.replace(/\.mdx$/, "") }));
 }

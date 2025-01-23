@@ -7,8 +7,8 @@ import { usePathname } from "next/navigation";
 import { NonceContext } from "@/src/app/providers";
 import { videosData } from "@/config/videosData";
 import { knowledgeHubData, SoftwareType } from "@/config/knowledgeCornerData";
-import { BlobProps } from "@/components/admin/BlobStorage";
 import { SidebarSectionProps } from "@/interfaces/ui";
+import { BlobProps } from "@/src/interfaces/admin";
 
 /**
  * Constructs a new href by combining the locale from the current path with the provided href.

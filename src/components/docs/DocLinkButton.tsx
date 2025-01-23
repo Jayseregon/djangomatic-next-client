@@ -1,15 +1,12 @@
 "use client";
+
 import { Button } from "@heroui/react";
 import { BookText } from "lucide-react";
 import React, { useContext } from "react";
 
-import { docsData, DocsData } from "@/src/config/docsData";
+import { docsData } from "@/src/config/docsData";
 import { NonceContext } from "@/src/app/providers";
-
-interface DocLinkButtonProps {
-  projectType: keyof DocsData;
-  slug: string;
-}
+import { DocLinkButtonProps } from "@/src/interfaces/docs";
 
 export default function DocLinkButton({
   projectType,

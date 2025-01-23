@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { Button } from "@heroui/react";
 import { CircleOff, FileText, Save, SaveAll } from "lucide-react";
-import { v4 as uuidv4 } from "uuid";
 
 import listForm4 from "public/reports/rogers/listForm4.json";
 import listForm5 from "public/reports/rogers/listForm5.json";
@@ -16,7 +15,6 @@ import {
   TowerReport,
   TowerReportImage,
   AntennaTransmissionLine,
-  Note,
 } from "@/interfaces/reports";
 import { TowerReportFormProps } from "@/interfaces/reports";
 import ToastNotification, {
@@ -27,6 +25,7 @@ import NotesInputs from "@/components/reports/NotesInputs";
 import DocLinkButton from "@/components/docs/DocLinkButton";
 import { getQuickbaseReportData } from "@/src/actions/quickbase/action";
 import { useChecklistForm } from "@/hooks/useChecklistForm";
+import { useNotes } from "@/hooks/useNotes";
 
 import FormSectionAccordion from "./FormSectionAccordion";
 import QuickbaseInputs from "./QuickbaseInputs";
@@ -78,13 +77,31 @@ export const TowerReportForm = ({
   });
 
   const [inventory, setInventory] = useState<AntennaTransmissionLine[]>([]);
-  const [notes, setNotes] = useState({
-    antennaNotes: [] as Note[],
-    deficiencyNotes: [] as Note[],
-  });
 
   const { checklists, initializeForm, updateForm, handleFormChange } =
     useChecklistForm();
+
+  const {
+    notes: antennaNotes,
+    setNotes: setAntennaNotes,
+    addNote: handleAddAntennaNote,
+    updateNote: handleAntennaNoteChange,
+    removeNote: handleRemoveAntennaNote,
+  } = useNotes(report?.notes_antenna || []);
+
+  const {
+    notes: deficiencyNotes,
+    setNotes: setDeficiencyNotes,
+    addNote: handleAddDeficiencyNote,
+    updateNote: handleDeficiencyNoteChange,
+    removeNote: handleRemoveDeficiencyNote,
+  } = useNotes(report?.notes_deficiency || []);
+
+  // Replace the notes state with individual states
+  const notes = {
+    antennaNotes,
+    deficiencyNotes,
+  };
 
   // Define form configurations
   const formConfigs = [
@@ -174,10 +191,8 @@ export const TowerReportForm = ({
         deficiencyImages: report.deficiency_images || [],
         newlyUploadedImages: [],
       });
-      setNotes({
-        deficiencyNotes: report.notes_deficiency || [],
-        antennaNotes: report.notes_antenna || [],
-      });
+      setAntennaNotes(report.notes_antenna || []);
+      setDeficiencyNotes(report.notes_deficiency || []);
       setInventory(report.antenna_inventory || []);
 
       // Initialize checklist forms
@@ -195,157 +210,35 @@ export const TowerReportForm = ({
       }, 500);
       localStorage.removeItem("reportNotification");
     }
-  }, [report, initializeForm]);
+  }, [report, initializeForm, setAntennaNotes, setDeficiencyNotes]);
 
-  // Handler functions for antenna notes
-  const handleAddAntennaNote = () => {
-    setNotes((prev) => ({
-      ...prev,
-      antennaNotes: [
-        ...prev.antennaNotes,
-        {
-          id: uuidv4(),
-          indexNumber: prev.antennaNotes.length + 1,
-          comment: "",
-        },
-      ],
-    }));
-  };
-
-  const handleAntennaNoteChange = (
-    index: number,
-    field: string,
-    value: any,
-  ) => {
-    if (field === "reorder") {
-      const reindexedNotes = value.map((note: Note, idx: number) => ({
-        ...note,
-        indexNumber: idx + 1,
-      }));
-
-      setNotes((prev) => ({ ...prev, antennaNotes: reindexedNotes }));
-    } else {
-      setNotes((prev) => {
-        const updatedNotes = [...prev.antennaNotes];
-
-        updatedNotes[index] = {
-          ...updatedNotes[index],
-          [field]: value,
-        };
-
-        return { ...prev, antennaNotes: updatedNotes };
-      });
-    }
-  };
-
-  const handleRemoveAntennaNote = (index: number) => {
-    setNotes((prev) => {
-      const filtered = prev.antennaNotes.filter((_, i) => i !== index);
-
-      return {
-        ...prev,
-        antennaNotes: filtered.map((note, i) => ({
-          ...note,
-          indexNumber: i + 1,
-        })),
-      };
-    });
-  };
-
-  // Handler functions for deficiency notes
-  const handleAddDeficiencyNote = () => {
-    setNotes((prev) => ({
-      ...prev,
-      deficiencyNotes: [
-        ...prev.deficiencyNotes,
-        {
-          id: uuidv4(),
-          indexNumber: prev.deficiencyNotes.length + 1,
-          comment: "",
-        },
-      ],
-    }));
-  };
-
-  const handleDeficiencyNoteChange = (
-    index: number,
-    field: string,
-    value: any,
-  ) => {
-    if (field === "reorder") {
-      const reindexedNotes = value.map((note: Note, idx: number) => ({
-        ...note,
-        indexNumber: idx + 1,
-      }));
-
-      setNotes((prev) => ({ ...prev, deficiencyNotes: reindexedNotes }));
-    } else {
-      setNotes((prev) => {
-        const updatedNotes = [...prev.deficiencyNotes];
-
-        updatedNotes[index] = {
-          ...updatedNotes[index],
-          [field]: value,
-        };
-
-        return { ...prev, deficiencyNotes: updatedNotes };
-      });
-    }
-  };
-
-  const handleRemoveDeficiencyNote = (index: number) => {
-    setNotes((prev) => {
-      const filtered = prev.deficiencyNotes.filter((_, i) => i !== index);
-
-      return {
-        ...prev,
-        deficiencyNotes: filtered.map((note, i) => ({
-          ...note,
-          indexNumber: i + 1,
-        })),
-      };
-    });
-  };
+  const getReportData = useCallback((): Partial<TowerReport> => {
+    return {
+      ...formData,
+      site_images: images.siteImages,
+      front_image: images.frontImages,
+      deficiency_images: images.deficiencyImages,
+      antenna_inventory: inventory,
+      checklistForm4: checklists.form4,
+      checklistForm5: checklists.form5,
+      checklistForm6: checklists.form6,
+      checklistForm7: checklists.form7,
+      checklistForm8: checklists.form8,
+      checklistForm9: checklists.form9,
+      checklistForm10: checklists.form10,
+      checklistForm11: checklists.form11,
+      notes_antenna: notes.antennaNotes,
+      notes_deficiency: notes.deficiencyNotes,
+    };
+  }, [formData, images, inventory, checklists, notes]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    onSave({
-      ...formData,
-      site_images: images.siteImages,
-      front_image: images.frontImages,
-      deficiency_images: images.deficiencyImages,
-      antenna_inventory: inventory,
-      checklistForm4: checklists.form4,
-      checklistForm5: checklists.form5,
-      checklistForm6: checklists.form6,
-      checklistForm7: checklists.form7,
-      checklistForm8: checklists.form8,
-      checklistForm9: checklists.form9,
-      checklistForm10: checklists.form10,
-      checklistForm11: checklists.form11,
-      notes_antenna: notes.antennaNotes,
-      notes_deficiency: notes.deficiencyNotes,
-    });
+    onSave(getReportData());
   };
 
   const handleSaveAndContinue = async () => {
-    const result = await onLocalSave({
-      ...formData,
-      site_images: images.siteImages,
-      front_image: images.frontImages,
-      deficiency_images: images.deficiencyImages,
-      antenna_inventory: inventory,
-      checklistForm4: checklists.form4,
-      checklistForm5: checklists.form5,
-      checklistForm6: checklists.form6,
-      checklistForm7: checklists.form7,
-      checklistForm8: checklists.form8,
-      checklistForm9: checklists.form9,
-      checklistForm10: checklists.form10,
-      checklistForm11: checklists.form11,
-      notes_antenna: notes.antennaNotes,
-      notes_deficiency: notes.deficiencyNotes,
-    });
+    const result = await onLocalSave(getReportData());
 
     if (result.success) {
       // Reset the state of newlyUploadedImages after a successful local save

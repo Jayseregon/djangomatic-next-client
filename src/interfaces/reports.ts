@@ -1,11 +1,3 @@
-import {
-  TowerReport,
-  TowerReportImage,
-  TOCSections,
-  AntennaTransmissionLine,
-  Note,
-} from "@/types/reports";
-
 export interface TowerReportFormProps {
   report?: Partial<TowerReport> | null;
   onSave: (report: Partial<TowerReport>) => void;
@@ -151,4 +143,99 @@ export interface ImageRotateModalProps {
 
 export interface RecordData {
   [key: string]: string | number;
+}
+
+export interface ListItem {
+  code: string;
+  item: string;
+}
+
+export interface DynamicFormProps {
+  setChecklistForm: (
+    form: ChecklistRow[] | ((prev: ChecklistRow[]) => ChecklistRow[]),
+  ) => void;
+  checkListForm: ChecklistRow[];
+  list: ListItem[];
+  onFormChange: (
+    setChecklistForm: (
+      form: ChecklistRow[] | ((prev: ChecklistRow[]) => ChecklistRow[]),
+    ) => void,
+    index: number,
+    field: string,
+    value: string | boolean | undefined,
+  ) => void;
+}
+
+export interface TowerReport {
+  id: string;
+  createdAt: Date;
+  updatedAt: Date;
+  front_image: TowerReportImage[];
+  site_images: TowerReportImage[];
+  deficiency_images: TowerReportImage[];
+  jde_work_order: string;
+  jde_job: string;
+  site_name: string;
+  site_code: string;
+  site_region: string;
+  tower_id: string;
+  tower_name: string;
+  tower_site_name: string;
+  job_revision: string;
+  job_description: string;
+  design_standard: string;
+  client_name: string;
+  client_company: string;
+  assigned_peng: string;
+  redline_pages: number;
+  antenna_inventory: AntennaTransmissionLine[];
+  checklistForm4: ChecklistRow[];
+  checklistForm5: ChecklistRow[];
+  checklistForm6: ChecklistRow[];
+  checklistForm7: ChecklistRow[];
+  checklistForm8: ChecklistRow[];
+  checklistForm9: ChecklistRow[];
+  checklistForm10: ChecklistRow[];
+  checklistForm11: ChecklistRow[];
+  notes_antenna: Note[];
+  notes_deficiency: Note[];
+}
+
+export interface ChecklistRow {
+  id: string;
+  code: string;
+  isChecked?: boolean;
+  comments: string;
+}
+
+export interface TowerReportImage {
+  id: string;
+  url: string;
+  label: string;
+  deficiency_check_procedure: string;
+  deficiency_recommendation: string;
+  imgIndex: number;
+  azureId: string;
+}
+
+export interface TOCSections {
+  title: string;
+  pageNumber: number;
+}
+
+export interface AntennaTransmissionLine {
+  id: string;
+  elevation: string;
+  quantity: string;
+  equipment: string;
+  azimuth: string;
+  tx_line: string;
+  odu: string;
+  carrier: string;
+}
+
+export interface Note {
+  id: string;
+  indexNumber: number;
+  comment: string;
 }

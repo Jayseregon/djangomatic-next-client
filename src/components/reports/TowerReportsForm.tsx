@@ -1,9 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { Button } from "@heroui/react";
 import { CircleOff, FileText, Save, SaveAll } from "lucide-react";
 import { v4 as uuidv4 } from "uuid";
 
-import DynamicForm from "@/components/reports/checklist/DynamicForm";
 import listForm4 from "public/reports/rogers/listForm4.json";
 import listForm5 from "public/reports/rogers/listForm5.json";
 import listForm6 from "public/reports/rogers/listForm6.json";
@@ -17,9 +16,8 @@ import {
   TowerReport,
   TowerReportImage,
   AntennaTransmissionLine,
-  ChecklistRow,
   Note,
-} from "@/types/reports";
+} from "@/interfaces/reports";
 import { TowerReportFormProps } from "@/interfaces/reports";
 import ToastNotification, {
   ToastResponse,
@@ -28,11 +26,24 @@ import { FormInput } from "@/components/ui/formInput";
 import NotesInputs from "@/components/reports/NotesInputs";
 import DocLinkButton from "@/components/docs/DocLinkButton";
 import { getQuickbaseReportData } from "@/src/actions/quickbase/action";
+import { useChecklistForm } from "@/hooks/useChecklistForm";
 
 import FormSectionAccordion from "./FormSectionAccordion";
 import QuickbaseInputs from "./QuickbaseInputs";
 import ImageUpload from "./imageUpload/ImageUpload";
 import AntennaTransmissionInputs from "./AntennaTransmissionInputs";
+import { ChecklistForms } from "./checklist/ChecklistForms";
+
+// Add this type definition
+type ChecklistFormKey =
+  | "checklistForm4"
+  | "checklistForm5"
+  | "checklistForm6"
+  | "checklistForm7"
+  | "checklistForm8"
+  | "checklistForm9"
+  | "checklistForm10"
+  | "checklistForm11";
 
 export const TowerReportForm = ({
   report,
@@ -58,27 +69,76 @@ export const TowerReportForm = ({
     redline_pages: 0,
     assigned_peng: "",
   });
-  const [siteImages, setSiteImages] = useState<TowerReportImage[]>([]);
-  const [frontImages, setFrontImages] = useState<TowerReportImage[]>([]);
-  const [deficiencyImages, setDeficiencyImages] = useState<TowerReportImage[]>(
-    [],
-  );
-  const [newlyUploadedImages, setNewlyUploadedImages] = useState<
-    TowerReportImage[]
-  >([]);
-  const [antennaInventory, setAntennaInventory] = useState<
-    AntennaTransmissionLine[]
-  >([]);
-  const [checklistForm4, setChecklistForm4] = useState<ChecklistRow[]>([]);
-  const [checklistForm5, setChecklistForm5] = useState<ChecklistRow[]>([]);
-  const [checklistForm6, setChecklistForm6] = useState<ChecklistRow[]>([]);
-  const [checklistForm7, setChecklistForm7] = useState<ChecklistRow[]>([]);
-  const [checklistForm8, setChecklistForm8] = useState<ChecklistRow[]>([]);
-  const [checklistForm9, setChecklistForm9] = useState<ChecklistRow[]>([]);
-  const [checklistForm10, setChecklistForm10] = useState<ChecklistRow[]>([]);
-  const [checklistForm11, setChecklistForm11] = useState<ChecklistRow[]>([]);
-  const [antennaNotes, setAntennaNotes] = useState<Note[]>([]);
-  const [deficiencyNotes, setDeficiencyNotes] = useState<Note[]>([]);
+
+  const [images, setImages] = useState({
+    siteImages: [] as TowerReportImage[],
+    frontImages: [] as TowerReportImage[],
+    deficiencyImages: [] as TowerReportImage[],
+    newlyUploadedImages: [] as TowerReportImage[],
+  });
+
+  const [inventory, setInventory] = useState<AntennaTransmissionLine[]>([]);
+  const [notes, setNotes] = useState({
+    antennaNotes: [] as Note[],
+    deficiencyNotes: [] as Note[],
+  });
+
+  const { checklists, initializeForm, updateForm, handleFormChange } =
+    useChecklistForm();
+
+  // Define form configurations
+  const formConfigs = [
+    {
+      key: "form4",
+      formKey: "checklistForm4" as ChecklistFormKey,
+      title: "FORM 4: Civil - Antenna Structure and Site Works",
+      list: listForm4,
+    },
+    {
+      key: "form5",
+      formKey: "checklistForm5" as ChecklistFormKey,
+      title:
+        "FORM 5: Civil - Electrical/Mechanical Alarm & Fire Protection Systems",
+      list: listForm5,
+    },
+    {
+      key: "form6",
+      formKey: "checklistForm6" as ChecklistFormKey,
+      title: "FORM 6: Civil - AC Power and Grounding",
+      list: listForm6,
+    },
+    {
+      key: "form7",
+      formKey: "checklistForm7" as ChecklistFormKey,
+      title: "FORM 7: Civil - Cable Tray and Overhead Support",
+      list: listForm7,
+    },
+    {
+      key: "form8",
+      formKey: "checklistForm8" as ChecklistFormKey,
+      title: "FORM 8: Technical Install & Commission - Cellular Base Station",
+      list: listForm8,
+    },
+    {
+      key: "form9",
+      formKey: "checklistForm9" as ChecklistFormKey,
+      title: "FORM 9: Technical Install & Commission - Microwave Radio",
+      list: listForm9,
+    },
+    {
+      key: "form10",
+      formKey: "checklistForm10" as ChecklistFormKey,
+      title: "FORM 10: Technical Install & Commission - AC/DC Power",
+      list: listForm10,
+    },
+    {
+      key: "form11",
+      formKey: "checklistForm11" as ChecklistFormKey,
+      title:
+        "FORM 11: Technical Install & Commission - Miscellaneous Equipment",
+      list: listForm11,
+    },
+  ];
 
   const subdir = `${formData.jde_job}-${formData.jde_work_order}` || "";
   const siteImagesLabelOptions: string[] = siteImagesLabelOptionsData;
@@ -88,25 +148,6 @@ export const TowerReportForm = ({
     id: "",
     updatedAt: new Date(),
   });
-
-  const initializeChecklistForm = (
-    reportForm: ChecklistRow[] | undefined,
-    listForm: { code: string }[],
-    setChecklistForm: React.Dispatch<React.SetStateAction<ChecklistRow[]>>,
-  ) => {
-    if (reportForm && reportForm.length > 0) {
-      setChecklistForm(reportForm);
-    } else {
-      const initialForm = listForm.map((listItem) => ({
-        id: "",
-        code: listItem.code,
-        isChecked: undefined,
-        comments: "",
-      }));
-
-      setChecklistForm(initialForm);
-    }
-  };
 
   useEffect(() => {
     if (report) {
@@ -127,53 +168,22 @@ export const TowerReportForm = ({
         redline_pages: report.redline_pages || 0,
         assigned_peng: report.assigned_peng || "",
       });
-      setSiteImages(report.site_images || []);
-      setFrontImages(report.front_image || []);
-      setDeficiencyImages(report.deficiency_images || []);
-      setDeficiencyNotes(report.notes_deficiency || []);
-      setAntennaInventory(report.antenna_inventory || []);
-      setAntennaNotes(report.notes_antenna || []);
+      setImages({
+        siteImages: report.site_images || [],
+        frontImages: report.front_image || [],
+        deficiencyImages: report.deficiency_images || [],
+        newlyUploadedImages: [],
+      });
+      setNotes({
+        deficiencyNotes: report.notes_deficiency || [],
+        antennaNotes: report.notes_antenna || [],
+      });
+      setInventory(report.antenna_inventory || []);
 
-      initializeChecklistForm(
-        report.checklistForm4,
-        listForm4,
-        setChecklistForm4,
-      );
-      initializeChecklistForm(
-        report.checklistForm5,
-        listForm5,
-        setChecklistForm5,
-      );
-      initializeChecklistForm(
-        report.checklistForm6,
-        listForm6,
-        setChecklistForm6,
-      );
-      initializeChecklistForm(
-        report.checklistForm7,
-        listForm7,
-        setChecklistForm7,
-      );
-      initializeChecklistForm(
-        report.checklistForm8,
-        listForm8,
-        setChecklistForm8,
-      );
-      initializeChecklistForm(
-        report.checklistForm9,
-        listForm9,
-        setChecklistForm9,
-      );
-      initializeChecklistForm(
-        report.checklistForm10,
-        listForm10,
-        setChecklistForm10,
-      );
-      initializeChecklistForm(
-        report.checklistForm11,
-        listForm11,
-        setChecklistForm11,
-      );
+      // Initialize checklist forms
+      formConfigs.forEach(({ key, formKey, list }) => {
+        initializeForm(report[formKey], list, key);
+      });
     }
 
     const notification = localStorage.getItem("reportNotification");
@@ -185,18 +195,21 @@ export const TowerReportForm = ({
       }, 500);
       localStorage.removeItem("reportNotification");
     }
-  }, [report]);
+  }, [report, initializeForm]);
 
   // Handler functions for antenna notes
   const handleAddAntennaNote = () => {
-    setAntennaNotes((prev) => [
+    setNotes((prev) => ({
       ...prev,
-      {
-        id: uuidv4(),
-        indexNumber: prev.length + 1,
-        comment: "",
-      },
-    ]);
+      antennaNotes: [
+        ...prev.antennaNotes,
+        {
+          id: uuidv4(),
+          indexNumber: prev.antennaNotes.length + 1,
+          comment: "",
+        },
+      ],
+    }));
   };
 
   const handleAntennaNoteChange = (
@@ -210,42 +223,48 @@ export const TowerReportForm = ({
         indexNumber: idx + 1,
       }));
 
-      setAntennaNotes(reindexedNotes);
+      setNotes((prev) => ({ ...prev, antennaNotes: reindexedNotes }));
     } else {
-      setAntennaNotes((prev) => {
-        const updatedNotes = [...prev];
+      setNotes((prev) => {
+        const updatedNotes = [...prev.antennaNotes];
 
         updatedNotes[index] = {
           ...updatedNotes[index],
           [field]: value,
         };
 
-        return updatedNotes;
+        return { ...prev, antennaNotes: updatedNotes };
       });
     }
   };
 
   const handleRemoveAntennaNote = (index: number) => {
-    setAntennaNotes((prev) => {
-      const filtered = prev.filter((_, i) => i !== index);
+    setNotes((prev) => {
+      const filtered = prev.antennaNotes.filter((_, i) => i !== index);
 
-      return filtered.map((note, i) => ({
-        ...note,
-        indexNumber: i + 1,
-      }));
+      return {
+        ...prev,
+        antennaNotes: filtered.map((note, i) => ({
+          ...note,
+          indexNumber: i + 1,
+        })),
+      };
     });
   };
 
   // Handler functions for deficiency notes
   const handleAddDeficiencyNote = () => {
-    setDeficiencyNotes((prev) => [
+    setNotes((prev) => ({
       ...prev,
-      {
-        id: uuidv4(),
-        indexNumber: prev.length + 1,
-        comment: "",
-      },
-    ]);
+      deficiencyNotes: [
+        ...prev.deficiencyNotes,
+        {
+          id: uuidv4(),
+          indexNumber: prev.deficiencyNotes.length + 1,
+          comment: "",
+        },
+      ],
+    }));
   };
 
   const handleDeficiencyNoteChange = (
@@ -259,29 +278,32 @@ export const TowerReportForm = ({
         indexNumber: idx + 1,
       }));
 
-      setDeficiencyNotes(reindexedNotes);
+      setNotes((prev) => ({ ...prev, deficiencyNotes: reindexedNotes }));
     } else {
-      setDeficiencyNotes((prev) => {
-        const updatedNotes = [...prev];
+      setNotes((prev) => {
+        const updatedNotes = [...prev.deficiencyNotes];
 
         updatedNotes[index] = {
           ...updatedNotes[index],
           [field]: value,
         };
 
-        return updatedNotes;
+        return { ...prev, deficiencyNotes: updatedNotes };
       });
     }
   };
 
   const handleRemoveDeficiencyNote = (index: number) => {
-    setDeficiencyNotes((prev) => {
-      const filtered = prev.filter((_, i) => i !== index);
+    setNotes((prev) => {
+      const filtered = prev.deficiencyNotes.filter((_, i) => i !== index);
 
-      return filtered.map((note, i) => ({
-        ...note,
-        indexNumber: i + 1,
-      }));
+      return {
+        ...prev,
+        deficiencyNotes: filtered.map((note, i) => ({
+          ...note,
+          indexNumber: i + 1,
+        })),
+      };
     });
   };
 
@@ -289,45 +311,45 @@ export const TowerReportForm = ({
     e.preventDefault();
     onSave({
       ...formData,
-      site_images: siteImages,
-      front_image: frontImages,
-      deficiency_images: deficiencyImages,
-      antenna_inventory: antennaInventory,
-      checklistForm4: checklistForm4,
-      checklistForm5: checklistForm5,
-      checklistForm6: checklistForm6,
-      checklistForm7: checklistForm7,
-      checklistForm8: checklistForm8,
-      checklistForm9: checklistForm9,
-      checklistForm10: checklistForm10,
-      checklistForm11: checklistForm11,
-      notes_antenna: antennaNotes,
-      notes_deficiency: deficiencyNotes,
+      site_images: images.siteImages,
+      front_image: images.frontImages,
+      deficiency_images: images.deficiencyImages,
+      antenna_inventory: inventory,
+      checklistForm4: checklists.form4,
+      checklistForm5: checklists.form5,
+      checklistForm6: checklists.form6,
+      checklistForm7: checklists.form7,
+      checklistForm8: checklists.form8,
+      checklistForm9: checklists.form9,
+      checklistForm10: checklists.form10,
+      checklistForm11: checklists.form11,
+      notes_antenna: notes.antennaNotes,
+      notes_deficiency: notes.deficiencyNotes,
     });
   };
 
   const handleSaveAndContinue = async () => {
     const result = await onLocalSave({
       ...formData,
-      site_images: siteImages,
-      front_image: frontImages,
-      deficiency_images: deficiencyImages,
-      antenna_inventory: antennaInventory,
-      checklistForm4: checklistForm4,
-      checklistForm5: checklistForm5,
-      checklistForm6: checklistForm6,
-      checklistForm7: checklistForm7,
-      checklistForm8: checklistForm8,
-      checklistForm9: checklistForm9,
-      checklistForm10: checklistForm10,
-      checklistForm11: checklistForm11,
-      notes_antenna: antennaNotes,
-      notes_deficiency: deficiencyNotes,
+      site_images: images.siteImages,
+      front_image: images.frontImages,
+      deficiency_images: images.deficiencyImages,
+      antenna_inventory: inventory,
+      checklistForm4: checklists.form4,
+      checklistForm5: checklists.form5,
+      checklistForm6: checklists.form6,
+      checklistForm7: checklists.form7,
+      checklistForm8: checklists.form8,
+      checklistForm9: checklists.form9,
+      checklistForm10: checklists.form10,
+      checklistForm11: checklists.form11,
+      notes_antenna: notes.antennaNotes,
+      notes_deficiency: notes.deficiencyNotes,
     });
 
     if (result.success) {
       // Reset the state of newlyUploadedImages after a successful local save
-      setNewlyUploadedImages([]);
+      setImages((prev) => ({ ...prev, newlyUploadedImages: [] }));
       if (!result.isNewReport) {
         setToastMessage(result.response);
         setToastOpen(true);
@@ -339,11 +361,14 @@ export const TowerReportForm = ({
   };
 
   const handleCancelClick = () => {
-    onCancel(newlyUploadedImages, subdir);
+    onCancel(images.newlyUploadedImages, subdir);
   };
 
   const handleNewImageUpload = (image: TowerReportImage) => {
-    setNewlyUploadedImages((prev) => [...prev, image]);
+    setImages((prev) => ({
+      ...prev,
+      newlyUploadedImages: [...prev.newlyUploadedImages, image],
+    }));
   };
 
   const handleSearchQB = async () => {
@@ -376,36 +401,39 @@ export const TowerReportForm = ({
     }
   };
 
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-  ) => {
-    const { name, value } = e.target;
-    let parsedValue;
+  const handleChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+      const { name, value } = e.target;
+      let parsedValue;
 
-    if (name === "redline_pages" && !isNaN(parseInt(value))) {
-      parsedValue = parseInt(value);
-    } else {
-      parsedValue = value;
-    }
-    setFormData((prev) => ({ ...prev, [name]: parsedValue }));
-  };
+      if (name === "redline_pages" && !isNaN(parseInt(value))) {
+        parsedValue = parseInt(value);
+      } else {
+        parsedValue = value;
+      }
+      setFormData((prev) => ({ ...prev, [name]: parsedValue }));
+    },
+    [],
+  );
 
-  const handleAntennaInventoryChange = (
-    index: number,
-    field: string,
-    value: string,
-  ) => {
-    setAntennaInventory((prev) => {
-      const updatedInventory = [...prev];
+  const handleAntennaInventoryChange = useCallback(
+    (index: number, field: string, value: string) => {
+      setInventory((prev) => {
+        const updatedInventory = [...prev];
 
-      updatedInventory[index] = { ...updatedInventory[index], [field]: value };
+        updatedInventory[index] = {
+          ...updatedInventory[index],
+          [field]: value,
+        };
 
-      return updatedInventory;
-    });
-  };
+        return updatedInventory;
+      });
+    },
+    [],
+  );
 
-  const handleAddAntenna = () => {
-    setAntennaInventory((prev) => [
+  const handleAddAntenna = useCallback(() => {
+    setInventory((prev) => [
       ...prev,
       {
         id: "",
@@ -419,14 +447,14 @@ export const TowerReportForm = ({
         projectId: [],
       },
     ]);
-  };
+  }, []);
 
-  const handleRemoveAntenna = (index: number) => {
-    setAntennaInventory((prev) => prev.filter((_, i) => i !== index));
-  };
+  const handleRemoveAntenna = useCallback((index: number) => {
+    setInventory((prev) => prev.filter((_, i) => i !== index));
+  }, []);
 
-  const handleDuplicateAntenna = (index: number) => {
-    setAntennaInventory((prev) => {
+  const handleDuplicateAntenna = useCallback((index: number) => {
+    setInventory((prev) => {
       const antennaToDuplicate = prev[index];
       const duplicatedAntenna = { ...antennaToDuplicate };
       const updatedInventory = [
@@ -437,22 +465,7 @@ export const TowerReportForm = ({
 
       return updatedInventory;
     });
-  };
-
-  const handleChecklistFormChange = (
-    setChecklistForm: React.Dispatch<React.SetStateAction<any[]>>,
-    index: number,
-    field: string,
-    value: string | boolean | undefined,
-  ) => {
-    setChecklistForm((prev) => {
-      const updatedChecklist = [...prev];
-
-      updatedChecklist[index] = { ...updatedChecklist[index], [field]: value };
-
-      return updatedChecklist;
-    });
-  };
+  }, []);
 
   return (
     <>
@@ -488,12 +501,14 @@ export const TowerReportForm = ({
         {/* Front Images */}
         {formData.jde_work_order && formData.jde_work_order?.length > 5 && (
           <ImageUpload
-            images={frontImages}
+            images={images.frontImages}
             isFrontcover={true}
             labelPlaceholder="Front Image"
             newImageButtonName="Add Cover Image"
             subdir={subdir}
-            onImagesChange={setFrontImages}
+            onImagesChange={(newImages) =>
+              setImages((prev) => ({ ...prev, frontImages: newImages }))
+            }
             onNewImageUpload={handleNewImageUpload}
           />
         )}
@@ -517,7 +532,7 @@ export const TowerReportForm = ({
           <div className="space-y-10">
             {formData.jde_work_order && formData.jde_work_order?.length > 5 && (
               <AntennaTransmissionInputs
-                antennaInventory={antennaInventory}
+                antennaInventory={inventory}
                 onAddAntenna={handleAddAntenna}
                 onAntennaChange={handleAntennaInventoryChange}
                 onDuplicateAntenna={handleDuplicateAntenna}
@@ -526,7 +541,7 @@ export const TowerReportForm = ({
             )}
             {/* Antenna Notes Section */}
             <NotesInputs
-              notes={antennaNotes}
+              notes={notes.antennaNotes}
               onAddNote={handleAddAntennaNote}
               onNoteChange={handleAntennaNoteChange}
               onRemoveNote={handleRemoveAntennaNote}
@@ -540,19 +555,24 @@ export const TowerReportForm = ({
           <div className="space-y-10">
             {formData.jde_work_order && formData.jde_work_order?.length > 5 && (
               <ImageUpload
-                images={deficiencyImages}
+                images={images.deficiencyImages}
                 isDeficiency={true}
                 labelOptions={[]}
                 labelPlaceholder="Description"
                 newImageButtonName="Add Deficiency"
                 subdir={subdir}
-                onImagesChange={setDeficiencyImages}
+                onImagesChange={(newImages) =>
+                  setImages((prev) => ({
+                    ...prev,
+                    deficiencyImages: newImages,
+                  }))
+                }
                 onNewImageUpload={handleNewImageUpload}
               />
             )}
             {/* Deficiency Notes Section */}
             <NotesInputs
-              notes={deficiencyNotes}
+              notes={notes.deficiencyNotes}
               onAddNote={handleAddDeficiencyNote}
               onNoteChange={handleDeficiencyNoteChange}
               onRemoveNote={handleRemoveDeficiencyNote}
@@ -565,120 +585,28 @@ export const TowerReportForm = ({
           {/* Site Images */}
           {formData.jde_work_order && formData.jde_work_order?.length > 5 && (
             <ImageUpload
-              images={siteImages}
+              images={images.siteImages}
               labelOptions={siteImagesLabelOptions}
               labelPlaceholder="Select/Edit an option"
               newImageButtonName="Add Site Image"
               subdir={subdir}
-              onImagesChange={setSiteImages}
+              onImagesChange={(newImages) =>
+                setImages((prev) => ({ ...prev, siteImages: newImages }))
+              }
               onNewImageUpload={handleNewImageUpload}
             />
           )}
         </FormSectionAccordion>
 
-        {/* Form 4 */}
-        <FormSectionAccordion
-          menuKey="form4"
-          title="FORM 4: Civil - Antenna Structure and Site Works"
-        >
-          <DynamicForm
-            checkListForm={checklistForm4}
-            list={listForm4}
-            setChecklistForm={setChecklistForm4}
-            onFormChange={handleChecklistFormChange}
+        {/* Checklist Forms */}
+        {formData.jde_work_order && formData.jde_work_order?.length > 5 && (
+          <ChecklistForms
+            checklists={checklists}
+            formConfigs={formConfigs}
+            onFormChange={handleFormChange}
+            onFormUpdate={updateForm}
           />
-        </FormSectionAccordion>
-
-        {/* Form 5 */}
-        <FormSectionAccordion
-          menuKey="form5"
-          title="FORM 5: Civil - Electrical/Mechanical Alarm & Fire Protection Systems"
-        >
-          <DynamicForm
-            checkListForm={checklistForm5}
-            list={listForm5}
-            setChecklistForm={setChecklistForm5}
-            onFormChange={handleChecklistFormChange}
-          />
-        </FormSectionAccordion>
-
-        {/* Form 6 */}
-        <FormSectionAccordion
-          menuKey="form6"
-          title="FORM 6: Civil - AC Power and Grounding"
-        >
-          <DynamicForm
-            checkListForm={checklistForm6}
-            list={listForm6}
-            setChecklistForm={setChecklistForm6}
-            onFormChange={handleChecklistFormChange}
-          />
-        </FormSectionAccordion>
-
-        {/* Form 7 */}
-        <FormSectionAccordion
-          menuKey="form7"
-          title="FORM 7: Civil - Cable Tray and Overhead Support"
-        >
-          <DynamicForm
-            checkListForm={checklistForm7}
-            list={listForm7}
-            setChecklistForm={setChecklistForm7}
-            onFormChange={handleChecklistFormChange}
-          />
-        </FormSectionAccordion>
-
-        {/* Form 8 */}
-        <FormSectionAccordion
-          menuKey="form8"
-          title="FORM 8: Technical Install & Commission - Cellular Base Station"
-        >
-          <DynamicForm
-            checkListForm={checklistForm8}
-            list={listForm8}
-            setChecklistForm={setChecklistForm8}
-            onFormChange={handleChecklistFormChange}
-          />
-        </FormSectionAccordion>
-
-        {/* Form 9 */}
-        <FormSectionAccordion
-          menuKey="form9"
-          title="FORM 9: Technical Install & Commission - Microwave Radio"
-        >
-          <DynamicForm
-            checkListForm={checklistForm9}
-            list={listForm9}
-            setChecklistForm={setChecklistForm9}
-            onFormChange={handleChecklistFormChange}
-          />
-        </FormSectionAccordion>
-
-        {/* Form 10 */}
-        <FormSectionAccordion
-          menuKey="form10"
-          title="FORM 10: Technical Install & Commission - AC/DC Power"
-        >
-          <DynamicForm
-            checkListForm={checklistForm10}
-            list={listForm10}
-            setChecklistForm={setChecklistForm10}
-            onFormChange={handleChecklistFormChange}
-          />
-        </FormSectionAccordion>
-
-        {/* Form 11 */}
-        <FormSectionAccordion
-          menuKey="form11"
-          title="FORM 11: Technical Install & Commission - Miscellaneous Equipment"
-        >
-          <DynamicForm
-            checkListForm={checklistForm11}
-            list={listForm11}
-            setChecklistForm={setChecklistForm11}
-            onFormChange={handleChecklistFormChange}
-          />
-        </FormSectionAccordion>
+        )}
 
         <div className="space-x-4 mt-4 mx-auto">
           <Button isIconOnly color="success" type="submit">

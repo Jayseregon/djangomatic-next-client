@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, memo } from "react";
 import { Button } from "@heroui/react";
 
 import siteImagesLabelOptionsData from "public/reports/rogers/siteImagesLabelOptions.json";
@@ -15,17 +15,18 @@ import {
   formConfigs,
   quickbaseMapping,
   WORK_ORDER_MIN_LENGTH,
+  INITIAL_FORM_STATE,
 } from "@/config/towerReportConfig";
 import { useImageSection } from "@/hooks/useImageSection";
 import { useAntennaInventory } from "@/hooks/useAntennaInventory";
 import { useToast } from "@/hooks/useToast";
-
-import FormSectionAccordion from "./FormSectionAccordion";
-import QuickbaseInputs from "./QuickbaseInputs";
-import ImageUpload from "./imageUpload/ImageUpload";
-import AntennaTransmissionInputs from "./AntennaTransmissionInputs";
-import { ChecklistForms } from "./checklist/ChecklistForms";
-import { FormActions } from "./FormActions";
+import FormSectionAccordion from "@/components/reports/FormSectionAccordion";
+import QuickbaseInputs from "@/components/reports/QuickbaseInputs";
+import ImageUpload from "@/components/reports/imageUpload/ImageUpload";
+import AntennaTransmissionInputs from "@/components/reports/AntennaTransmissionInputs";
+import ChecklistForms from "@/components/reports/checklist/ChecklistForms";
+import { FormActions } from "@/components/reports/FormActions";
+import ErrorBoundary from "@/src/components/error/ErrorBoundary";
 
 export const TowerReportForm = ({
   report,
@@ -34,23 +35,8 @@ export const TowerReportForm = ({
   onCancel,
   isNew = false,
 }: TowerReportFormProps) => {
-  const [formData, setFormData] = useState<Partial<TowerReport>>({
-    jde_work_order: "",
-    jde_job: "",
-    site_name: "",
-    site_code: "",
-    site_region: "",
-    tower_id: "",
-    tower_name: "",
-    tower_site_name: "",
-    job_revision: "",
-    job_description: "",
-    design_standard: "",
-    client_company: "",
-    client_name: "",
-    redline_pages: 0,
-    assigned_peng: "",
-  });
+  const [formData, setFormData] =
+    useState<Partial<TowerReport>>(INITIAL_FORM_STATE);
 
   const { checklists, initializeForm, updateForm, handleFormChange } =
     useChecklistForm();
@@ -185,10 +171,13 @@ export const TowerReportForm = ({
     deficiencyImageSection.resetNewlyUploaded();
   }, [frontImageSection, siteImageSection, deficiencyImageSection]);
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    onSave(getReportData());
-  };
+  const handleSubmit = useCallback(
+    (e: React.FormEvent) => {
+      e.preventDefault();
+      onSave(getReportData());
+    },
+    [getReportData, onSave],
+  );
 
   const handleSaveAndContinue = async () => {
     const result = await onLocalSave(getReportData());
@@ -251,148 +240,155 @@ export const TowerReportForm = ({
   return (
     <>
       <DocLinkButton projectType="admin_docs" slug="pci-reports-rogers" />
-      <form
-        className="space-y-4 w-full px-20 pt-5 z-30"
-        onSubmit={handleSubmit}
-      >
-        {/* Quickbase Query */}
-        <div className="grid grid-cols-2 items-center gap-8">
-          <FormInput
-            label="Work Order"
-            name="jde_work_order"
-            placeholder="XXXXXX"
-            value={formData.jde_work_order}
-            onChange={handleChange}
-          />
-          <div className="h-full w-full content-end">
-            <Button
-              className="bg-primary text-white w-full h-10"
-              isDisabled={!isWorkOrderValid}
-              radius="full"
-              variant="solid"
-              onPress={handleSearchQB}
-            >
-              Search QB
-            </Button>
-          </div>
-        </div>
-
-        {isWorkOrderValid && (
-          <>
-            {/* Front Images */}
-            <ImageUpload
-              images={frontImageSection.images}
-              isFrontcover={true}
-              labelPlaceholder="Front Image"
-              newImageButtonName="Add Cover Image"
-              subdir={subdir}
-              onImagesChange={frontImageSection.handleImagesChange}
-              onNewImageUpload={frontImageSection.handleNewImageUpload}
+      <ErrorBoundary fallback={<div>Something went wrong</div>}>
+        <form
+          className="space-y-4 w-full px-20 pt-5 z-30"
+          onSubmit={handleSubmit}
+        >
+          {/* Quickbase Query */}
+          <div className="grid grid-cols-2 items-center gap-8">
+            <FormInput
+              label="Work Order"
+              name="jde_work_order"
+              placeholder="XXXXXX"
+              value={formData.jde_work_order}
+              onChange={handleChange}
             />
+            <div className="h-full w-full content-end">
+              <Button
+                className="bg-primary text-white w-full h-10"
+                isDisabled={!isWorkOrderValid}
+                radius="full"
+                variant="solid"
+                onPress={handleSearchQB}
+              >
+                Search QB
+              </Button>
+            </div>
+          </div>
 
-            {/* Divider */}
-            <FormSectionAccordion
-              defaultOpen
-              menuKey="qb-data"
-              title="Quickbase Project Data"
-            >
-              {/* Quickbase Data */}
-              <QuickbaseInputs
-                formData={formData}
-                handleChange={handleChange}
-              />
-            </FormSectionAccordion>
-
-            <FormSectionAccordion
-              menuKey="antenna"
-              title="Antenna & Transmission Line Inventory"
-            >
-              {/* Antenna & Transmission Line Inventory */}
-              <div className="space-y-10">
-                <AntennaTransmissionInputs
-                  antennaInventory={inventory}
-                  onAddAntenna={handleAddAntenna}
-                  onAntennaChange={handleAntennaInventoryChange}
-                  onDuplicateAntenna={handleDuplicateAntenna}
-                  onRemoveAntenna={handleRemoveAntenna}
-                />
-
-                {/* Antenna Notes Section */}
-                <NotesInputs
-                  notes={notes.antennaNotes}
-                  onAddNote={handleAddAntennaNote}
-                  onNoteChange={handleAntennaNoteChange}
-                  onRemoveNote={handleRemoveAntennaNote}
-                />
-              </div>
-            </FormSectionAccordion>
-
-            <FormSectionAccordion
-              menuKey="deficiencies"
-              title="Deficiency Images"
-            >
-              {/* Deficiency Images */}
-              <div className="space-y-10">
-                <ImageUpload
-                  images={deficiencyImageSection.images}
-                  isDeficiency={true}
-                  labelOptions={[]}
-                  labelPlaceholder="Description"
-                  newImageButtonName="Add Deficiency"
-                  subdir={subdir}
-                  onImagesChange={deficiencyImageSection.handleImagesChange}
-                  onNewImageUpload={deficiencyImageSection.handleNewImageUpload}
-                />
-
-                {/* Deficiency Notes Section */}
-                <NotesInputs
-                  notes={notes.deficiencyNotes}
-                  onAddNote={handleAddDeficiencyNote}
-                  onNoteChange={handleDeficiencyNoteChange}
-                  onRemoveNote={handleRemoveDeficiencyNote}
-                />
-              </div>
-            </FormSectionAccordion>
-
-            <FormSectionAccordion menuKey="site" title="Site Images">
-              {/* Site Images */}
-
+          {isWorkOrderValid && (
+            <>
+              {/* Front Images */}
               <ImageUpload
-                images={siteImageSection.images}
-                labelOptions={siteImagesLabelOptions}
-                labelPlaceholder="Select/Edit an option"
-                newImageButtonName="Add Site Image"
+                images={frontImageSection.images}
+                isFrontcover={true}
+                labelPlaceholder="Front Image"
+                newImageButtonName="Add Cover Image"
                 subdir={subdir}
-                onImagesChange={siteImageSection.handleImagesChange}
-                onNewImageUpload={siteImageSection.handleNewImageUpload}
+                onImagesChange={frontImageSection.handleImagesChange}
+                onNewImageUpload={frontImageSection.handleNewImageUpload}
               />
-            </FormSectionAccordion>
 
-            {/* Checklist Forms */}
-            {isWorkOrderValid && (
-              <ChecklistForms
-                checklists={checklists}
-                formConfigs={formConfigs}
-                onFormChange={handleFormChange}
-                onFormUpdate={updateForm}
-              />
-            )}
-          </>
-        )}
+              {/* Divider */}
+              <FormSectionAccordion
+                defaultOpen
+                menuKey="qb-data"
+                title="Quickbase Project Data"
+              >
+                {/* Quickbase Data */}
+                <QuickbaseInputs
+                  formData={formData}
+                  handleChange={handleChange}
+                />
+              </FormSectionAccordion>
 
-        <FormActions
-          isNew={isNew}
-          onCancel={handleCancelClick}
-          onGeneratePDF={handleGeneratePDF}
-          onSaveAndContinue={handleSaveAndContinue}
-        />
+              <FormSectionAccordion
+                menuKey="antenna"
+                title="Antenna & Transmission Line Inventory"
+              >
+                {/* Antenna & Transmission Line Inventory */}
+                <div className="space-y-10">
+                  <AntennaTransmissionInputs
+                    antennaInventory={inventory}
+                    onAddAntenna={handleAddAntenna}
+                    onAntennaChange={handleAntennaInventoryChange}
+                    onDuplicateAntenna={handleDuplicateAntenna}
+                    onRemoveAntenna={handleRemoveAntenna}
+                  />
 
-        <ToastNotification
-          open={toastOpen}
-          response={toastMessage}
-          setOpen={setToastOpen}
-        />
-      </form>
+                  {/* Antenna Notes Section */}
+                  <NotesInputs
+                    notes={notes.antennaNotes}
+                    onAddNote={handleAddAntennaNote}
+                    onNoteChange={handleAntennaNoteChange}
+                    onRemoveNote={handleRemoveAntennaNote}
+                  />
+                </div>
+              </FormSectionAccordion>
+
+              <FormSectionAccordion
+                menuKey="deficiencies"
+                title="Deficiency Images"
+              >
+                {/* Deficiency Images */}
+                <div className="space-y-10">
+                  <ImageUpload
+                    images={deficiencyImageSection.images}
+                    isDeficiency={true}
+                    labelOptions={[]}
+                    labelPlaceholder="Description"
+                    newImageButtonName="Add Deficiency"
+                    subdir={subdir}
+                    onImagesChange={deficiencyImageSection.handleImagesChange}
+                    onNewImageUpload={
+                      deficiencyImageSection.handleNewImageUpload
+                    }
+                  />
+
+                  {/* Deficiency Notes Section */}
+                  <NotesInputs
+                    notes={notes.deficiencyNotes}
+                    onAddNote={handleAddDeficiencyNote}
+                    onNoteChange={handleDeficiencyNoteChange}
+                    onRemoveNote={handleRemoveDeficiencyNote}
+                  />
+                </div>
+              </FormSectionAccordion>
+
+              <FormSectionAccordion menuKey="site" title="Site Images">
+                {/* Site Images */}
+
+                <ImageUpload
+                  images={siteImageSection.images}
+                  labelOptions={siteImagesLabelOptions}
+                  labelPlaceholder="Select/Edit an option"
+                  newImageButtonName="Add Site Image"
+                  subdir={subdir}
+                  onImagesChange={siteImageSection.handleImagesChange}
+                  onNewImageUpload={siteImageSection.handleNewImageUpload}
+                />
+              </FormSectionAccordion>
+
+              {/* Checklist Forms */}
+              {isWorkOrderValid && (
+                <ChecklistForms
+                  checklists={checklists}
+                  formConfigs={formConfigs}
+                  onFormChange={handleFormChange}
+                  onFormUpdate={updateForm}
+                />
+              )}
+            </>
+          )}
+
+          <FormActions
+            isNew={isNew}
+            onCancel={handleCancelClick}
+            onGeneratePDF={handleGeneratePDF}
+            onSaveAndContinue={handleSaveAndContinue}
+          />
+
+          <ToastNotification
+            open={toastOpen}
+            response={toastMessage}
+            setOpen={setToastOpen}
+          />
+        </form>
+      </ErrorBoundary>
     </>
   );
 };
+
+// Optimize exports for tree-shaking
+export default memo(TowerReportForm);

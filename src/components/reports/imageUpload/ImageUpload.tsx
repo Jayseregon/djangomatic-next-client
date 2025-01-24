@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, memo } from "react";
 import { Reorder, useDragControls } from "motion/react";
 import { Grip } from "lucide-react";
 
@@ -9,7 +9,7 @@ import { TowerReportImage } from "@/src/interfaces/reports";
 import { ImageRow } from "./ImageRow";
 import { FormInputRow } from "./FormInputRow";
 
-export const ImageUpload: React.FC<ImageUploadProps> = ({
+const ImageUpload: React.FC<ImageUploadProps> = ({
   images,
   onImagesChange,
   subdir,
@@ -307,4 +307,4 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({
   );
 };
 
-export default ImageUpload;
+export default memo(ImageUpload);

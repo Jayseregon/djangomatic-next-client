@@ -6,8 +6,7 @@ import listForm8 from "public/reports/rogers/listForm8.json";
 import listForm9 from "public/reports/rogers/listForm9.json";
 import listForm10 from "public/reports/rogers/listForm10.json";
 import listForm11 from "public/reports/rogers/listForm11.json";
-
-export const WORK_ORDER_MIN_LENGTH = 6;
+import { TowerReport } from "@/src/interfaces/reports";
 
 type ChecklistFormKey =
   | "checklistForm4"
@@ -19,7 +18,26 @@ type ChecklistFormKey =
   | "checklistForm10"
   | "checklistForm11";
 
-// Define form configurations
+export const WORK_ORDER_MIN_LENGTH = 6;
+
+export const INITIAL_FORM_STATE: Partial<TowerReport> = {
+  jde_work_order: "",
+  jde_job: "",
+  site_name: "",
+  site_code: "",
+  site_region: "",
+  tower_id: "",
+  tower_name: "",
+  tower_site_name: "",
+  job_revision: "",
+  job_description: "",
+  design_standard: "",
+  client_company: "",
+  client_name: "",
+  redline_pages: 0,
+  assigned_peng: "",
+};
+
 export const formConfigs = [
   {
     key: "form4",

@@ -1,10 +1,8 @@
 import React, { memo } from "react";
 
 import { ChecklistRow } from "@/interfaces/reports";
-
-import FormSectionAccordion from "../FormSectionAccordion";
-
-import { DynamicForm } from "./DynamicForm";
+import FormSectionAccordion from "@/src/components/reports/FormSectionAccordion";
+import { DynamicForm } from "@/src/components/reports/checklist/DynamicForm";
 
 interface FormConfig {
   key: string;
@@ -27,13 +25,13 @@ interface ChecklistFormsProps {
   ) => void;
 }
 
-export const ChecklistForms = memo(
-  ({
-    checklists,
-    formConfigs,
-    onFormChange,
-    onFormUpdate,
-  }: ChecklistFormsProps) => (
+const ChecklistForms = ({
+  checklists,
+  formConfigs,
+  onFormChange,
+  onFormUpdate,
+}: ChecklistFormsProps) => {
+  return (
     <>
       {formConfigs.map(({ key, title, list }) => (
         <FormSectionAccordion key={key} menuKey={key} title={title}>
@@ -50,7 +48,7 @@ export const ChecklistForms = memo(
         </FormSectionAccordion>
       ))}
     </>
-  ),
-);
+  );
+};
 
-ChecklistForms.displayName = "ChecklistForms";
+export default memo(ChecklistForms);

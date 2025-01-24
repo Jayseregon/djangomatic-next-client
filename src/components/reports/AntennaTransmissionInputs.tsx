@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo } from "react";
 
 import { AntennaTransmissionInputsProps } from "@/src/interfaces/reports";
 import { AntennaTransmissionLine } from "@/src/interfaces/reports";
@@ -69,13 +69,13 @@ const inputsList: {
   },
 };
 
-export default function AntennaTransmissionInputs({
+const AntennaTransmissionInputs = ({
   antennaInventory,
   onAntennaChange,
   onAddAntenna,
   onRemoveAntenna,
   onDuplicateAntenna,
-}: AntennaTransmissionInputsProps) {
+}: AntennaTransmissionInputsProps) => {
   const handleChange = (
     index: number,
     field: string,
@@ -155,4 +155,6 @@ export default function AntennaTransmissionInputs({
       <AddButton label="Add New Inventory" onClick={onAddAntenna} />
     </div>
   );
-}
+};
+
+export default memo(AntennaTransmissionInputs);

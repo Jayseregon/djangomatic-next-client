@@ -1,15 +1,20 @@
-import React, { useState, useEffect, useRef, memo } from "react";
+import React, { useEffect, memo, useCallback, useMemo } from "react";
 import { Reorder, useDragControls } from "motion/react";
 import { Grip } from "lucide-react";
 
-import { ImageUploadProps, LocalImages } from "@/src/interfaces/reports";
+import {
+  ImageUploadProps,
+  LocalImages,
+  TowerReportImage,
+} from "@/src/interfaces/reports";
 import { AddButton } from "@/src/components/ui/formInput";
-import { TowerReportImage } from "@/src/interfaces/reports";
+import { useImageUpload } from "@/src/hooks/useImageUpload";
+import { useLocalImages } from "@/src/hooks/useLocalImages";
 
 import { ImageRow } from "./ImageRow";
 import { FormInputRow } from "./FormInputRow";
 
-const ImageUpload: React.FC<ImageUploadProps> = ({
+const ImageUpload = ({
   images,
   onImagesChange,
   subdir,
@@ -20,145 +25,135 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
   maxImages,
   isFrontcover,
   isDeficiency = false,
-}) => {
-  const [localImages, setLocalImages] = useState<LocalImages[]>([]);
-  const isInitialized = useRef(false);
+}: ImageUploadProps) => {
+  const {
+    localImages,
+    setLocalImages,
+    initLocalImages,
+    findFirstAvailableIndex,
+    sortedLocalImages,
+  } = useLocalImages({ images, isFrontcover });
+
   const dragControls = useDragControls();
+  const { uploadImageToAzure } = useImageUpload();
 
   useEffect(() => {
-    if (!isInitialized.current && images.length > 0) {
-      const initialLocalImages = images.map((image, index) => ({
-        file: null,
-        label: isFrontcover ? "Front Cover" : image.label,
-        url: image.url,
-        imgIndex: image.imgIndex ?? index,
-        deficiency_check_procedure: image.deficiency_check_procedure,
-        deficiency_recommendation: image.deficiency_recommendation,
-      }));
+    initLocalImages();
+  }, [initLocalImages]);
 
-      setLocalImages([...initialLocalImages]);
-      isInitialized.current = true;
-    }
-  }, [images, isFrontcover]);
+  const handleImageChange = useCallback(
+    async (index: number, files: FileList) => {
+      if (!files?.[0]) return;
 
-  const findFirstAvailableIndex = () => {
-    const indices = localImages.map((image) => image.imgIndex);
-    let index = 0;
-
-    while (indices.includes(index)) {
-      index++;
-    }
-
-    return index;
-  };
-
-  const handleImageChange = async (index: number, files: FileList) => {
-    const newImages = [...localImages];
-
-    if (files && files[0]) {
       const file = files[0];
-      const label = isFrontcover ? "Front Cover" : newImages[index].label;
-      const imgIndex = index;
-      const deficiency_check_procedure = isDeficiency
-        ? newImages[index].deficiency_check_procedure
-        : "";
-      const deficiency_recommendation = isDeficiency
-        ? newImages[index].deficiency_recommendation
-        : "";
+      const newImages = [...localImages];
+      const currentImage = newImages[index];
+
+      const label = isFrontcover ? "Front Cover" : currentImage.label;
       const { url, azureId, id } = await uploadImageToAzure(
         file,
         label,
         subdir,
       );
+
       const newImage = {
         id,
         url,
         label,
-        imgIndex,
+        imgIndex: index,
         azureId,
-        deficiency_check_procedure,
-        deficiency_recommendation,
+        deficiency_check_procedure: isDeficiency
+          ? currentImage.deficiency_check_procedure
+          : "",
+        deficiency_recommendation: isDeficiency
+          ? currentImage.deficiency_recommendation
+          : "",
         siteProjectId: null,
         frontProjectId: null,
         deficiencyProjectId: null,
       };
 
       onImagesChange([...images, newImage]);
-      newImages[index] = { ...newImages[index], file, url, imgIndex };
+      newImages[index] = { ...currentImage, file, url, imgIndex: index };
       onNewImageUpload(newImage);
-    }
-    setLocalImages(newImages);
-  };
+      setLocalImages(newImages);
+    },
+    [
+      localImages,
+      images,
+      isFrontcover,
+      isDeficiency,
+      onImagesChange,
+      onNewImageUpload,
+      uploadImageToAzure,
+      subdir,
+    ],
+  );
 
-  const handleLabelChange = (
-    index: number,
-    e: React.ChangeEvent<HTMLInputElement>,
-  ) => {
-    if (isFrontcover) return;
+  const handleLabelChange = useCallback(
+    (index: number, e: React.ChangeEvent<HTMLInputElement>) => {
+      if (isFrontcover) return;
 
-    const { value } = e.target;
-    const newImages = [...localImages];
+      const { value } = e.target;
 
-    newImages[index] = {
-      ...newImages[index],
-      label: value,
-    };
-    setLocalImages(newImages);
+      setLocalImages((prev) =>
+        prev.map((img, i) => (i === index ? { ...img, label: value } : img)),
+      );
 
-    const updatedImages = images.map((img, i) =>
-      i === index ? { ...img, label: value } : img,
-    );
+      onImagesChange(
+        images.map((img, i) => (i === index ? { ...img, label: value } : img)),
+      );
+    },
+    [isFrontcover, images, onImagesChange],
+  );
 
-    onImagesChange(updatedImages);
-  };
+  const handleDeficiencyCheckProcedureChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const index = parseInt(e.target.name.split("-")[1], 10);
 
-  const handleDeficiencyCheckProcedureChange = (
-    e: React.ChangeEvent<HTMLInputElement>,
-  ) => {
-    const index = parseInt(e.target.name.split("-")[1], 10);
+      if (isFrontcover) return;
 
-    if (isFrontcover) return;
+      const { value } = e.target;
 
-    const { value } = e.target;
-    const newImages = [...localImages];
+      setLocalImages((prev) =>
+        prev.map((img, i) =>
+          i === index ? { ...img, deficiency_check_procedure: value } : img,
+        ),
+      );
 
-    newImages[index] = {
-      ...newImages[index],
-      deficiency_check_procedure: value,
-    };
-    setLocalImages(newImages);
+      onImagesChange(
+        images.map((img, i) =>
+          i === index ? { ...img, deficiency_check_procedure: value } : img,
+        ),
+      );
+    },
+    [isFrontcover, images, onImagesChange],
+  );
 
-    const updatedImages = images.map((img, i) =>
-      i === index ? { ...img, deficiency_check_procedure: value } : img,
-    );
+  const handleDeficiencyRecommendationChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const index = parseInt(e.target.name.split("-")[1], 10);
 
-    onImagesChange(updatedImages);
-  };
+      if (isFrontcover) return;
 
-  const handleDeficiencyRecommendationChange = (
-    e: React.ChangeEvent<HTMLInputElement>,
-  ) => {
-    const index = parseInt(e.target.name.split("-")[1], 10);
+      const { value } = e.target;
 
-    if (isFrontcover) return;
+      setLocalImages((prev) =>
+        prev.map((img, i) =>
+          i === index ? { ...img, deficiency_recommendation: value } : img,
+        ),
+      );
 
-    const { value } = e.target;
-    const newImages = [...localImages];
+      onImagesChange(
+        images.map((img, i) =>
+          i === index ? { ...img, deficiency_recommendation: value } : img,
+        ),
+      );
+    },
+    [isFrontcover, images, onImagesChange],
+  );
 
-    newImages[index] = {
-      ...newImages[index],
-      deficiency_recommendation: value,
-    };
-    setLocalImages(newImages);
-
-    const updatedImages = images.map((img, i) =>
-      i === index ? { ...img, deficiency_recommendation: value } : img,
-    );
-
-    onImagesChange(updatedImages);
-  };
-
-  const addImageField = () => {
+  const addImageField = useCallback(() => {
     if (
       (isFrontcover && localImages.length === 0) ||
       (!isFrontcover &&
@@ -177,130 +172,117 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
         },
       ]);
     }
-  };
+  }, [isFrontcover, localImages.length, maxImages, findFirstAvailableIndex]);
 
-  const removeImageField = async (index: number) => {
-    const imageToRemove = images.find((img) => img.imgIndex === index);
+  const removeImageField = useCallback(
+    async (index: number) => {
+      const imageToRemove = images.find((img) => img.imgIndex === index);
 
-    if (imageToRemove) {
-      await fetch(
-        `/api/azure-report-images/delete?subdir=${subdir}&azureId=${imageToRemove.azureId}`,
-        {
-          method: "DELETE",
-        },
-      );
-      onImagesChange(images.filter((img) => img.imgIndex !== index));
-    }
-    const newImages = localImages.filter((img) => img.imgIndex !== index);
-
-    setLocalImages(newImages);
-  };
-
-  const uploadImageToAzure = async (
-    file: File,
-    label: string,
-    subdir: string,
-  ) => {
-    const formData = new FormData();
-
-    formData.append("file", file);
-    formData.append("label", label);
-    formData.append("subdir", subdir);
-
-    const response = await fetch("/api/azure-report-images/upload", {
-      method: "POST",
-      body: formData,
-    });
-
-    const data = await response.json();
-
-    return { url: data.url, azureId: data.azureId, id: data.id };
-  };
-
-  const handleReorder = (newOrder: LocalImages[]) => {
-    // Create new array with updated indices
-    const reorderedLocal = newOrder.map((image, newIndex) => ({
-      ...image,
-      imgIndex: newIndex,
-    }));
-
-    setLocalImages(reorderedLocal);
-
-    // Update parent state
-    const reorderedParent = images
-      .map((parentImage) => {
-        const matchingLocal = reorderedLocal.find(
-          (local) => local.url === parentImage.url,
+      if (imageToRemove) {
+        await fetch(
+          `/api/azure-report-images/delete?subdir=${subdir}&azureId=${imageToRemove.azureId}`,
+          {
+            method: "DELETE",
+          },
         );
+        onImagesChange(images.filter((img) => img.imgIndex !== index));
+      }
+      const newImages = localImages.filter((img) => img.imgIndex !== index);
 
-        return matchingLocal
-          ? { ...parentImage, imgIndex: matchingLocal.imgIndex }
-          : null;
-      })
-      .filter((img): img is TowerReportImage => img !== null)
-      .sort((a, b) => a.imgIndex - b.imgIndex);
+      setLocalImages(newImages);
+    },
+    [images, localImages, onImagesChange, subdir],
+  );
 
-    onImagesChange(reorderedParent);
-  };
+  const handleReorder = useCallback(
+    (newOrder: LocalImages[]) => {
+      const reorderedLocal = newOrder.map((image, newIndex) => ({
+        ...image,
+        imgIndex: newIndex,
+      }));
+
+      setLocalImages(reorderedLocal);
+
+      const reorderedParent = images
+        .map((parentImage) => {
+          const matchingLocal = reorderedLocal.find(
+            (local) => local.url === parentImage.url,
+          );
+
+          return matchingLocal
+            ? { ...parentImage, imgIndex: matchingLocal.imgIndex }
+            : null;
+        })
+        .filter((img): img is TowerReportImage => img !== null)
+        .sort((a, b) => a.imgIndex - b.imgIndex);
+
+      onImagesChange(reorderedParent);
+    },
+    [images, onImagesChange],
+  );
+
+  const canAddMore = useMemo(
+    () =>
+      (isFrontcover && localImages.length === 0) ||
+      (!isFrontcover &&
+        (maxImages === undefined || localImages.length < maxImages)),
+    [isFrontcover, localImages.length, maxImages],
+  );
 
   return (
     <>
       <Reorder.Group
         axis="y"
         className="space-y-4"
-        values={localImages.sort((a, b) => a.imgIndex - b.imgIndex)}
+        values={sortedLocalImages}
         onReorder={handleReorder}
       >
-        {localImages
-          .sort((a, b) => a.imgIndex - b.imgIndex)
-          .map((image) => (
-            <Reorder.Item
-              key={image.url || `new-${image.imgIndex}`}
-              className="touch-none"
-              dragControls={dragControls}
-              value={image}
-            >
-              <div className="flex items-center gap-2 bg-background p-2 rounded-lg">
-                <div
-                  className="cursor-grab"
-                  onPointerDown={(e) => dragControls.start(e)}
-                >
-                  <Grip color="#4b5563" />
-                </div>
-                <div className="flex-1">
-                  {image.url ? (
-                    <ImageRow
-                      image={image}
-                      isDeficiency={isDeficiency}
-                      isFrontcover={isFrontcover}
-                      removeImageField={removeImageField}
-                    />
-                  ) : (
-                    <FormInputRow
-                      handleDeficiencyCheckProcedureChange={
-                        handleDeficiencyCheckProcedureChange
-                      }
-                      handleDeficiencyRecommendationChange={
-                        handleDeficiencyRecommendationChange
-                      }
-                      handleImageChange={handleImageChange}
-                      handleLabelChange={handleLabelChange}
-                      image={image}
-                      isDeficiency={isDeficiency}
-                      isFrontcover={isFrontcover}
-                      labelOptions={labelOptions}
-                      labelPlaceholder={labelPlaceholder}
-                      removeImageField={removeImageField}
-                    />
-                  )}
-                </div>
+        {sortedLocalImages.map((image) => (
+          <Reorder.Item
+            key={image.url || `new-${image.imgIndex}`}
+            className="touch-none"
+            dragControls={dragControls}
+            value={image}
+          >
+            <div className="flex items-center gap-2 bg-background p-2 rounded-lg">
+              <div
+                className="cursor-grab"
+                onPointerDown={(e) => dragControls.start(e)}
+              >
+                <Grip color="#4b5563" />
               </div>
-            </Reorder.Item>
-          ))}
+              <div className="flex-1">
+                {image.url ? (
+                  <ImageRow
+                    image={image}
+                    isDeficiency={isDeficiency}
+                    isFrontcover={isFrontcover}
+                    removeImageField={removeImageField}
+                  />
+                ) : (
+                  <FormInputRow
+                    handleDeficiencyCheckProcedureChange={
+                      handleDeficiencyCheckProcedureChange
+                    }
+                    handleDeficiencyRecommendationChange={
+                      handleDeficiencyRecommendationChange
+                    }
+                    handleImageChange={handleImageChange}
+                    handleLabelChange={handleLabelChange}
+                    image={image}
+                    isDeficiency={isDeficiency}
+                    isFrontcover={isFrontcover}
+                    labelOptions={labelOptions}
+                    labelPlaceholder={labelPlaceholder}
+                    removeImageField={removeImageField}
+                  />
+                )}
+              </div>
+            </div>
+          </Reorder.Item>
+        ))}
       </Reorder.Group>
-      {((isFrontcover && localImages.length === 0) ||
-        (!isFrontcover &&
-          (maxImages === undefined || localImages.length < maxImages))) && (
+      {canAddMore && (
         <AddButton label={newImageButtonName} onClick={addImageField} />
       )}
     </>

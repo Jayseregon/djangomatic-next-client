@@ -15,8 +15,18 @@ export const useToast = () => {
 
     if (notification) {
       setTimeout(() => {
-        setMessage(JSON.parse(notification));
-        setOpen(true);
+        try {
+          const parsedNotification = JSON.parse(notification);
+
+          // Ensure updatedAt is converted to Date object
+          setMessage({
+            ...parsedNotification,
+            updatedAt: new Date(parsedNotification.updatedAt),
+          });
+          setOpen(true);
+        } catch (error) {
+          console.error("Failed to parse notification:", error);
+        }
       }, 500);
       localStorage.removeItem("reportNotification");
     }

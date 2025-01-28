@@ -1,24 +1,31 @@
 import { useAsyncList } from "@react-stately/data";
+import { Key } from "@react-types/shared";
 
 import { RnDTeamTask, Status } from "@/interfaces/lib";
-import { convertTaskDates } from "@/lib/utils"; // Added import
+import { convertTaskDates } from "@/lib/utils";
+
+interface SortDescriptor {
+  column: Key;
+  direction: "ascending" | "descending";
+}
+
+interface AsyncListResponse {
+  items: RnDTeamTask[];
+}
 
 export const useSortTasksList = (
   apiEndpoint: string,
   showCompleted: boolean,
-): ReturnType<typeof useAsyncList<RnDTeamTask>> =>
-  useAsyncList<RnDTeamTask>({
-    async load({ signal }) {
+) => {
+  return useAsyncList<RnDTeamTask>({
+    async load({ signal }): Promise<AsyncListResponse> {
       const res = await fetch(apiEndpoint, {
         method: "GET",
         signal,
       });
       const data = await res.json();
 
-      const tasksWithDates = data.map((task: RnDTeamTask) =>
-        convertTaskDates(task),
-      );
-
+      const tasksWithDates = data.map(convertTaskDates);
       const filteredTasks = showCompleted
         ? tasksWithDates.filter(
             (task: RnDTeamTask) =>
@@ -31,40 +38,52 @@ export const useSortTasksList = (
               task.status !== Status.CANCELLED,
           );
 
-      const sortedTasks = filteredTasks.sort(
-        (a: RnDTeamTask, b: RnDTeamTask) => a.priority - b.priority,
-      );
-
-      return { items: sortedTasks };
+      return {
+        items: filteredTasks.sort(
+          (a: RnDTeamTask, b: RnDTeamTask) => a.priority - b.priority,
+        ),
+      };
     },
-    async sort({ items, sortDescriptor }) {
+    async sort({
+      items,
+      sortDescriptor,
+    }: {
+      items: RnDTeamTask[];
+      sortDescriptor: SortDescriptor | null;
+    }): Promise<AsyncListResponse> {
       if (!sortDescriptor) {
         return { items };
       }
 
-      const sortedItems = [...items].sort((a, b) => {
-        const aValue = a[sortDescriptor.column as keyof RnDTeamTask];
-        const bValue = b[sortDescriptor.column as keyof RnDTeamTask];
+      return {
+        items: [...items].sort((a, b) => {
+          const aValue = a[sortDescriptor.column as keyof RnDTeamTask];
+          const bValue = b[sortDescriptor.column as keyof RnDTeamTask];
 
-        if (aValue == null || bValue == null) {
-          return 0;
-        }
+          if (aValue == null || bValue == null) {
+            return 0;
+          }
 
-        if (typeof aValue === "number" && typeof bValue === "number") {
+          if (typeof aValue === "number" && typeof bValue === "number") {
+            return sortDescriptor.direction === "ascending"
+              ? aValue - bValue
+              : bValue - aValue;
+          }
+
+          if (aValue instanceof Date && bValue instanceof Date) {
+            return sortDescriptor.direction === "ascending"
+              ? aValue.getTime() - bValue.getTime()
+              : bValue.getTime() - aValue.getTime();
+          }
+
+          const aString = String(aValue);
+          const bString = String(bValue);
+
           return sortDescriptor.direction === "ascending"
-            ? aValue - bValue
-            : bValue - aValue;
-        }
-
-        if (typeof aValue === "string" && typeof bValue === "string") {
-          return sortDescriptor.direction === "ascending"
-            ? aValue.localeCompare(bValue)
-            : bValue.localeCompare(aValue);
-        }
-
-        return 0;
-      });
-
-      return { items: sortedItems };
+            ? aString.localeCompare(bString)
+            : bString.localeCompare(aString);
+        }),
+      };
     },
   });
+};

@@ -232,6 +232,7 @@ export interface AntennaTransmissionLine {
   tx_line: string;
   odu: string;
   carrier: string;
+  projectId: string; // Add this line to match Prisma schema
 }
 
 export interface Note {

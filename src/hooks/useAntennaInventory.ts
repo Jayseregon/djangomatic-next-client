@@ -36,7 +36,7 @@ export const useAntennaInventory = (
         tx_line: "",
         odu: "",
         carrier: "",
-        projectId: [],
+        projectId: "",
       },
     ]);
   }, []);

@@ -13,3 +13,5 @@ if (typeof Response === 'undefined') {
   } as any
 }
 Object.defineProperty(window, 'scrollTo', { value: jest.fn(), writable: true });
+
+global.fetch = jest.fn();

@@ -27,6 +27,10 @@ export async function fetchImageBatch(
 
   try {
     const response = await fetch(`/api/proxy-image?urls=${encodedUrls}`);
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
     const imagesData = await response.json();
 
     return imagesData.reduce((acc: { [key: string]: string }, img: any) => {

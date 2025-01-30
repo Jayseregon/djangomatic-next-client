@@ -426,6 +426,97 @@ export const PopoverContent = ({ children }: { children: React.ReactNode }) => (
   <div>{children}</div>
 );
 
+// Add Modal component mock
+interface ModalProps extends BaseProps {
+  isOpen: boolean;
+  onClose?: () => void;
+  closeButton?: boolean;
+  backdrop?: string;
+  classNames?: {
+    base?: string;
+    backdrop?: string;
+    body?: string;
+    header?: string;
+    footer?: string;
+  };
+  size?: string;
+}
+
+export const Modal = ({
+  isOpen,
+  children,
+  onClose,
+  closeButton,
+  backdrop,
+  classNames,
+  size,
+  ...props
+}: ModalProps) => {
+  if (!isOpen) return null;
+
+  return (
+    <div
+      aria-modal="true"
+      className={classNames?.base}
+      data-backdrop={backdrop}
+      data-size={size}
+      data-testid="modal"
+      role="dialog"
+      tabIndex={0}
+      onClick={(e) => {
+        if (e.target === e.currentTarget && closeButton) {
+          onClose?.();
+        }
+      }}
+      onKeyDown={(e) => {
+        if (e.key === "Escape" && closeButton) {
+          onClose?.();
+        }
+      }}
+      {...props}
+    >
+      {closeButton && (
+        <button
+          aria-label="Close"
+          className="close-button"
+          type="button"
+          onClick={onClose}
+        >
+          Close
+        </button>
+      )}
+      <div className="modal-backdrop" data-testid="modal-backdrop" />
+      <div className="modal-container" data-testid="modal-container">
+        {children}
+      </div>
+    </div>
+  );
+};
+
+export const ModalContent = ({ children, className, ...props }: BaseProps) => (
+  <div className={className} data-testid="modal-content" {...props}>
+    {children}
+  </div>
+);
+
+export const ModalHeader = ({ children, className, ...props }: BaseProps) => (
+  <div className={className} data-testid="modal-header" {...props}>
+    {children}
+  </div>
+);
+
+export const ModalBody = ({ children, className, ...props }: BaseProps) => (
+  <div className={className} data-testid="modal-body" {...props}>
+    {children}
+  </div>
+);
+
+export const ModalFooter = ({ children, className, ...props }: BaseProps) => (
+  <div className={className} data-testid="modal-footer" {...props}>
+    {children}
+  </div>
+);
+
 // Add Snippet component mock
 export const Snippet = ({
   children,

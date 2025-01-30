@@ -50,33 +50,39 @@ const ImageUpload = ({
       const currentImage = newImages[index];
 
       const label = isFrontcover ? "Front Cover" : currentImage.label;
-      const { url, azureId, id } = await uploadImageToAzure(
-        file,
-        label,
-        subdir,
-      );
 
-      const newImage = {
-        id,
-        url,
-        label,
-        imgIndex: index,
-        azureId,
-        deficiency_check_procedure: isDeficiency
-          ? currentImage.deficiency_check_procedure
-          : "",
-        deficiency_recommendation: isDeficiency
-          ? currentImage.deficiency_recommendation
-          : "",
-        siteProjectId: null,
-        frontProjectId: null,
-        deficiencyProjectId: null,
-      };
+      try {
+        const { url, azureId, id } = await uploadImageToAzure(
+          file,
+          label,
+          subdir,
+        );
 
-      onImagesChange([...images, newImage]);
-      newImages[index] = { ...currentImage, file, url, imgIndex: index };
-      onNewImageUpload(newImage);
-      setLocalImages(newImages);
+        const newImage = {
+          id,
+          url,
+          label,
+          imgIndex: index,
+          azureId,
+          deficiency_check_procedure: isDeficiency
+            ? currentImage.deficiency_check_procedure
+            : "",
+          deficiency_recommendation: isDeficiency
+            ? currentImage.deficiency_recommendation
+            : "",
+          siteProjectId: null,
+          frontProjectId: null,
+          deficiencyProjectId: null,
+        };
+
+        onImagesChange([...images, newImage]);
+        newImages[index] = { ...currentImage, file, url, imgIndex: index };
+        onNewImageUpload(newImage);
+        setLocalImages(newImages);
+      } catch (err) {
+        console.error(err);
+        throw err;
+      }
     },
     [
       localImages,

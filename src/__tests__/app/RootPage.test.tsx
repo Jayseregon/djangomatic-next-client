@@ -28,11 +28,11 @@ jest.mock(
 // }));
 
 // Mock HomeContent component
-jest.mock("@/src/components/root/HomeContent", () => ({
+jest.mock("@/components/root/HomeContent", () => ({
   __esModule: true,
   default: ({ session }: { session: any }) => (
     <div data-session={!!session} data-testid="home-content">
-      Mock HomeContent
+      Mock Home Content
     </div>
   ),
 }));

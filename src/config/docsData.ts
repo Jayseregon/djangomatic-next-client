@@ -81,6 +81,7 @@ export const docsData = {
     },
   ],
   xplore_docs: [
+    // BOM Workflow, qgis doc: FALSE
     {
       label: "BOM Workflow",
       href: "/docs/xplore/bom-workflow",
@@ -94,12 +95,6 @@ export const docsData = {
     },
   ],
   comcast_docs: [
-    // Comcast Automated Design Workflow, qgis doc: FALSE
-    {
-      label: "Automated Design Workflow",
-      href: "/docs/comcast/automated-design-workflow",
-      is_qgis_doc: false,
-    },
     // Comcast Basemap Design Workflow, qgis doc: FALSE
     {
       label: "Basemap Design Workflow",

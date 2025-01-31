@@ -6,7 +6,7 @@ import {
   AntennaTransmissionLine,
   ChecklistRow,
   Note,
-} from "@/src/types/reports";
+} from "@/src/interfaces/reports";
 import { handlePrismaError } from "@/src/lib/prismaErrorHandler";
 const prisma = new PrismaClient();
 

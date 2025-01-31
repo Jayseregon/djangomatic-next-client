@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 import { TowerReportForm } from "@/src/components/reports/TowerReportsForm";
-import { TowerReport, TowerReportImage } from "@/src/types/reports";
+import { TowerReport, TowerReportImage } from "@/src/interfaces/reports";
 import { title } from "@/src/components/primitives";
 
 export default function ReportFormPage() {

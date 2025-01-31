@@ -23,31 +23,12 @@ function isValidTokenResponse(
   return validateTokens(tokens.djAuthToken);
 }
 
-const backendCredentialsMap: Record<
-  string,
-  { email: string | undefined; password: string | undefined }
-> = {
-  tds: {
-    email: process.env.APP_TDS_USER_EMAIL,
-    password: process.env.APP_TDS_USER_PASSWORD,
-  },
-  cogeco: {
-    email: process.env.APP_COGECO_USER_EMAIL,
-    password: process.env.APP_COGECO_USER_PASSWORD,
-  },
-  vistabeam: {
-    email: process.env.APP_VISTABEAM_USER_EMAIL,
-    password: process.env.APP_VISTABEAM_USER_PASSWORD,
-  },
-  xplore: {
-    email: process.env.APP_XPLORE_USER_EMAIL,
-    password: process.env.APP_XPLORE_USER_PASSWORD,
-  },
-  telus: {
-    email: process.env.APP_TELUS_USER_EMAIL,
-    password: process.env.APP_TELUS_USER_PASSWORD,
-  },
-};
+function getBackendCredentials(backendUser: string) {
+  return {
+    email: process.env[`APP_${backendUser.toUpperCase()}_USER_EMAIL`],
+    password: process.env[`APP_${backendUser.toUpperCase()}_USER_PASSWORD`],
+  };
+}
 
 const isTokenExpired = (token: string) => {
   try {
@@ -71,10 +52,7 @@ const validateTokens = (token: string): boolean => {
 };
 
 export async function makeServerLoginRequest(backendUser: string) {
-  const credentials = backendCredentialsMap[backendUser] || {
-    email: undefined,
-    password: undefined,
-  };
+  const credentials = getBackendCredentials(backendUser);
 
   try {
     if (!credentials.email || !credentials.password) {

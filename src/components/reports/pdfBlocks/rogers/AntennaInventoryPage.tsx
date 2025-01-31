@@ -6,7 +6,7 @@ import {
   AntennaTransmissionLine,
   TOCSections,
   Note,
-} from "@/src/types/reports";
+} from "@/src/interfaces/reports";
 
 import TOCSectionPDF from "./TOCSection";
 import { ListTitle } from "./ListElements";

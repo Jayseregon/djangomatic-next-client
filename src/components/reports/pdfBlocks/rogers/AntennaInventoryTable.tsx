@@ -1,7 +1,7 @@
 import React from "react";
 import { View } from "@react-pdf/renderer";
 
-import { AntennaTransmissionLine } from "@/src/types/reports";
+import { AntennaTransmissionLine } from "@/src/interfaces/reports";
 import { StylesPDF } from "@/styles/stylesPDF";
 
 import AntennaInventoryTableHeader from "./AntennaInventoryTableHeader";

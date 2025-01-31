@@ -1,10 +1,9 @@
+import { memo } from "react";
+
 import { QuickbaseInputsProps } from "@/interfaces/reports";
 import { FormInput } from "@/components/ui/formInput";
 
-export default function QuickbaseInputs({
-  formData,
-  handleChange,
-}: QuickbaseInputsProps) {
+const QuickbaseInputs = ({ formData, handleChange }: QuickbaseInputsProps) => {
   return (
     <>
       {/* Client Data */}
@@ -127,4 +126,6 @@ export default function QuickbaseInputs({
       </div>
     </>
   );
-}
+};
+
+export default memo(QuickbaseInputs);

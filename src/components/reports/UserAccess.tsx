@@ -4,8 +4,7 @@ import React, { useEffect, useState } from "react";
 
 import { fetchUserServer } from "@/actions/generic/action";
 import { UserSchema } from "@/interfaces/lib";
-
-import { UnAuthorized } from "../auth/unAuthorized";
+import { UnAuthorized } from "@/components/auth/unAuthorized";
 
 export default function UserAccessReports({
   email,

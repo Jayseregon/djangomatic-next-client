@@ -2,8 +2,7 @@ import React from "react";
 import { Text, View } from "@react-pdf/renderer";
 
 import { StylesPDF } from "@/styles/stylesPDF";
-import { ChecklistRow } from "@/src/types/reports";
-import { ListItem } from "@/components/reports/checklist/DynamicForm";
+import { ChecklistRow, ListItem } from "@/src/interfaces/reports";
 
 const AppendixCRow = ({
   items,

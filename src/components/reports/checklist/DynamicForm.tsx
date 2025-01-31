@@ -1,31 +1,14 @@
 import React from "react";
 import { RadioGroup, Radio } from "@heroui/react";
 
-import { ChecklistRow } from "@/types/reports";
+import { DynamicFormProps } from "@/src/interfaces/reports";
 
-export interface ListItem {
-  code: string;
-  item: string;
-}
-
-interface DynamicFormProps {
-  setChecklistForm: React.Dispatch<React.SetStateAction<any[]>>;
-  checkListForm: ChecklistRow[];
-  list: ListItem[];
-  onFormChange: (
-    setChecklistForm: React.Dispatch<React.SetStateAction<any[]>>,
-    index: number,
-    field: string,
-    value: string | boolean | undefined,
-  ) => void;
-}
-
-const DynamicForm: React.FC<DynamicFormProps> = ({
+export const DynamicForm = ({
   setChecklistForm,
   checkListForm,
   list,
   onFormChange,
-}) => {
+}: DynamicFormProps) => {
   const handleInputChange = (
     index: number,
     field: string,
@@ -101,5 +84,3 @@ const DynamicForm: React.FC<DynamicFormProps> = ({
     </div>
   );
 };
-
-export default DynamicForm;

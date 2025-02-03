@@ -1,9 +1,9 @@
 {
   "HomePage": {
     "HeroTitle": "Simplifier vos tâches quotidiennes",
-    "Description1": "Des solutions basées sur le cloud pour rationaliser vos flux de travail et vos activités quotidiennes grâce à nos outils d’automatisation avancés.",
+    "Description1": "Des solutions basées sur le cloud pour rationaliser vos flux de travail et vos activités quotidiennes grâce à nos outils d'automatisation avancés.",
     "Description2": "Accédez facilement à la documentation pour tous les processus organisationnels et les outils personnalisés, accompagnée de tutoriels vidéo complets.",
-    "BugReport": "Signalez tout problème ou bug via notre tableau de rapport de bugs, pour une résolution rapide"
+    "BugReport": "Signalez tout problème, bug, ou suggestions via notre tableau de rapport de bugs, pour une résolution rapide"
   },
   "UnAuthorized": {
     "access": "Vous n'avez pas les permissions requises pour accéder à cette page.",
@@ -54,9 +54,9 @@
       "subtitle": "Suivez la progression de nos projets et des fonctionnalités à venir",
       "projectSidebar": "Projets",
       "controlButtons": {
-        "newCard" : "Carte",
-        "newProject" : "Projet",
-        "newCategory" : "Catégorie",
+        "newCard": "Carte",
+        "newProject": "Projet",
+        "newCategory": "Catégorie",
         "inputPlaceholders": {
           "projectName": "Nom du projet",
           "categoryName": "Nom de la catégorie"
@@ -89,8 +89,8 @@
         "title": "Accueil",
         "dashboardLink": "Tous les tableaux"
       },
-      "teamSection": "Tableaux des membres", 
-      "reportsSection" : {
+      "teamSection": "Tableaux des membres",
+      "reportsSection": {
         "title": "Rapports",
         "bugDashboardLink": "Rapport de bug"
       }
@@ -150,7 +150,7 @@
     "input_password": "Veuillez entrer votre mot de passe TDS",
     "input_uuidPole": "Optionnel : UUID poteau pour traitement ponctuel",
     "control_erase": "Supprimer existants",
-    "control_snap": "Snapshots auto", 
+    "control_snap": "Snapshots auto",
     "project_id": "Entrez l'ID du projet",
     "project_num": "Entrez le numéro de projet"
   },
@@ -286,6 +286,10 @@
     "extract_bom_summary": {
       "description": "Cette application produit un résumé BOM à partir d'un fichier zip contenant des shapefiles extraits d'AutoCAD.",
       "update": "Implémentation de l'outil Xplore."
+    },
+    "hydro_one_bom_auto": {
+      "description": "This app creates a BOM [...] from a zip file [...]",
+      "update": "Xplore tools implementation."
     }
   },
   "telusApps": {

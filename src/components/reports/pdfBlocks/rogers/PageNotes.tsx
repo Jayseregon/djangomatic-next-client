@@ -1,6 +1,6 @@
 import React from "react";
 
-import { Note } from "@/src/types/reports";
+import { Note } from "@/src/interfaces/reports";
 
 import { ListItem } from "./ListElements";
 

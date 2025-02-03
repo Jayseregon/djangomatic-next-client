@@ -1,14 +1,10 @@
 "use client";
 
-import { ReactNode, useContext, type JSX } from "react";
+import { useContext, type JSX } from "react";
 
 import { cn } from "@/lib/utils";
 import { NonceContext } from "@/src/app/providers";
-
-interface CalloutProps {
-  children?: ReactNode;
-  type?: "default" | "warning" | "danger";
-}
+import { CalloutProps } from "@/src/interfaces/mdx";
 
 /**
  * Callout component renders a styled callout box with different types (default, warning, danger).

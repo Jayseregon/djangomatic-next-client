@@ -160,10 +160,10 @@ export const UncheckIcon = ({ size = 20, ...props }: IconSvgProps) => (
 
 export const StopSignIcon = ({ size = 20, ...props }: IconSvgProps) => (
   <svg
-    aria-hidden="true"
+    aria-label="Stop Sign"
     focusable="false"
     height={size}
-    role="presentation"
+    role="img"
     viewBox="0 0 16 16"
     width={size}
     {...props}

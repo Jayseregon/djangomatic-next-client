@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import { View, Text, Image as PdfImg } from "@react-pdf/renderer";
 
 import { StylesPDF } from "@/styles/stylesPDF";
-import { TOCSections, TowerReport } from "@/src/types/reports";
+import { TOCSections, TowerReport } from "@/src/interfaces/reports";
 import { fetchImageBatch } from "@/lib/pdfRenderUtils";
 
 import TOCSectionPDF from "./TOCSection";
@@ -50,7 +50,7 @@ const SitePhotosPage = ({
   );
 
   const introPage = (
-    <View key="site-photos-intro" break wrap={false}>
+    <View key="site-photos-intro" wrap={false}>
       <View style={StylesPDF.sectionTitleContainer}>
         <TOCSectionPDF
           id="site-photos"

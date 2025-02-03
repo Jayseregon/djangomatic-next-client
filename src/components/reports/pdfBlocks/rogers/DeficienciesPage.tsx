@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import { View, Text, Image as PdfImg } from "@react-pdf/renderer";
 
 import { StylesPDF } from "@/styles/stylesPDF";
-import { TOCSections, TowerReport } from "@/src/types/reports";
+import { TOCSections, TowerReport } from "@/src/interfaces/reports";
 import { fetchImageBatch } from "@/lib/pdfRenderUtils";
 
 import TOCSectionPDF from "./TOCSection";
@@ -61,7 +61,6 @@ const DeficienciesPage = ({
         <ListTitle title="Additional comments:" />
         <PageNotes items={report.notes_deficiency} />
       </View>
-      {/* Footer can be added here if needed */}
     </View>,
   );
 
@@ -78,7 +77,6 @@ const DeficienciesPage = ({
           Deficiency Photos
         </TOCSectionPDF>
       </View>
-      {/* Footer can be added here if needed */}
     </View>,
   );
 
@@ -102,7 +100,6 @@ const DeficienciesPage = ({
             {image.imgIndex + 1 + ". " + image.label}
           </Text>
         </View>
-        {/* Footer can be added here if needed */}
       </View>,
     );
   });

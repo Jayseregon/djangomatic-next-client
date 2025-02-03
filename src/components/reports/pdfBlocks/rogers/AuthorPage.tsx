@@ -2,7 +2,7 @@ import React from "react";
 import { Text, View } from "@react-pdf/renderer";
 
 import { StylesPDF } from "@/styles/stylesPDF";
-import { TowerReport } from "@/src/types/reports";
+import { TowerReport } from "@/src/interfaces/reports";
 
 const AuthorPage = ({ report }: { report: TowerReport }) => {
   return (

@@ -8,8 +8,25 @@ import {
 import { cn } from "@/src/lib/utils";
 import { FormInputRowProps } from "@/src/interfaces/reports";
 import { DropArea } from "@/components/reports/DropArea";
+import { ImageRotateModal } from "@/components/reports/imageUpload/ImageRotateModal";
 
-import { ImageRotateModal } from "./ImageRotateModal";
+const createFileList = (file: File): FileList => {
+  if (typeof DataTransfer === "undefined") {
+    // For test environment
+    return {
+      0: file,
+      length: 1,
+      item: (index: number) => (index === 0 ? file : null),
+    } as unknown as FileList;
+  }
+
+  // For browser environment
+  const dataTransfer = new DataTransfer();
+
+  dataTransfer.items.add(file);
+
+  return dataTransfer.files;
+};
 
 export const FormInputRow = ({
   image,
@@ -39,10 +56,7 @@ export const FormInputRow = ({
   };
 
   const handleConfirmUpload = async (rotatedFile: File) => {
-    const dataTransfer = new DataTransfer();
-
-    dataTransfer.items.add(rotatedFile);
-    handleImageChange(image.imgIndex, dataTransfer.files);
+    handleImageChange(image.imgIndex, createFileList(rotatedFile));
     setShowModal(false);
     setSelectedFile(null);
   };

@@ -17,6 +17,7 @@ const config: Config = {
   coverageProvider: "v8",
   testEnvironment: "jest-environment-jsdom",
   setupFilesAfterEnv: ["<rootDir>/jest.setup.ts"],
+  setupFiles: ["<rootDir>/src/__tests__/__mocks__/mediaElementMock.ts"],
   moduleFileExtensions: [
     "js",
     "mjs",
@@ -38,6 +39,7 @@ const config: Config = {
     "^@/src/lib/(.*)$": "<rootDir>/src/lib/$1",
     "^@/hooks/(.*)$": "<rootDir>/src/hooks/$1",
     "^@/data/(.*)$": "<rootDir>/src/data/$1",
+    "^@/src/(.*)$": "<rootDir>/src/$1",
     "^@/(.*)$": "<rootDir>/src/$1",
     "^#site/content$": "<rootDir>/.velite",
     "^@heroui/react$": "<rootDir>/src/__tests__/__mocks__/heroui.tsx",
@@ -49,12 +51,13 @@ const config: Config = {
     "^next-auth/react$": "<rootDir>/src/__tests__/__mocks__/next-auth-react.tsx",
     "^next-auth$": "<rootDir>/src/__tests__/__mocks__/next-auth-react.tsx",
     "^next-auth/jwt$": "<rootDir>/src/__tests__/__mocks__/next-auth-react.tsx",
-    "^@/src/(.*)$": "<rootDir>/src/$1",
     "^@/auth$": "<rootDir>/auth.ts",
     "^@/src/auth$": "<rootDir>/auth.ts",
     "^next-intl/server$": "<rootDir>/src/__tests__/__mocks__/next-intl-server.ts",
     "^next-auth/providers/(.*)$": "<rootDir>/src/__tests__/__mocks__/next-auth-providers.ts",
     '^next/server$': '<rootDir>/src/__tests__/__mocks__/next-server.ts',
+    "^next-mdx-remote-client/rsc$": "<rootDir>/src/__tests__/__mocks__/next-mdx-remote-client-rsc.ts",
+    "^@heroui/snippet$": "<rootDir>/src/__tests__/__mocks__/heroui.tsx",
   },
   testMatch: [
     "**/__tests__/**/*.[jt]s?(x)",
@@ -76,7 +79,7 @@ const config: Config = {
     "^.+\\.(js|jsx|ts|tsx)$": "babel-jest",
   },
   transformIgnorePatterns: [
-    "/node_modules/(?!(@auth/core|next-auth|@panva/hkdf|jose|oauth|openid-client|preact|uuid|next-intl|@auth/core/providers|next-auth/providers|lucide-react))/"
+    "/node_modules/(?!(@auth/core|next-auth|@panva/hkdf|jose|oauth|openid-client|preact|uuid|next-intl|@auth/core/providers|next-auth/providers|lucide-react|next-mdx-remote-client))/"
   ],
   // Uncomment the next line to limit workers if needed
   // maxWorkers: 2,

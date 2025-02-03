@@ -25,6 +25,8 @@ const schemasCache = new LRUCache<string, any>({
   ttl: 1000 * 60 * 10,
 });
 
+export { tablesCache, schemasCache };
+
 // axios instance with base url
 export const axiosInstance = axios.create({
   baseURL: baseUrl,

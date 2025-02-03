@@ -2,8 +2,7 @@ import type { Config } from "tailwindcss";
 
 import { heroui } from "@heroui/theme";
 
-/** @type {import("tailwindcss").Config} */
-const config = {
+const config: import("tailwindcss").Config = {
   content: [
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
@@ -138,7 +137,7 @@ const config = {
   safelist: [
     {
       pattern:
-      /(bg|border|text)-(slate|gray|zinc|neutral|stone|red|orange|amber|yellow|lime|green|emerald|teal|cyan|sky|blue|indigo|violet|purple|fuchsia|pink|rose|primary|secondary|success|warning|danger)-(100|200|300|400|500|600|700|800|900|950)/,
+        /(bg|border|text)-(slate|gray|zinc|neutral|stone|red|orange|amber|yellow|lime|green|emerald|teal|cyan|sky|blue|indigo|violet|purple|fuchsia|pink|rose|primary|secondary|success|warning|danger)-(100|200|300|400|500|600|700|800|900|950)/,
       variants: ["hover", "focus", "active"],
     },
   ],

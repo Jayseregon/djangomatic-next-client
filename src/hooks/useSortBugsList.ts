@@ -1,37 +1,49 @@
 import { useAsyncList } from "@react-stately/data";
+import { Key } from "@react-types/shared";
 
 import { BugReport, BugStatus } from "@/interfaces/bugs";
 import { convertBugsDates } from "@/lib/utils";
 
+interface SortDescriptor {
+  column: Key;
+  direction: "ascending" | "descending";
+}
+
+interface AsyncListResponse {
+  items: BugReport[];
+}
+
 export const useSortBugsList = (
   apiEndpoint: string,
   showCompleted: boolean,
-): ReturnType<typeof useAsyncList<BugReport>> =>
-  useAsyncList<BugReport>({
-    async load({ signal }) {
+) => {
+  return useAsyncList<BugReport>({
+    async load({ signal }): Promise<AsyncListResponse> {
       const res = await fetch(apiEndpoint, {
         method: "GET",
         signal,
       });
       const data = await res.json();
 
-      const bugsWithDates = data.map((bug: BugReport) => convertBugsDates(bug));
+      const bugsWithDates = data.map(convertBugsDates);
 
-      if (showCompleted) {
-        return {
-          items: bugsWithDates.filter(
-            (bug: BugReport) => bug.status === BugStatus.CLOSED,
-          ),
-        };
-      } else {
-        return {
-          items: bugsWithDates.filter(
-            (bug: BugReport) => bug.status !== BugStatus.CLOSED,
-          ),
-        };
-      }
+      return {
+        items: showCompleted
+          ? bugsWithDates.filter(
+              (bug: BugReport) => bug.status === BugStatus.CLOSED,
+            )
+          : bugsWithDates.filter(
+              (bug: BugReport) => bug.status !== BugStatus.CLOSED,
+            ),
+      };
     },
-    async sort({ items, sortDescriptor }) {
+    async sort({
+      items,
+      sortDescriptor,
+    }: {
+      items: BugReport[];
+      sortDescriptor: SortDescriptor | null;
+    }): Promise<AsyncListResponse> {
       if (!sortDescriptor) {
         return { items };
       }
@@ -58,3 +70,4 @@ export const useSortBugsList = (
       };
     },
   });
+};

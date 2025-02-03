@@ -1,7 +1,7 @@
 import React from "react";
 import { Document, Page, Text, Image as PdfImg } from "@react-pdf/renderer";
 
-import { TOCSections, TowerReport } from "@/src/types/reports";
+import { TOCSections, TowerReport } from "@/src/interfaces/reports";
 import { StylesPDF } from "@/styles/stylesPDF";
 
 import FrontPage from "./FrontPage";

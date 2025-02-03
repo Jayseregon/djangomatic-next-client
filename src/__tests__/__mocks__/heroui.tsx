@@ -426,6 +426,125 @@ export const PopoverContent = ({ children }: { children: React.ReactNode }) => (
   <div>{children}</div>
 );
 
+// Add Modal component mock
+interface ModalProps extends BaseProps {
+  isOpen: boolean;
+  onClose?: () => void;
+  closeButton?: boolean;
+  backdrop?: string;
+  classNames?: {
+    base?: string;
+    backdrop?: string;
+    body?: string;
+    header?: string;
+    footer?: string;
+  };
+  size?: string;
+}
+
+export const Modal = ({
+  isOpen,
+  children,
+  onClose,
+  closeButton,
+  backdrop,
+  classNames,
+  size,
+  ...props
+}: ModalProps) => {
+  if (!isOpen) return null;
+
+  return (
+    <div
+      aria-modal="true"
+      className={classNames?.base}
+      data-backdrop={backdrop}
+      data-size={size}
+      data-testid="modal"
+      role="dialog"
+      tabIndex={0}
+      onClick={(e) => {
+        if (e.target === e.currentTarget && closeButton) {
+          onClose?.();
+        }
+      }}
+      onKeyDown={(e) => {
+        if (e.key === "Escape" && closeButton) {
+          onClose?.();
+        }
+      }}
+      {...props}
+    >
+      {closeButton && (
+        <button
+          aria-label="Close"
+          className="close-button"
+          type="button"
+          onClick={onClose}
+        >
+          Close
+        </button>
+      )}
+      <div className="modal-backdrop" data-testid="modal-backdrop" />
+      <div className="modal-container" data-testid="modal-container">
+        {children}
+      </div>
+    </div>
+  );
+};
+
+export const ModalContent = ({ children, className, ...props }: BaseProps) => (
+  <div className={className} data-testid="modal-content" {...props}>
+    {children}
+  </div>
+);
+
+export const ModalHeader = ({ children, className, ...props }: BaseProps) => (
+  <div className={className} data-testid="modal-header" {...props}>
+    {children}
+  </div>
+);
+
+export const ModalBody = ({ children, className, ...props }: BaseProps) => (
+  <div className={className} data-testid="modal-body" {...props}>
+    {children}
+  </div>
+);
+
+export const ModalFooter = ({ children, className, ...props }: BaseProps) => (
+  <div className={className} data-testid="modal-footer" {...props}>
+    {children}
+  </div>
+);
+
+// Add Snippet component mock
+export const Snippet = ({
+  children,
+  hideCopyButton,
+  hideSymbol,
+  variant,
+  ...props
+}: BaseProps & {
+  hideCopyButton?: boolean;
+  hideSymbol?: boolean;
+  variant?: string;
+}) => (
+  <div
+    className={`inline-flex items-center justify-between h-fit gap-2 px-3 py-1.5 text-small rounded-medium ${
+      variant === "flat" ? "bg-default/40" : ""
+    } text-default-700`}
+    data-hide-copy={hideCopyButton}
+    data-hide-symbol={hideSymbol}
+    data-testid="code-snippet"
+    data-variant={variant}
+    {...props}
+  >
+    <pre className="bg-transparent text-inherit font-mono font-normal inline-block whitespace-nowrap">
+      {children}
+    </pre>
+  </div>
+);
+
 // Add a test to satisfy Jest's requirement
 describe("HeroUI Mocks", () => {
   it("exists", () => {

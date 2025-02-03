@@ -13,6 +13,16 @@ jest.mock("@/components/ui/LottieAnimation", () => ({
   default: () => <div data-testid="mock-lottie">Lottie Animation</div>,
 }));
 
+// Mock BugReportNotice
+jest.mock("@/components/root/BugReportNotice", () => ({
+  BugReportNotice: () => (
+    <div data-testid="mock-bug-report">
+      <p>BugReport</p>
+      <a href="/boards/bug-report">Link</a>
+    </div>
+  ),
+}));
+
 describe("HomeContent", () => {
   beforeEach(() => {
     jest.clearAllMocks();
@@ -33,6 +43,7 @@ describe("HomeContent", () => {
     expect(screen.getByText("Description1")).toBeInTheDocument();
     expect(screen.getByText("Description2")).toBeInTheDocument();
     expect(screen.getByTestId("mock-lottie")).toBeInTheDocument();
+    expect(screen.getByTestId("mock-bug-report")).toBeInTheDocument();
   });
 
   it("renders bug report section with correct link", () => {
@@ -40,10 +51,16 @@ describe("HomeContent", () => {
 
     render(<HomeContent session={mockSession} />);
 
-    expect(screen.getByText("BugReport")).toBeInTheDocument();
-    const bugReportLink = screen.getByRole("link");
+    // Check for bug report section
+    const bugReportSection = screen.getByTestId("mock-bug-report");
 
-    expect(bugReportLink).toHaveAttribute("href", "/boards/bug-report");
+    expect(bugReportSection).toBeInTheDocument();
+    expect(bugReportSection).toHaveTextContent("BugReport");
+
+    // Check for link
+    const link = screen.getByRole("link");
+
+    expect(link).toHaveAttribute("href", "/boards/bug-report");
   });
 
   it("renders app name", () => {

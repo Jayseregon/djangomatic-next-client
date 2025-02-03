@@ -2,7 +2,7 @@ import React from "react";
 import { Text, View } from "@react-pdf/renderer";
 
 import { StylesPDF } from "@/styles/stylesPDF";
-import { TowerReportImage } from "@/src/types/reports";
+import { TowerReportImage } from "@/src/interfaces/reports";
 
 const DeficienciesTableRow = ({ items }: { items: TowerReportImage[] }) => (
   <>

@@ -1,7 +1,7 @@
 import { View, Text, Image as PdfImg } from "@react-pdf/renderer";
 
 import { StylesPDF } from "@/styles/stylesPDF";
-import { TOCSections } from "@/src/types/reports";
+import { TOCSections } from "@/src/interfaces/reports";
 import sideImageList from "public/reports/rogers/appendixBSideImageList.json";
 import checkingProceduresList from "public/reports/rogers/appendixBCheckingProceduresList.json";
 

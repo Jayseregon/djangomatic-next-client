@@ -1,7 +1,7 @@
 import React from "react";
 import { View } from "@react-pdf/renderer";
 
-import { TowerReportImage } from "@/src/types/reports";
+import { TowerReportImage } from "@/src/interfaces/reports";
 import { StylesPDF } from "@/styles/stylesPDF";
 
 import DeficienciesTableHeader from "./DeficienciesTableHeader";

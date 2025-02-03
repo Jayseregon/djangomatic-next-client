@@ -2,15 +2,7 @@
 
 import React from "react";
 
-interface TOCItem {
-  title: string;
-  id: string;
-}
-
-interface TableOfContentsMdxProps {
-  items: TOCItem[];
-  title: string;
-}
+import { TableOfContentsMdxProps } from "@/src/interfaces/mdx";
 
 export default function TableOfContentsMdx({
   items,
@@ -22,7 +14,8 @@ export default function TableOfContentsMdx({
 
     if (element) {
       const yOffset = -100; // Adjust this value based on your header height or desired offset
-      const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
+      const y =
+        element.getBoundingClientRect().top + window.pageYOffset + yOffset;
 
       window.scrollTo({ top: y, behavior: "smooth" });
     }
@@ -43,4 +36,3 @@ export default function TableOfContentsMdx({
     </div>
   );
 }
-

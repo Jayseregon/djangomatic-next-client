@@ -9,7 +9,7 @@ import listForm9 from "public/reports/rogers/listForm9.json";
 import listForm10 from "public/reports/rogers/listForm10.json";
 import listForm11 from "public/reports/rogers/listForm11.json";
 import { StylesPDF } from "@/styles/stylesPDF";
-import { TOCSections, TowerReport } from "@/src/types/reports";
+import { TOCSections, TowerReport } from "@/src/interfaces/reports";
 
 import TOCSectionPDF from "./TOCSection";
 import AppendixCTable from "./AppendixCTable";

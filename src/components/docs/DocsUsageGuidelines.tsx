@@ -1,7 +1,7 @@
 import { useTranslations } from "next-intl";
 
-import { ExclamationTriangleIcon } from "../icons";
-import { subtitle } from "../primitives";
+import { ExclamationTriangleIcon } from "@/src/components/icons";
+import { subtitle } from "@/src/components/primitives";
 
 const DocsUsageGuidelines = () => {
   const t = useTranslations("DocsUsageGuidelines");

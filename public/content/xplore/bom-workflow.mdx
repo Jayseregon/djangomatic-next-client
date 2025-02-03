@@ -1,0 +1,196 @@
+---
+title: BOM Workflow
+slug: bom-workflow
+---
+<div>
+---
+
+**Comprehensive Solutions for Efficient Data Preparation and Network Design**  
+*Empowering streamlined workflows with detailed, client-focused guides.*
+
+---
+
+<TableOfContentsMdx
+  title="Table of Contents"
+  items={[
+    { title: "Overview", id: "overview" },
+    { title: "Requirements", id: "requirements" },
+    { title: "Step 1: Open the AutoCAD Project", id: "step-1-open-autocad-project" },
+    { title: "Step 2: Extract Layers", id: "step-2-extract-layers" },
+    { title: "Step 3: Open QGIS", id: "step-3-open-qgis" },
+    { title: "Step 4: Open the Python Console", id: "step-4-open-python-console" },
+    { title: "Step 5: Open the Script Editor", id: "step-5-open-script-editor" },
+    { title: "Step 6: Load the Script", id: "step-6-load-script" },
+    { title: "Step 7: Run the Script", id: "step-7-run-script" },
+    { title: "Step 8: Compress Shapefiles into a ZIP File", id: "step-8-compress-shapefiles" },
+    { title: "Step 9: Upload and Process the ZIP File on Djangomatic", id: "step-9-upload-zip-djangomatic" },
+    { title: "Step 10: Copy and Paste Summary into BOM Template", id: "step-10-copy-summary-bom-template" },
+    { title: "Report Issues & Suggestions", id: "report-issues-and-suggestions" }
+  ]}
+/>
+
+---
+
+<h2 id="overview">Overview</h2>
+
+This guide outlines the step-by-step procedure to extract and export layers from an AutoCAD project and process them using GIS and web applications to complete the BOM (Bill of Materials). The workflow involves using AutoCAD, QGIS, and the Djangomatic platform.
+
+---
+
+<h2 id="requirements">Requirements</h2>
+
+Before starting, ensure you have the following:
+
+- **AutoCAD** software with <Snippet>**MAPEXPORT**</Snippet> functionality such as **AutoCAD Map 3D**.
+- **Export Profiles** for **Points** and **Lines**.
+   - <Snippet>**xplore_points_exp_profile.epf**</Snippet>
+   - <Snippet>**xplore_lines_exp_profile.epf**</Snippet>
+- **QGIS** (latest stable version recommended).
+- The Python script <Snippet>**BOM_Data_Processing.py**</Snippet>.
+- **Access** to the [Djangomatic](https://djangomatic-pro.azurewebsites.net/) platform with an **SSO** account.
+- The **BOM template** for pasting the summary data.
+
+---
+
+<h2 id="step-1-open-autocad-project">Step 1: Open the AutoCAD Project</h2>
+
+1. Launch **AutoCAD**.
+2. Open the project from which you need to extract layers.
+
+---
+
+<h2 id="step-2-extract-layers">Step 2: Extract Layers</h2>
+
+1. Use the command **MAPEXPORT**.
+
+<LoadDynamicImage imageName="xplore-bom-workflow/cad-mapexport-command" width={700} />
+
+2. Perform two separate exports:
+   - For the **POINTS** features, load the profile <Snippet>**xplore_points_exp_profile.epf**</Snippet>.
+   - For the **LINES** features, load the profile <Snippet>**xplore_lines_exp_profile.epf**</Snippet>.
+
+3. **Export** the respective features using the loaded profiles.
+
+<LoadDynamicImage imageName="xplore-bom-workflow/cad-mapexport-save-location" width={700} />
+<LoadDynamicImage imageName="xplore-bom-workflow/cad-mapexport-profile" width={700} />
+
+**Note:** *These profiles are pre-configured to extract the required layers and attributes for Points and Lines.*
+
+*Using the MAPEXPORT command in AutoCAD to extract layers.*
+
+---
+
+<h2 id="step-3-open-qgis">Step 3: Open QGIS</h2>
+
+1. Launch **QGIS**.
+
+---
+
+<h2 id="step-4-open-python-console">Step 4: Open the Python Console</h2>
+
+1. Access the Python Console:
+   - In the top menu, go to **Plugins > Python Console**.
+
+<LoadDynamicImage imageName="xplore-bom-workflow/qgis-open-python-console" width={700} />
+
+*Accessing the Python Console in QGIS.*
+
+---
+
+<h2 id="step-5-open-script-editor">Step 5: Open the Script Editor</h2>
+
+1. Open the **Script Editor**:
+   - In the Python Console, click the **Show Editor** button (paper and pencil icon).
+
+<LoadDynamicImage imageName="xplore-bom-workflow/qgis-python-console-show-editor" width={700} />
+
+*Opening the Script Editor in the QGIS Python Console.*
+
+---
+
+<h2 id="step-6-load-script">Step 6: Load the Script</h2>
+
+1. Load the script into the editor:
+   - Click the **Open Script** button (folder icon).
+   - Navigate to the location of the <Snippet>**BOM_Data_Processing.py**</Snippet> script.
+   - Select the file and click **Open**.
+
+<LoadDynamicImage imageName="xplore-bom-workflow/qgis-python-console-open-script" width={700} />
+
+*Loading a script into the QGIS Script Editor.*
+
+---
+
+<h2 id="step-7-run-script">Step 7: Run the Script</h2>
+
+1. **Run** the script:
+   - Click the **Run Script** button (green play icon).
+2. The script will prompt for the **POINTS** and **LINES** shapefiles and process them into separate shapefiles needed for the BOM app in Djangomatic.
+
+<LoadDynamicImage imageName="xplore-bom-workflow/qgis-python-run-script" width={700} />
+
+<LoadDynamicImage imageName="xplore-bom-workflow/qgis-python-script-prompt" width={500} />
+
+*Running a script to process extracted layers in QGIS.*
+
+---
+
+<h2 id="step-8-compress-shapefiles">Step 8: Compress Shapefiles into a ZIP File</h2>
+
+1. Navigate to the folder containing the extracted shapefiles (e.g., 'BOM_EXTRACT').
+
+<LoadDynamicImage imageName="xplore-bom-workflow/extracted-shapefiles-folder" width={700} />
+
+2. Select **all** the shapefiles.
+3. **Right-click** and choose **Send to > Compressed (zipped) folder**.
+
+<LoadDynamicImage imageName="xplore-bom-workflow/compress-zip-example" width={700} />
+
+4. Name the ZIP file appropriately.
+
+*Compressing shapefiles into a ZIP file for upload.*
+
+---
+
+<h2 id="step-9-upload-zip-djangomatic">Step 9: Upload and Process the ZIP File on Djangomatic</h2>
+
+1. Under the **Apps** section, open the **XPLORE** drop-down menu and select the **Extract BOM Summary** app.
+
+<LoadDynamicImage imageName="xplore-bom-workflow/djangomatic-apps-menu" width={700} />
+
+2. Upload the ZIP file containing the shapefiles.
+3. Click **Start Task** and wait for the process to complete.
+
+<LoadDynamicImage imageName="xplore-bom-workflow/djangomatic-input-zip-app" width={700} />
+
+4. **Download** the generated ZIP file containing the summary.
+
+<LoadDynamicImage imageName="xplore-bom-workflow/djangomatic-app-completed-process" width={700} />
+
+*Uploading and processing a ZIP file on Djangomatic.*
+
+---
+
+<h2 id="step-10-copy-summary-bom-template">Step 10: Copy and Paste Summary into BOM Template</h2>
+
+1. Open the **BOM template**.
+2. **Copy** the relevant data from the extracted Excel summary.
+
+<LoadDynamicImage imageName="xplore-bom-workflow/excel-app-summary" width={500} />
+
+3. **Paste** the data into the **BOM template** under the appropriate **FSA sheet and segment**.
+
+<LoadDynamicImage imageName="xplore-bom-workflow/paste-bom-quantity-to-template" width={1000} />
+
+*Copying data from the summary into the BOM template.*
+
+---
+
+<h2 id="report-issues-and-suggestions">Report Issues & Suggestions</h2>
+
+*This guide is crafted to help professionals streamline their design workflows with precise instructions and efficient tools. For further assistance, please contact the **Continuous Improvement and Automation Team**.*  
+<BugReportNotice />
+
+---
+
+</div>

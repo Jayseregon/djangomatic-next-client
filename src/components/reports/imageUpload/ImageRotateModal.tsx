@@ -43,9 +43,13 @@ export const ImageRotateModal = ({
   };
 
   const handleConfirm = async () => {
-    const rotatedFile = await getRotatedImageFile(file, rotation);
+    try {
+      const rotatedFile = await getRotatedImageFile(file, rotation);
 
-    onConfirm(rotatedFile);
+      onConfirm(rotatedFile);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   const getRotatedImageFile = (file: File, rotation: number): Promise<File> => {
@@ -166,6 +170,9 @@ export const ImageRotateModal = ({
           >
             <Save />
           </Button>
+          <button type="button" onClick={handleConfirm}>
+            Confirm
+          </button>
         </ModalFooter>
       </ModalContent>
     </Modal>

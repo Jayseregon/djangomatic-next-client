@@ -11,13 +11,8 @@ export interface SoftwareDoc {
 export const knowledgeHubData = {
   software_docs: [
     {
-      label: "QGIS Placeholder",
-      href: "/docs/knowledge-corner/qgis/kc-qgis-placeholder",
-      software: "qgis",
-    },
-    {
-      label: "Preparing Road Data in QGIS",
-      href: "/docs/knowledge-corner/qgis/kc-preparing-road-data-qgis",
+      label: "Preparing Road Data",
+      href: "/docs/knowledge-corner/qgis/kc-preparing-road-data",
       software: "qgis",
     },
     {

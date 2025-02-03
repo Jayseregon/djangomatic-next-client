@@ -1,12 +1,9 @@
 "use client";
 
-import { ReactNode, useContext, type JSX } from "react";
+import { useContext, type JSX } from "react";
 
 import { NonceContext } from "@/src/app/providers";
-
-interface SnippetProps {
-  children?: ReactNode;
-}
+import { SnippetProps } from "@/src/interfaces/mdx";
 
 /**
  * Snippet component renders a styled span element to display code snippets.

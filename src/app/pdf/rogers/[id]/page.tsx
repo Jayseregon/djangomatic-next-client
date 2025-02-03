@@ -5,7 +5,7 @@ import React, { useEffect, useState } from "react";
 import { Font, BlobProvider, pdf } from "@react-pdf/renderer";
 import { Button } from "@heroui/button";
 
-import { TowerReport, TOCSections } from "@/src/types/reports";
+import { TowerReport, TOCSections } from "@/src/interfaces/reports";
 import { LoadingContent } from "@/components/ui/LoadingContent";
 import { UnAuthorized } from "@/components/auth/unAuthorized";
 import ReportDocument from "@/components/reports/pdfBlocks/rogers/ReportDocument";

@@ -1,7 +1,7 @@
 import { View } from "@react-pdf/renderer";
 
 import { StylesPDF } from "@/styles/stylesPDF";
-import { TOCSections } from "@/src/types/reports";
+import { TOCSections } from "@/src/interfaces/reports";
 
 import TOCSectionPDF from "./TOCSection";
 

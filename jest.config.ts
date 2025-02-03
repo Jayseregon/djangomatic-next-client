@@ -58,6 +58,8 @@ const config: Config = {
     '^next/server$': '<rootDir>/src/__tests__/__mocks__/next-server.ts',
     "^next-mdx-remote-client/rsc$": "<rootDir>/src/__tests__/__mocks__/next-mdx-remote-client-rsc.ts",
     "^@heroui/snippet$": "<rootDir>/src/__tests__/__mocks__/heroui.tsx",
+    "^public/(.*)$": "<rootDir>/public/$1",
+    "^@/styles/(.*)$": "<rootDir>/styles/$1",  // Add this line
   },
   testMatch: [
     "**/__tests__/**/*.[jt]s?(x)",

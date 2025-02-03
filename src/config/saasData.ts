@@ -506,6 +506,21 @@ export const saasData = {
       dbClass: "",
       is_active: "Y",
     },
+    // Hydro-One BOM Automation
+    {
+      label: "Hydro-One BOM Automation",
+      type: "admin",
+      href: "/saas/xplore/admin/hydro_one_bom_auto",
+      endpoint: "/saas/xplore/ajax/hydro-one-bom-automation/",
+      desc: "hydro_one_bom_auto",
+      version: "1.0.0",
+      date_upd: "2025-02-03",
+      doc_href: "/saas/tds/empty",
+      asDownloadable: true,
+      willOverride: false,
+      dbClass: "",
+      is_active: "Y",
+    },
   ],
   telus_saas: [
     // Create Telus candidates excel files from Mergin Maps survey data

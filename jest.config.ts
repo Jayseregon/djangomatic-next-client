@@ -79,7 +79,7 @@ const config: Config = {
     "^.+\\.(js|jsx|ts|tsx)$": "babel-jest",
   },
   transformIgnorePatterns: [
-    "/node_modules/(?!(@auth/core|next-auth|@panva/hkdf|jose|oauth|openid-client|preact|uuid|next-intl|@auth/core/providers|next-auth/providers|lucide-react|next-mdx-remote-client))/"
+    "/node_modules/(?!(@auth/core|next-auth|@panva/hkdf|jose|oauth|openid-client|preact|uuid|next-intl|@auth/core/providers|next-auth/providers|lucide-react|next-mdx-remote-client|@react-pdf/renderer))/"
   ],
   // Uncomment the next line to limit workers if needed
   // maxWorkers: 2,

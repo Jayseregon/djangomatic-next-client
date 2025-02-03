@@ -286,6 +286,10 @@
     "extract_bom_summary": {
       "description": "This app creates a BOM summary from a zip file containing AutoCAD extracted shapefiles.",
       "update": "Xplore tools implementation."
+    },
+    "hydro_one_bom_auto": {
+      "description": "This app creates a BOM [...] from a zip file [...]",
+      "update": "Xplore tools implementation."
     }
   },
   "telusApps": {

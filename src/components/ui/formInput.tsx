@@ -22,12 +22,17 @@ export const FormInput: React.FC<FormInputProps> = ({
   isRounded = true,
   withTooltip = false,
 }) => {
+  const inputId = `${name}-input`;
+
   return (
     <div className="grid grid-cols-1 gap-1">
       {label && (
-        <p className="text-ellipsis overflow-hidden text-primary text-sm">
+        <label
+          className="text-ellipsis overflow-hidden text-primary text-sm"
+          htmlFor={inputId}
+        >
           {label}
-        </p>
+        </label>
       )}
       {withTooltip ? (
         <CustomTooltip content={value}>
@@ -36,8 +41,9 @@ export const FormInput: React.FC<FormInputProps> = ({
           >
             <input
               required
+              aria-label={label || name}
               className="border-0 focus:ring-0 focus:ring-inset text-foreground bg-transparent text-center text-ellipsis overflow-hidden"
-              id={name}
+              id={inputId}
               name={name}
               placeholder={placeholder || undefined}
               step={type === "number" ? "0.01" : undefined}
@@ -54,8 +60,9 @@ export const FormInput: React.FC<FormInputProps> = ({
         >
           <input
             required
+            aria-label={label || name}
             className="border-0 focus:ring-0 focus:ring-inset text-foreground bg-transparent text-center text-ellipsis overflow-hidden"
-            id={name}
+            id={inputId}
             name={name}
             placeholder={placeholder || undefined}
             step={type === "number" ? "0.01" : undefined}

@@ -17,7 +17,7 @@ import { Cog, FileText, Pencil, Trash2 } from "lucide-react";
 import { TowerReport } from "@/src/interfaces/reports";
 import { SearchIcon } from "@/components/icons";
 
-const TowerReportsDashboard = ({
+export const TowerReportsDashboard = ({
   canDeleteReports,
 }: {
   canDeleteReports: boolean;
@@ -274,5 +274,3 @@ const TowerReportsDashboard = ({
     </div>
   );
 };
-
-export default TowerReportsDashboard;

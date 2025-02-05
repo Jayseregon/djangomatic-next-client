@@ -8,7 +8,7 @@ import {
 } from "@testing-library/react";
 import { useRouter } from "next/navigation";
 
-import TowerReportsDashboard from "@/components/reports/TowerReportsDashboard"; // Changed to default import
+import { TowerReportsDashboard } from "@/components/reports/TowerReportsDashboard"; // Changed to default import
 
 // Mock next/navigation
 jest.mock("next/navigation", () => ({

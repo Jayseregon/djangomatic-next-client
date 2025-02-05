@@ -11,11 +11,12 @@ export const FormActions = ({
   onGeneratePDF,
 }: FormActionsProps) => (
   <div className="space-x-4 mt-4 mx-auto">
-    <Button isIconOnly color="success" type="submit">
+    <Button isIconOnly aria-label="save-all" color="success" type="submit">
       <SaveAll />
     </Button>
     <Button
       isIconOnly
+      aria-label="save"
       color="success"
       variant="bordered"
       onPress={onSaveAndContinue}
@@ -25,6 +26,7 @@ export const FormActions = ({
     {!isNew && onGeneratePDF && (
       <Button
         isIconOnly
+        aria-label="file-text"
         color="primary"
         variant="bordered"
         onPress={onGeneratePDF}
@@ -32,7 +34,13 @@ export const FormActions = ({
         <FileText />
       </Button>
     )}
-    <Button isIconOnly color="danger" variant="bordered" onPress={onCancel}>
+    <Button
+      isIconOnly
+      aria-label="circle-off"
+      color="danger"
+      variant="bordered"
+      onPress={onCancel}
+    >
       <CircleOff />
     </Button>
   </div>

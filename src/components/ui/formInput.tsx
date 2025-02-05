@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Button, Tooltip } from "@heroui/react";
+import { Button, Tooltip, ButtonProps } from "@heroui/react";
 import { CircleMinus, Copy } from "lucide-react";
 
 import {
@@ -22,12 +22,17 @@ export const FormInput: React.FC<FormInputProps> = ({
   isRounded = true,
   withTooltip = false,
 }) => {
+  const inputId = `${name}-input`;
+
   return (
     <div className="grid grid-cols-1 gap-1">
       {label && (
-        <p className="text-ellipsis overflow-hidden text-primary text-sm">
+        <label
+          className="text-ellipsis overflow-hidden text-primary text-sm"
+          htmlFor={inputId}
+        >
           {label}
-        </p>
+        </label>
       )}
       {withTooltip ? (
         <CustomTooltip content={value}>
@@ -36,8 +41,9 @@ export const FormInput: React.FC<FormInputProps> = ({
           >
             <input
               required
+              aria-label={label || name}
               className="border-0 focus:ring-0 focus:ring-inset text-foreground bg-transparent text-center text-ellipsis overflow-hidden"
-              id={name}
+              id={inputId}
               name={name}
               placeholder={placeholder || undefined}
               step={type === "number" ? "0.01" : undefined}
@@ -54,8 +60,9 @@ export const FormInput: React.FC<FormInputProps> = ({
         >
           <input
             required
+            aria-label={label || name}
             className="border-0 focus:ring-0 focus:ring-inset text-foreground bg-transparent text-center text-ellipsis overflow-hidden"
-            id={name}
+            id={inputId}
             name={name}
             placeholder={placeholder || undefined}
             step={type === "number" ? "0.01" : undefined}
@@ -209,25 +216,21 @@ export const LabelInput = ({
 };
 
 export const TrashButton = ({
-  onClick,
-  className,
-}: {
-  onClick: () => void;
-  className?: string;
-}) => {
-  return (
-    <Button
-      isIconOnly
-      className={className}
-      color="danger"
-      radius="full"
-      variant="light"
-      onPress={onClick}
-    >
-      <CircleMinus />
-    </Button>
-  );
-};
+  onPress,
+  "aria-label": ariaLabel = "remove note",
+  ...props
+}: ButtonProps) => (
+  <Button
+    isIconOnly
+    aria-label={ariaLabel}
+    color="danger"
+    variant="light"
+    onPress={(e) => onPress?.(e as any)}
+    {...props}
+  >
+    <CircleMinus />
+  </Button>
+);
 
 export const CopyButton = ({
   onClick,

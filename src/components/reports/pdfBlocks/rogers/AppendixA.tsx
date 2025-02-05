@@ -35,8 +35,6 @@ const AppendixA = ({
           Redline of Construction Drawings
         </TOCSectionPDF>
       </View>
-      {/* Additional content can be added here */}
-      {/* ...existing code... */}
     </View>,
   );
 

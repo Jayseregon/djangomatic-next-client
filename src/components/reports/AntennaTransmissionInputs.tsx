@@ -1,7 +1,9 @@
 import React, { memo } from "react";
 
-import { AntennaTransmissionInputsProps } from "@/src/interfaces/reports";
-import { AntennaTransmissionLine } from "@/src/interfaces/reports";
+import {
+  AntennaTransmissionInputsProps,
+  AntennaTransmissionLine,
+} from "@/src/interfaces/reports";
 import {
   AntennaFormInput,
   TrashButton,

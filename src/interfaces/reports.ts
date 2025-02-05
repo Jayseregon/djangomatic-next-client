@@ -247,3 +247,10 @@ export interface FormActionsProps {
   onCancel: () => void;
   onGeneratePDF?: () => void;
 }
+
+export interface FormSectionAccordionProps {
+  title: string;
+  children: React.ReactNode;
+  menuKey: string;
+  defaultOpen?: boolean;
+}

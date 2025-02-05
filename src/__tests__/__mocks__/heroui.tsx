@@ -54,21 +54,29 @@ export const Button = ({
   isDisabled,
   ...props
 }: ButtonProps) => {
-  const pressHandlers = createPressHandlers(onPress);
+  const handleClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    if (onPress) {
+      onPress(e);
+    }
+  };
 
   return (
     <button
-      aria-label={ariaLabel}
+      aria-label={
+        ariaLabel || (typeof children === "string" ? children : undefined)
+      }
       className={className}
-      color={color} // Keep the original color prop
-      data-color={color} // Also add data-color for testing
+      color={color} // Keep this
+      data-color={color}
       data-icon-only={isIconOnly}
-      data-testid={id} // Add this line to use id as testid
-      disabled={isDisabled} // Use isDisabled as HTML disabled attribute
+      data-testid={id || ariaLabel?.toLowerCase().replace(/\s+/g, "-")}
+      disabled={isDisabled}
       id={id}
       nonce={nonce}
+      role="button"
       type="button"
-      {...pressHandlers}
+      onClick={handleClick}
       {...props}
     >
       {children}
@@ -351,37 +359,83 @@ export const Progress = ({
 );
 
 // Add the Input component mock
-export const Input = ({
-  classNames,
-  labelPlacement = "inside", // Set default value
-  placeholder,
-  startContent,
-  type,
-  ...props
-}: BaseProps & {
-  placeholder?: string;
-  type?: string;
+interface InputProps extends BaseProps {
+  isClearable?: boolean;
+  value?: string;
+  onValueChange?: (value: string) => void;
+  onClear?: () => void;
   startContent?: React.ReactNode;
-  labelPlacement?: "inside" | "outside" | "outside-left";
-  classNames?: { input?: string };
-  "aria-label"?: string;
-}) => (
-  <div
-    className={classNames?.input}
-    data-label-placement={labelPlacement} // Use labelPlacement to position label
-  >
-    {startContent}
-    <input
-      aria-label={props["aria-label"]}
-      className={classNames?.input}
-      placeholder={placeholder} // Remove the labelPlacement condition here
-      role="searchbox"
-      type={type}
-      {...props}
-    />
-    {labelPlacement !== "inside" && placeholder && <label>{placeholder}</label>}
-  </div>
-);
+  placeholder?: string;
+  color?: string;
+  radius?: string;
+  classNames?: {
+    input?: string;
+    inputWrapper?: string;
+  };
+  labelPlacement?: string; // Add labelPlacement prop
+}
+
+export const Input = ({
+  isClearable,
+  value,
+  onValueChange,
+  onClear,
+  startContent,
+  placeholder,
+  color,
+  radius,
+  classNames,
+  labelPlacement, // extract but don't pass to DOM
+  ...props
+}: InputProps) => {
+  const inputClasses = [
+    classNames?.input,
+    "text-sm",
+    "border-none",
+    "outline-none",
+    "ring-0",
+    "focus:border-none",
+    "focus:outline-none",
+    "focus:ring-0",
+  ]
+    .filter(Boolean)
+    .join(" ");
+
+  const wrapperClasses = [
+    classNames?.inputWrapper,
+    radius && `rounded-${radius}`,
+    color && `border-${color}`,
+    "text-sm",
+    "border-none",
+    "outline-none",
+    "ring-0",
+    "focus:border-none",
+    "focus:outline-none",
+    "focus:ring-0",
+  ]
+    .filter(Boolean)
+    .join(" ");
+
+  return (
+    <div className={wrapperClasses} data-label-placement={labelPlacement}>
+      {startContent}
+      <input
+        className={inputClasses}
+        placeholder={placeholder}
+        role="searchbox"
+        type="search"
+        value={value}
+        onChange={(e) => onValueChange?.(e.target.value)}
+        {...props}
+      />
+      {isClearable && value && (
+        <button type="button" onClick={onClear}>
+          Clear
+        </button>
+      )}
+    </div>
+  );
+};
 
 export const Tooltip = ({
   children,
@@ -543,6 +597,87 @@ export const Snippet = ({
       {children}
     </pre>
   </div>
+);
+
+// Add Table component mock
+interface TableProps extends BaseProps {
+  isHeaderSticky?: boolean;
+  removeWrapper?: boolean;
+  selectionMode?: string;
+  topContent?: React.ReactNode;
+  emptyContent?: string;
+  "aria-label"?: string;
+  classNames?: {
+    base?: string;
+    th?: string;
+  };
+}
+
+export const Table = ({
+  children,
+  topContent,
+  classNames,
+  isHeaderSticky,
+  removeWrapper,
+  selectionMode,
+  ...props
+}: TableProps) => (
+  <div className={classNames?.base}>
+    {topContent}
+    <div className="overflow-x-auto">
+      <table
+        data-header-sticky={isHeaderSticky}
+        data-remove-wrapper={removeWrapper}
+        data-selection-mode={selectionMode}
+        {...props}
+      >
+        {children}
+      </table>
+    </div>
+  </div>
+);
+
+interface TableHeaderProps extends BaseProps {
+  className?: string;
+}
+
+export const TableHeader = ({
+  children,
+  className,
+  ...props
+}: TableHeaderProps) => (
+  <thead className={className} {...props}>
+    <tr>{children}</tr>
+  </thead>
+);
+
+export const TableBody = ({
+  children,
+  items = [],
+  emptyContent, // extract but don't pass to DOM
+  ...props
+}: BaseProps & {
+  items: any[];
+  emptyContent?: string;
+  children?: React.ReactNode | ((item: any) => React.ReactNode);
+}) => (
+  <tbody data-empty-content={emptyContent} {...props}>
+    {typeof children === "function"
+      ? items.map((item) => (children as (item: any) => React.ReactNode)(item))
+      : children}
+  </tbody>
+);
+
+export const TableColumn = ({ children, ...props }: BaseProps) => (
+  <th {...props}>{children}</th>
+);
+
+export const TableRow = ({ children, ...props }: BaseProps) => (
+  <tr {...props}>{children}</tr>
+);
+
+export const TableCell = ({ children, ...props }: BaseProps) => (
+  <td {...props}>{children}</td>
 );
 
 // Add a test to satisfy Jest's requirement

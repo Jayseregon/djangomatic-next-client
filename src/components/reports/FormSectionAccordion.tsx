@@ -3,19 +3,14 @@ import classNames from "classnames";
 import * as Accordion from "@radix-ui/react-accordion";
 import { ChevronDownIcon } from "@radix-ui/react-icons";
 
-interface FormSectionAccordionProps {
-  title: string;
-  children: React.ReactNode;
-  menuKey: string;
-  defaultOpen?: boolean;
-}
+import { FormSectionAccordionProps } from "@/src/interfaces/reports";
 
-const FormSectionAccordion: React.FC<FormSectionAccordionProps> = ({
+const FormSectionAccordion = ({
   title,
   children,
   menuKey,
   defaultOpen = false,
-}) => (
+}: FormSectionAccordionProps) => (
   <Accordion.Root
     collapsible
     defaultValue={defaultOpen ? menuKey : undefined}

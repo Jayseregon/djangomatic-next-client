@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Button, Tooltip } from "@heroui/react";
+import { Button, Tooltip, ButtonProps } from "@heroui/react";
 import { CircleMinus, Copy } from "lucide-react";
 
 import {
@@ -209,25 +209,21 @@ export const LabelInput = ({
 };
 
 export const TrashButton = ({
-  onClick,
-  className,
-}: {
-  onClick: () => void;
-  className?: string;
-}) => {
-  return (
-    <Button
-      isIconOnly
-      className={className}
-      color="danger"
-      radius="full"
-      variant="light"
-      onPress={onClick}
-    >
-      <CircleMinus />
-    </Button>
-  );
-};
+  onPress,
+  "aria-label": ariaLabel = "remove note",
+  ...props
+}: ButtonProps) => (
+  <Button
+    isIconOnly
+    aria-label={ariaLabel}
+    color="danger"
+    variant="light"
+    onPress={(e) => onPress?.(e as any)}
+    {...props}
+  >
+    <CircleMinus />
+  </Button>
+);
 
 export const CopyButton = ({
   onClick,

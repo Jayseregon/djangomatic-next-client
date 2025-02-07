@@ -26,12 +26,14 @@ export const UserTable = ({
 }): JSX.Element => {
   const [users, setUsers] = useState<UserSchema[]>([]);
   const [selectedMenu, setSelectedMenu] = useState<string>("default");
+  const [isLoading, setIsLoading] = useState<boolean>(true); // Add loading state
 
   // Determine if the session user is a superuser
   const isSessionSuperUser = superUserEmails.includes(sessionEmail);
 
   useEffect(() => {
     async function fetchData() {
+      setIsLoading(true); // Set loading to true before fetch
       try {
         const response = await fetch("/api/prisma-user");
         const data = await response.json();
@@ -45,6 +47,8 @@ export const UserTable = ({
         setUsers(filteredData);
       } catch (error) {
         console.error("Failed to fetch users:", error);
+      } finally {
+        setIsLoading(false); // Set loading to false after fetch
       }
     }
     fetchData();
@@ -91,7 +95,7 @@ export const UserTable = ({
    */
   const topContent = (): JSX.Element => {
     return (
-      <div className="flex inline-block uppercase text-center gap-4 divide-x divide-zinc-300 dark:divide-zinc-700">
+      <div className="flex uppercase text-center gap-4 divide-x divide-zinc-300 dark:divide-zinc-700">
         <RadioGroup
           aria-label="default-menu"
           label="Default permissions"
@@ -141,6 +145,7 @@ export const UserTable = ({
           {renderTableHeader(selectedMenu, isAdmin)}
           <TableBody
             emptyContent="No entries found"
+            isLoading={isLoading}
             items={users}
             loadingContent={<LoadingContent />}
           >

@@ -70,11 +70,22 @@ export const BugsModal = ({
   async function fetchDevUsers() {
     try {
       const response = await fetch("/api/rnd-all-users");
-      const data: UserSchema[] = await response.json();
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const data = await response.json();
+
+      if (!Array.isArray(data)) {
+        setDevUsers([]);
+
+        return;
+      }
       const filteredData = data.filter((user: UserSchema) => user.canAccessRnd);
 
       setDevUsers(filteredData);
     } catch (error) {
+      setDevUsers([]); // Set empty array on error
       console.error("Failed to fetch users:", error);
     }
   }

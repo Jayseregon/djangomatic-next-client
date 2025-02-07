@@ -128,6 +128,7 @@ export const SunIcon = (props: IconSvgProps) => (
 export const CheckIcon = ({ size = 20, ...props }: IconSvgProps) => (
   <svg
     aria-hidden="true"
+    data-testid="check-icon"
     focusable="false"
     height={size}
     role="presentation"
@@ -144,6 +145,7 @@ export const CheckIcon = ({ size = 20, ...props }: IconSvgProps) => (
 export const UncheckIcon = ({ size = 20, ...props }: IconSvgProps) => (
   <svg
     aria-hidden="true"
+    data-testid="uncheck-icon"
     focusable="false"
     height={size}
     role="presentation"

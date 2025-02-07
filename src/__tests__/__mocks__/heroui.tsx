@@ -601,75 +601,103 @@ export const Snippet = ({
 
 // Add Table component mock
 interface TableProps extends BaseProps {
+  "aria-label"?: string;
   isHeaderSticky?: boolean;
   removeWrapper?: boolean;
   selectionMode?: string;
   topContent?: React.ReactNode;
   emptyContent?: string;
-  "aria-label"?: string;
   classNames?: {
     base?: string;
     th?: string;
   };
+  sortDescriptor?: {
+    column?: string;
+    direction?: "ascending" | "descending";
+  };
+  onSortChange?: (descriptor: any) => void;
 }
 
-export const Table = ({
+export const Table: React.FC<TableProps> = ({
   children,
   topContent,
   classNames,
-  isHeaderSticky,
-  removeWrapper,
-  selectionMode,
-  ...props
-}: TableProps) => (
+  "aria-label": ariaLabel,
+}) => (
   <div className={classNames?.base}>
     {topContent}
     <div className="overflow-x-auto">
-      <table
-        data-header-sticky={isHeaderSticky}
-        data-remove-wrapper={removeWrapper}
-        data-selection-mode={selectionMode}
-        {...props}
-      >
-        {children}
-      </table>
+      <table aria-label={ariaLabel}>{children}</table>
     </div>
   </div>
 );
 
+// Add missing TableHeaderProps interface
 interface TableHeaderProps extends BaseProps {
   className?: string;
 }
 
-export const TableHeader = ({
-  children,
-  className,
-  ...props
-}: TableHeaderProps) => (
-  <thead className={className} {...props}>
-    <tr>{children}</tr>
-  </thead>
-);
-
+// Update TableBody mock to properly handle loading and children
 export const TableBody = ({
   children,
   items = [],
-  emptyContent, // extract but don't pass to DOM
+  emptyContent,
+  isLoading,
+  loadingContent,
+}: any) => {
+  if (isLoading) {
+    return (
+      <tbody>
+        <tr>
+          <td colSpan={2}>{loadingContent}</td>
+        </tr>
+      </tbody>
+    );
+  }
+  if (!items?.length) {
+    return (
+      <tbody>
+        <tr>
+          <td colSpan={2}>{emptyContent}</td>
+        </tr>
+      </tbody>
+    );
+  }
+
+  return (
+    <tbody>
+      {items.map((item: any) => {
+        const result = (children as (item: any) => React.ReactNode)(item);
+
+        return result;
+      })}
+    </tbody>
+  );
+};
+
+interface TableColumnProps extends BaseProps {
+  allowsSorting?: boolean;
+  key?: string;
+}
+
+export const TableColumn: React.FC<TableColumnProps> = ({
+  children,
+  allowsSorting,
   ...props
-}: BaseProps & {
-  items: any[];
-  emptyContent?: string;
-  children?: React.ReactNode | ((item: any) => React.ReactNode);
 }) => (
-  <tbody data-empty-content={emptyContent} {...props}>
-    {typeof children === "function"
-      ? items.map((item) => (children as (item: any) => React.ReactNode)(item))
-      : children}
-  </tbody>
+  <th data-allows-sorting={allowsSorting} {...props}>
+    {children}
+  </th>
 );
 
-export const TableColumn = ({ children, ...props }: BaseProps) => (
-  <th {...props}>{children}</th>
+export const TableHeader: React.FC<TableHeaderProps> = ({
+  children,
+  className,
+  ...props
+}) => (
+  <thead className={className} {...props}>
+    <tr>{children}</tr>
+  </thead>
 );
 
 export const TableRow = ({ children, ...props }: BaseProps) => (
@@ -678,6 +706,140 @@ export const TableRow = ({ children, ...props }: BaseProps) => (
 
 export const TableCell = ({ children, ...props }: BaseProps) => (
   <td {...props}>{children}</td>
+);
+
+// Add Tabs component mock
+interface TabsProps extends BaseProps {
+  "aria-label"?: string;
+  variant?: string;
+  classNames?: {
+    tabList?: string;
+    cursor?: string;
+    tab?: string;
+    tabContent?: string;
+  };
+}
+
+export const Tabs: React.FC<TabsProps> = ({
+  children,
+  "aria-label": ariaLabel,
+  variant,
+  classNames,
+  ...props
+}) => {
+  const [selectedKey, setSelectedKey] = React.useState<string>();
+
+  // Convert children to array and filter out non-Tab elements
+  const tabs = React.Children.toArray(children).filter(
+    (child) => React.isValidElement(child) && child.type === Tab,
+  );
+
+  // Set initial selected tab
+  React.useEffect(() => {
+    if (tabs.length > 0 && !selectedKey) {
+      const firstTabKey = (tabs[0] as React.ReactElement).key?.toString() || "";
+
+      setSelectedKey(firstTabKey);
+    }
+  }, [tabs, selectedKey]);
+
+  return (
+    <div
+      aria-label={ariaLabel}
+      className={classNames?.tabList}
+      data-variant={variant}
+      role="tablist"
+      {...props}
+    >
+      {tabs.map((tab) => {
+        const tabElement = tab as React.ReactElement<TabProps>;
+        const key = tabElement.key?.toString() || "";
+
+        return React.cloneElement(tabElement, {
+          key,
+          isSelected: selectedKey === key,
+          onSelect: () => setSelectedKey(key),
+        });
+      })}
+    </div>
+  );
+};
+
+interface TabProps extends BaseProps {
+  key?: string;
+  title: string | React.ReactNode;
+  isSelected?: boolean;
+  onSelect?: () => void;
+}
+
+export const Tab: React.FC<TabProps> = ({
+  children,
+  title,
+  isSelected,
+  onSelect,
+  ...props
+}) => {
+  return (
+    <div role="tabpanel" {...props}>
+      <div
+        role="tab"
+        tabIndex={0} // make focusable
+        onClick={onSelect}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" || e.key === " ") {
+            onSelect?.();
+          }
+        }}
+      >
+        <span
+          data-testid={`tab-${typeof title === "string" ? title : "content"}`}
+        >
+          {title}
+        </span>
+      </div>
+      {isSelected && (
+        <div data-testid="tab-content" role="tabcontent">
+          {children}
+        </div>
+      )}
+    </div>
+  );
+};
+
+// Add RadioGroup and Radio component mocks
+export const RadioGroup = ({
+  children,
+  value,
+  onValueChange,
+  orientation,
+  label,
+  "aria-label": ariaLabel,
+  className,
+}: any) => (
+  <div
+    aria-label={ariaLabel}
+    className={className}
+    data-orientation={orientation}
+    data-value={value}
+    role="radiogroup"
+  >
+    <div className="radio-label">{label}</div>
+    {React.Children.map(children, (child) =>
+      React.cloneElement(child, { groupValue: value, onChange: onValueChange }),
+    )}
+  </div>
+);
+
+export const Radio = ({ value, groupValue, onChange, children }: any) => (
+  <button
+    aria-checked={value === groupValue}
+    name={children}
+    role="radio"
+    value={value}
+    onClick={() => onChange(value)}
+  >
+    {children}
+  </button>
 );
 
 // Add a test to satisfy Jest's requirement

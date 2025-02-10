@@ -54,14 +54,14 @@
       "subtitle": "Track the progress of our projects and upcoming features",
       "projectSidebar": "Projects",
       "controlButtons": {
-        "newCard" : "Card",
-        "newProject" : "Project",
-        "newCategory" : "Category", 
+        "newCard": "Card",
+        "newProject": "Project",
+        "newCategory": "Category",
         "inputPlaceholders": {
           "projectName": "Project Name",
           "categoryName": "Category Name"
         }
-      }, 
+      },
       "projectCardPlaceholders": {
         "pName": "Project Name",
         "pMembers": "Project Members",
@@ -89,11 +89,24 @@
         "title": "Home",
         "dashboardLink": "All Dashboards"
       },
-      "teamSection": "Team Dashboards", 
-      "reportsSection" : {
+      "teamSection": "Team Dashboards",
+      "reportsSection": {
         "title": "Reports",
-        "bugDashboardLink": "Bug Report", 
+        "bugDashboardLink": "Bug Report",
         "appTrackingLink": "App Tracking"
+      }
+    },
+    "appTracking": {
+      "title": "App Tracking",
+      "subtitle": "Track the utilisation of our apps and tools",
+      "boardColumns": {
+        "appName": "App Name",
+        "usageCount": "Usage Count",
+        "endpoint": "API Endpoint",
+        "average": "Avg RT",
+        "min": "Min RT",
+        "max": "Max RT",
+        "total": "Total RT"
       }
     },
     "taskExtension": "Tasks",
@@ -151,7 +164,7 @@
     "input_password": "Please enter TDS password",
     "input_uuidPole": "Optional: pole UUID for ponctual processing",
     "control_erase": "Erase existing",
-    "control_snap": "Auto snapshots", 
+    "control_snap": "Auto snapshots",
     "project_id": "Enter project ID",
     "project_num": "Enter project number"
   },

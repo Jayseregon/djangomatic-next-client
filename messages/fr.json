@@ -93,7 +93,20 @@
       "reportsSection": {
         "title": "Rapports",
         "bugDashboardLink": "Rapport de bug",
-        "appTrackingLink": "App Tracking"
+        "appTrackingLink": "Suivi des applications"
+      }
+    },
+    "appTracking": {
+      "title": "Suivi des applications",
+      "subtitle": "Suivi de l'utilisation de nos applications et outils",
+      "boardColumns": {
+        "appName": "App Name",
+        "usageCount": "Usage Count",
+        "endpoint": "API Endpoint",
+        "average": "Avg RT",
+        "min": "Min RT",
+        "max": "Max RT",
+        "total": "Total RT"
       }
     },
     "taskExtension": "Tâches",

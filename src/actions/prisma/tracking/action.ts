@@ -5,6 +5,22 @@ import { revalidatePath } from "next/cache";
 
 import { prisma } from "@/src/lib/prismaClient";
 
+export async function getAppTrackingEntries() {
+  try {
+    const items = await prisma.appUsageTracking.findMany({
+      where: {
+        status: "SUCCESS",
+      },
+    });
+
+    return items;
+  } catch (error) {
+    throw new Error(
+      `Error fetching tracking entries: ${(error as Error).message}`,
+    );
+  }
+}
+
 export async function createAppTrackingEntry(
   task_id: string,
   app_name: string,

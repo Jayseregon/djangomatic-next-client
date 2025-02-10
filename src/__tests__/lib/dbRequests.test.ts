@@ -1,5 +1,9 @@
 jest.mock("@/actions/django/action");
 jest.mock("@/actions/generic/action");
+jest.mock("@/actions/prisma/tracking/action", () => ({
+  createAppTrackingEntry: jest.fn().mockResolvedValue("test-entry-id"),
+  updateAppTrackingEntry: jest.fn().mockResolvedValue(undefined),
+}));
 jest.mock("isomorphic-dompurify", () => ({
   sanitize: jest.fn((text) => text),
 }));

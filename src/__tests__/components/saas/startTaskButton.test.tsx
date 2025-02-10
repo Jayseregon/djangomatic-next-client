@@ -13,6 +13,11 @@ jest.mock("@/lib/dbRequests", () => ({
   checkTaskStatus: jest.fn(),
 }));
 
+jest.mock("@/actions/prisma/tracking/action", () => ({
+  createAppTrackingEntry: jest.fn().mockResolvedValue("test-entry-id"),
+  updateAppTrackingEntry: jest.fn().mockResolvedValue(undefined),
+}));
+
 // Create a properly typed mockState object
 interface MockState {
   inputData: InputDataProps;
@@ -48,6 +53,9 @@ let mockState: MockState = {
 jest.mock("@/components/saas/inputDataProviders", () => ({
   useInputData: () => ({
     inputData: mockState.inputData,
+  }),
+  useAppName: () => ({
+    appName: "testApp",
   }),
   useTaskData: () => ({
     taskData: mockState.taskData,

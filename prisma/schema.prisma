@@ -249,3 +249,13 @@ model RoadmapProjectCard {
 
   @@unique([projectId, cardId])
 }
+
+model AppUsageTracking {
+  id           String   @id @default(cuid())
+  task_id      String
+  app_name     String
+  endpoint     String
+  status       String   @default("PENDING")
+  elapsed_time String   @default("0s")
+  createdAt    DateTime @default(now())
+}

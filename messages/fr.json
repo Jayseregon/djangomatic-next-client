@@ -92,7 +92,8 @@
       "teamSection": "Tableaux des membres",
       "reportsSection": {
         "title": "Rapports",
-        "bugDashboardLink": "Rapport de bug"
+        "bugDashboardLink": "Rapport de bug",
+        "appTrackingLink": "App Tracking"
       }
     },
     "taskExtension": "Tâches",

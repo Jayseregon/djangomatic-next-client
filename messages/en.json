@@ -92,7 +92,8 @@
       "teamSection": "Team Dashboards", 
       "reportsSection" : {
         "title": "Reports",
-        "bugDashboardLink": "Bug Report"
+        "bugDashboardLink": "Bug Report", 
+        "appTrackingLink": "App Tracking"
       }
     },
     "taskExtension": "Tasks",

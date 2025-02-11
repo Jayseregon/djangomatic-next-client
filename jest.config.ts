@@ -58,6 +58,10 @@ const config: Config = {
     '^next/server$': '<rootDir>/src/__tests__/__mocks__/next-server.ts',
     "^next-mdx-remote-client/rsc$": "<rootDir>/src/__tests__/__mocks__/next-mdx-remote-client-rsc.ts",
     "^@heroui/snippet$": "<rootDir>/src/__tests__/__mocks__/heroui.tsx",
+    "^public/(.*)$": "<rootDir>/public/$1",
+    "^@/styles/(.*)$": "<rootDir>/styles/$1",
+    "^@/components/admin/(.*)$": "<rootDir>/src/components/admin/$1",
+    "^@/lib/prismaClient$": "<rootDir>/src/__tests__/__mocks__/prismaClientMock.ts",
   },
   testMatch: [
     "**/__tests__/**/*.[jt]s?(x)",
@@ -79,7 +83,7 @@ const config: Config = {
     "^.+\\.(js|jsx|ts|tsx)$": "babel-jest",
   },
   transformIgnorePatterns: [
-    "/node_modules/(?!(@auth/core|next-auth|@panva/hkdf|jose|oauth|openid-client|preact|uuid|next-intl|@auth/core/providers|next-auth/providers|lucide-react|next-mdx-remote-client))/"
+    "/node_modules/(?!(@auth/core|next-auth|@panva/hkdf|jose|oauth|openid-client|preact|uuid|next-intl|@auth/core/providers|next-auth/providers|lucide-react|next-mdx-remote-client|@react-pdf/renderer))/"
   ],
   // Uncomment the next line to limit workers if needed
   // maxWorkers: 2,

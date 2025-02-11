@@ -54,21 +54,29 @@ export const Button = ({
   isDisabled,
   ...props
 }: ButtonProps) => {
-  const pressHandlers = createPressHandlers(onPress);
+  const handleClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    if (onPress) {
+      onPress(e);
+    }
+  };
 
   return (
     <button
-      aria-label={ariaLabel}
+      aria-label={
+        ariaLabel || (typeof children === "string" ? children : undefined)
+      }
       className={className}
-      color={color} // Keep the original color prop
-      data-color={color} // Also add data-color for testing
+      color={color} // Keep this
+      data-color={color}
       data-icon-only={isIconOnly}
-      data-testid={id} // Add this line to use id as testid
-      disabled={isDisabled} // Use isDisabled as HTML disabled attribute
+      data-testid={id || ariaLabel?.toLowerCase().replace(/\s+/g, "-")}
+      disabled={isDisabled}
       id={id}
       nonce={nonce}
+      role="button"
       type="button"
-      {...pressHandlers}
+      onClick={handleClick}
       {...props}
     >
       {children}
@@ -351,37 +359,92 @@ export const Progress = ({
 );
 
 // Add the Input component mock
-export const Input = ({
-  classNames,
-  labelPlacement = "inside", // Set default value
-  placeholder,
-  startContent,
-  type,
-  ...props
-}: BaseProps & {
-  placeholder?: string;
-  type?: string;
+interface InputProps extends BaseProps {
+  isClearable?: boolean;
+  value?: string;
+  onValueChange?: (value: string) => void;
+  onClear?: () => void;
   startContent?: React.ReactNode;
-  labelPlacement?: "inside" | "outside" | "outside-left";
-  classNames?: { input?: string };
-  "aria-label"?: string;
-}) => (
-  <div
-    className={classNames?.input}
-    data-label-placement={labelPlacement} // Use labelPlacement to position label
-  >
-    {startContent}
-    <input
-      aria-label={props["aria-label"]}
-      className={classNames?.input}
-      placeholder={placeholder} // Remove the labelPlacement condition here
-      role="searchbox"
-      type={type}
-      {...props}
-    />
-    {labelPlacement !== "inside" && placeholder && <label>{placeholder}</label>}
-  </div>
-);
+  placeholder?: string;
+  color?: string;
+  radius?: string;
+  classNames?: {
+    input?: string;
+    inputWrapper?: string;
+  };
+  labelPlacement?: string; // Add labelPlacement prop
+  label?: string;
+  isReadOnly?: boolean;
+}
+
+export const Input = ({
+  isClearable,
+  value,
+  onValueChange,
+  onClear,
+  startContent,
+  placeholder,
+  color,
+  radius,
+  classNames,
+  labelPlacement, // extract but don't pass to DOM
+  label,
+  isReadOnly,
+  ...props
+}: InputProps) => {
+  const inputClasses = [
+    classNames?.input,
+    "text-sm",
+    "border-none",
+    "outline-none",
+    "ring-0",
+    "focus:border-none",
+    "focus:outline-none",
+    "focus:ring-0",
+  ]
+    .filter(Boolean)
+    .join(" ");
+
+  const wrapperClasses = [
+    classNames?.inputWrapper,
+    radius && `rounded-${radius}`,
+    color && `border-${color}`,
+    "text-sm",
+    "border-none",
+    "outline-none",
+    "ring-0",
+    "focus:border-none",
+    "focus:outline-none",
+    "focus:ring-0",
+  ]
+    .filter(Boolean)
+    .join(" ");
+
+  const inputId = React.useId();
+
+  return (
+    <div className={wrapperClasses} data-label-placement={labelPlacement}>
+      {startContent}
+      {label && <label htmlFor={inputId}>{label}</label>}
+      <input
+        className={inputClasses}
+        id={inputId}
+        placeholder={placeholder}
+        readOnly={isReadOnly}
+        role="searchbox"
+        type="search"
+        value={value}
+        onChange={(e) => onValueChange?.(e.target.value)}
+        {...props}
+      />
+      {isClearable && value && (
+        <button type="button" onClick={onClear}>
+          Clear
+        </button>
+      )}
+    </div>
+  );
+};
 
 export const Tooltip = ({
   children,
@@ -430,7 +493,8 @@ export const PopoverContent = ({ children }: { children: React.ReactNode }) => (
 interface ModalProps extends BaseProps {
   isOpen: boolean;
   onClose?: () => void;
-  closeButton?: boolean;
+  hideCloseButton?: boolean; // Add to interface
+  closeButton?: boolean; // Add back the original prop
   backdrop?: string;
   classNames?: {
     base?: string;
@@ -440,22 +504,29 @@ interface ModalProps extends BaseProps {
     footer?: string;
   };
   size?: string;
+  "aria-labelledby"?: string;
 }
 
 export const Modal = ({
   isOpen,
   children,
   onClose,
+  hideCloseButton,
   closeButton,
   backdrop,
   classNames,
   size,
+  "aria-labelledby": ariaLabelledBy,
   ...props
 }: ModalProps) => {
   if (!isOpen) return null;
 
+  // Support both hideCloseButton and closeButton props
+  const shouldShowCloseButton = closeButton ?? !hideCloseButton;
+
   return (
     <div
+      aria-labelledby={ariaLabelledBy}
       aria-modal="true"
       className={classNames?.base}
       data-backdrop={backdrop}
@@ -464,18 +535,18 @@ export const Modal = ({
       role="dialog"
       tabIndex={0}
       onClick={(e) => {
-        if (e.target === e.currentTarget && closeButton) {
+        if (e.target === e.currentTarget && shouldShowCloseButton) {
           onClose?.();
         }
       }}
       onKeyDown={(e) => {
-        if (e.key === "Escape" && closeButton) {
+        if (e.key === "Escape" && shouldShowCloseButton) {
           onClose?.();
         }
       }}
       {...props}
     >
-      {closeButton && (
+      {shouldShowCloseButton && (
         <button
           aria-label="Close"
           className="close-button"
@@ -544,6 +615,493 @@ export const Snippet = ({
     </pre>
   </div>
 );
+
+// Add Table component mock
+interface TableProps extends BaseProps {
+  "aria-label"?: string;
+  isHeaderSticky?: boolean;
+  removeWrapper?: boolean;
+  selectionMode?: string;
+  topContent?: React.ReactNode;
+  emptyContent?: string;
+  classNames?: {
+    base?: string;
+    th?: string;
+  };
+  sortDescriptor?: {
+    column?: string;
+    direction?: "ascending" | "descending";
+  };
+  onSortChange?: (descriptor: any) => void;
+}
+
+export const Table: React.FC<TableProps> = ({
+  children,
+  topContent,
+  classNames,
+  "aria-label": ariaLabel,
+}) => (
+  <div className={classNames?.base}>
+    {topContent}
+    <div className="overflow-x-auto">
+      <table aria-label={ariaLabel}>{children}</table>
+    </div>
+  </div>
+);
+
+// Update TableBodyProps to not extend BaseProps
+interface TableBodyProps {
+  className?: string;
+  nonce?: string;
+  items?: any[];
+  emptyContent?: string;
+  isLoading?: boolean;
+  loadingContent?: React.ReactNode;
+  children?: React.ReactNode | ((item: any) => React.ReactNode);
+}
+
+// Add missing TableHeaderProps interface
+interface TableHeaderProps extends BaseProps {
+  className?: string;
+}
+
+// Update TableBody to handle both function and element children
+export const TableBody = ({
+  children,
+  items = [],
+  emptyContent = "No entries found",
+  isLoading,
+  loadingContent,
+}: TableBodyProps) => {
+  if (isLoading) {
+    return (
+      <tbody>
+        <tr>
+          <td colSpan={2}>{loadingContent}</td>
+        </tr>
+      </tbody>
+    );
+  }
+  if (!items?.length) {
+    return (
+      <tbody>
+        <tr>
+          <td colSpan={2}>{emptyContent}</td>
+        </tr>
+      </tbody>
+    );
+  }
+  if (typeof children === "function") {
+    return (
+      <tbody>
+        {items.map((item: any, index: number) => (
+          <React.Fragment key={index}>{children(item)}</React.Fragment>
+        ))}
+      </tbody>
+    );
+  }
+
+  return <tbody>{children}</tbody>;
+};
+
+interface TableColumnProps extends BaseProps {
+  allowsSorting?: boolean;
+  key?: string;
+}
+
+export const TableColumn: React.FC<TableColumnProps> = ({
+  children,
+  allowsSorting,
+  ...props
+}) => (
+  <th data-allows-sorting={allowsSorting} {...props}>
+    {children}
+  </th>
+);
+
+export const TableHeader: React.FC<TableHeaderProps> = ({
+  children,
+  className,
+  ...props
+}) => (
+  <thead className={className} {...props}>
+    <tr>{children}</tr>
+  </thead>
+);
+
+export const TableRow = ({ children, ...props }: BaseProps) => (
+  <tr {...props}>{children}</tr>
+);
+
+export const TableCell = ({ children, ...props }: BaseProps) => (
+  <td {...props}>{children}</td>
+);
+
+// Add Tabs component mock
+interface TabsProps extends BaseProps {
+  "aria-label"?: string;
+  variant?: string;
+  classNames?: {
+    tabList?: string;
+    cursor?: string;
+    tab?: string;
+    tabContent?: string;
+  };
+}
+
+export const Tabs: React.FC<TabsProps> = ({
+  children,
+  "aria-label": ariaLabel,
+  variant,
+  classNames,
+  ...props
+}) => {
+  const [selectedKey, setSelectedKey] = React.useState<string>();
+
+  // Convert children to array and filter out non-Tab elements
+  const tabs = React.Children.toArray(children).filter(
+    (child) => React.isValidElement(child) && child.type === Tab,
+  );
+
+  // Set initial selected tab
+  React.useEffect(() => {
+    if (tabs.length > 0 && !selectedKey) {
+      const firstTabKey = (tabs[0] as React.ReactElement).key?.toString() || "";
+
+      setSelectedKey(firstTabKey);
+    }
+  }, [tabs, selectedKey]);
+
+  return (
+    <div
+      aria-label={ariaLabel}
+      className={classNames?.tabList}
+      data-variant={variant}
+      role="tablist"
+      {...props}
+    >
+      {tabs.map((tab) => {
+        const tabElement = tab as React.ReactElement<TabProps>;
+        const key = tabElement.key?.toString() || "";
+
+        return React.cloneElement(tabElement, {
+          key,
+          isSelected: selectedKey === key,
+          onSelect: () => setSelectedKey(key),
+        });
+      })}
+    </div>
+  );
+};
+
+interface TabProps extends BaseProps {
+  key?: string;
+  title: string | React.ReactNode;
+  isSelected?: boolean;
+  onSelect?: () => void;
+}
+
+export const Tab: React.FC<TabProps> = ({
+  children,
+  title,
+  isSelected,
+  onSelect,
+  ...props
+}) => {
+  return (
+    <div role="tabpanel" {...props}>
+      {/* Fix click-events-have-key-events and interactive-supports-focus */}
+      <div
+        role="tab"
+        tabIndex={0}
+        onClick={onSelect}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" || e.key === " ") {
+            onSelect?.();
+          }
+        }}
+      >
+        <span
+          data-testid={`tab-${typeof title === "string" ? title : "content"}`}
+        >
+          {title}
+        </span>
+      </div>
+      {isSelected && (
+        <div data-testid="tab-content" role="tabcontent">
+          {children}
+        </div>
+      )}
+    </div>
+  );
+};
+
+// Add RadioGroup and Radio component mocks
+export const RadioGroup = ({
+  children,
+  value,
+  onValueChange,
+  orientation,
+  label,
+  "aria-label": ariaLabel,
+  className,
+}: any) => (
+  <div
+    aria-label={ariaLabel}
+    className={className}
+    data-orientation={orientation}
+    data-value={value}
+    role="radiogroup"
+  >
+    <div className="radio-label">{label}</div>
+    {React.Children.map(children, (child) =>
+      React.cloneElement(child, { groupValue: value, onChange: onValueChange }),
+    )}
+  </div>
+);
+
+export const Radio = ({ value, groupValue, onChange, children }: any) => (
+  <button
+    aria-checked={value === groupValue}
+    name={children}
+    role="radio"
+    value={value}
+    onClick={() => onChange(value)}
+  >
+    {children}
+  </button>
+);
+
+// Update Card components with proper exports and accessibility
+interface CardProps extends BaseProps {
+  onPress?: () => void;
+  isPressable?: boolean;
+}
+
+export const Card = ({
+  children,
+  onPress,
+  isPressable,
+  ...props
+}: CardProps) => (
+  <div
+    data-testid="card"
+    role={isPressable ? "button" : undefined}
+    tabIndex={isPressable ? 0 : undefined}
+    onClick={onPress}
+    onKeyDown={(e) => {
+      if (e.key === "Enter" || e.key === " ") {
+        onPress?.();
+      }
+    }}
+    {...props}
+  >
+    {children}
+  </div>
+);
+
+export const CardHeader = ({ children, ...props }: BaseProps) => (
+  <div data-testid="card-header" {...props}>
+    {children}
+  </div>
+);
+
+export const CardBody = ({ children, ...props }: BaseProps) => (
+  <div data-testid="card-body" {...props}>
+    {children}
+  </div>
+);
+
+interface ChipProps extends BaseProps {
+  color?: string;
+  size?: "sm" | "md" | "lg";
+  variant?: "flat" | "solid";
+}
+
+export const Chip = ({
+  children,
+  className,
+  color,
+  size,
+  variant,
+  ...props
+}: ChipProps) => (
+  <span
+    className={className}
+    data-color={color}
+    data-size={size}
+    data-variant={variant}
+    {...props}
+  >
+    {children}
+  </span>
+);
+
+// Add Select & SelectItem components
+interface SelectProps extends BaseProps {
+  "aria-label"?: string;
+  selectedKeys?: Set<string>;
+  onSelectionChange?: (keys: { currentKey: string }) => void;
+  labelPlacement?: string;
+  placeholder?: string;
+  variant?: string;
+  classNames?: {
+    trigger?: string;
+    label?: string;
+    popoverContent?: string;
+  };
+  renderValue?: (selected: Set<any>) => React.ReactNode;
+  label?: string | React.ReactNode;
+}
+
+export const Select = ({
+  children,
+  "aria-label": ariaLabel,
+  selectedKeys,
+  onSelectionChange,
+  labelPlacement,
+  placeholder,
+  label,
+  variant,
+  classNames, // Keep but use
+  renderValue, // Keep but use
+  ...props
+}: SelectProps) => {
+  // Use classNames and renderValue props
+  const containerClasses = [
+    classNames?.trigger,
+    classNames?.label,
+    classNames?.popoverContent,
+  ]
+    .filter(Boolean)
+    .join(" ");
+
+  const selectedValue = Array.from(selectedKeys || [])[0];
+  const displayValue = renderValue
+    ? renderValue(selectedKeys || new Set())
+    : selectedValue;
+
+  // Modify to properly handle rendering
+  const getOptionLabel = (child: unknown): string | undefined => {
+    if (React.isValidElement<SelectItemProps>(child)) {
+      if (child.props.children && typeof child.props.children === "object") {
+        return child.props.textValue || child.props.value;
+      }
+
+      return child.props.children as string;
+    }
+
+    return undefined;
+  };
+
+  return (
+    <div
+      aria-controls={`select-${ariaLabel}-popup`}
+      aria-expanded="false"
+      aria-label={ariaLabel}
+      className={containerClasses}
+      data-label-placement={labelPlacement}
+      data-variant={variant}
+      role="combobox"
+      {...props}
+    >
+      {label && <label>{label}</label>}
+      <div className="selected-value">{displayValue}</div>
+      <select
+        value={selectedValue}
+        onChange={(e) => onSelectionChange?.({ currentKey: e.target.value })}
+      >
+        <option value="">{placeholder}</option>
+        {React.Children.map(children, (child) => {
+          if (!React.isValidElement<SelectItemProps>(child)) return null;
+          const childProps = child.props;
+
+          return React.cloneElement(
+            child as React.ReactElement<SelectItemProps>,
+            {
+              ...childProps,
+              children: getOptionLabel(child),
+            },
+          );
+        })}
+      </select>
+    </div>
+  );
+};
+
+interface SelectItemProps extends BaseProps {
+  key?: string;
+  value?: string;
+  textValue?: string;
+  classNames?: {
+    base?: string;
+  };
+}
+
+export const SelectItem = ({
+  children,
+  value,
+  textValue,
+  classNames: _classNames, // Prefix unused props with underscore
+  ...props
+}: SelectItemProps) => (
+  <option value={value} {...props}>
+    {typeof children === "object" ? textValue || value : children}
+  </option>
+);
+
+// Add Textarea component
+interface TextareaProps extends BaseProps {
+  value?: string;
+  onValueChange?: (value: string) => void;
+  labelPlacement?: string;
+  maxRows?: number;
+  minRows?: number;
+  variant?: string;
+  classNames?: {
+    input?: string;
+    inputWrapper?: string;
+  };
+  placeholder?: string;
+}
+
+export const Textarea = ({
+  value,
+  onValueChange,
+  labelPlacement,
+  maxRows, // Keep but use
+  minRows,
+  variant,
+  classNames, // Keep but use
+  placeholder,
+  ...props
+}: TextareaProps) => {
+  // Use maxRows and classNames props
+  const textareaStyles = {
+    maxHeight: maxRows ? `${maxRows * 1.5}em` : undefined,
+  };
+
+  const wrapperClasses = [classNames?.inputWrapper, classNames?.input]
+    .filter(Boolean)
+    .join(" ");
+
+  return (
+    <div
+      className={wrapperClasses}
+      data-label-placement={labelPlacement}
+      data-variant={variant}
+    >
+      <textarea
+        placeholder={placeholder}
+        rows={minRows}
+        style={textareaStyles}
+        value={value}
+        onChange={(e) => onValueChange?.(e.target.value)}
+        {...props}
+      />
+    </div>
+  );
+};
 
 // Add a test to satisfy Jest's requirement
 describe("HeroUI Mocks", () => {

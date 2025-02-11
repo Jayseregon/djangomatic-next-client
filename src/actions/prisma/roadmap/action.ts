@@ -1,12 +1,10 @@
 "use server";
 
-import { PrismaClient } from "@prisma/client";
 import { z } from "zod";
 import { revalidatePath } from "next/cache";
 
+import { prisma } from "@/src/lib/prismaClient";
 import { capitalizeFirstLetters } from "@/src/lib/utils";
-
-const prisma = new PrismaClient();
 
 export async function createRoadmapCardCategory(categoryName: string) {
   try {

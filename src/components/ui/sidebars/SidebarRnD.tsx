@@ -98,7 +98,7 @@ export const SidebarRnD = ({
               </ul>
             </AccordionItem>
 
-            {/* RnD Bug reports access */}
+            {/* RnD Reports access */}
             <AccordionItem
               key="bug-report"
               aria-label="bug-report"
@@ -108,6 +108,7 @@ export const SidebarRnD = ({
                 </h2>
               }
             >
+              {/* Bug reports access */}
               <Link
                 className={`${linkTagStyling("/rnd/bugs", "/rnd/bugs")} w-full`}
                 href={"/rnd/bugs"}
@@ -121,6 +122,15 @@ export const SidebarRnD = ({
                     {bugCount}
                   </div>
                 </div>
+              </Link>
+
+              {/* App tracking access */}
+              <Link
+                className={`${linkTagStyling("/rnd/tracking", "/rnd/tracking")} w-full`}
+                href={"/rnd/tracking"}
+                nonce={nonce}
+              >
+                {t("sidebar.reportsSection.appTrackingLink")}
               </Link>
             </AccordionItem>
           </Accordion>

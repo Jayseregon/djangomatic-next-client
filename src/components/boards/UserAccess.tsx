@@ -4,8 +4,7 @@ import React, { useEffect, useState, type JSX } from "react";
 
 import { fetchUserServer } from "@/actions/generic/action";
 import { UserSchema } from "@/interfaces/lib";
-
-import { UnAuthorized } from "../auth/unAuthorized";
+import { UnAuthorized } from "@/components/auth/unAuthorized";
 
 /**
  * UserAccessBoards component checks if a user has access to boards and renders the appropriate content.

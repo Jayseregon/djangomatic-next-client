@@ -242,7 +242,9 @@ export const TowerReportForm = ({
       <DocLinkButton projectType="admin_docs" slug="pci-reports-rogers" />
       <ErrorBoundary fallback={<div>Something went wrong</div>}>
         <form
+          aria-label="Tower Report Form"
           className="space-y-4 w-full px-20 pt-5 z-30"
+          role="form"
           onSubmit={handleSubmit}
         >
           {/* Quickbase Query */}

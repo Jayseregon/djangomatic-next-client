@@ -53,7 +53,8 @@ export const DropArea = ({
             ? "border-gray-300 dark:border-gray-800 cursor-not-allowed"
             : "border-primary cursor-pointer"
       }`}
-      role="button"
+      data-testid="drop-area"
+      role="presentation"
       tabIndex={0}
       onClick={() => {
         if (!isDisabled) {
@@ -72,12 +73,14 @@ export const DropArea = ({
       <input
         multiple
         className="hidden"
+        data-testid={`file-input-${index}`}
         id={`file-input-${index}`}
         type="file"
         onChange={handleFileChange}
       />
       <Button
         className="text-foreground w-full h-10"
+        data-testid="drop-button"
         isDisabled={isDisabled}
         radius="full"
         variant="light"

@@ -1,5 +1,9 @@
 jest.mock("@/actions/django/action");
 jest.mock("@/actions/generic/action");
+jest.mock("@/actions/prisma/tracking/action", () => ({
+  createAppTrackingEntry: jest.fn().mockResolvedValue("test-entry-id"),
+  updateAppTrackingEntry: jest.fn().mockResolvedValue(undefined),
+}));
 jest.mock("isomorphic-dompurify", () => ({
   sanitize: jest.fn((text) => text),
 }));
@@ -222,6 +226,7 @@ describe("Database Request Utils", () => {
         setTaskData: mockSetTaskData,
         accessDownload: true,
         backendUser: "test_user",
+        entryId: "entry-123",
       });
 
       expect(mockSetTaskData).toHaveBeenCalled();
@@ -248,6 +253,7 @@ describe("Database Request Utils", () => {
         waitTime: 1000,
         setTaskData: mockSetTaskData,
         backendUser: "test_user",
+        entryId: "entry-123",
       });
 
       expect(global.setTimeout).toHaveBeenCalledTimes(1);

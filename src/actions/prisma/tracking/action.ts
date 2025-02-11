@@ -69,7 +69,7 @@ export async function updateAppTrackingEntry(
     if (!record) {
       throw new Error("Error updating tracking entry");
     }
-    console.log("Updated tracking entry:", record);
+    // console.log("Updated tracking entry:", record);
 
     revalidatePath("/");
   } catch (error) {

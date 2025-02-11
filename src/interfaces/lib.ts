@@ -104,6 +104,7 @@ export interface checkTaskStatusProps {
   taskOptions?: startTaskProps;
   accessDownload?: boolean;
   backendUser?: string;
+  entryId: string;
 }
 
 export interface InputDataProps {

@@ -3,7 +3,6 @@ import type { JSX } from "react";
 import { TableRow, TableCell } from "@heroui/react";
 
 import { UserSchema } from "@/interfaces/lib";
-import { superUserEmails } from "@/config/superUser";
 
 import { PermissionButton } from "./PermissionButton";
 
@@ -25,8 +24,7 @@ export const defaultBody = ({
   isAdmin: boolean;
   isSessionSuperUser: boolean;
 }): JSX.Element => {
-  const isUserSuperUser = superUserEmails.includes(user.email);
-  const disabled = !isSessionSuperUser && isUserSuperUser;
+  const disabled = !isSessionSuperUser;
 
   if (isAdmin) {
     return (
@@ -135,8 +133,7 @@ export const docsBody = ({
   handleToggle: (id: string, field: string, value: boolean) => void;
   isSessionSuperUser: boolean;
 }): JSX.Element => {
-  const isUserSuperUser = superUserEmails.includes(user.email);
-  const disabled = !isSessionSuperUser && isUserSuperUser;
+  const disabled = !isSessionSuperUser;
 
   return (
     <TableRow key={user.email}>
@@ -226,8 +223,7 @@ export const videosBody = ({
   handleToggle: (id: string, field: string, value: boolean) => void;
   isSessionSuperUser: boolean;
 }): JSX.Element => {
-  const isUserSuperUser = superUserEmails.includes(user.email);
-  const disabled = !isSessionSuperUser && isUserSuperUser;
+  const disabled = !isSessionSuperUser;
 
   return (
     <TableRow key={user.email}>
@@ -294,8 +290,7 @@ export const reportsBody = ({
   handleToggle: (id: string, field: string, value: boolean) => void;
   isSessionSuperUser: boolean;
 }): JSX.Element => {
-  const isUserSuperUser = superUserEmails.includes(user.email);
-  const disabled = !isSessionSuperUser && isUserSuperUser;
+  const disabled = !isSessionSuperUser;
 
   return (
     <TableRow key={user.email}>
@@ -337,8 +332,7 @@ export const appsTdsBody = ({
   handleToggle: (id: string, field: string, value: boolean) => void;
   isSessionSuperUser: boolean;
 }): JSX.Element => {
-  const isUserSuperUser = superUserEmails.includes(user.email);
-  const disabled = !isSessionSuperUser && isUserSuperUser;
+  const disabled = !isSessionSuperUser;
 
   return (
     <TableRow key={user.email}>
@@ -412,8 +406,7 @@ export const appsCogecoBody = ({
   handleToggle: (id: string, field: string, value: boolean) => void;
   isSessionSuperUser: boolean;
 }): JSX.Element => {
-  const isUserSuperUser = superUserEmails.includes(user.email);
-  const disabled = !isSessionSuperUser && isUserSuperUser;
+  const disabled = !isSessionSuperUser;
 
   return (
     <TableRow key={user.email}>
@@ -447,8 +440,7 @@ export const appsVistabeamBody = ({
   handleToggle: (id: string, field: string, value: boolean) => void;
   isSessionSuperUser: boolean;
 }): JSX.Element => {
-  const isUserSuperUser = superUserEmails.includes(user.email);
-  const disabled = !isSessionSuperUser && isUserSuperUser;
+  const disabled = !isSessionSuperUser;
 
   return (
     <TableRow key={user.email}>
@@ -498,8 +490,7 @@ export const appsXploreBody = ({
   handleToggle: (id: string, field: string, value: boolean) => void;
   isSessionSuperUser: boolean;
 }): JSX.Element => {
-  const isUserSuperUser = superUserEmails.includes(user.email);
-  const disabled = !isSessionSuperUser && isUserSuperUser;
+  const disabled = !isSessionSuperUser;
 
   return (
     <TableRow key={user.email}>
@@ -533,8 +524,7 @@ export const appsTelusBody = ({
   handleToggle: (id: string, field: string, value: boolean) => void;
   isSessionSuperUser: boolean;
 }): JSX.Element => {
-  const isUserSuperUser = superUserEmails.includes(user.email);
-  const disabled = !isSessionSuperUser && isUserSuperUser;
+  const disabled = !isSessionSuperUser;
 
   return (
     <TableRow key={user.email}>

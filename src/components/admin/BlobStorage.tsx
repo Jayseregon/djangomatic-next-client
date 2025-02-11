@@ -24,8 +24,7 @@ import {
 } from "@/src/lib/utils";
 import { LoadingContent } from "@/components/ui/LoadingContent";
 import { BlobProps } from "@/src/interfaces/admin";
-
-import { TrashIcon, GearIcon } from "../icons";
+import { TrashIcon, GearIcon } from "@/components/icons";
 
 /**
  * BlobStorage component for managing Azure Blob Storage uploads and displaying blob list.
@@ -194,7 +193,7 @@ export const BlobStorage = (): JSX.Element => {
   const topContent = (): JSX.Element => {
     return (
       <div className="pb-5">
-        <div className="flex w-full inline-block py-1 rounded-3xl bg-transparent border-0 text-sm text-foreground ring-1 ring-inset ring-gray-300 dark:ring-gray-700">
+        <div className="flex w-full py-1 rounded-3xl bg-transparent border-0 text-sm text-foreground ring-1 ring-inset ring-gray-300 dark:ring-gray-700">
           <label
             className="block w-40 py-1.5 bg-transparent border border-transparent border-r-slate-300 dark:border-r-slate-700 text-sm text-foreground text-center"
             htmlFor="file-input"
@@ -215,7 +214,7 @@ export const BlobStorage = (): JSX.Element => {
             </span>
           )}
         </div>
-        <div className="flex inline-block gap-4 pt-4 justify-between">
+        <div className="flex gap-4 pt-4 justify-between">
           <div className="flex flex-row gap-10">
             <select
               required

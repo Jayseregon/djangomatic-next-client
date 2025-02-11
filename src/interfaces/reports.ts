@@ -226,13 +226,13 @@ export interface TOCSections {
 export interface AntennaTransmissionLine {
   id: string;
   elevation: string;
-  quantity: string;
   equipment: string;
+  quantity: string;
   azimuth: string;
   tx_line: string;
   odu: string;
   carrier: string;
-  projectId: string; // Add this line to match Prisma schema
+  projectId: string;
 }
 
 export interface Note {
@@ -246,4 +246,11 @@ export interface FormActionsProps {
   onSaveAndContinue: () => void;
   onCancel: () => void;
   onGeneratePDF?: () => void;
+}
+
+export interface FormSectionAccordionProps {
+  title: string;
+  children: React.ReactNode;
+  menuKey: string;
+  defaultOpen?: boolean;
 }

@@ -24,12 +24,13 @@ export default function NotesInputs({
         {notes.map((note, index) => (
           <Reorder.Item key={note.id} dragControls={dragControls} value={note}>
             <div className="flex items-center space-x-2">
-              <div
+              <button
+                aria-label="grip handle"
                 className="cursor-grab"
                 onPointerDown={(e) => dragControls.start(e)}
               >
                 <Grip color="#4b5563" />
-              </div>
+              </button>
               <span className="min-w-[50px] text-center text-foreground">
                 {index + 1}
               </span>
@@ -38,7 +39,10 @@ export default function NotesInputs({
                 value={note.comment}
                 onChange={(e) => onNoteChange(index, "comment", e.target.value)}
               />
-              <TrashButton onClick={() => onRemoveNote(index)} />
+              <TrashButton
+                aria-label="remove note"
+                onClick={() => onRemoveNote(index)}
+              />
             </div>
           </Reorder.Item>
         ))}

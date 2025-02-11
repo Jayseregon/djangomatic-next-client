@@ -1,9 +1,10 @@
 "use client";
 
 import { Button, Spinner } from "@heroui/react";
-import React, { useEffect, type JSX } from "react";
+import React, { useEffect, type JSX, useState } from "react";
 import { useTranslations } from "next-intl";
 
+import { createAppTrackingEntry } from "@/actions/prisma/tracking/action";
 import { startTask, checkTaskStatus } from "@/lib/dbRequests";
 import {
   InputDataProps,
@@ -11,7 +12,7 @@ import {
   TaskDataProps,
 } from "@/interfaces/lib";
 
-import { useInputData, useTaskData } from "./inputDataProviders";
+import { useInputData, useTaskData, useAppName } from "./inputDataProviders";
 import { DownloadButton } from "./serverDropdowns";
 import { useConsoleData } from "./inputDataProviders";
 
@@ -23,8 +24,10 @@ import { useConsoleData } from "./inputDataProviders";
  */
 export const StartTaskButton = (): JSX.Element => {
   const { inputData } = useInputData();
+  const { appName } = useAppName();
   const { taskData, setTaskData } = useTaskData();
   const { appendToConsole } = useConsoleData();
+  const [entryId, setEntryId] = useState<string | null>(null);
   const t = useTranslations("startTaskButton");
 
   // Base taskOptions
@@ -133,6 +136,21 @@ export const StartTaskButton = (): JSX.Element => {
       appendToConsole("$ Starting task...");
       const task_id = await startTask(taskOptions);
 
+      // create new app tracking entry
+      if (task_id) {
+        const id = await createAppTrackingEntry(
+          task_id,
+          appName,
+          inputData.taskEndpoint,
+        );
+
+        if (id) {
+          setEntryId(id as string);
+        } else {
+          throw new Error("Error creating app tracking entry");
+        }
+      }
+
       setTaskData((prevTaskData: TaskDataProps) => ({
         ...prevTaskData,
         taskId: task_id,
@@ -153,6 +171,7 @@ export const StartTaskButton = (): JSX.Element => {
         taskOptions: taskOptions,
         accessDownload: inputData.asDownloadable,
         backendUser: inputData.clientName,
+        entryId: entryId as string,
       });
     }
   }, [taskData.taskId]);

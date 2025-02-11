@@ -1,20 +1,6 @@
 // Constants for tests
 const NEW_CSRF_TOKEN = "new-csrf-token";
 
-// Mock modules first without external variables
-jest.mock("@prisma/client", () => {
-  const mock = {
-    findUnique: jest.fn(),
-  };
-
-  return {
-    PrismaClient: jest.fn(() => ({
-      user: mock,
-    })),
-    _mock: mock,
-  };
-});
-
 // Create CSRF middleware mock
 const mockMiddlewareResponse = jest.fn().mockImplementation(() =>
   Promise.resolve({
@@ -31,14 +17,20 @@ jest.mock("@edge-csrf/nextjs", () => ({
   createCsrfMiddleware: () => () => mockMiddlewareResponse(),
 }));
 
-// Imports after mocks
+// Mock the prisma client
+jest.mock("@/lib/prismaClient", () => ({
+  prisma: {
+    user: {
+      findUnique: jest.fn(),
+    },
+  },
+}));
+
+// Imports
 import { cookies } from "next/headers";
-import { PrismaClient } from "@prisma/client";
 
+import { prisma } from "@/lib/prismaClient";
 import { fetchUserServer, getServerCsrfToken } from "@/actions/generic/action";
-
-// Get the mock from the Prisma mock
-const prismaUserMock = (PrismaClient as any)()?.user;
 
 describe("getServerCsrfToken", () => {
   const mockConsoleError = jest.fn();
@@ -158,32 +150,30 @@ describe("fetchUserServer", () => {
     canAccessAppsTdsHLD: false,
     canAccessAppsTdsLLD: false,
     canAccessVideoSttar: false,
-    // ...all other required fields
   };
 
   beforeEach(() => {
     jest.clearAllMocks();
-    prismaUserMock.findUnique.mockReset();
   });
 
   it("should return user with empty rndTasks array when user is found", async () => {
-    prismaUserMock.findUnique.mockResolvedValue(mockUser);
+    (prisma.user.findUnique as jest.Mock).mockResolvedValueOnce(mockUser);
 
     const result = await fetchUserServer("test@example.com");
 
     expect(result).toEqual({ ...mockUser, rndTasks: [] });
-    expect(prismaUserMock.findUnique).toHaveBeenCalledWith({
+    expect(prisma.user.findUnique).toHaveBeenCalledWith({
       where: { email: "test@example.com" },
     });
   });
 
   it("should return null when user is not found", async () => {
-    prismaUserMock.findUnique.mockResolvedValue(null);
+    (prisma.user.findUnique as jest.Mock).mockResolvedValueOnce(null);
 
     const result = await fetchUserServer("nonexistent@example.com");
 
     expect(result).toBeNull();
-    expect(prismaUserMock.findUnique).toHaveBeenCalledWith({
+    expect(prisma.user.findUnique).toHaveBeenCalledWith({
       where: { email: "nonexistent@example.com" },
     });
   });
@@ -191,7 +181,7 @@ describe("fetchUserServer", () => {
   it("should return null and log error when database query fails", async () => {
     const mockError = new Error("Database error");
 
-    prismaUserMock.findUnique.mockRejectedValue(mockError);
+    (prisma.user.findUnique as jest.Mock).mockRejectedValueOnce(mockError);
     const mockConsoleError = jest.spyOn(console, "error").mockImplementation();
 
     const result = await fetchUserServer("test@example.com");
@@ -205,11 +195,11 @@ describe("fetchUserServer", () => {
   });
 
   it("should validate email with zod", async () => {
-    prismaUserMock.findUnique.mockResolvedValueOnce(mockUser);
+    (prisma.user.findUnique as jest.Mock).mockResolvedValueOnce(mockUser);
 
     await fetchUserServer("test@example.com");
 
-    expect(prismaUserMock.findUnique).toHaveBeenCalledWith({
+    expect(prisma.user.findUnique).toHaveBeenCalledWith({
       where: { email: "test@example.com" },
     });
   });

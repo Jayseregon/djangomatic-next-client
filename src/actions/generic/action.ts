@@ -3,12 +3,10 @@
 import { cookies } from "next/headers";
 import { createCsrfMiddleware } from "@edge-csrf/nextjs";
 import { NextRequest } from "next/server";
-import { PrismaClient } from "@prisma/client";
 import { z } from "zod";
 
+import { prisma } from "@/src/lib/prismaClient";
 import { UserSchema } from "@/src/interfaces/lib";
-
-const prisma = new PrismaClient();
 
 const csrfMiddleware = createCsrfMiddleware({
   cookie: {

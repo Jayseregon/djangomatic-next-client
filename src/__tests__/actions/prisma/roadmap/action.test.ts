@@ -1,6 +1,6 @@
-import { PrismaClient } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 
+import { prisma } from "@/lib/prismaClient";
 import {
   createRoadmapCardCategory,
   getRoadmapCardCategories,
@@ -10,35 +10,9 @@ import {
   updateCardPositions,
 } from "@/actions/prisma/roadmap/action";
 
-// Mock next/cache
-jest.mock("next/cache", () => ({
-  revalidatePath: jest.fn(),
-}));
-
-// Mock PrismaClient
-jest.mock("@prisma/client", () => {
-  interface MockPrisma {
-    roadmapCardCategory: {
-      create: jest.Mock;
-      findMany: jest.Mock;
-    };
-    roadmapCard: {
-      findMany: jest.Mock;
-    };
-    roadmapProject: {
-      findMany: jest.Mock;
-      create: jest.Mock;
-      delete: jest.Mock;
-      findUnique: jest.Mock;
-    };
-    roadmapProjectCard: {
-      deleteMany: jest.Mock;
-      update: jest.Mock;
-    };
-    $transaction: jest.Mock;
-  }
-
-  const mock: MockPrisma = {
+// Mock the prisma client
+jest.mock("@/lib/prismaClient", () => ({
+  prisma: {
     roadmapCardCategory: {
       create: jest.fn(),
       findMany: jest.fn(),
@@ -56,15 +30,14 @@ jest.mock("@prisma/client", () => {
       deleteMany: jest.fn(),
       update: jest.fn(),
     },
-    $transaction: jest.fn((callback) => callback(mock)),
-  };
+    $transaction: jest.fn((callback) => callback(prisma)),
+  },
+}));
 
-  return {
-    PrismaClient: jest.fn(() => mock),
-  };
-});
-
-const prismaMock = new PrismaClient() as jest.Mocked<PrismaClient>;
+// Mock next/cache
+jest.mock("next/cache", () => ({
+  revalidatePath: jest.fn(),
+}));
 
 describe("Roadmap Actions", () => {
   const mockConsoleError = jest.spyOn(console, "error").mockImplementation();
@@ -88,7 +61,7 @@ describe("Roadmap Actions", () => {
     it("should create a category with capitalized name", async () => {
       await createRoadmapCardCategory("test category");
 
-      expect(prismaMock.roadmapCardCategory.create).toHaveBeenCalledWith({
+      expect(prisma.roadmapCardCategory.create).toHaveBeenCalledWith({
         data: { name: "Test Category" },
       });
       expect(revalidatePath).toHaveBeenCalledWith("/");
@@ -98,9 +71,9 @@ describe("Roadmap Actions", () => {
       const consoleLogSpy = jest.spyOn(console, "log").mockImplementation();
       const error = new Error("Database error");
 
-      (
-        prismaMock.roadmapCardCategory.create as jest.Mock
-      ).mockRejectedValueOnce(error);
+      (prisma.roadmapCardCategory.create as jest.Mock).mockRejectedValueOnce(
+        error,
+      );
 
       await createRoadmapCardCategory("test");
 
@@ -116,9 +89,9 @@ describe("Roadmap Actions", () => {
     it("should return all categories", async () => {
       const mockCategories = [{ id: "1", name: "Category 1" }];
 
-      (
-        prismaMock.roadmapCardCategory.findMany as jest.Mock
-      ).mockResolvedValueOnce(mockCategories);
+      (prisma.roadmapCardCategory.findMany as jest.Mock).mockResolvedValueOnce(
+        mockCategories,
+      );
 
       const result = await getRoadmapCardCategories();
 
@@ -137,7 +110,7 @@ describe("Roadmap Actions", () => {
         },
       ];
 
-      (prismaMock.roadmapCard.findMany as jest.Mock).mockResolvedValueOnce(
+      (prisma.roadmapCard.findMany as jest.Mock).mockResolvedValueOnce(
         mockCards,
       );
 
@@ -151,14 +124,14 @@ describe("Roadmap Actions", () => {
     it("should create a project with default position", async () => {
       const mockProject = { id: "1", name: "New Project", position: 0 };
 
-      (prismaMock.roadmapProject.create as jest.Mock).mockResolvedValueOnce(
+      (prisma.roadmapProject.create as jest.Mock).mockResolvedValueOnce(
         mockProject,
       );
 
       const result = await createRoadmapProject("New Project");
 
       expect(result).toEqual(mockProject);
-      expect(prismaMock.roadmapProject.create).toHaveBeenCalledWith({
+      expect(prisma.roadmapProject.create).toHaveBeenCalledWith({
         data: { name: "New Project", position: 0 },
       });
       expect(revalidatePath).toHaveBeenCalledWith("/");
@@ -167,7 +140,7 @@ describe("Roadmap Actions", () => {
     it("should create a project with specified position", async () => {
       await createRoadmapProject("New Project", 5);
 
-      expect(prismaMock.roadmapProject.create).toHaveBeenCalledWith({
+      expect(prisma.roadmapProject.create).toHaveBeenCalledWith({
         data: { name: "New Project", position: 5 },
       });
     });
@@ -177,10 +150,10 @@ describe("Roadmap Actions", () => {
     it("should delete project and related cards", async () => {
       await deletegRoadmapProject("1");
 
-      expect(prismaMock.roadmapProjectCard.deleteMany).toHaveBeenCalledWith({
+      expect(prisma.roadmapProjectCard.deleteMany).toHaveBeenCalledWith({
         where: { projectId: "1" },
       });
-      expect(prismaMock.roadmapProject.delete).toHaveBeenCalledWith({
+      expect(prisma.roadmapProject.delete).toHaveBeenCalledWith({
         where: { id: "1" },
       });
       expect(revalidatePath).toHaveBeenCalledWith("/");
@@ -203,14 +176,14 @@ describe("Roadmap Actions", () => {
         ],
       };
 
-      (prismaMock.roadmapProject.findUnique as jest.Mock).mockResolvedValueOnce(
+      (prisma.roadmapProject.findUnique as jest.Mock).mockResolvedValueOnce(
         mockProject,
       );
 
       const result = await updateCardPositions(mockUpdates);
 
       expect(result).toEqual(mockProject);
-      expect(prismaMock.roadmapProjectCard.update).toHaveBeenCalledTimes(2);
+      expect(prisma.roadmapProjectCard.update).toHaveBeenCalledTimes(2);
       expect(revalidatePath).toHaveBeenCalledWith("/boards/roadmap");
       expect(revalidatePath).toHaveBeenCalledWith("/boards/roadmap/projects/1");
     });
@@ -226,7 +199,7 @@ describe("Roadmap Actions", () => {
     });
 
     it("should throw error if project not found", async () => {
-      (prismaMock.roadmapProject.findUnique as jest.Mock).mockResolvedValueOnce(
+      (prisma.roadmapProject.findUnique as jest.Mock).mockResolvedValueOnce(
         null,
       );
 

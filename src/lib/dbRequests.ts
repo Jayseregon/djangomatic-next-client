@@ -11,6 +11,7 @@ import {
   startTaskProps,
   TaskDataProps,
 } from "@/interfaces/lib";
+import { updateAppTrackingEntry } from "@/actions/prisma/tracking/action";
 
 const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
 // const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
@@ -341,6 +342,7 @@ export const checkTaskStatus = async ({
   taskOptions,
   accessDownload = false,
   backendUser,
+  entryId,
 }: checkTaskStatusProps) => {
   if (!backendUser) {
     throw new Error("backendUser is required");
@@ -378,6 +380,7 @@ export const checkTaskStatus = async ({
             setTaskData,
             accessDownload,
             backendUser,
+            entryId,
           }),
         waitTime,
       );
@@ -387,6 +390,15 @@ export const checkTaskStatus = async ({
         ...prevTaskData,
         taskStatus: data.status,
       }));
+
+      // update app tracking data
+      await updateAppTrackingEntry(
+        task_id,
+        entryId,
+        data.status,
+        data.result.elapsed,
+      );
+
       // sanitize the result due to html formatting from legacy server (django)
       const sanitizedResult = DOMPurify.sanitize(data.result.result);
 
@@ -416,6 +428,7 @@ export const checkTaskStatus = async ({
             taskOptions: updatedTaskOptions,
             accessDownload: false,
             backendUser,
+            entryId,
           });
         } catch (error) {
           console.error("Error during snapshot task restart:", error);

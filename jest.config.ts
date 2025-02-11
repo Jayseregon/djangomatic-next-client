@@ -61,6 +61,7 @@ const config: Config = {
     "^public/(.*)$": "<rootDir>/public/$1",
     "^@/styles/(.*)$": "<rootDir>/styles/$1",
     "^@/components/admin/(.*)$": "<rootDir>/src/components/admin/$1",
+    "^@/lib/prismaClient$": "<rootDir>/src/__tests__/__mocks__/prismaClientMock.ts",
   },
   testMatch: [
     "**/__tests__/**/*.[jt]s?(x)",

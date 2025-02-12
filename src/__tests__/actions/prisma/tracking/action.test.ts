@@ -9,6 +9,9 @@ jest.mock("@/src/lib/prismaClient", () => {
       create: jest.fn(),
       update: jest.fn(),
     },
+    towerReport: {
+      findMany: jest.fn(),
+    },
   };
 
   return { prisma: mockPrisma };
@@ -18,6 +21,7 @@ import {
   getAppTrackingEntries,
   createAppTrackingEntry,
   updateAppTrackingEntry,
+  getPciReportsEntries,
 } from "@/src/actions/prisma/tracking/action";
 import { prisma } from "@/src/lib/prismaClient";
 
@@ -182,6 +186,32 @@ describe("App Tracking Actions", () => {
           mockData.elapsed_time,
         ),
       ).rejects.toThrow("Error updating tracking entry: Database error");
+    });
+  });
+
+  describe("getPciReportsEntries", () => {
+    it("should fetch PCI reports successfully", async () => {
+      const mockReports = [
+        { id: "1", site_name: "Site 1" },
+        { id: "2", site_name: "Site 2" },
+      ];
+
+      (prisma.towerReport.findMany as jest.Mock).mockResolvedValue(mockReports);
+
+      const result = await getPciReportsEntries();
+
+      expect(prisma.towerReport.findMany).toHaveBeenCalled();
+      expect(result).toEqual(mockReports);
+    });
+
+    it("should handle errors when fetching PCI reports", async () => {
+      (prisma.towerReport.findMany as jest.Mock).mockRejectedValue(
+        new Error("Database error"),
+      );
+
+      await expect(getPciReportsEntries()).rejects.toThrow(
+        "Error fetching PCI reports: Database error",
+      );
     });
   });
 });

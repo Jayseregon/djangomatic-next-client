@@ -1,5 +1,6 @@
-import { groupByAppName } from "@/src/lib/appTrackingUtils";
+import { groupByAppName, groupPciReports } from "@/src/lib/appTrackingUtils";
 import { AppUsageTracking } from "@/interfaces/rnd";
+import { TowerReport } from "@/interfaces/reports";
 
 describe("appTrackingUtils", () => {
   describe("groupByAppName", () => {
@@ -144,6 +145,55 @@ describe("appTrackingUtils", () => {
         avg_time: "0.00s",
         id: "1",
         endpoint: "/api/endpoint1",
+      });
+    });
+  });
+
+  describe("groupPciReports", () => {
+    it("should group PCI reports correctly", () => {
+      const mockReports: Partial<TowerReport>[] = [
+        {
+          id: "1",
+          site_name: "Site 1",
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+        {
+          id: "2",
+          site_name: "Site 2",
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+      ];
+
+      const result = groupPciReports(mockReports as TowerReport[]);
+
+      expect(result).toHaveLength(1);
+      expect(result[0]).toEqual({
+        app_name: "PCI Reports",
+        id: "N/A",
+        count: 2,
+        total_time: "N/A",
+        min_time: "N/A",
+        max_time: "N/A",
+        avg_time: "N/A",
+        endpoint: "/reports",
+      });
+    });
+
+    it("should handle empty reports array", () => {
+      const result = groupPciReports([]);
+
+      expect(result).toHaveLength(1);
+      expect(result[0]).toEqual({
+        app_name: "PCI Reports",
+        id: "N/A",
+        count: 0,
+        total_time: "N/A",
+        min_time: "N/A",
+        max_time: "N/A",
+        avg_time: "N/A",
+        endpoint: "/reports",
       });
     });
   });

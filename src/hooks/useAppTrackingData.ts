@@ -1,8 +1,12 @@
 import { useState, useEffect, useCallback } from "react";
 
 import { AppGroup } from "@/interfaces/rnd";
-import { getAppTrackingEntries } from "@/actions/prisma/tracking/action";
-import { groupByAppName } from "@/lib/appTrackingUtils";
+import {
+  getAppTrackingEntries,
+  getPciReportsEntries,
+} from "@/actions/prisma/tracking/action";
+import { groupByAppName, groupPciReports } from "@/lib/appTrackingUtils";
+import { TowerReport } from "@/interfaces/reports";
 
 export const useAppTrackingData = () => {
   const [data, setData] = useState<AppGroup[]>([]);
@@ -13,13 +17,24 @@ export const useAppTrackingData = () => {
     setIsLoading(true);
     setError(null);
     try {
-      const records = await getAppTrackingEntries();
+      const appRecords = await getAppTrackingEntries();
 
-      if (!records) {
-        throw new Error("No records found");
+      if (!appRecords) {
+        throw new Error("No app records found");
       }
 
-      const reducedRecords = groupByAppName(records);
+      const pciReportsRecords = await getPciReportsEntries();
+
+      if (!pciReportsRecords) {
+        throw new Error("No PCI reports found");
+      }
+
+      const reducedRecords = groupByAppName(appRecords);
+      const reducedReportsRecords = groupPciReports(
+        pciReportsRecords as TowerReport[],
+      );
+
+      reducedRecords.push(...reducedReportsRecords);
 
       reducedRecords.sort((a, b) => {
         if (a.app_name < b.app_name) return -1;

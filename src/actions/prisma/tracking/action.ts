@@ -21,6 +21,16 @@ export async function getAppTrackingEntries() {
   }
 }
 
+export async function getPciReportsEntries() {
+  try {
+    const items = await prisma.towerReport.findMany();
+
+    return items;
+  } catch (error) {
+    throw new Error(`Error fetching PCI reports: ${(error as Error).message}`);
+  }
+}
+
 export async function createAppTrackingEntry(
   task_id: string,
   app_name: string,

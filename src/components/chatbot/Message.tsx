@@ -6,8 +6,8 @@ export default function Message({ message }: MessageProps) {
   const isUserMessage = message.role === "user";
 
   const messageStyle = isUserMessage
-    ? "bg-sky-500 text-sky-950 rounded-br-none"
-    : "bg-amber-500 text-amber-950 rounded-bl-none";
+    ? "border border-sky-500 text-sky-500 rounded-br-none"
+    : "bg-sky-500 text-sky-950 rounded-bl-none";
 
   return (
     <div

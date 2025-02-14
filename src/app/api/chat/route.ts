@@ -1,47 +1,45 @@
 import { openai } from "@ai-sdk/openai";
-import { streamText, tool } from "ai";
-import { z } from "zod";
+import {
+  InvalidToolArgumentsError,
+  NoSuchToolError,
+  streamText,
+  ToolExecutionError,
+} from "ai";
+
+import { convertFahrenheitToCelsius } from "@/src/tools/convertFahrenheitToCelsius";
+import { keywordsEmbedding } from "@/src/tools/keywordsEmbedding";
+import { weather } from "@/src/tools/weather";
 
 export const maxDuration = 30;
 
 export async function POST(req: Request) {
   const { messages } = await req.json();
 
-  const result = streamText({
-    model: openai("gpt-4o"),
-    messages,
-    tools: {
-      weather: tool({
-        description: "Get the weather in a location (fahrenheit)",
-        parameters: z.object({
-          location: z.string().describe("The location to get the weather for"),
-        }),
-        execute: async ({ location }) => {
-          const temperature = Math.round(Math.random() * (90 - 32) + 32);
+  try {
+    const result = streamText({
+      model: openai("gpt-4o"),
+      messages,
+      tools: {
+        keywordsEmbedding,
+        weather,
+        convertFahrenheitToCelsius,
+      },
+    });
 
-          return {
-            location,
-            temperature,
-          };
-        },
-      }),
-      convertFahrenheitToCelsius: tool({
-        description: "Convert a temperature in fahrenheit to celsius",
-        parameters: z.object({
-          temperature: z
-            .number()
-            .describe("The temperature in fahrenheit to convert"),
-        }),
-        execute: async ({ temperature }) => {
-          const celsius = Math.round((temperature - 32) * (5 / 9));
-
-          return {
-            celsius,
-          };
-        },
-      }),
-    },
-  });
-
-  return result.toDataStreamResponse();
+    return result.toDataStreamResponse({
+      getErrorMessage: (error) => {
+        if (NoSuchToolError.isInstance(error)) {
+          return "The model tried to call a unknown tool.";
+        } else if (InvalidToolArgumentsError.isInstance(error)) {
+          return "The model called a tool with invalid arguments.";
+        } else if (ToolExecutionError.isInstance(error)) {
+          return "An error occurred during tool execution.";
+        } else {
+          return "An unknown error occurred.";
+        }
+      },
+    });
+  } catch (error) {
+    console.error("Error executing model:", error);
+  }
 }

@@ -24,8 +24,9 @@ describe("Message Component", () => {
 
     expect(messageContainer).toHaveClass("justify-end", "ml-auto");
     expect(messageContent).toHaveClass(
-      "bg-sky-500",
-      "text-sky-950",
+      "border",
+      "border-sky-500",
+      "text-sky-500",
       "rounded-br-none",
     );
     expect(screen.getByText("Hello there!")).toBeInTheDocument();
@@ -42,8 +43,8 @@ describe("Message Component", () => {
 
     expect(messageContainer).toHaveClass("justify-start", "mr-auto");
     expect(messageContent).toHaveClass(
-      "bg-amber-500",
-      "text-amber-950",
+      "bg-sky-500",
+      "text-sky-950",
       "rounded-bl-none",
     );
     expect(screen.getByText("How can I help?")).toBeInTheDocument();
@@ -60,8 +61,8 @@ describe("Message Component", () => {
 
     expect(messageContainer).toHaveClass("justify-start", "mr-auto");
     expect(messageContent).toHaveClass(
-      "bg-amber-500",
-      "text-amber-950",
+      "bg-sky-500",
+      "text-sky-950",
       "rounded-bl-none",
     );
   });
@@ -77,8 +78,8 @@ describe("Message Component", () => {
 
     expect(messageContainer).toHaveClass("justify-start", "mr-auto");
     expect(messageContent).toHaveClass(
-      "bg-amber-500",
-      "text-amber-950",
+      "bg-sky-500",
+      "text-sky-950",
       "rounded-bl-none",
     );
   });

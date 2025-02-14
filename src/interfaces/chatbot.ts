@@ -5,3 +5,13 @@ export interface MessageProps {
     content: string;
   };
 }
+
+export interface KeywordEmbedding {
+  word: string;
+  x: number;
+  y: number;
+}
+
+export interface KeywordsEmbeddingResponse {
+  keywords: KeywordEmbedding[];
+}

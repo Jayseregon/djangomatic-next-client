@@ -28,6 +28,7 @@
       "@/types/*": ["src/types/*"],
       "@/interfaces/*": ["src/interfaces/*"],
       "@/lib/*": ["src/lib/*"],
+      "@/tools/*": ["src/tools/*"],
       "@/hooks/*": ["src/hooks/*"],
       "@/data/*": ["src/data/*"]
     }

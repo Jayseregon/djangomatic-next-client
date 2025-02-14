@@ -34,6 +34,12 @@ class CustomResponse {
 }
 global.Response = CustomResponse as any;
 
+// Add Web Streams API polyfills
+import { TransformStream, ReadableStream, WritableStream } from 'stream/web';
+global.TransformStream = TransformStream as unknown as typeof global.TransformStream;
+global.ReadableStream = ReadableStream as unknown as typeof global.ReadableStream;
+global.WritableStream = WritableStream as unknown as typeof global.WritableStream;
+
 Object.defineProperty(window, 'scrollTo', { value: jest.fn(), writable: true });
 
 global.fetch = jest.fn().mockImplementation(() =>

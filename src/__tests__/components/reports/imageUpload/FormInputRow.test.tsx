@@ -60,11 +60,9 @@ jest.mock("@/components/ui/formInput", () => ({
       onChange={onChange}
     />
   ),
-  TrashButton: ({ onClick }: any) => (
-    <button data-testid="mock-trash-button" onClick={onClick}>
-      Delete
-    </button>
-  ),
+  TrashButton: (
+    { onPress }: any, // Change onClick to onPress
+  ) => <button data-testid="mock-trash-button" onClick={onPress} />,
 }));
 
 // Update ImageRotateModal mock to properly handle file creation and passing

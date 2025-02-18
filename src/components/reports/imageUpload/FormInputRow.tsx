@@ -118,7 +118,7 @@ export const FormInputRow = ({
         ) : (
           <></>
         )}
-        <TrashButton onClick={() => removeImageField(image.imgIndex)} />
+        <TrashButton onPress={() => removeImageField(image.imgIndex)} />
       </div>
       {selectedFile && (
         <ImageRotateModal

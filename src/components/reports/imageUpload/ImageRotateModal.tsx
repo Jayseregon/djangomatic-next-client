@@ -170,9 +170,6 @@ export const ImageRotateModal = ({
           >
             <Save />
           </Button>
-          <button type="button" onClick={handleConfirm}>
-            Confirm
-          </button>
         </ModalFooter>
       </ModalContent>
     </Modal>

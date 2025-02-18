@@ -142,21 +142,21 @@ describe("FormInput Components", () => {
     const mockOnClick = jest.fn();
 
     it("renders TrashButton with correct color", () => {
-      render(<TrashButton onClick={mockOnClick} />);
+      render(<TrashButton onPress={mockOnClick} />);
       const button = screen.getByRole("button");
 
       expect(button).toHaveAttribute("data-color", "danger");
     });
 
     it("renders CopyButton with correct color", () => {
-      render(<CopyButton onClick={mockOnClick} />);
+      render(<CopyButton onPress={mockOnClick} />);
       const button = screen.getByRole("button");
 
       expect(button).toHaveAttribute("data-color", "primary");
     });
 
     it("renders AddButton with label", () => {
-      render(<AddButton label="Add Item" onClick={mockOnClick} />);
+      render(<AddButton label="Add Item" onPress={mockOnClick} />);
       expect(screen.getByText("Add Item")).toBeInTheDocument();
     });
   });

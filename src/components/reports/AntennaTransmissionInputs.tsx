@@ -148,13 +148,13 @@ const AntennaTransmissionInputs = ({
               );
             })}
             <div className="flex">
-              <CopyButton onClick={() => onDuplicateAntenna(index)} />
-              <TrashButton onClick={() => onRemoveAntenna(index)} />
+              <CopyButton onPress={() => onDuplicateAntenna(index)} />
+              <TrashButton onPress={() => onRemoveAntenna(index)} />
             </div>
           </div>
         ))}
       </div>
-      <AddButton label="Add New Inventory" onClick={onAddAntenna} />
+      <AddButton label="Add New Inventory" onPress={onAddAntenna} />
     </div>
   );
 };

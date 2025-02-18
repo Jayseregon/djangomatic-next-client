@@ -14,7 +14,7 @@ const TOCSectionPDF = ({
 }: TOCSectionProps) => {
   if (!willCaptureToc) {
     return (
-      <Text id={id} style={style}>
+      <Text id={id} style={style as any}>
         {children}
       </Text>
     );
@@ -46,7 +46,7 @@ const TOCSectionPDF = ({
 
           return children;
         }}
-        style={style}
+        style={style as any}
       />
     );
   }

@@ -1,12 +1,22 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 
 import { TowerReportImage } from "@/interfaces/reports";
 
 export const useImageSection = (initialImages: TowerReportImage[] = []) => {
-  const [images, setImages] = useState<TowerReportImage[]>(initialImages);
+  // console.log("Initial Images: ", initialImages);
+
+  const [images, setImages] = useState<TowerReportImage[]>(() => initialImages);
   const [newlyUploadedImages, setNewlyUploadedImages] = useState<
     TowerReportImage[]
   >([]);
+
+  useEffect(() => {
+    if (initialImages?.length > 0 && images.length === 0) {
+      setImages(initialImages);
+    }
+  }, [initialImages]);
+
+  // console.log("Section Images: ", images);
 
   const handleImagesChange = useCallback((newImages: TowerReportImage[]) => {
     setImages(newImages);

@@ -11,6 +11,8 @@ export function useLocalImages({ images, isFrontcover }: UseLocalImagesProps) {
   const [localImages, setLocalImages] = useState<LocalImages[]>([]);
   const isInitialized = useRef(false);
 
+  // console.log("Local Images: ", images);
+
   const initialLocalImages = useMemo(
     () =>
       images.map((image, index) => ({
@@ -46,6 +48,8 @@ export function useLocalImages({ images, isFrontcover }: UseLocalImagesProps) {
     () => [...localImages].sort((a, b) => a.imgIndex - b.imgIndex),
     [localImages],
   );
+
+  // console.log("Sorted images", sortedLocalImages);
 
   return {
     localImages,

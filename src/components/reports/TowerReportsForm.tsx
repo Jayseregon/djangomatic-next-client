@@ -76,7 +76,12 @@ export const TowerReportForm = ({
   const subdir = `${formData.jde_job}-${formData.jde_work_order}` || "";
   const siteImagesLabelOptions: string[] = siteImagesLabelOptionsData;
 
+  // console.log("Report Front Image:", report?.front_image);
+
   const frontImageSection = useImageSection(report?.front_image);
+
+  // console.log("Front Image Section:", frontImageSection.images);
+
   const siteImageSection = useImageSection(report?.site_images);
   const deficiencyImageSection = useImageSection(report?.deficiency_images);
 

@@ -233,10 +233,10 @@ export const TrashButton = ({
 );
 
 export const CopyButton = ({
-  onClick,
+  onPress,
   className,
 }: {
-  onClick: () => void;
+  onPress: () => void;
   className?: string;
 }) => {
   return (
@@ -246,7 +246,7 @@ export const CopyButton = ({
       color="primary"
       radius="full"
       variant="light"
-      onPress={onClick}
+      onPress={onPress}
     >
       <Copy />
     </Button>
@@ -254,11 +254,11 @@ export const CopyButton = ({
 };
 
 export const AddButton = ({
-  onClick,
+  onPress,
   label,
   className,
 }: {
-  onClick: () => void;
+  onPress: () => void;
   label: string;
   className?: string;
 }) => {
@@ -271,7 +271,7 @@ export const AddButton = ({
       radius="lg"
       type="button"
       variant="ghost"
-      onPress={onClick}
+      onPress={onPress}
     >
       {label}
     </Button>

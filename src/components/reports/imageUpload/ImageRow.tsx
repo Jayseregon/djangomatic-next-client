@@ -40,7 +40,7 @@ export const ImageRow = ({
               />
               <TrashButton
                 className="ml-2"
-                onClick={() => removeImageField(image.imgIndex)}
+                onPress={() => removeImageField(image.imgIndex)}
               />
             </div>
           ) : (
@@ -51,14 +51,14 @@ export const ImageRow = ({
               />
               <TrashButton
                 className="ml-2"
-                onClick={() => removeImageField(image.imgIndex)}
+                onPress={() => removeImageField(image.imgIndex)}
               />
             </>
           )
         ) : (
           <TrashButton
             className="ml-2"
-            onClick={() => removeImageField(image.imgIndex)}
+            onPress={() => removeImageField(image.imgIndex)}
           />
         )}
       </>

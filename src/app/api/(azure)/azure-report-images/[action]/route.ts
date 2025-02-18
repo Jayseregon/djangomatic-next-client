@@ -5,6 +5,8 @@ import { NextResponse } from "next/server";
 import { BlobServiceClient } from "@azure/storage-blob";
 import sharp from "sharp";
 
+import { sanitizeFileName } from "@/src/lib/utils";
+
 const rootdir = "tower_reports_images";
 
 // Azure Storage connection details
@@ -37,7 +39,8 @@ export async function POST(request: Request): Promise<Response> {
   }
 
   const azureId = uuidv4();
-  const blobName = `${rootdir}/${subdir}/${azureId}-${file.name}`;
+  const parsedName = sanitizeFileName(file.name);
+  const blobName = `${rootdir}/${subdir}/${azureId}-${parsedName}`;
   const blockBlobClient = containerClient.getBlockBlobClient(blobName);
 
   // Set blob properties and tags

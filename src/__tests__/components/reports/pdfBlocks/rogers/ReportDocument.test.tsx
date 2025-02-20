@@ -77,7 +77,11 @@ jest.mock("@/src/components/reports/pdfBlocks/rogers/DeficienciesPage", () => ({
 
 jest.mock("@/src/components/reports/pdfBlocks/rogers/SitePhotosPage", () => ({
   __esModule: true,
-  default: () => <div data-testid="site-photos-page">Site Photos</div>,
+  default: () => [
+    <div key="site-photos" data-testid="site-photos-page">
+      Site Photos
+    </div>,
+  ],
 }));
 
 jest.mock("@/src/components/reports/pdfBlocks/rogers/AppendixA", () => ({

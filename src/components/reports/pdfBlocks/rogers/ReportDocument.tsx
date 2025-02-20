@@ -47,12 +47,11 @@ const ReportDocument = ({
       tocSections,
       willCaptureToc,
     }),
-    <SitePhotosPage
-      key="site-photos"
-      report={report}
-      tocSections={tocSections}
-      willCaptureToc={willCaptureToc}
-    />,
+    ...SitePhotosPage({
+      report,
+      tocSections,
+      willCaptureToc,
+    }),
     ...AppendixA({
       tocSections,
       willCaptureToc,

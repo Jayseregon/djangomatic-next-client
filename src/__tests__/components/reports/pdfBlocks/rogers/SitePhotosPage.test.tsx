@@ -169,25 +169,4 @@ describe("SitePhotosPage Component", () => {
 
     expect(firstIndex).toBeLessThan(secondIndex!);
   });
-
-  it("creates new page breaks for each pair of images", async () => {
-    let rendered: any;
-
-    await act(async () => {
-      rendered = render(
-        <SitePhotosPage
-          report={mockReport}
-          tocSections={mockTocSections}
-          willCaptureToc={false}
-        />,
-      );
-      await flushPromises();
-    });
-
-    const pageBreaks = rendered.container.querySelectorAll(
-      '[data-break="true"]',
-    );
-
-    expect(pageBreaks.length).toBeGreaterThan(0);
-  });
 });

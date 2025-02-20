@@ -18,7 +18,7 @@ function cspMiddleware(req: NextRequest): NextResponse {
   const cspHeader = `
   default-src 'self';
   script-src 'self' 'nonce-${nonce}' 'unsafe-eval' https://github.com https://staging-djangomatic.azurewebsites.net https://djangomatic-pro.azurewebsites.net;
-  style-src 'self' 'nonce-${nonce}' https://staging-djangomatic.azurewebsites.net https://djangomatic-pro.azurewebsites.net;
+  style-src 'self' 'unsafe-inline' 'nonce-${nonce}' https://staging-djangomatic.azurewebsites.net https://djangomatic-pro.azurewebsites.net;
   img-src 'self' blob: data: https://i.pravatar.cc https://github.com https://avatars.githubusercontent.com https://*.githubusercontent.com https://djangomaticstorage.blob.core.windows.net;
   font-src 'self';
   object-src 'none';
@@ -46,7 +46,6 @@ function cspMiddleware(req: NextRequest): NextResponse {
     },
   });
 
-  // Set the CSP header on the response
   response.headers.set("Content-Security-Policy", cspHeader);
 
   return response;

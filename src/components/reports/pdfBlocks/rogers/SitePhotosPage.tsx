@@ -67,7 +67,6 @@ const SitePhotosPage = ({
   const photoPages = siteImagePairs.map((pair, index) => (
     <View
       key={`site-photo-pair-${index}`}
-      break
       style={StylesPDF.imageColumn}
       wrap={false}
     >

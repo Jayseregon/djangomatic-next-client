@@ -72,7 +72,6 @@ export const config = {
         const existingUser = await prisma.user.findUnique({
           where: { email: user.email! },
         });
-        // console.log("Existing user:", existingUser);
 
         // create user entry if not exists
         if (!existingUser) {
@@ -83,7 +82,6 @@ export const config = {
               isAdmin: isAdmin,
             },
           });
-          // console.log("User created with:", user);
         } else {
           await prisma.user.update({
             where: { email: user.email! },
@@ -104,8 +102,6 @@ export const config = {
         }
       }
 
-      // console.log("LOG Token:", token);
-
       return token;
     },
     async session({ session, token }) {
@@ -122,12 +118,11 @@ export const config = {
         .setProtectedHeader({ alg: algorithm })
         .setIssuedAt()
         .setIssuer(issuer)
-        .setExpirationTime("1h")
+        .setExpirationTime("5min")
         .sign(key);
 
+      // console.log("JWT-i:", newJwt);
       session.fastapiToken = newJwt;
-
-      // console.log("LOG Session:", session);
 
       return session;
     },

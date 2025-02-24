@@ -11,10 +11,16 @@ export default function ReportFormPage() {
   const router = useRouter();
   const params = useParams();
   const { id } = params;
+
+  // Added state to persist the report id
+  const [reportId, setReportId] = useState<string>(
+    Array.isArray(id) ? id[0] : (id ?? ""),
+  );
   const [report, setReport] = useState<TowerReport | null>(null);
 
   useEffect(() => {
     if (id) {
+      setReportId(Array.isArray(id) ? id[0] : id);
       async function fetchReport() {
         try {
           const response = await fetch(`/api/prisma-tower-report?id=${id}`);
@@ -35,13 +41,16 @@ export default function ReportFormPage() {
 
   const handleSaveAndClose = async (report: Partial<TowerReport>) => {
     try {
-      const response = await fetch(`/api/prisma-tower-report/update?id=${id}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
+      const response = await fetch(
+        `/api/prisma-tower-report/update?id=${reportId}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(report),
         },
-        body: JSON.stringify(report),
-      });
+      );
 
       if (!response.ok) {
         throw new Error(`Failed to save report: ${response.statusText}`);
@@ -55,20 +64,23 @@ export default function ReportFormPage() {
 
   const handleLocalSave = async (report: Partial<TowerReport>) => {
     try {
-      const response = await fetch(`/api/prisma-tower-report/update?id=${id}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
+      const response = await fetch(
+        `/api/prisma-tower-report/update?id=${reportId}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(report),
         },
-        body: JSON.stringify(report),
-      });
+      );
 
       if (!response.ok) {
         throw new Error(`Failed to save report: ${response.statusText}`);
       }
 
       const responseData = await response.json();
-      const reportId: string = responseData.report.id;
+      const reportIdFromResponse: string = responseData.report.id;
       const reportUpdatedAt: Date = new Date(responseData.report.updatedAt);
       const successMessage = "Report successfully saved!";
 
@@ -77,7 +89,7 @@ export default function ReportFormPage() {
         isNewReport: false,
         response: {
           message: successMessage,
-          id: reportId,
+          id: reportIdFromResponse,
           updatedAt: reportUpdatedAt,
         },
       };

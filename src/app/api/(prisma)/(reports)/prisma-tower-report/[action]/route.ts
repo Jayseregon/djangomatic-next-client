@@ -245,16 +245,19 @@ export async function PUT(request: Request) {
     return NextResponse.json({ report: updatedReport }, { status: 200 });
   } catch (error) {
     if (error instanceof Error) {
+      const detailedError = `Error updating report with id ${id}: ${error.message}. Stack trace: ${error.stack}`;
+
+      // Return comprehensive details to the client so it gets logged in the browser
       return NextResponse.json(
         {
           error: "Failed to update report",
-          details: error.message,
+          details: detailedError,
         },
         { status: 500 },
       );
-    } else {
-      return handlePrismaError(error);
     }
+
+    return handlePrismaError(error);
   } finally {
     await prisma.$disconnect();
   }

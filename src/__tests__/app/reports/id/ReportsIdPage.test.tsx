@@ -225,7 +225,7 @@ describe("ReportFormPage", () => {
     });
 
     expect(consoleErrorSpy).toHaveBeenCalledWith(
-      "Failed to save tower report:",
+      "Failed to save tower report with id (test-id):",
       expect.any(Error),
     );
 

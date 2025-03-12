@@ -1,15 +1,16 @@
 import { AppGroup, AppUsageTracking } from "@/interfaces/rnd";
+import { TowerReport } from "@/interfaces/reports";
+
+type GroupData = {
+  count: number;
+  total_time: number;
+  min_time: number;
+  max_time: number;
+  id: string;
+  endpoint: string;
+};
 
 export const groupByAppName = (records: AppUsageTracking[]): AppGroup[] => {
-  type GroupData = {
-    count: number;
-    total_time: number;
-    min_time: number;
-    max_time: number;
-    id: string;
-    endpoint: string;
-  };
-
   const groups = records.reduce(
     (acc, record) => {
       const time = parseFloat(record.elapsed_time.replace("s", ""));
@@ -61,4 +62,21 @@ export const groupByAppName = (records: AppUsageTracking[]): AppGroup[] => {
       endpoint: data.endpoint,
     };
   });
+};
+
+export const groupPciReports = (records: TowerReport[]): AppGroup[] => {
+  const count = records.length;
+
+  return [
+    {
+      app_name: "PCI Reports",
+      id: "N/A",
+      count: count,
+      total_time: "N/A",
+      min_time: "N/A",
+      max_time: "N/A",
+      avg_time: "N/A",
+      endpoint: "/reports",
+    },
+  ];
 };

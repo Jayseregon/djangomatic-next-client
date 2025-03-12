@@ -13,13 +13,17 @@ export const useSession = jest.fn(() => ({
 }));
 
 // Server-side exports (next-auth)
-export const auth = jest.fn().mockImplementation(() =>
+export const auth = jest.fn();
+
+// Set default mock implementation
+auth.mockImplementation(() =>
   Promise.resolve({
     user: {
       name: "Test User",
       email: "test@example.com",
       id: "test-id",
     },
+    fastapiToken: "mock-token",
   }),
 );
 
@@ -51,6 +55,21 @@ export {
   signOut as defaultSignOut,
   handlers as defaultHandlers,
 };
+
+// Mock jose module
+jest.mock("jose", () => ({
+  SignJWT: jest.fn().mockImplementation(() => ({
+    setProtectedHeader: () => ({
+      setIssuedAt: () => ({
+        setIssuer: () => ({
+          setExpirationTime: () => ({
+            sign: () => Promise.resolve("mock.jwt.token"),
+          }),
+        }),
+      }),
+    }),
+  })),
+}));
 
 // Add test suite to satisfy Jest's requirement
 describe("NextAuth Mock", () => {

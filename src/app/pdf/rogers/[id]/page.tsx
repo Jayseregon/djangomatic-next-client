@@ -12,7 +12,7 @@ import ReportDocument from "@/components/reports/pdfBlocks/rogers/ReportDocument
 import { titleCase } from "@/src/lib/utils";
 
 // Disable hyphenation
-Font.registerHyphenationCallback((word) => [word]);
+Font.registerHyphenationCallback((word: any) => [word]);
 
 // New component for PDF viewer
 const PDFViewer = ({

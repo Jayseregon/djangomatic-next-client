@@ -289,7 +289,7 @@ const ImageUpload = ({
         ))}
       </Reorder.Group>
       {canAddMore && (
-        <AddButton label={newImageButtonName} onClick={addImageField} />
+        <AddButton label={newImageButtonName} onPress={addImageField} />
       )}
     </>
   );

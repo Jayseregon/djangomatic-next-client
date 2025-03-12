@@ -41,13 +41,13 @@ export default function NotesInputs({
               />
               <TrashButton
                 aria-label="remove note"
-                onClick={() => onRemoveNote(index)}
+                onPress={() => onRemoveNote(index)}
               />
             </div>
           </Reorder.Item>
         ))}
       </Reorder.Group>
-      <AddButton label="Add New Note" onClick={onAddNote} />
+      <AddButton label="Add New Note" onPress={onAddNote} />
     </div>
   );
 }

@@ -10,7 +10,7 @@ import ReportDocument from "@/src/components/reports/pdfBlocks/rogers/ReportDocu
 const prisma = new PrismaClient();
 
 // disable hyphenation
-Font.registerHyphenationCallback((word) => [word]);
+Font.registerHyphenationCallback((word: any) => [word]);
 
 export async function GET(
   request: Request,

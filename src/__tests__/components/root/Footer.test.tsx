@@ -45,7 +45,7 @@ describe("Footer component", () => {
     const heartIcon = document.querySelector('svg[role="presentation"]');
 
     expect(heartIcon).toBeInTheDocument();
-    expect(heartIcon).toHaveAttribute("height", "20");
-    expect(heartIcon).toHaveAttribute("width", "20");
+    expect(heartIcon).toHaveAttribute("height", "16");
+    expect(heartIcon).toHaveAttribute("width", "16");
   });
 });

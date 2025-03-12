@@ -11,13 +11,22 @@ export default function ReportFormPage() {
   const router = useRouter();
   const params = useParams();
   const { id } = params;
+
+  // Added state to persist the report id
+  const [reportId, setReportId] = useState<string>(
+    Array.isArray(id) ? id[0] : (id ?? ""),
+  );
   const [report, setReport] = useState<TowerReport | null>(null);
 
   useEffect(() => {
     if (id) {
+      const newId = Array.isArray(id) ? id[0] : id;
+
+      setReportId(newId);
+      console.log("Current reportId:", newId); // extra logging
       async function fetchReport() {
         try {
-          const response = await fetch(`/api/prisma-tower-report?id=${id}`);
+          const response = await fetch(`/api/prisma-tower-report?id=${newId}`);
 
           if (!response.ok) {
             throw new Error(`Failed to fetch report: ${response.statusText}`);
@@ -34,41 +43,79 @@ export default function ReportFormPage() {
   }, [id]);
 
   const handleSaveAndClose = async (report: Partial<TowerReport>) => {
+    if (!reportId.trim()) {
+      console.error("Empty reportId in handleSaveAndClose");
+
+      return;
+    }
+    console.log("Saving report with reportId:", reportId);
     try {
-      const response = await fetch(`/api/prisma-tower-report/update?id=${id}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
+      const response = await fetch(
+        `/api/prisma-tower-report/update?id=${reportId}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(report),
         },
-        body: JSON.stringify(report),
-      });
+      );
 
       if (!response.ok) {
-        throw new Error(`Failed to save report: ${response.statusText}`);
+        // Attempt to extract more detailed info from the response
+        const errorText = await response.text();
+
+        throw new Error(
+          `Failed to save report: ${response.statusText}. Details: ${errorText}`,
+        );
       }
 
       router.push("/reports");
     } catch (error) {
-      console.error("Failed to save tower report:", error);
+      console.error(
+        `Failed to save tower report with id (${reportId}):`,
+        error,
+      );
     }
   };
 
   const handleLocalSave = async (report: Partial<TowerReport>) => {
-    try {
-      const response = await fetch(`/api/prisma-tower-report/update?id=${id}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
+    if (!reportId.trim()) {
+      console.error("Empty reportId in handleLocalSave");
+
+      return {
+        success: false,
+        isNewReport: false,
+        response: {
+          message: "Report ID is missing. Please refresh the page.",
+          id: "",
+          updatedAt: new Date(),
         },
-        body: JSON.stringify(report),
-      });
+      };
+    }
+    console.log("Local saving report with reportId:", reportId);
+    try {
+      const response = await fetch(
+        `/api/prisma-tower-report/update?id=${reportId}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(report),
+        },
+      );
 
       if (!response.ok) {
-        throw new Error(`Failed to save report: ${response.statusText}`);
+        const errorText = await response.text();
+
+        throw new Error(
+          `Failed to save report: ${response.statusText}. Details: ${errorText}`,
+        );
       }
 
       const responseData = await response.json();
-      const reportId: string = responseData.report.id;
+      const reportIdFromResponse: string = responseData.report.id;
       const reportUpdatedAt: Date = new Date(responseData.report.updatedAt);
       const successMessage = "Report successfully saved!";
 
@@ -77,18 +124,24 @@ export default function ReportFormPage() {
         isNewReport: false,
         response: {
           message: successMessage,
-          id: reportId,
+          id: reportIdFromResponse,
           updatedAt: reportUpdatedAt,
         },
       };
     } catch (error) {
       // Failure message
-      const errorMessage = `Failed to save tower report: ${(error as Error).message}`;
+      const errorMessage = `Failed to save tower report: ${(error as Error).message}. Report ID: ${reportId}`;
+
+      console.error(errorMessage);
 
       return {
         success: false,
         isNewReport: false,
-        response: { message: errorMessage, id: "", updatedAt: new Date() },
+        response: {
+          message: errorMessage,
+          id: reportId,
+          updatedAt: new Date(),
+        },
       };
     }
   };

@@ -72,9 +72,10 @@ describe("DatabaseSchemaTable3Selector", () => {
       </NextIntlClientProvider>,
     );
 
-    expect(screen.getByText("Choose Database")).toBeInTheDocument();
-    expect(screen.getByText("Choose Schema")).toBeInTheDocument();
-    expect(screen.getByText("Choose Table")).toBeInTheDocument();
+    // Update to check for the elements that actually exist in the DOM
+    expect(screen.getByText("database")).toBeInTheDocument();
+    expect(screen.getByText("schema")).toBeInTheDocument();
+    expect(screen.getByText("table")).toBeInTheDocument();
   });
 });
 

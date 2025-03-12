@@ -6,6 +6,7 @@ export interface UserSchema {
   lastLogin: Date;
   isAdmin: boolean;
   isRnDTeam: boolean;
+  canAccessChatbot: boolean;
   canAccessAppsTdsHLD: boolean;
   canAccessAppsTdsLLD: boolean;
   canAccessAppsTdsArcGIS: boolean;

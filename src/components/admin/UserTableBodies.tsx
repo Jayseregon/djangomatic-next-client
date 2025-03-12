@@ -72,6 +72,14 @@ export const defaultBody = ({
             user={user}
           />
         </TableCell>
+        <TableCell>
+          <PermissionButton
+            disabled={disabled}
+            fieldName="canAccessChatbot"
+            handleToggle={handleToggle}
+            user={user}
+          />
+        </TableCell>
       </TableRow>
     );
   }
@@ -109,6 +117,14 @@ export const defaultBody = ({
         <PermissionButton
           disabled={disabled}
           fieldName="canAccessRnd"
+          handleToggle={handleToggle}
+          user={user}
+        />
+      </TableCell>
+      <TableCell>
+        <PermissionButton
+          disabled={disabled}
+          fieldName="canAccessChatbot"
           handleToggle={handleToggle}
           user={user}
         />
@@ -547,7 +563,7 @@ export const renderTableBody = (
   selectedMenu: string,
   isAdmin: boolean,
   isSessionSuperUser: boolean,
-  handleToggle: (id: string, field: string, value: boolean) => void,
+  handleToggle: (id: string, field: string, value: boolean) => void
 ) => {
   switch (selectedMenu) {
     case "docs":

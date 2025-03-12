@@ -563,7 +563,7 @@ export const renderTableBody = (
   selectedMenu: string,
   isAdmin: boolean,
   isSessionSuperUser: boolean,
-  handleToggle: (id: string, field: string, value: boolean) => void
+  handleToggle: (id: string, field: string, value: boolean) => void,
 ) => {
   switch (selectedMenu) {
     case "docs":

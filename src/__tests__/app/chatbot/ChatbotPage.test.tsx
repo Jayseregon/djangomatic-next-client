@@ -1,14 +1,39 @@
 import { render, screen, fireEvent, act } from "@testing-library/react";
 import { useChat } from "@ai-sdk/react";
+import { useSession } from "next-auth/react";
 
-import Chat from "@/src/app/chatbot/page";
+import ChatbotPage from "@/src/app/chatbot/page";
 
-// Mock the useChat hook
+// Mock the required hooks and components
 jest.mock("@ai-sdk/react", () => ({
   useChat: jest.fn(),
 }));
 
-describe("Chat Component", () => {
+jest.mock("next-auth/react", () => ({
+  useSession: jest.fn(),
+}));
+
+// Mock the components used in ChatbotPage
+jest.mock("@/components/auth/unAuthenticated", () => ({
+  UnAuthenticated: () => (
+    <div data-testid="unauthenticated">Not authenticated</div>
+  ),
+}));
+
+jest.mock("@/components/chatbot/UserAccess", () => ({
+  UserAccessChatbot: ({ children }: { children: React.ReactNode }) => (
+    <div data-testid="user-access">{children}</div>
+  ),
+}));
+
+jest.mock("@/src/components/error/ErrorBoundary", () => ({
+  __esModule: true,
+  default: ({ children }: { children: React.ReactNode }) => (
+    <div data-testid="error-boundary">{children}</div>
+  ),
+}));
+
+describe("ChatbotPage Component", () => {
   const mockHandleSubmit = jest.fn((e) => e.preventDefault());
   const mockHandleInputChange = jest.fn();
   const mockScrollIntoView = jest.fn();
@@ -27,10 +52,40 @@ describe("Chat Component", () => {
       handleInputChange: mockHandleInputChange,
       handleSubmit: mockHandleSubmit,
     });
+
+    // Setup useSession mock with authenticated user
+    (useSession as jest.Mock).mockReturnValue({
+      data: {
+        user: {
+          email: "test@example.com",
+        },
+      },
+      status: "authenticated",
+    });
   });
 
-  it("renders the chat interface", () => {
-    render(<Chat />);
+  it("renders unauthenticated view when no session", () => {
+    (useSession as jest.Mock).mockReturnValue({
+      data: null,
+      status: "unauthenticated",
+    });
+
+    render(<ChatbotPage />);
+    expect(screen.getByTestId("unauthenticated")).toBeInTheDocument();
+  });
+
+  it("renders unauthenticated view when no email in session", () => {
+    (useSession as jest.Mock).mockReturnValue({
+      data: { user: {} },
+      status: "authenticated",
+    });
+
+    render(<ChatbotPage />);
+    expect(screen.getByTestId("unauthenticated")).toBeInTheDocument();
+  });
+
+  it("renders the chat interface when authenticated", () => {
+    render(<ChatbotPage />);
 
     expect(screen.getByRole("searchbox")).toBeInTheDocument();
     expect(
@@ -39,7 +94,7 @@ describe("Chat Component", () => {
   });
 
   it("handles input changes", () => {
-    render(<Chat />);
+    render(<ChatbotPage />);
 
     const input = screen.getByRole("searchbox");
 
@@ -49,7 +104,7 @@ describe("Chat Component", () => {
   });
 
   it("handles form submission", () => {
-    render(<Chat />);
+    render(<ChatbotPage />);
 
     const form = screen.getByRole("searchbox").closest("form");
 
@@ -71,7 +126,7 @@ describe("Chat Component", () => {
       handleSubmit: mockHandleSubmit,
     });
 
-    render(<Chat />);
+    render(<ChatbotPage />);
 
     expect(screen.getByText("Hello")).toBeInTheDocument();
     expect(screen.getByText("Hi there!")).toBeInTheDocument();
@@ -87,7 +142,7 @@ describe("Chat Component", () => {
       handleSubmit: mockHandleSubmit,
     });
 
-    render(<Chat />);
+    render(<ChatbotPage />);
 
     // Wait for useEffect to run
     await act(async () => {
@@ -98,7 +153,7 @@ describe("Chat Component", () => {
   });
 
   it("maintains fixed layout structure", () => {
-    render(<Chat />);
+    render(<ChatbotPage />);
 
     const mainContainer = screen.getByRole("searchbox").closest("div.fixed");
 
@@ -109,5 +164,15 @@ describe("Chat Component", () => {
       .closest("div.flex-none");
 
     expect(inputContainer).toHaveClass("bg-background/80");
+  });
+
+  it("renders with error boundary", () => {
+    render(<ChatbotPage />);
+    expect(screen.getByTestId("error-boundary")).toBeInTheDocument();
+  });
+
+  it("renders with user access wrapper", () => {
+    render(<ChatbotPage />);
+    expect(screen.getByTestId("user-access")).toBeInTheDocument();
   });
 });

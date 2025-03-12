@@ -59,7 +59,8 @@ describe("SchemasDropdown", () => {
         />
       </NextIntlClientProvider>,
     );
-    expect(screen.getByText("Loading...")).toBeInTheDocument();
+    // Update to check for the key instead of the translated text
+    expect(screen.getByText("ServerDropdowns.loading")).toBeInTheDocument();
     // ...existing code...
   });
 });
@@ -92,7 +93,8 @@ describe("TablesDropdown", () => {
         />
       </NextIntlClientProvider>,
     );
-    expect(screen.getByText("Loading...")).toBeInTheDocument();
+    // Update to check for the key instead of the translated text
+    expect(screen.getByText("ServerDropdowns.loading")).toBeInTheDocument();
     // ...existing code...
   });
 });

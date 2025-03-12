@@ -22,6 +22,7 @@ model User {
   lastLogin                      DateTime      @updatedAt
   isAdmin                        Boolean       @default(false)
   isRnDTeam                      Boolean       @default(false)
+  canAccessChatbot               Boolean       @default(false)
   canAccessAppsTdsHLD            Boolean       @default(false)
   canAccessAppsTdsLLD            Boolean       @default(false)
   canAccessAppsTdsArcGIS         Boolean       @default(false)

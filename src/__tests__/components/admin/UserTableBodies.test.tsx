@@ -56,6 +56,7 @@ describe("UserTableBodies", () => {
     createdAt: new Date(),
     lastLogin: new Date(),
     isRnDTeam: false,
+    canAccessChatbot: false,
     canAccessAppsTdsHLD: false,
     canAccessAppsTdsLLD: false,
     canAccessAppsTdsArcGIS: false,
@@ -113,7 +114,7 @@ describe("UserTableBodies", () => {
 
       expect(screen.getByText(mockUser.name)).toBeInTheDocument();
       expect(screen.getByText(mockUser.email)).toBeInTheDocument();
-      expect(screen.getAllByRole("button")).toHaveLength(5); // Admin view has 5 toggle buttons
+      expect(screen.getAllByRole("button")).toHaveLength(6); // Admin view has 5 toggle buttons
     });
 
     it("renders non-admin view correctly", () => {
@@ -132,7 +133,7 @@ describe("UserTableBodies", () => {
 
       expect(screen.getByText(mockUser.name)).toBeInTheDocument();
       expect(screen.getByText(mockUser.email)).toBeInTheDocument();
-      expect(screen.getAllByRole("button")).toHaveLength(4); // Non-admin view has 4 toggle buttons
+      expect(screen.getAllByRole("button")).toHaveLength(5); // Non-admin view has 4 toggle buttons
     });
 
     it("disables buttons for non-super users", () => {

@@ -107,7 +107,8 @@ describe("StartTaskButton", () => {
       </NextIntlClientProvider>,
     );
 
-    expect(screen.getByText("Start Task")).toBeInTheDocument();
+    // Button text is rendered as "label" because of our mock
+    expect(screen.getByText("label")).toBeInTheDocument();
   });
 
   it("starts task when clicked", async () => {
@@ -187,8 +188,7 @@ describe("StartTaskButton", () => {
       </NextIntlClientProvider>,
     );
 
-    expect(
-      screen.getByRole("button", { name: "Download" }),
-    ).toBeInTheDocument();
+    // Look for specific Download button by its text
+    expect(screen.getByText("Download")).toBeInTheDocument();
   });
 });

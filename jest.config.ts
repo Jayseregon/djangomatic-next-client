@@ -62,6 +62,7 @@ const config: Config = {
     "^@/styles/(.*)$": "<rootDir>/styles/$1",
     "^@/components/admin/(.*)$": "<rootDir>/src/components/admin/$1",
     "^@/lib/prismaClient$": "<rootDir>/src/__tests__/__mocks__/prismaClientMock.ts",
+    "^next-intl$": "<rootDir>/src/__tests__/__mocks__/next-intl.tsx", 
   },
   testMatch: [
     "**/__tests__/**/*.[jt]s?(x)",
@@ -83,7 +84,7 @@ const config: Config = {
     "^.+\\.(js|jsx|ts|tsx)$": "babel-jest",
   },
   transformIgnorePatterns: [
-    "/node_modules/(?!(@auth/core|next-auth|@panva/hkdf|jose|oauth|openid-client|preact|uuid|next-intl|@auth/core/providers|next-auth/providers|lucide-react|next-mdx-remote-client|@react-pdf/renderer))/"
+    "/node_modules/(?!(@auth/core|next-auth|@panva/hkdf|jose|oauth|openid-client|preact|uuid|next-intl|@auth/core/providers|next-auth/providers|lucide-react|next-mdx-remote-client|@react-pdf/renderer|use-intl))/",
   ],
   // Uncomment the next line to limit workers if needed
   // maxWorkers: 2,

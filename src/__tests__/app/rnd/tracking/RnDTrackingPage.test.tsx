@@ -1,6 +1,6 @@
 import { render, screen } from "@testing-library/react";
 
-import AppTrackingSidePage from "@/app/rnd/tracking/page";
+import AppTrackingSidePage from "@/src/app/rnd/tracking/apps/page";
 
 // Mock next-intl
 jest.mock("next-intl", () => ({

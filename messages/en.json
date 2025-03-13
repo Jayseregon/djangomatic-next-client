@@ -93,7 +93,8 @@
       "reportsSection": {
         "title": "Reports",
         "bugDashboardLink": "Bug Report",
-        "appTrackingLink": "App Tracking"
+        "appTrackingLink": "App Tracking",
+        "gainsTrackingLink": "Gains Tracking"
       }
     },
     "appTracking": {
@@ -107,6 +108,13 @@
         "min": "Min RT",
         "max": "Max RT",
         "total": "Total RT"
+      }
+    },
+    "gainsTracking": {
+      "title": "Gains Tracking",
+      "subtitle": "Track the gains from automation tools",
+      "boardColumns": {
+        "name": "Name"
       }
     },
     "taskExtension": "Tasks",

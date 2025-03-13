@@ -1,3 +1,14 @@
+export interface GainTrackingItem {
+  id: string;
+  name: string;
+  timeSaved: number; // hours per week
+  costSavings: number; // $ per month
+  roi: number; // percentage
+  implementationDate: string;
+  status: "Planned" | "In Progress" | "Completed";
+  department: string;
+}
+
 export interface AppUsageTracking {
   id: string;
   task_id: string;

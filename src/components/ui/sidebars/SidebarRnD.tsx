@@ -124,13 +124,20 @@ export const SidebarRnD = ({
                 </div>
               </Link>
 
-              {/* App tracking access */}
+              {/* Tracking access */}
               <Link
-                className={`${linkTagStyling("/rnd/tracking", "/rnd/tracking")} w-full`}
-                href={"/rnd/tracking"}
+                className={`${linkTagStyling("/rnd/tracking/apps", "/rnd/tracking/apps")} w-full`}
+                href={"/rnd/tracking/apps"}
                 nonce={nonce}
               >
                 {t("sidebar.reportsSection.appTrackingLink")}
+              </Link>
+              <Link
+                className={`${linkTagStyling("/rnd/tracking/gains", "/rnd/tracking/gains")} w-full`}
+                href={"/rnd/tracking/gains"}
+                nonce={nonce}
+              >
+                {t("sidebar.reportsSection.gainsTrackingLink")}
               </Link>
             </AccordionItem>
           </Accordion>

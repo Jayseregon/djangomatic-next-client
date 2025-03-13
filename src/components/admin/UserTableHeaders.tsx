@@ -30,6 +30,7 @@ export const defaultHeader = ({
         <TableColumn key="Roadmap">Roadmap</TableColumn>
         <TableColumn key="Bugs">Bugs</TableColumn>
         <TableColumn key="rnd">r&amp;d</TableColumn>
+        <TableColumn key="chatbot">Chatbot</TableColumn>
       </TableHeader>
     );
   }
@@ -49,6 +50,7 @@ export const defaultHeader = ({
       <TableColumn key="Roadmap">Roadmap</TableColumn>
       <TableColumn key="Bugs">Bugs</TableColumn>
       <TableColumn key="rnd">r&amp;d</TableColumn>
+      <TableColumn key="chatbot">Chatbot</TableColumn>
     </TableHeader>
   );
 };

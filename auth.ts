@@ -7,10 +7,12 @@ import NextAuth from "next-auth";
 import "next-auth/jwt";
 import GitHub from "next-auth/providers/github";
 import MicrosoftEntraID from "next-auth/providers/microsoft-entra-id";
+import * as jose from "jose";
 
 declare module "next-auth" {
   interface Session {
     accessToken?: string;
+    fastapiToken?: string;
     user: {
       id: string;
     } & DefaultSession["user"];
@@ -51,6 +53,7 @@ export const config = {
   pages: {
     signIn: "/signin",
   },
+  secret: process.env.AUTH_SECRET,
   trustHost: true,
   callbacks: {
     async signIn({ user }) {
@@ -61,7 +64,7 @@ export const config = {
         user.email?.endsWith("@telecon.com");
 
       const isAdmin = authorizedMembers.some(
-        (member) => member.email === user.email
+        (member) => member.email === user.email,
       );
 
       if (isAuthorized) {
@@ -69,7 +72,6 @@ export const config = {
         const existingUser = await prisma.user.findUnique({
           where: { email: user.email! },
         });
-        // console.log("Existing user:", existingUser);
 
         // create user entry if not exists
         if (!existingUser) {
@@ -80,7 +82,6 @@ export const config = {
               isAdmin: isAdmin,
             },
           });
-          // console.log("User created with:", user);
         } else {
           await prisma.user.update({
             where: { email: user.email! },
@@ -105,7 +106,23 @@ export const config = {
     },
     async session({ session, token }) {
       session.accessToken = token.accessToken;
-      session.user.id = token.id as string;
+      session.user.id = token.sub as string;
+
+      const secretKey = process.env.AUTH_SECRET;
+
+      const algorithm = "HS256";
+      const issuer =
+        process.env.NEXT_PUBLIC_APP_ENV !== "production" ? "github" : "telecon";
+      const key = new TextEncoder().encode(secretKey);
+      const newJwt = await new jose.SignJWT({ ...session.user })
+        .setProtectedHeader({ alg: algorithm })
+        .setIssuedAt()
+        .setIssuer(issuer)
+        .setExpirationTime("5min")
+        .sign(key);
+
+      // console.log("JWT-i:", newJwt);
+      session.fastapiToken = newJwt;
 
       return session;
     },

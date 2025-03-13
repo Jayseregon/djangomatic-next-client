@@ -231,7 +231,6 @@ function RoadmapCard({ card, setCards, providedCategories }: RoadmapCardProps) {
                   base: "hover:!bg-foreground/30 focus:!bg-foreground/30",
                 }}
                 textValue={category.name}
-                value={category.id}
               >
                 {category.name}
               </SelectItem>
@@ -268,7 +267,6 @@ function RoadmapCard({ card, setCards, providedCategories }: RoadmapCardProps) {
                   base: "hover:!bg-foreground/30 focus:!bg-foreground/30",
                 }}
                 textValue={color}
-                value={color}
               >
                 <Badge color={color} />
               </SelectItem>

@@ -72,6 +72,14 @@ export const defaultBody = ({
             user={user}
           />
         </TableCell>
+        <TableCell>
+          <PermissionButton
+            disabled={disabled}
+            fieldName="canAccessChatbot"
+            handleToggle={handleToggle}
+            user={user}
+          />
+        </TableCell>
       </TableRow>
     );
   }
@@ -109,6 +117,14 @@ export const defaultBody = ({
         <PermissionButton
           disabled={disabled}
           fieldName="canAccessRnd"
+          handleToggle={handleToggle}
+          user={user}
+        />
+      </TableCell>
+      <TableCell>
+        <PermissionButton
+          disabled={disabled}
+          fieldName="canAccessChatbot"
           handleToggle={handleToggle}
           user={user}
         />

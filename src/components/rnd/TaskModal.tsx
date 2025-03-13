@@ -284,7 +284,6 @@ export const TaskModal: React.FC<TaskModalProps> = ({
                     base: "hover:!bg-foreground/30 focus:!bg-foreground/30",
                   }}
                   textValue={status}
-                  value={status}
                 >
                   <Chip
                     className="capitalize"
@@ -320,7 +319,6 @@ export const TaskModal: React.FC<TaskModalProps> = ({
                     base: "hover:!bg-foreground/30 focus:!bg-foreground/30",
                   }}
                   textValue={user.name}
-                  value={user.id}
                 >
                   {user.name}
                 </SelectItem>
@@ -351,7 +349,6 @@ export const TaskModal: React.FC<TaskModalProps> = ({
                     base: "hover:!bg-foreground/30 focus:!bg-foreground/30",
                   }}
                   textValue={i.toString()}
-                  value={i.toString()}
                 >
                   {i}
                 </SelectItem>
@@ -380,7 +377,6 @@ export const TaskModal: React.FC<TaskModalProps> = ({
                     base: "hover:!bg-foreground/30 focus:!bg-foreground/30",
                   }}
                   textValue={i}
-                  value={i}
                 >
                   {i}
                 </SelectItem>

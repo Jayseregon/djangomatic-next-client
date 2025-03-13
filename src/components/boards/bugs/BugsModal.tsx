@@ -275,7 +275,6 @@ export const BugsModal = ({
                     base: "hover:!bg-foreground/30 focus:!bg-foreground/30",
                   }}
                   textValue={status}
-                  value={status}
                 >
                   <Chip
                     className="capitalize"
@@ -332,7 +331,6 @@ export const BugsModal = ({
                     base: "hover:!bg-foreground/30 focus:!bg-foreground/30",
                   }}
                   textValue={priority}
-                  value={priority}
                 >
                   <Chip
                     className="capitalize"
@@ -386,7 +384,6 @@ export const BugsModal = ({
                       base: "hover:!bg-foreground/30 focus:!bg-foreground/30",
                     }}
                     textValue={user.name}
-                    value={user.name}
                   >
                     {user.name}
                   </SelectItem>

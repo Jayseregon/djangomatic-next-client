@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import { useTranslations } from "next-intl";
 import {
   Table,
@@ -13,9 +13,19 @@ import {
 
 import { LoadingContent } from "@/components/ui/LoadingContent";
 import { GainTrackingItem } from "@/src/interfaces/rnd";
+import { MonthlyGainsCostBoard } from "@/components/rnd/tracking/MonthlyGainsCostBoard";
 
 export const GainsTrackingBoard = ({ data }: { data: GainTrackingItem[] }) => {
   const t = useTranslations("RnD.gainsTracking.boardColumns");
+  const [selectedItem, setSelectedItem] = useState<GainTrackingItem | null>(
+    null,
+  );
+
+  const handleSelectionChange = (key: React.Key) => {
+    const item = data.find((item) => item.id === key);
+
+    setSelectedItem(item || null);
+  };
 
   return (
     <div className="mt-10 w-full">
@@ -29,7 +39,19 @@ export const GainsTrackingBoard = ({ data }: { data: GainTrackingItem[] }) => {
             th: "uppercase bg-foreground text-background",
           }}
           color="primary"
+          selectedKeys={selectedItem ? [selectedItem.id] : []}
           selectionMode="single"
+          onSelectionChange={(keys) => {
+            // The keys is a Set, we need to get the first (and only) key
+            if (keys === "all") return;
+            const keyArray = Array.from(keys);
+
+            if (keyArray.length > 0) {
+              handleSelectionChange(keyArray[0]);
+            } else {
+              setSelectedItem(null);
+            }
+          }}
         >
           <TableHeader>
             <TableColumn key="name" allowsSorting className="text-center">
@@ -97,6 +119,15 @@ export const GainsTrackingBoard = ({ data }: { data: GainTrackingItem[] }) => {
           </TableBody>
         </Table>
       </div>
+
+      {selectedItem && (
+        <div className="mt-6">
+          <h3 className="text-lg font-medium mb-2">
+            Monthly Costs for {selectedItem.name}
+          </h3>
+          <MonthlyGainsCostBoard item={selectedItem} />
+        </div>
+      )}
     </div>
   );
 };

@@ -7,6 +7,10 @@ export interface GainTrackingItem {
   implementationDate: string;
   status: "Planned" | "In Progress" | "Completed";
   department: string;
+  monthlyCosts?: {
+    month: string;
+    cost: number;
+  }[];
 }
 
 export interface AppUsageTracking {

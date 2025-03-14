@@ -32,4 +32,8 @@ export interface AppGroup {
   total_time: string;
   id: string;
   endpoint: string;
+  monthlyUsage?: {
+    month: string;
+    count: number;
+  }[];
 }

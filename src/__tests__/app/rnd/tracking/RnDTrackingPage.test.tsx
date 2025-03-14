@@ -17,6 +17,17 @@ jest.mock("@/components/auth/unAuthenticated", () => ({
   ),
 }));
 
+// Mock the new AppTrackingDashboard component
+jest.mock("@/src/components/rnd/tracking/AppTrackingDashboard", () => ({
+  AppTrackingDashboard: () => (
+    <div data-testid="app-tracking-dashboard">
+      <div data-testid="app-tracking-board">App Tracking Board Component</div>
+      App Tracking Dashboard Component
+    </div>
+  ),
+}));
+
+// Keep the AppTrackingBoard mock for backwards compatibility
 jest.mock("@/src/components/rnd/tracking/AppTrackingBoard", () => ({
   AppTrackingBoard: () => (
     <div data-testid="app-tracking-board">App Tracking Board Component</div>
@@ -74,6 +85,17 @@ jest.mock(
   }),
   { virtual: true },
 );
+
+// Mock the useAppTrackingData hook to prevent act warnings
+jest.mock("@/src/hooks/useAppTrackingData", () => ({
+  useAppTrackingData: () => ({
+    data: [],
+    isLoading: false,
+    error: null,
+    reload: jest.fn(),
+    years: [2023, 2024],
+  }),
+}));
 
 describe("AppTrackingSidePage", () => {
   const renderTrackingPage = async (session: any = null) => {

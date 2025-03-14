@@ -23,7 +23,7 @@ export default function ReportFormPage() {
       const newId = Array.isArray(id) ? id[0] : id;
 
       setReportId(newId);
-      console.log("Current reportId:", newId); // extra logging
+      // console.log("Current reportId:", newId); // extra logging
       async function fetchReport() {
         try {
           const response = await fetch(`/api/prisma-tower-report?id=${newId}`);
@@ -48,7 +48,7 @@ export default function ReportFormPage() {
 
       return;
     }
-    console.log("Saving report with reportId:", reportId);
+    // console.log("Saving report with reportId:", reportId);
     try {
       const response = await fetch(
         `/api/prisma-tower-report/update?id=${reportId}`,
@@ -93,7 +93,7 @@ export default function ReportFormPage() {
         },
       };
     }
-    console.log("Local saving report with reportId:", reportId);
+    // console.log("Local saving report with reportId:", reportId);
     try {
       const response = await fetch(
         `/api/prisma-tower-report/update?id=${reportId}`,

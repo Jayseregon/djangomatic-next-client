@@ -78,12 +78,23 @@ export const useAppTrackingData = (filterYear?: number) => {
       //   throw new Error("No PCI reports found");
       // }
 
-      const reducedRecords = groupByAppName(appRecords);
       // const reducedReportsRecords = groupPciReports(
       //   pciReportsRecords as TowerReport[],
       // );
 
       // reducedRecords.push(...reducedReportsRecords);
+
+      // Filter records by year if a filter is specified
+      const filteredRecords = filterYear
+        ? appRecords.filter((record) => {
+            const recordYear = new Date(record.createdAt).getFullYear();
+
+            return recordYear === filterYear;
+          })
+        : appRecords;
+
+      // Group by app name using the filtered records
+      const reducedRecords = groupByAppName(filteredRecords);
 
       // Add monthly usage data to each app group
       reducedRecords.forEach((record) => {
@@ -94,21 +105,15 @@ export const useAppTrackingData = (filterYear?: number) => {
         );
       });
 
-      // If filtering by year, only include records with usage in that year
-      const filteredRecords = filterYear
-        ? reducedRecords.filter((record) =>
-            record.monthlyUsage?.some((m) => m.count > 0),
-          )
-        : reducedRecords;
-
-      filteredRecords.sort((a, b) => {
+      // Sort records by app name
+      reducedRecords.sort((a, b) => {
         if (a.app_name < b.app_name) return -1;
         if (a.app_name > b.app_name) return 1;
 
         return 0;
       });
 
-      setData(filteredRecords);
+      setData(reducedRecords);
     } catch (error: any) {
       setError(error.message);
     } finally {

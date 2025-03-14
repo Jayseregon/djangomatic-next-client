@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState } from "react";
 import { Tabs, Tab } from "@heroui/react";
 
 import { useAppTrackingData } from "@/src/hooks/useAppTrackingData";
@@ -9,28 +9,20 @@ import { AppTrackingBoard } from "./AppTrackingBoard";
 
 // Client component that uses session
 export const AppTrackingDashboard = () => {
-  const { data, isLoading, error, reload, years } = useAppTrackingData();
-
-  // Default to current year or most recent year in data
+  // Default to current year
   const currentYear = new Date().getFullYear();
-  const [selectedYear, setSelectedYear] = useState(
-    years.includes(currentYear) ? currentYear : years[0] || currentYear,
-  );
+  const [selectedYear, setSelectedYear] = useState(currentYear);
 
-  // Filter data by selected year
-  const filteredData = useMemo(() => {
-    if (!selectedYear || years.length === 0) return data;
+  // Pass selected year to the hook
+  const { data, isLoading, error, reload, years } =
+    useAppTrackingData(selectedYear);
 
-    return data.filter((item) => {
-      // If item has monthly usage data, check if it has usage in the selected year
-      if (item.monthlyUsage) {
-        // Check if there's any usage in the selected year
-        return item.monthlyUsage.some((m) => m.count > 0);
-      }
-
-      return true; // Include items without monthly data
-    });
-  }, [data, selectedYear, years]);
+  // Set initial selected year after loading years
+  useState(() => {
+    if (years.length > 0 && !years.includes(selectedYear)) {
+      setSelectedYear(years[0]);
+    }
+  });
 
   return (
     <>
@@ -55,7 +47,7 @@ export const AppTrackingDashboard = () => {
         </div>
       )}
       <AppTrackingBoard
-        data={filteredData}
+        data={data}
         error={error}
         isLoading={isLoading}
         reload={reload}

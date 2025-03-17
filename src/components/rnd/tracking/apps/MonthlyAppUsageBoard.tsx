@@ -1,17 +1,10 @@
 "use client";
 
 import React, { useMemo } from "react";
-import {
-  Table,
-  TableBody,
-  TableHeader,
-  TableColumn,
-  TableCell,
-  TableRow,
-} from "@heroui/react";
 
 import { AppGroup } from "@/src/interfaces/rnd";
 import { MONTHS } from "@/components/rnd/tracking/MockData";
+import { MonthlyDataTable } from "@/components/rnd/tracking/MonthlyDataTable";
 
 export const MonthlyAppUsageBoard = ({ item }: { item: AppGroup }) => {
   // Generate monthly usage data for fiscal year (Dec-Nov)
@@ -32,59 +25,16 @@ export const MonthlyAppUsageBoard = ({ item }: { item: AppGroup }) => {
     return monthlyData.reduce((acc, curr) => acc + curr.count, 0);
   }, [monthlyData]);
 
-  // Create column and cell lists to avoid TypeScript errors
-  const columns = useMemo(() => {
-    const monthColumns = MONTHS.map((month) => (
-      <TableColumn key={month} className="text-center">
-        {month}
-      </TableColumn>
-    ));
-
-    return [
-      ...monthColumns,
-      <TableColumn key="total" className="text-center font-bold">
-        Total
-      </TableColumn>,
-    ];
-  }, []);
-
-  const cells = useMemo(() => {
-    const monthCells = MONTHS.map((month) => {
-      const data = monthlyData.find((d) => d.month === month);
-
-      return (
-        <TableCell key={month}>
-          {data && data.count > 0 ? data.count.toLocaleString() : "-"}
-        </TableCell>
-      );
-    });
-
-    return [
-      ...monthCells,
-      <TableCell key="total" className="font-bold">
-        {totalUsage.toLocaleString()}
-      </TableCell>,
-    ];
-  }, [monthlyData, totalUsage]);
-
   return (
-    <div className="w-full">
-      <div className="overflow-x-auto">
-        <Table
-          removeWrapper
-          aria-label="monthly-usage-table"
-          classNames={{
-            base: "text-center",
-            th: "bg-primary-100 text-primary-800",
-          }}
-          selectionMode="none"
-        >
-          <TableHeader>{columns}</TableHeader>
-          <TableBody>
-            <TableRow key="usage">{cells}</TableRow>
-          </TableBody>
-        </Table>
-      </div>
-    </div>
+    <MonthlyDataTable
+      data={monthlyData}
+      tableAriaLabel="monthly-usage-table"
+      tableStyles={{
+        base: "text-center",
+        header: "bg-primary text-background",
+      }}
+      total={totalUsage}
+      valueField="count"
+    />
   );
 };

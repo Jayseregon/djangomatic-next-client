@@ -17,22 +17,26 @@ jest.mock("@/components/auth/unAuthenticated", () => ({
   ),
 }));
 
-// Mock the new AppTrackingDashboard component
+// Mock the AppTrackingDashboard component
 jest.mock("@/src/components/rnd/tracking/apps/AppTrackingDashboard", () => ({
   AppTrackingDashboard: () => (
     <div data-testid="app-tracking-dashboard">
-      <div data-testid="app-tracking-board">App Tracking Board Component</div>
       App Tracking Dashboard Component
     </div>
   ),
 }));
 
-// Keep the AppTrackingBoard mock for backwards compatibility
-jest.mock("@/src/components/rnd/tracking/apps/AppTrackingBoard", () => ({
-  AppTrackingBoard: () => (
-    <div data-testid="app-tracking-board">App Tracking Board Component</div>
-  ),
-}));
+// Mock the ReportsTrackingDashboard component
+jest.mock(
+  "@/src/components/rnd/tracking/apps/tower-reports/ReportsTrackingDashboard",
+  () => ({
+    ReportsTrackingDashboard: () => (
+      <div data-testid="reports-tracking-dashboard">
+        Tower Report Tracking Dashboard Component
+      </div>
+    ),
+  }),
+);
 
 jest.mock("@/src/components/rnd/UserAccess", () => ({
   UserAccessRnDSection: ({
@@ -125,12 +129,18 @@ describe("AppTrackingSidePage", () => {
 
     await renderTrackingPage(mockSession);
 
-    expect(screen.getByText("App Usage Tracking")).toBeInTheDocument();
+    // Use a more specific query to get the main title (h1)
+    expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent(
+      "App Usage Tracking",
+    );
     expect(
       screen.getByText("Track application usage statistics"),
     ).toBeInTheDocument();
-    expect(screen.getByTestId("app-tracking-board")).toBeInTheDocument();
-    expect(screen.getByTestId("error-boundary")).toBeInTheDocument();
+    expect(screen.getByTestId("app-tracking-dashboard")).toBeInTheDocument();
+    expect(
+      screen.getByTestId("reports-tracking-dashboard"),
+    ).toBeInTheDocument();
+    expect(screen.getAllByTestId("error-boundary").length).toBe(2);
   });
 
   describe("AppTrackingPageContent", () => {
@@ -149,7 +159,7 @@ describe("AppTrackingSidePage", () => {
       expect(userAccess).toHaveAttribute("data-email", "test@example.com");
     });
 
-    it("includes ErrorBoundary with fallback message", async () => {
+    it("includes ErrorBoundary components with specific fallback messages", async () => {
       const mockSession = {
         user: {
           email: "test@example.com",
@@ -159,13 +169,18 @@ describe("AppTrackingSidePage", () => {
 
       await renderTrackingPage(mockSession);
 
-      const errorBoundary = screen.getByTestId("error-boundary");
+      const errorBoundaries = screen.getAllByTestId("error-boundary");
 
-      expect(errorBoundary).toBeInTheDocument();
-      expect(errorBoundary).toHaveAttribute("data-fallback", "component");
+      expect(errorBoundaries.length).toBe(2);
+      expect(errorBoundaries[0]).toContainElement(
+        screen.getByTestId("app-tracking-dashboard"),
+      );
+      expect(errorBoundaries[1]).toContainElement(
+        screen.getByTestId("reports-tracking-dashboard"),
+      );
     });
 
-    it("renders AppTrackingBoard inside ErrorBoundary", async () => {
+    it("renders section headers for both tracking components", async () => {
       const mockSession = {
         user: {
           email: "test@example.com",
@@ -175,10 +190,11 @@ describe("AppTrackingSidePage", () => {
 
       await renderTrackingPage(mockSession);
 
-      const errorBoundary = screen.getByTestId("error-boundary");
-      const trackingBoard = screen.getByTestId("app-tracking-board");
+      // Get all h3 headings and check their content
+      const sectionHeadings = screen.getAllByRole("heading", { level: 3 });
 
-      expect(errorBoundary).toContainElement(trackingBoard);
+      expect(sectionHeadings[0]).toHaveTextContent("App Usage Tracking");
+      expect(sectionHeadings[1]).toHaveTextContent("Tower Report Tracking");
     });
   });
 });

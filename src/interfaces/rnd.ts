@@ -1,3 +1,5 @@
+import { TowerReport } from "@/interfaces/reports";
+
 export interface GainTrackingItem {
   id: string;
   name: string;
@@ -36,4 +38,19 @@ export interface AppGroup {
     month: string;
     count: number;
   }[];
+}
+
+// Define a type that picks only the fields we need from TowerReport
+export type TowerReportForTracking = Pick<
+  TowerReport,
+  "id" | "createdAt" | "updatedAt"
+>;
+
+export interface MonthlyReportsUsageBoardProps {
+  data: { month: string; count: number }[];
+  isLoading: boolean;
+  error: string | null;
+  reload: () => void;
+  selectedYear?: number;
+  totalCount: number;
 }

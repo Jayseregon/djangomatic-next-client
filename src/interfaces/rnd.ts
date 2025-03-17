@@ -1,4 +1,6 @@
 import { TowerReport } from "@/interfaces/reports";
+import { RnDTeamTask } from "./lib";
+import { FiscalMonths, GainTrackingStatus } from "@prisma/client";
 
 export interface GainTrackingItem {
   id: string;
@@ -13,6 +15,27 @@ export interface GainTrackingItem {
     month: string;
     cost: number;
   }[];
+}
+
+export interface GainsTrackingRecordItem {
+  id: string;
+  createAt: Date;
+  name: string;
+  region?: string;
+  hasGains: boolean;
+  replaceOffshore: boolean;
+  timeInitial: number;
+  timeSaved: number;
+  comments?: string;
+  status: GainTrackingStatus;
+  monthlyCosts: MonthlyCostRecordItem[];
+}
+
+export interface MonthlyCostRecordItem {
+  id: string;
+  fiscalYear: number;
+  month: FiscalMonths;
+  cost: number;
 }
 
 export interface AppUsageTracking {

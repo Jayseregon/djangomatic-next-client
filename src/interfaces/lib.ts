@@ -1,3 +1,6 @@
+import { Status } from "@prisma/client";
+import { GainsTrackingRecordItem } from "./rnd";
+
 export interface UserSchema {
   id: string;
   email: string;
@@ -53,16 +56,8 @@ export interface RnDTeamTask {
   dueDate?: Date | null;
   startedAt?: Date | null;
   completedAt?: Date | null;
-}
-
-export enum Status {
-  CREATED = "CREATED",
-  NEXT_UP = "NEXT_UP",
-  IN_PROGRESS = "IN_PROGRESS",
-  PENDING = "PENDING",
-  BLOCKED = "BLOCKED",
-  COMPLETED = "COMPLETED",
-  CANCELLED = "CANCELLED",
+  trackGains: boolean;
+  gains?: GainsTrackingRecordItem;
 }
 
 export interface fetchDbSchemasProps {

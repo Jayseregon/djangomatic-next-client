@@ -128,7 +128,8 @@
       "comments": "Commentaires",
       "dueDate": "Échéance",
       "startedAt": "Commencée",
-      "completedAt": "Terminée"
+      "completedAt": "Terminée",
+      "trackGains": "Suivi des gains"
     },
     "taskModal": {
       "addNew": "Ajouter une nouvelle tâche",

@@ -128,7 +128,8 @@
       "comments": "Comments",
       "dueDate": "Due Date",
       "startedAt": "Started At",
-      "completedAt": "Completed At"
+      "completedAt": "Completed At",
+      "trackGains": "Track Gains"
     },
     "taskModal": {
       "addNew": "Add New Task",

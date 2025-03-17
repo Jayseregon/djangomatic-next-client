@@ -13,12 +13,14 @@ import {
   Input,
   Textarea,
   Chip,
+  Switch,
 } from "@heroui/react";
 import { CircleOff, Save, Trash2 } from "lucide-react";
 
 import { DatePicker } from "@/components/ui/DatePicker";
-import { UserSchema, RnDTeamTask, Status } from "@/interfaces/lib";
+import { UserSchema, RnDTeamTask } from "@/interfaces/lib";
 import { statusColorMap } from "@/lib/utils";
+import { Status } from "@prisma/client";
 
 interface TaskModalProps {
   visible: boolean;
@@ -50,6 +52,7 @@ export const TaskModal: React.FC<TaskModalProps> = ({
     dueDate: null,
     startedAt: null,
     completedAt: null,
+    trackGains: true,
   };
 
   const initialState = useMemo(() => {
@@ -90,6 +93,13 @@ export const TaskModal: React.FC<TaskModalProps> = ({
     setTask((prevTask) => ({
       ...prevTask,
       [field]: value,
+    }));
+  };
+
+  const handleTrackGainsChange = (isSelected: boolean) => {
+    setTask((prevTask) => ({
+      ...prevTask,
+      trackGains: isSelected,
     }));
   };
 
@@ -211,8 +221,7 @@ export const TaskModal: React.FC<TaskModalProps> = ({
       }}
       isOpen={visible}
       size="2xl"
-      onClose={onClose}
-    >
+      onClose={onClose}>
       <ModalContent>
         <ModalHeader className="flex flex-row justify-between items-center w-full">
           {mode === "add" ? t("taskModal.addNew") : t("taskModal.editTask")}
@@ -222,8 +231,7 @@ export const TaskModal: React.FC<TaskModalProps> = ({
               aria-label="Delete Task"
               color="danger"
               variant="light"
-              onPress={handleDelete}
-            >
+              onPress={handleDelete}>
               <Trash2 />
             </Button>
           ) : null}
@@ -265,8 +273,7 @@ export const TaskModal: React.FC<TaskModalProps> = ({
                     className="capitalize"
                     color={statusColorMap[selectedStatus as Status]}
                     size="sm"
-                    variant="flat"
-                  >
+                    variant="flat">
                     {typeof selectedStatus === "string"
                       ? selectedStatus.toLowerCase()
                       : ""}
@@ -275,22 +282,19 @@ export const TaskModal: React.FC<TaskModalProps> = ({
               }}
               selectedKeys={task.status ? new Set([task.status]) : new Set()}
               variant="bordered"
-              onSelectionChange={handleStatusChange}
-            >
+              onSelectionChange={handleStatusChange}>
               {statusOptions.map((status) => (
                 <SelectItem
                   key={status}
                   classNames={{
                     base: "hover:!bg-foreground/30 focus:!bg-foreground/30",
                   }}
-                  textValue={status}
-                >
+                  textValue={status}>
                   <Chip
                     className="capitalize"
                     color={statusColorMap[status]}
                     size="sm"
-                    variant="flat"
-                  >
+                    variant="flat">
                     {status.toLowerCase()}
                   </Chip>
                 </SelectItem>
@@ -310,16 +314,14 @@ export const TaskModal: React.FC<TaskModalProps> = ({
               placeholder="..."
               selectedKeys={task.owner ? new Set([task.owner.id]) : new Set()}
               variant="bordered"
-              onSelectionChange={handleSelectChange}
-            >
+              onSelectionChange={handleSelectChange}>
               {options.map((user) => (
                 <SelectItem
                   key={user.id}
                   classNames={{
                     base: "hover:!bg-foreground/30 focus:!bg-foreground/30",
                   }}
-                  textValue={user.name}
-                >
+                  textValue={user.name}>
                   {user.name}
                 </SelectItem>
               ))}
@@ -340,16 +342,14 @@ export const TaskModal: React.FC<TaskModalProps> = ({
                   : new Set()
               }
               variant="bordered"
-              onSelectionChange={handlePriorityChange}
-            >
+              onSelectionChange={handlePriorityChange}>
               {priorityOptions.map((i) => (
                 <SelectItem
                   key={i}
                   classNames={{
                     base: "hover:!bg-foreground/30 focus:!bg-foreground/30",
                   }}
-                  textValue={i.toString()}
-                >
+                  textValue={i.toString()}>
                   {i}
                 </SelectItem>
               ))}
@@ -368,16 +368,14 @@ export const TaskModal: React.FC<TaskModalProps> = ({
                 task.impactedPeople ? new Set([task.impactedPeople]) : new Set()
               }
               variant="bordered"
-              onSelectionChange={handleImpactedPeopleChange}
-            >
+              onSelectionChange={handleImpactedPeopleChange}>
               {impactedPeopleOptions.map((i) => (
                 <SelectItem
                   key={i}
                   classNames={{
                     base: "hover:!bg-foreground/30 focus:!bg-foreground/30",
                   }}
-                  textValue={i}
-                >
+                  textValue={i}>
                   {i}
                 </SelectItem>
               ))}
@@ -424,25 +422,31 @@ export const TaskModal: React.FC<TaskModalProps> = ({
           </div>
         </ModalBody>
         <ModalFooter>
-          <div className="flex flex-row gap-3">
-            <Button
-              isIconOnly
-              aria-label="Save Task"
-              color="success"
-              isDisabled={!task.task || !task.owner}
-              onPress={handleSaveClick}
-            >
-              <Save />
-            </Button>
-            <Button
-              isIconOnly
-              aria-label="Close Modal"
-              color="danger"
-              variant="bordered"
-              onPress={onClose}
-            >
-              <CircleOff />
-            </Button>
+          <div className="flex flex-row justify-between w-full">
+            <Switch
+              aria-label="Track Gains"
+              isSelected={task.trackGains}
+              onValueChange={handleTrackGainsChange}>
+              {t("taskBoardColumns.trackGains")}
+            </Switch>
+            <div className="flex flex-row gap-3">
+              <Button
+                isIconOnly
+                aria-label="Save Task"
+                color="success"
+                isDisabled={!task.task || !task.owner}
+                onPress={handleSaveClick}>
+                <Save />
+              </Button>
+              <Button
+                isIconOnly
+                aria-label="Close Modal"
+                color="danger"
+                variant="bordered"
+                onPress={onClose}>
+                <CircleOff />
+              </Button>
+            </div>
           </div>
         </ModalFooter>
       </ModalContent>

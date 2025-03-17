@@ -1,7 +1,8 @@
 import { renderHook } from "@testing-library/react";
 
 import { useSortTasksList } from "@/hooks/useSortTasksList";
-import { RnDTeamTask, Status } from "@/interfaces/lib";
+import { RnDTeamTask } from "@/interfaces/lib";
+import { Status } from "@prisma/client";
 
 interface LoadParams {
   signal?: AbortSignal;

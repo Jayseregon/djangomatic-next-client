@@ -59,7 +59,12 @@ export const TaskManager = ({
       }
       const task = await response.json();
       const taskWithDates: RnDTeamTask = convertTaskDates(task);
-
+      
+      // Make sure trackGains is properly initialized if it's undefined
+      if (taskWithDates.trackGains === undefined) {
+        taskWithDates.trackGains = true;
+      }
+      
       setTaskToEdit(taskWithDates);
       setEditModalVisible(true);
     } catch (error) {

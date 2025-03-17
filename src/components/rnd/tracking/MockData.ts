@@ -1,20 +1,5 @@
 import { GainTrackingItem } from "@/src/interfaces/rnd";
-
-// List of months in fiscal year order
-export const MONTHS = [
-  "December",
-  "January",
-  "February",
-  "March",
-  "April",
-  "May",
-  "June",
-  "July",
-  "August",
-  "September",
-  "October",
-  "November",
-];
+import { getFiscalMonths } from "@/components/rnd/tracking/getFiscalMonths";
 
 // Helper function to generate monthly costs
 export const generateMonthlyCosts = (startDate: string, baseCost: number) => {
@@ -25,7 +10,7 @@ export const generateMonthlyCosts = (startDate: string, baseCost: number) => {
   // We need to convert from calendar month (Jan=0) to fiscal month (Dec=0)
   const fiscalMonthIndex = (implementationMonth + 1) % 12;
 
-  return MONTHS.map((month, index) => {
+  return getFiscalMonths.map((month, index) => {
     // Only show costs for months after or equal to implementation month
     const cost =
       index >= fiscalMonthIndex

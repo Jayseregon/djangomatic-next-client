@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 
 import { getPciReportsEntries } from "@/actions/prisma/tracking/action";
-import { MONTHS } from "@/src/components/rnd/tracking/MockData";
+import { getFiscalMonths } from "@/src/components/rnd/tracking/getFiscalMonths";
 import { TowerReportForTracking } from "@/interfaces/rnd";
 
 // Helper function to calculate monthly counts
@@ -13,7 +13,7 @@ const calculateMonthlyReports = (
   const monthlyMap = new Map<string, number>();
 
   // Initialize all months with zero
-  MONTHS.forEach((month) => {
+  getFiscalMonths.forEach((month) => {
     monthlyMap.set(month, 0);
   });
 
@@ -28,7 +28,7 @@ const calculateMonthlyReports = (
     .forEach((report) => {
       const date = new Date(report.createdAt);
       const monthIndex = date.getMonth(); // 0-11
-      const monthName = MONTHS[(monthIndex + 1) % 12]; // Adjust to fiscal year (Dec=0)
+      const monthName = getFiscalMonths[(monthIndex + 1) % 12]; // Adjust to fiscal year (Dec=0)
 
       const currentCount = monthlyMap.get(monthName) || 0;
 
@@ -36,7 +36,7 @@ const calculateMonthlyReports = (
     });
 
   // Convert map to array of objects
-  return MONTHS.map((month) => ({
+  return getFiscalMonths.map((month) => ({
     month,
     count: monthlyMap.get(month) || 0,
   }));

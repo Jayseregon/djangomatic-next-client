@@ -3,7 +3,7 @@ import { useState, useEffect, useCallback } from "react";
 import { AppGroup, AppUsageTracking } from "@/interfaces/rnd";
 import { getAppTrackingEntries } from "@/actions/prisma/tracking/action";
 import { groupByAppName } from "@/lib/appTrackingUtils";
-import { MONTHS } from "@/src/components/rnd/tracking/MockData";
+import { getFiscalMonths } from "@/src/components/rnd/tracking/getFiscalMonths";
 
 // Helper function to calculate monthly usage from raw tracking data
 const calculateMonthlyUsage = (
@@ -15,7 +15,7 @@ const calculateMonthlyUsage = (
   const monthlyMap = new Map<string, number>();
 
   // Initialize all months with zero
-  MONTHS.forEach((month) => {
+  getFiscalMonths.forEach((month) => {
     monthlyMap.set(month, 0);
   });
 
@@ -30,7 +30,7 @@ const calculateMonthlyUsage = (
     .forEach((record) => {
       const date = new Date(record.createdAt);
       const monthIndex = date.getMonth(); // 0-11
-      const monthName = MONTHS[(monthIndex + 1) % 12]; // Adjust to fiscal year (Dec=0)
+      const monthName = getFiscalMonths[(monthIndex + 1) % 12]; // Adjust to fiscal year (Dec=0)
 
       const currentCount = monthlyMap.get(monthName) || 0;
 
@@ -38,7 +38,7 @@ const calculateMonthlyUsage = (
     });
 
   // Convert map to array of objects
-  return MONTHS.map((month) => ({
+  return getFiscalMonths.map((month) => ({
     month,
     count: monthlyMap.get(month) || 0,
   }));

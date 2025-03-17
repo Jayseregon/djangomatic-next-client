@@ -3,7 +3,7 @@
 import React, { useMemo } from "react";
 
 import { GainTrackingItem } from "@/src/interfaces/rnd";
-import { MONTHS } from "@/components/rnd/tracking/MockData";
+import { getFiscalMonths } from "@/src/components/rnd/tracking/getFiscalMonths";
 import { MonthlyDataTable } from "@/components/rnd/tracking/MonthlyDataTable";
 
 export const MonthlyGainsCostBoard = ({ item }: { item: GainTrackingItem }) => {
@@ -15,7 +15,7 @@ export const MonthlyGainsCostBoard = ({ item }: { item: GainTrackingItem }) => {
     }
 
     // Otherwise generate placeholder data
-    return MONTHS.map((month) => ({
+    return getFiscalMonths.map((month) => ({
       month,
       cost: 0,
     }));

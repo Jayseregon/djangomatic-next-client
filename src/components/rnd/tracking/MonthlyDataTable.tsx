@@ -10,7 +10,7 @@ import {
   TableRow,
 } from "@heroui/react";
 
-import { MONTHS } from "@/src/components/rnd/tracking/MockData";
+import { getFiscalMonths } from "@/src/components/rnd/tracking/getFiscalMonths";
 
 interface MonthlyData {
   month: string;
@@ -52,7 +52,7 @@ export const MonthlyDataTable = ({
 }: MonthlyDataTableProps) => {
   // Create column and cell lists
   const columns = useMemo(() => {
-    const monthColumns = MONTHS.map((month) => (
+    const monthColumns = getFiscalMonths.map((month) => (
       <TableColumn key={month} className="text-center">
         {month}
       </TableColumn>
@@ -67,7 +67,7 @@ export const MonthlyDataTable = ({
   }, []);
 
   const cells = useMemo(() => {
-    const monthCells = MONTHS.map((month) => {
+    const monthCells = getFiscalMonths.map((month) => {
       const monthData = data.find((item) => item.month === month);
       const value =
         monthData && monthData[valueField] > 0

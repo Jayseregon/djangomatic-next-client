@@ -3,7 +3,7 @@ import { renderHook, act } from "@testing-library/react";
 import { useAppsTrackingData } from "@/src/hooks/tracking/useAppsTrackingData";
 import { getAppTrackingEntries } from "@/src/actions/prisma/tracking/action";
 import { AppUsageTracking } from "@/interfaces/rnd";
-import { MONTHS } from "@/src/components/rnd/tracking/MockData";
+import { getFiscalMonths } from "@/src/components/rnd/tracking/getFiscalMonths";
 
 // Mock the action module
 jest.mock("@/src/actions/prisma/tracking/action", () => ({
@@ -191,7 +191,9 @@ describe("useAppsTrackingData", () => {
 
     // Check monthly usage data is attached
     expect(result.current.data[0].monthlyUsage).toBeDefined();
-    expect(result.current.data[0].monthlyUsage?.length).toBe(MONTHS.length);
+    expect(result.current.data[0].monthlyUsage?.length).toBe(
+      getFiscalMonths.length,
+    );
 
     // Find January entry (should have count = 1 for app1 in current year)
     const januaryData = result.current.data[0].monthlyUsage?.find(

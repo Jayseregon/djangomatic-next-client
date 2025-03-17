@@ -14,25 +14,17 @@ import {
 import { RefreshCcw } from "lucide-react";
 
 import { LoadingContent } from "@/components/ui/LoadingContent";
-import { AppGroup } from "@/src/interfaces/rnd";
+import { AppGroup, AppsTrackingBoardProps } from "@/interfaces/rnd";
 
-import { MonthlyAppUsageBoard } from "./MonthlyAppUsageBoard";
+import { MonthlyAppsUsageBoard } from "./MonthlyAppsUsageBoard";
 
-interface AppTrackingBoardProps {
-  data: AppGroup[];
-  isLoading: boolean;
-  error: string | null;
-  reload: () => void;
-  selectedYear?: number;
-}
-
-export const AppTrackingBoard = ({
+export const AppsTrackingBoard = ({
   data,
   isLoading,
   error,
   reload,
   selectedYear,
-}: AppTrackingBoardProps) => {
+}: AppsTrackingBoardProps) => {
   const t = useTranslations("RnD.appTracking.boardColumns");
   const [selectedItem, setSelectedItem] = useState<AppGroup | null>(null);
 
@@ -164,7 +156,7 @@ export const AppTrackingBoard = ({
             Monthly Usage for {selectedItem.app_name}
             {selectedYear ? ` (${selectedYear})` : ""}
           </h3>
-          <MonthlyAppUsageBoard item={selectedItem} />
+          <MonthlyAppsUsageBoard item={selectedItem} />
         </div>
       )}
     </div>

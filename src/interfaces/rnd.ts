@@ -40,6 +40,14 @@ export interface AppGroup {
   }[];
 }
 
+export interface AppsTrackingBoardProps {
+  data: AppGroup[];
+  isLoading: boolean;
+  error: string | null;
+  reload: () => void;
+  selectedYear?: number;
+}
+
 // Define a type that picks only the fields we need from TowerReport
 export type TowerReportForTracking = Pick<
   TowerReport,

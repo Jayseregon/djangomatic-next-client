@@ -5,7 +5,7 @@ import { auth } from "@/auth";
 import { UnAuthenticated } from "@/components/auth/unAuthenticated";
 import { UserAccessRnDSection } from "@/src/components/rnd/UserAccess";
 import ErrorBoundary from "@/src/components/error/ErrorBoundary";
-import { AppTrackingDashboard } from "@/src/components/rnd/tracking/apps/AppTrackingDashboard";
+import { AppsTrackingDashboard } from "@/src/components/rnd/tracking/apps/AppsTrackingDashboard";
 import { ReportsTrackingDashboard } from "@/src/components/rnd/tracking/apps/tower-reports/ReportsTrackingDashboard";
 
 export default async function AppTrackingSidePage() {
@@ -30,7 +30,7 @@ function AppTrackingPageContent({ session }: { session: any }) {
         <div className="mt-8">
           <h3 className="text-xl font-bold">App Usage Tracking</h3>
           <ErrorBoundary fallback={<div>Error loading app tracking data</div>}>
-            <AppTrackingDashboard />
+            <AppsTrackingDashboard />
           </ErrorBoundary>
         </div>
 

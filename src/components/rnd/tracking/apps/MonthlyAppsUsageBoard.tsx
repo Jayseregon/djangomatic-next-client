@@ -6,7 +6,7 @@ import { AppGroup } from "@/src/interfaces/rnd";
 import { MONTHS } from "@/components/rnd/tracking/MockData";
 import { MonthlyDataTable } from "@/components/rnd/tracking/MonthlyDataTable";
 
-export const MonthlyAppUsageBoard = ({ item }: { item: AppGroup }) => {
+export const MonthlyAppsUsageBoard = ({ item }: { item: AppGroup }) => {
   // Generate monthly usage data for fiscal year (Dec-Nov)
   const monthlyData = useMemo(() => {
     // If we have actual monthly data, use it

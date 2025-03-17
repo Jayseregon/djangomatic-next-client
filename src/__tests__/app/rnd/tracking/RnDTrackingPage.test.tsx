@@ -17,9 +17,9 @@ jest.mock("@/components/auth/unAuthenticated", () => ({
   ),
 }));
 
-// Mock the AppTrackingDashboard component
-jest.mock("@/src/components/rnd/tracking/apps/AppTrackingDashboard", () => ({
-  AppTrackingDashboard: () => (
+// Mock the AppsTrackingDashboard component
+jest.mock("@/src/components/rnd/tracking/apps/AppsTrackingDashboard", () => ({
+  AppsTrackingDashboard: () => (
     <div data-testid="app-tracking-dashboard">
       App Tracking Dashboard Component
     </div>

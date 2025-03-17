@@ -5,10 +5,10 @@ import { Tabs, Tab } from "@heroui/react";
 
 import { useAppTrackingData } from "@/src/hooks/useAppTrackingData";
 
-import { AppTrackingBoard } from "./AppTrackingBoard";
+import { AppsTrackingBoard } from "./AppsTrackingBoard";
 
 // Client component that uses session
-export const AppTrackingDashboard = () => {
+export const AppsTrackingDashboard = () => {
   // Default to current year
   const currentYear = new Date().getFullYear();
   const [selectedYear, setSelectedYear] = useState(currentYear);
@@ -46,7 +46,7 @@ export const AppTrackingDashboard = () => {
           </Tabs>
         </div>
       )}
-      <AppTrackingBoard
+      <AppsTrackingBoard
         data={data}
         error={error}
         isLoading={isLoading}

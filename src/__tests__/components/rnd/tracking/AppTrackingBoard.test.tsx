@@ -1,7 +1,7 @@
 import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
 
-import { AppTrackingBoard as ActualAppTrackingBoard } from "@/src/components/rnd/tracking/apps/AppTrackingBoard";
+import { AppsTrackingBoard as ActualAppTrackingBoard } from "@/src/components/rnd/tracking/apps/AppsTrackingBoard";
 import { AppGroup } from "@/src/interfaces/rnd";
 
 // Mock dependencies
@@ -11,8 +11,8 @@ jest.mock("lucide-react", () => ({
 jest.mock("next-intl", () => ({
   useTranslations: () => (key: string) => key,
 }));
-jest.mock("@/src/components/rnd/tracking/apps/MonthlyAppUsageBoard", () => ({
-  MonthlyAppUsageBoard: ({ item }: { item: AppGroup }) => (
+jest.mock("@/src/components/rnd/tracking/apps/MonthlyAppsUsageBoard", () => ({
+  MonthlyAppsUsageBoard: ({ item }: { item: AppGroup }) => (
     <div data-testid="monthly-usage">Monthly Usage for {item.app_name}</div>
   ),
 }));
@@ -21,14 +21,14 @@ jest.mock("@/components/ui/LoadingContent", () => ({
   LoadingContent: () => <div>Loading...</div>,
 }));
 
-// Mock the AppTrackingBoard component to control item selection for tests
-jest.mock("@/src/components/rnd/tracking/apps/AppTrackingBoard", () => {
+// Mock the AppsTrackingBoard component to control item selection for tests
+jest.mock("@/src/components/rnd/tracking/apps/AppsTrackingBoard", () => {
   const ActualComponent = jest.requireActual(
-    "@/src/components/rnd/tracking/apps/AppTrackingBoard",
-  ).AppTrackingBoard;
+    "@/src/components/rnd/tracking/apps/AppsTrackingBoard",
+  ).AppsTrackingBoard;
 
-  const AppTrackingBoard = (props: any) => {
-    // For testing purposes, if selectedItemId is provided, we'll explicitly show the MonthlyAppUsageBoard
+  const AppsTrackingBoard = (props: any) => {
+    // For testing purposes, if selectedItemId is provided, we'll explicitly show the MonthlyAppsUsageBoard
     if (props.selectedItemId) {
       const selectedItem = props.data.find(
         (item: any) => item.id === props.selectedItemId,
@@ -56,12 +56,12 @@ jest.mock("@/src/components/rnd/tracking/apps/AppTrackingBoard", () => {
     return <ActualComponent {...props} />;
   };
 
-  return { AppTrackingBoard };
+  return { AppsTrackingBoard };
 });
 
-// Get the mocked version of AppTrackingBoard for testing
-const { AppTrackingBoard } = jest.requireMock(
-  "@/src/components/rnd/tracking/apps/AppTrackingBoard",
+// Get the mocked version of AppsTrackingBoard for testing
+const { AppsTrackingBoard } = jest.requireMock(
+  "@/src/components/rnd/tracking/apps/AppsTrackingBoard",
 );
 
 // Mock HeroUI Table implementation for testing
@@ -184,7 +184,7 @@ jest.mock("@heroui/react", () => {
   };
 });
 
-describe("AppTrackingBoard", () => {
+describe("AppsTrackingBoard", () => {
   const mockReload = jest.fn();
 
   const mockData = [
@@ -281,8 +281,8 @@ describe("AppTrackingBoard", () => {
   });
 
   it("renders monthly usage board when an item is selected", () => {
-    // For this test, we use the mocked version that can show the MonthlyAppUsageBoard
-    render(<AppTrackingBoard {...defaultProps} selectedItemId="1" />);
+    // For this test, we use the mocked version that can show the MonthlyAppsUsageBoard
+    render(<AppsTrackingBoard {...defaultProps} selectedItemId="1" />);
 
     // Use getByTestId to find the monthly usage element
     const monthlyUsage = screen.getByTestId("monthly-usage");
@@ -296,9 +296,9 @@ describe("AppTrackingBoard", () => {
   });
 
   it("should show the correct title with year when both item selected and year provided", () => {
-    // For this test, we use the mocked version that can show the MonthlyAppUsageBoard
+    // For this test, we use the mocked version that can show the MonthlyAppsUsageBoard
     render(
-      <AppTrackingBoard
+      <AppsTrackingBoard
         {...defaultProps}
         selectedItemId="1"
         selectedYear={2023}

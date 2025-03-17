@@ -5,7 +5,7 @@ import { auth } from "@/auth";
 import { UnAuthenticated } from "@/components/auth/unAuthenticated";
 import { UserAccessRnDSection } from "@/src/components/rnd/UserAccess";
 import ErrorBoundary from "@/src/components/error/ErrorBoundary";
-import { GainsTrackingDashboard } from "@/src/components/rnd/tracking/GainsTrackingDashboard";
+import { GainsTrackingDashboard } from "@/src/components/rnd/tracking/gains/GainsTrackingDashboard";
 
 export default async function GainsTrackingSidePage() {
   const session = await auth();

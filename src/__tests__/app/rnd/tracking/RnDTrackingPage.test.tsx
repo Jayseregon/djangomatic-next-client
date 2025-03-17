@@ -18,7 +18,7 @@ jest.mock("@/components/auth/unAuthenticated", () => ({
 }));
 
 // Mock the new AppTrackingDashboard component
-jest.mock("@/src/components/rnd/tracking/AppTrackingDashboard", () => ({
+jest.mock("@/src/components/rnd/tracking/apps/AppTrackingDashboard", () => ({
   AppTrackingDashboard: () => (
     <div data-testid="app-tracking-dashboard">
       <div data-testid="app-tracking-board">App Tracking Board Component</div>
@@ -28,7 +28,7 @@ jest.mock("@/src/components/rnd/tracking/AppTrackingDashboard", () => ({
 }));
 
 // Keep the AppTrackingBoard mock for backwards compatibility
-jest.mock("@/src/components/rnd/tracking/AppTrackingBoard", () => ({
+jest.mock("@/src/components/rnd/tracking/apps/AppTrackingBoard", () => ({
   AppTrackingBoard: () => (
     <div data-testid="app-tracking-board">App Tracking Board Component</div>
   ),

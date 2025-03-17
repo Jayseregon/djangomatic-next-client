@@ -11,8 +11,7 @@ import {
 } from "@heroui/react";
 
 import { GainTrackingItem } from "@/src/interfaces/rnd";
-
-import { MONTHS } from "./MockData";
+import { MONTHS } from "@/components/rnd/tracking/MockData";
 
 export const MonthlyGainsCostBoard = ({ item }: { item: GainTrackingItem }) => {
   // Generate monthly cost data for fiscal year (Dec-Nov)

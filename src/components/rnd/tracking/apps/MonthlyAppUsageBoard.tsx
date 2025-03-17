@@ -11,8 +11,7 @@ import {
 } from "@heroui/react";
 
 import { AppGroup } from "@/src/interfaces/rnd";
-
-import { MONTHS } from "./MockData";
+import { MONTHS } from "@/components/rnd/tracking/MockData";
 
 export const MonthlyAppUsageBoard = ({ item }: { item: AppGroup }) => {
   // Generate monthly usage data for fiscal year (Dec-Nov)

@@ -5,7 +5,7 @@ import { auth } from "@/auth";
 import { UnAuthenticated } from "@/components/auth/unAuthenticated";
 import { UserAccessRnDSection } from "@/src/components/rnd/UserAccess";
 import ErrorBoundary from "@/src/components/error/ErrorBoundary";
-import { AppTrackingDashboard } from "@/src/components/rnd/tracking/AppTrackingDashboard";
+import { AppTrackingDashboard } from "@/src/components/rnd/tracking/apps/AppTrackingDashboard";
 
 export default async function AppTrackingSidePage() {
   const session = await auth();

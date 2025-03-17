@@ -13,7 +13,7 @@ import {
 
 import { LoadingContent } from "@/components/ui/LoadingContent";
 import { GainTrackingItem } from "@/src/interfaces/rnd";
-import { MonthlyGainsCostBoard } from "@/components/rnd/tracking/MonthlyGainsCostBoard";
+import { MonthlyGainsCostBoard } from "@/components/rnd/tracking/gains/MonthlyGainsCostBoard";
 
 export const GainsTrackingBoard = ({ data }: { data: GainTrackingItem[] }) => {
   const t = useTranslations("RnD.gainsTracking.boardColumns");

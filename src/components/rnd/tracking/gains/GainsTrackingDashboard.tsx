@@ -4,9 +4,8 @@
 import { useState, useMemo } from "react";
 import { Tabs, Tab } from "@heroui/react";
 
-import { GainsTrackingBoard } from "@/src/components/rnd/tracking/GainsTrackingBoard";
-
-import { mockData } from "./MockData";
+import { GainsTrackingBoard } from "@/src/components/rnd/tracking/gains/GainsTrackingBoard";
+import { mockData } from "@/components/rnd/tracking/MockData";
 
 // Client component that uses session
 export const GainsTrackingDashboard = () => {

@@ -1,7 +1,7 @@
 import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
 
-import { AppTrackingBoard as ActualAppTrackingBoard } from "@/src/components/rnd/tracking/AppTrackingBoard";
+import { AppTrackingBoard as ActualAppTrackingBoard } from "@/src/components/rnd/tracking/apps/AppTrackingBoard";
 import { AppGroup } from "@/src/interfaces/rnd";
 
 // Mock dependencies
@@ -11,7 +11,7 @@ jest.mock("lucide-react", () => ({
 jest.mock("next-intl", () => ({
   useTranslations: () => (key: string) => key,
 }));
-jest.mock("@/src/components/rnd/tracking/MonthlyAppUsageBoard", () => ({
+jest.mock("@/src/components/rnd/tracking/apps/MonthlyAppUsageBoard", () => ({
   MonthlyAppUsageBoard: ({ item }: { item: AppGroup }) => (
     <div data-testid="monthly-usage">Monthly Usage for {item.app_name}</div>
   ),
@@ -22,9 +22,9 @@ jest.mock("@/components/ui/LoadingContent", () => ({
 }));
 
 // Mock the AppTrackingBoard component to control item selection for tests
-jest.mock("@/src/components/rnd/tracking/AppTrackingBoard", () => {
+jest.mock("@/src/components/rnd/tracking/apps/AppTrackingBoard", () => {
   const ActualComponent = jest.requireActual(
-    "@/src/components/rnd/tracking/AppTrackingBoard",
+    "@/src/components/rnd/tracking/apps/AppTrackingBoard",
   ).AppTrackingBoard;
 
   const AppTrackingBoard = (props: any) => {
@@ -61,7 +61,7 @@ jest.mock("@/src/components/rnd/tracking/AppTrackingBoard", () => {
 
 // Get the mocked version of AppTrackingBoard for testing
 const { AppTrackingBoard } = jest.requireMock(
-  "@/src/components/rnd/tracking/AppTrackingBoard",
+  "@/src/components/rnd/tracking/apps/AppTrackingBoard",
 );
 
 // Mock HeroUI Table implementation for testing

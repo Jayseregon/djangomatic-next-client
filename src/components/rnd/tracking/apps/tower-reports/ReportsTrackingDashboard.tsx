@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { Tabs, Tab } from "@heroui/react";
 
-import { useTowerReportTrackingData } from "@/src/hooks/useTowerReportTrackingData";
+import { useReportsTrackingData } from "@/src/hooks/tracking/useReportsTrackingData";
 
 import { MonthlyReportsUsageBoard } from "./MonthlyReportsUsageBoard";
 
@@ -15,7 +15,7 @@ export const ReportsTrackingDashboard = () => {
 
   // Pass selected year to the hook
   const { data, isLoading, error, reload, years, totalCount } =
-    useTowerReportTrackingData(selectedYear);
+    useReportsTrackingData(selectedYear);
 
   // Set initial selected year after loading years
   useEffect(() => {

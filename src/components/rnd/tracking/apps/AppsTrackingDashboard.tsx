@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { Tabs, Tab } from "@heroui/react";
 
-import { useAppTrackingData } from "@/src/hooks/useAppTrackingData";
+import { useAppsTrackingData } from "@/src/hooks/tracking/useAppsTrackingData";
 
 import { AppsTrackingBoard } from "./AppsTrackingBoard";
 
@@ -15,7 +15,7 @@ export const AppsTrackingDashboard = () => {
 
   // Pass selected year to the hook
   const { data, isLoading, error, reload, years } =
-    useAppTrackingData(selectedYear);
+    useAppsTrackingData(selectedYear);
 
   // Set initial selected year after loading years
   useState(() => {

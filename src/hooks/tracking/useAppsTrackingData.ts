@@ -44,7 +44,7 @@ const calculateMonthlyUsage = (
   }));
 };
 
-export const useAppTrackingData = (filterYear?: number) => {
+export const useAppsTrackingData = (filterYear?: number) => {
   const [data, setData] = useState<AppGroup[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);

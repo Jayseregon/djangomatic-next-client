@@ -90,9 +90,9 @@ jest.mock(
   { virtual: true },
 );
 
-// Mock the useAppTrackingData hook to prevent act warnings
-jest.mock("@/src/hooks/useAppTrackingData", () => ({
-  useAppTrackingData: () => ({
+// Mock the useAppsTrackingData hook to prevent act warnings
+jest.mock("@/src/hooks/tracking/useAppsTrackingData", () => ({
+  useAppsTrackingData: () => ({
     data: [],
     isLoading: false,
     error: null,

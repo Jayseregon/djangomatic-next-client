@@ -42,7 +42,7 @@ const calculateMonthlyReports = (
   }));
 };
 
-export const useTowerReportTrackingData = (filterYear?: number) => {
+export const useReportsTrackingData = (filterYear?: number) => {
   const [data, setData] = useState<{ month: string; count: number }[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);

@@ -1,6 +1,6 @@
 import { renderHook, act } from "@testing-library/react";
 
-import { useAppTrackingData } from "@/src/hooks/useAppTrackingData";
+import { useAppsTrackingData } from "@/src/hooks/tracking/useAppsTrackingData";
 import { getAppTrackingEntries } from "@/src/actions/prisma/tracking/action";
 import { AppUsageTracking } from "@/interfaces/rnd";
 import { MONTHS } from "@/src/components/rnd/tracking/MockData";
@@ -10,7 +10,7 @@ jest.mock("@/src/actions/prisma/tracking/action", () => ({
   getAppTrackingEntries: jest.fn(),
 }));
 
-describe("useAppTrackingData", () => {
+describe("useAppsTrackingData", () => {
   const currentYear = new Date().getFullYear();
   const lastYear = currentYear - 1;
 
@@ -52,7 +52,7 @@ describe("useAppTrackingData", () => {
   it("should load app tracking data successfully", async () => {
     (getAppTrackingEntries as jest.Mock).mockResolvedValueOnce(mockAppRecords);
 
-    const { result } = renderHook(() => useAppTrackingData());
+    const { result } = renderHook(() => useAppsTrackingData());
 
     expect(result.current.isLoading).toBe(true);
     expect(result.current.error).toBeNull();
@@ -78,7 +78,7 @@ describe("useAppTrackingData", () => {
       new Error("Failed to fetch app records"),
     );
 
-    const { result } = renderHook(() => useAppTrackingData());
+    const { result } = renderHook(() => useAppsTrackingData());
 
     await act(async () => {
       await new Promise((resolve) => setTimeout(resolve, 0));
@@ -92,7 +92,7 @@ describe("useAppTrackingData", () => {
   it("should handle null app records", async () => {
     (getAppTrackingEntries as jest.Mock).mockResolvedValueOnce(null);
 
-    const { result } = renderHook(() => useAppTrackingData());
+    const { result } = renderHook(() => useAppsTrackingData());
 
     await act(async () => {
       await new Promise((resolve) => setTimeout(resolve, 0));
@@ -121,7 +121,7 @@ describe("useAppTrackingData", () => {
       .mockResolvedValueOnce(mockAppRecords)
       .mockResolvedValueOnce(updatedMockRecords);
 
-    const { result } = renderHook(() => useAppTrackingData());
+    const { result } = renderHook(() => useAppsTrackingData());
 
     await act(async () => {
       await new Promise((resolve) => setTimeout(resolve, 0));
@@ -161,7 +161,7 @@ describe("useAppTrackingData", () => {
 
     (getAppTrackingEntries as jest.Mock).mockResolvedValueOnce(unsortedRecords);
 
-    const { result } = renderHook(() => useAppTrackingData());
+    const { result } = renderHook(() => useAppsTrackingData());
 
     await act(async () => {
       await new Promise((resolve) => setTimeout(resolve, 0));
@@ -174,7 +174,7 @@ describe("useAppTrackingData", () => {
   it("should filter data by year", async () => {
     (getAppTrackingEntries as jest.Mock).mockResolvedValueOnce(mockAppRecords);
 
-    const { result } = renderHook(() => useAppTrackingData(currentYear));
+    const { result } = renderHook(() => useAppsTrackingData(currentYear));
 
     await act(async () => {
       await new Promise((resolve) => setTimeout(resolve, 0));
@@ -228,7 +228,7 @@ describe("useAppTrackingData", () => {
     );
 
     // Filter for last year
-    const { result } = renderHook(() => useAppTrackingData(lastYear));
+    const { result } = renderHook(() => useAppsTrackingData(lastYear));
 
     await act(async () => {
       await new Promise((resolve) => setTimeout(resolve, 0));

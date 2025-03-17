@@ -4,6 +4,11 @@ import React, { useState, useEffect } from "react";
 
 import { RnDTeamTask, UserSchema } from "@/interfaces/lib";
 import { convertTaskDates } from "@/lib/utils";
+import {
+  getRndUserById,
+  getRndTaskById,
+  updateRndTask,
+} from "@/src/actions/prisma/rndTask/action";
 
 import { TaskBoardFull, TaskBoardShort } from "./TaskBoard";
 import { AddTaskButton } from "./AddTaskButton";
@@ -28,12 +33,7 @@ export const TaskManager = ({
     if (id && !user) {
       async function fetchUser() {
         try {
-          const response = await fetch(`/api/rnd-unique-user?id=${id}`);
-
-          if (!response.ok) {
-            throw new Error("Failed to fetch user");
-          }
-          const userData = await response.json();
+          const userData = await getRndUserById(id as string);
 
           setCurrentUser(userData);
         } catch (error) {
@@ -52,19 +52,14 @@ export const TaskManager = ({
 
   const handleRowAction = async (taskId: string) => {
     try {
-      const response = await fetch(`/api/rnd-task/find?id=${taskId}`);
-
-      if (!response.ok) {
-        throw new Error("Failed to fetch task");
-      }
-      const task = await response.json();
+      const task = await getRndTaskById(taskId);
       const taskWithDates: RnDTeamTask = convertTaskDates(task);
-      
+
       // Make sure trackGains is properly initialized if it's undefined
       if (taskWithDates.trackGains === undefined) {
         taskWithDates.trackGains = true;
       }
-      
+
       setTaskToEdit(taskWithDates);
       setEditModalVisible(true);
     } catch (error) {
@@ -76,17 +71,7 @@ export const TaskManager = ({
     if (!taskToEdit || !taskToEdit.id) return;
 
     try {
-      const response = await fetch("/api/rnd-task/update", {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ id: taskToEdit.id, ...updatedTask }),
-      });
-
-      if (!response.ok) {
-        throw new Error("Failed to update task");
-      }
+      await updateRndTask({ id: taskToEdit.id, ...updatedTask });
       setEditModalVisible(false);
       setTaskToEdit(null);
       handleTaskChange();

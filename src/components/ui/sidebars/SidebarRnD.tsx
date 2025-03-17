@@ -9,6 +9,7 @@ import { UnAuthorized } from "@/components/auth/unAuthorized";
 import { UserSchema } from "@/interfaces/lib";
 import { linkTagStyling } from "@/components/ui/sidebars/helper";
 import { BugReport } from "@/interfaces/bugs";
+import { getRndUsers } from "@/src/actions/prisma/rndTask/action";
 
 export const SidebarRnD = ({
   nonce,
@@ -24,8 +25,7 @@ export const SidebarRnD = ({
   useEffect(() => {
     async function fetchData() {
       try {
-        const resUsers = await fetch("/api/rnd-all-users");
-        const dataUsers = await resUsers.json();
+        const dataUsers = await getRndUsers();
 
         setUsers(dataUsers);
 

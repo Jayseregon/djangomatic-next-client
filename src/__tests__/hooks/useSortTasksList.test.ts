@@ -1,8 +1,19 @@
 import { renderHook } from "@testing-library/react";
+import { Status } from "@prisma/client";
 
 import { useSortTasksList } from "@/hooks/useSortTasksList";
 import { RnDTeamTask } from "@/interfaces/lib";
-import { Status } from "@prisma/client";
+import * as rndTaskActions from "@/src/actions/prisma/rndTask/action";
+
+// Mock the server action
+jest.mock("@/src/actions/prisma/rndTask/action", () => ({
+  getRndTasksByOwnerId: jest.fn(),
+}));
+
+// Mock console.error so we can test it was called correctly
+const originalConsoleError = console.error;
+
+console.error = jest.fn();
 
 interface LoadParams {
   signal?: AbortSignal;
@@ -51,6 +62,7 @@ describe("useSortTasksList", () => {
       dueDate: new Date("2024-02-01"),
       startedAt: new Date("2024-01-15"),
       completedAt: undefined,
+      trackGains: true,
     },
     {
       id: "2",
@@ -63,33 +75,38 @@ describe("useSortTasksList", () => {
       dueDate: new Date("2024-02-15"),
       startedAt: new Date("2024-01-20"),
       completedAt: new Date("2024-01-25"),
+      trackGains: true,
     },
   ];
 
   beforeEach(() => {
     jest.clearAllMocks();
-    global.fetch = jest.fn(async () =>
-      Promise.resolve({
-        json: () => Promise.resolve(mockTasks),
-      }),
-    ) as jest.Mock;
+    // Mock the server action to return our mock data
+    (rndTaskActions.getRndTasksByOwnerId as jest.Mock).mockResolvedValue(
+      mockTasks,
+    );
+    // Clear the console.error mock
+    (console.error as jest.Mock).mockClear();
   });
 
-  it("should make API call with correct endpoint", async () => {
-    const { result } = renderHook(() => useSortTasksList("/api/tasks", false));
+  afterAll(() => {
+    // Restore original console.error after tests
+    console.error = originalConsoleError;
+  });
+
+  it("should call getRndTasksByOwnerId with correct id", async () => {
+    const { result } = renderHook(() => useSortTasksList("user-123", false));
     const hook = result.current as unknown as AsyncListData;
-    const abortController = new AbortController();
 
-    await hook.load({ signal: abortController.signal });
+    await hook.load({});
 
-    expect(fetch).toHaveBeenCalledWith("/api/tasks", {
-      method: "GET",
-      signal: expect.any(AbortSignal),
-    });
+    expect(rndTaskActions.getRndTasksByOwnerId).toHaveBeenCalledWith(
+      "user-123",
+    );
   });
 
   it("should load and filter active tasks when showCompleted is false", async () => {
-    const { result } = renderHook(() => useSortTasksList("/api/tasks", false));
+    const { result } = renderHook(() => useSortTasksList("user-123", false));
     const hook = result.current as unknown as AsyncListData;
     const response = await hook.load({});
 
@@ -102,7 +119,7 @@ describe("useSortTasksList", () => {
   });
 
   it("should load and filter completed tasks when showCompleted is true", async () => {
-    const { result } = renderHook(() => useSortTasksList("/api/tasks", true));
+    const { result } = renderHook(() => useSortTasksList("user-123", true));
     const hook = result.current as unknown as AsyncListData;
     const response = await hook.load({});
 
@@ -115,7 +132,7 @@ describe("useSortTasksList", () => {
   });
 
   it("should sort numeric fields correctly", async () => {
-    const { result } = renderHook(() => useSortTasksList("/api/tasks", false));
+    const { result } = renderHook(() => useSortTasksList("user-123", false));
     const hook = result.current as unknown as AsyncListData;
 
     const sortResult = await hook.sort({
@@ -128,7 +145,7 @@ describe("useSortTasksList", () => {
   });
 
   it("should sort string fields correctly", async () => {
-    const { result } = renderHook(() => useSortTasksList("/api/tasks", false));
+    const { result } = renderHook(() => useSortTasksList("user-123", false));
     const hook = result.current as unknown as AsyncListData;
 
     const sortResult = await hook.sort({
@@ -141,7 +158,7 @@ describe("useSortTasksList", () => {
   });
 
   it("should sort date fields correctly", async () => {
-    const { result } = renderHook(() => useSortTasksList("/api/tasks", false));
+    const { result } = renderHook(() => useSortTasksList("user-123", false));
     const hook = result.current as unknown as AsyncListData;
 
     const sortResult = await hook.sort({
@@ -154,7 +171,7 @@ describe("useSortTasksList", () => {
   });
 
   it("should handle missing sort descriptor", async () => {
-    const { result } = renderHook(() => useSortTasksList("/api/tasks", false));
+    const { result } = renderHook(() => useSortTasksList("user-123", false));
     const hook = result.current as unknown as AsyncListData;
 
     const sortResult = await hook.sort({
@@ -166,11 +183,24 @@ describe("useSortTasksList", () => {
   });
 
   it("should handle API errors gracefully", async () => {
-    global.fetch = jest.fn(() => Promise.reject(new Error("API Error")));
+    // Mock the server action to throw an error
+    const errorMessage = "API Error";
 
-    const { result } = renderHook(() => useSortTasksList("/api/tasks", false));
+    (rndTaskActions.getRndTasksByOwnerId as jest.Mock).mockRejectedValue(
+      new Error(errorMessage),
+    );
+
+    const { result } = renderHook(() => useSortTasksList("user-123", false));
     const hook = result.current as unknown as AsyncListData;
 
-    await expect(hook.load({})).rejects.toThrow("API Error");
+    const response = await hook.load({});
+
+    // Check that we get an empty array when there's an error
+    expect(response.items).toEqual([]);
+    // Verify the error was logged
+    expect(console.error).toHaveBeenCalledWith(
+      "Error loading tasks:",
+      expect.objectContaining({ message: errorMessage }),
+    );
   });
 });

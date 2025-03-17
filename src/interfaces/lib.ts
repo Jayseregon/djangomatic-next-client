@@ -1,4 +1,5 @@
 import { Status } from "@prisma/client";
+
 import { GainsTrackingRecordItem } from "./rnd";
 
 export interface UserSchema {

@@ -25,6 +25,7 @@ import {
 import { bugStatusColorMap, bugPriorityColorMap } from "@/lib/utils";
 import { UserSchema } from "@/interfaces/lib";
 import { DatePicker } from "@/components/ui/DatePicker";
+import { getRndUsers } from "@/src/actions/prisma/rndTask/action";
 
 export const BugsModal = ({
   visible,
@@ -69,21 +70,15 @@ export const BugsModal = ({
 
   async function fetchDevUsers() {
     try {
-      const response = await fetch("/api/rnd-all-users");
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-      const data = await response.json();
+      const data = await getRndUsers();
 
       if (!Array.isArray(data)) {
         setDevUsers([]);
 
         return;
       }
-      const filteredData = data.filter((user: UserSchema) => user.canAccessRnd);
 
-      setDevUsers(filteredData);
+      setDevUsers(data);
     } catch (error) {
       setDevUsers([]); // Set empty array on error
       console.error("Failed to fetch users:", error);

@@ -1,6 +1,6 @@
-import { TowerReport } from "@/interfaces/reports";
-import { RnDTeamTask } from "./lib";
 import { FiscalMonths, GainTrackingStatus } from "@prisma/client";
+
+import { TowerReport } from "@/interfaces/reports";
 
 export interface GainTrackingItem {
   id: string;

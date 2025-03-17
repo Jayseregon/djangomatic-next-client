@@ -1,5 +1,5 @@
 import React from "react";
-import { render, screen, act } from "@testing-library/react";
+import { render, screen, act, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 
 import { BugsModal } from "@/components/boards/bugs/BugsModal";
@@ -19,6 +19,26 @@ jest.mock("@/components/ui/DatePicker", () => ({
       onChange={(e) => onChange(new Date(e.target.value))}
     />
   ),
+}));
+
+// Mock the getRndUsers server action
+jest.mock("@/src/actions/prisma/rndTask/action", () => ({
+  getRndUsers: jest.fn().mockImplementation(() => {
+    return Promise.resolve([
+      {
+        id: "1",
+        name: "Dev1",
+        email: "dev1@example.com",
+        canAccessRnd: true,
+      },
+      {
+        id: "2",
+        name: "Dev2",
+        email: "dev2@example.com",
+        canAccessRnd: true,
+      },
+    ]);
+  }),
 }));
 
 describe("BugsModal", () => {
@@ -213,24 +233,32 @@ describe("BugsModal", () => {
 
   describe("Admin vs Non-Admin View", () => {
     it("shows assignee select for admin users", async () => {
-      await act(async () => {
-        render(
-          <BugsModal
-            isAdminSide={true}
-            mode="add"
-            sessionUsername={sessionUsername}
-            visible={true}
-            onBugChange={mockOnBugChange}
-            onClose={mockOnClose}
-            onSave={mockOnSave}
-          />,
-        );
+      render(
+        <BugsModal
+          isAdminSide={true}
+          mode="add"
+          sessionUsername="testUser"
+          visible={true}
+          onBugChange={() => {}}
+          onClose={() => {}}
+          onSave={() => {}}
+        />,
+      );
+
+      // Check for assignee field
+      expect(screen.getByLabelText("Assigned To")).toBeInTheDocument();
+
+      // Wait for the options to be loaded
+      await waitFor(() => {
+        expect(screen.getByText("Dev1")).toBeInTheDocument();
       });
 
-      expect(screen.getByLabelText("Assigned To")).toBeInTheDocument();
-      expect(
-        await screen.findByRole("option", { name: "Dev1" }),
-      ).toBeInTheDocument();
+      // Alternative approach if needed:
+      // const select = screen.getByLabelText("Assigned To");
+      // fireEvent.click(select);
+      // await waitFor(() => {
+      //   expect(screen.getByText("Dev1")).toBeInTheDocument();
+      // });
     });
 
     it("shows read-only input for non-admin users", async () => {

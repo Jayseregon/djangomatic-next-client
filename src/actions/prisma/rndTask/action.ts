@@ -2,6 +2,7 @@
 
 import { prisma } from "@/src/lib/prismaClient";
 import { UserSchema } from "@/src/interfaces/lib";
+import { getFiscalMonth, getFiscalYear } from "@/src/lib/actionHelper";
 
 /**
  * Get all RND tasks for a specific owner
@@ -96,12 +97,63 @@ export async function updateRndTask(data: any) {
     // Remove fields that should not be directly updated
     delete updateObject.createdAt;
 
+    // Check if task is being completed and should track gains
+    if (updateData.status === "COMPLETED") {
+      // Get the current task to check if it already has a gains record
+      const currentTask = await prisma.rnDTeamTask.findUnique({
+        where: { id },
+        include: { gains: true },
+      });
+
+      if (currentTask && !currentTask.gains) {
+        // Determine the effective trackGains value
+        // If trackGains is included in the update, use that value
+        // Otherwise use the current value from the database
+        const effectiveTrackGains =
+          updateData.trackGains !== undefined
+            ? updateData.trackGains
+            : currentTask.trackGains;
+
+        if (effectiveTrackGains === true) {
+          // Create a new GainsTrackingRecord with task name and an initial MonthlyCostRecord
+          const now = new Date();
+          const fiscalYear = getFiscalYear(now);
+          const fiscalMonth = getFiscalMonth(now);
+
+          const newGainsRecord = await prisma.gainsTrackingRecord.create({
+            data: {
+              task: { connect: { id } },
+              name: currentTask.task, // Copy task name to gains record
+              // Also create initial monthly cost record
+              monthlyCosts: {
+                create: {
+                  fiscalYear,
+                  month: fiscalMonth,
+                  cost: 0,
+                  count: 0,
+                  rate: 0,
+                  adjustedCost: 0,
+                },
+              },
+            },
+            include: {
+              monthlyCosts: true,
+            },
+          });
+
+          if (!newGainsRecord) {
+            throw new Error("Error creating gains record");
+          }
+        }
+      }
+    }
+
     const updatedTask = await prisma.rnDTeamTask.update({
       where: { id },
       data: updateObject,
+      include: { gains: true }, // Include gains in response
     });
 
-    // revalidatePath("/");
     return updatedTask;
   } catch (error) {
     throw new Error(`Error updating RND task: ${(error as Error).message}`);
@@ -113,11 +165,27 @@ export async function updateRndTask(data: any) {
  */
 export async function deleteRndTask(id: string) {
   try {
-    await prisma.rnDTeamTask.delete({
+    // First check if there's a related GainsTrackingRecord
+    const task = await prisma.rnDTeamTask.findUnique({
       where: { id },
+      include: { gains: true },
     });
 
-    // revalidatePath("/");
+    // Use a transaction to ensure all related records are deleted
+    await prisma.$transaction(async (tx) => {
+      // If a gains record exists, delete it first (this will cascade to MonthlyCostRecords)
+      if (task?.gains) {
+        await tx.gainsTrackingRecord.delete({
+          where: { id: task.gains.id },
+        });
+      }
+
+      // Delete the task itself
+      await tx.rnDTeamTask.delete({
+        where: { id },
+      });
+    });
+
     return { success: true };
   } catch (error) {
     throw new Error(`Error deleting RND task: ${(error as Error).message}`);

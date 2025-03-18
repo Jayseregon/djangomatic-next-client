@@ -162,19 +162,19 @@ model RnDTeamTask {
 }
 
 model GainsTrackingRecord {
-  id                 String              @id @default(cuid())
-  createdAt          DateTime            @default(now())
-  task               RnDTeamTask         @relation("TaskToGains", fields: [taskId], references: [id])
-  taskId             String              @unique
-  name               String
-  region             String?
-  hasGains           Boolean             @default(false)
-  replaceOffshore    Boolean             @default(false)
-  timeInitial        Int                 @default(0)
-  timeSaved          Int                 @default(0)
-  comments           String?
-  status             GainTrackingStatus  @default(OPEN)
-  monthlyCosts       MonthlyCostRecord[]
+  id              String              @id @default(cuid())
+  createdAt       DateTime            @default(now())
+  task            RnDTeamTask         @relation("TaskToGains", fields: [taskId], references: [id])
+  taskId          String              @unique
+  name            String
+  region          String?
+  hasGains        Boolean             @default(false)
+  replaceOffshore Boolean             @default(false)
+  timeInitial     Int                 @default(0)
+  timeSaved       Int                 @default(0)
+  comments        String?
+  status          GainTrackingStatus  @default(OPEN)
+  monthlyCosts    MonthlyCostRecord[]
 }
 
 model MonthlyCostRecord {
@@ -184,9 +184,9 @@ model MonthlyCostRecord {
   fiscalYear    Int
   month         FiscalMonths
   cost          Int                 @default(0)
-  count         Int?                 @default(0)
-  rate          Int?                 @default(0)
-  adjustedCost  Int?                 @default(0)
+  count         Int?                @default(0)
+  rate          Int?                @default(0)
+  adjustedCost  Int?                @default(0)
 }
 
 enum FiscalMonths {

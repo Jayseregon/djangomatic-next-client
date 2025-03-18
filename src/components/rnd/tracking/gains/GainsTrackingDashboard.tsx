@@ -1,39 +1,85 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { Tabs, Tab } from "@heroui/react";
 
 import { GainsTrackingBoard } from "@/src/components/rnd/tracking/gains/GainsTrackingBoard";
-import { mockGainsRecords } from "@/src/components/rnd/tracking/MockData";
+import {
+  getGainsTrackingRecords,
+  getGainsTrackingFiscalYears,
+} from "@/src/actions/prisma/tracking/action";
+import { GainsTrackingRecordItem } from "@/src/interfaces/rnd";
+import { LoadingContent } from "@/components/ui/LoadingContent";
 
-// Client component that uses session
 export const GainsTrackingDashboard = () => {
-  // Get fiscal years from the data
-  const availableYears = useMemo(() => {
-    const years = new Set<number>();
+  const [data, setData] = useState<GainsTrackingRecordItem[]>([]);
+  const [fiscalYears, setFiscalYears] = useState<number[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-    // Extract unique fiscal years from all monthly costs
-    mockGainsRecords.forEach((record) => {
-      record.monthlyCosts.forEach((mc) => {
-        years.add(mc.fiscalYear);
-      });
-    });
+  // Fetch data on mount
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        setIsLoading(true);
+        const [records, years] = await Promise.all([
+          getGainsTrackingRecords(),
+          getGainsTrackingFiscalYears(),
+        ]);
 
-    return Array.from(years).sort().reverse();
+        // Use current year if no years in database
+        const availableYears =
+          years.length > 0 ? years : [new Date().getFullYear()];
+
+        setData(records as GainsTrackingRecordItem[]);
+        setFiscalYears(availableYears);
+      } catch (err) {
+        setError((err as Error).message);
+        console.error("Error loading gains tracking data:", err);
+      } finally {
+        setIsLoading(false);
+      }
+    }
+
+    fetchData();
   }, []);
 
-  // Default to current year or most recent year in data
+  // Default to current year or first available year
   const currentYear = new Date().getFullYear();
-  const [selectedYear, setSelectedYear] = useState(
-    availableYears.includes(currentYear) ? currentYear : availableYears[0],
+  const [selectedYear, setSelectedYear] = useState<number>(
+    fiscalYears.includes(currentYear)
+      ? currentYear
+      : fiscalYears[0] || currentYear,
   );
+
+  // Update selected year when fiscal years are loaded
+  useEffect(() => {
+    if (fiscalYears.length > 0) {
+      setSelectedYear(
+        fiscalYears.includes(currentYear) ? currentYear : fiscalYears[0],
+      );
+    }
+  }, [fiscalYears, currentYear]);
 
   // Filter data by selected fiscal year
   const filteredData = useMemo(() => {
-    return mockGainsRecords.filter((record) =>
-      record.monthlyCosts.some((mc) => mc.fiscalYear === selectedYear),
+    if (data.length === 0) return [];
+
+    // If the record has monthly costs for the selected year or no costs yet, include it
+    return data.filter(
+      (record) =>
+        record.monthlyCosts.length === 0 ||
+        record.monthlyCosts.some((mc) => mc.fiscalYear === selectedYear),
     );
-  }, [selectedYear]);
+  }, [data, selectedYear]);
+
+  if (isLoading) {
+    return <LoadingContent />;
+  }
+
+  if (error) {
+    return <div className="text-danger">Error loading data: {error}</div>;
+  }
 
   return (
     <>
@@ -50,7 +96,7 @@ export const GainsTrackingDashboard = () => {
           variant="underlined"
           onSelectionChange={(key) => setSelectedYear(Number(key))}
         >
-          {availableYears.map((year) => (
+          {fiscalYears.map((year) => (
             <Tab key={year.toString()} title={year.toString()} />
           ))}
         </Tabs>

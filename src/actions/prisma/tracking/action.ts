@@ -88,3 +88,108 @@ export async function updateAppTrackingEntry(
     );
   }
 }
+
+// Fetch all gains tracking records
+export async function getGainsTrackingRecords() {
+  try {
+    const records = await prisma.gainsTrackingRecord.findMany({
+      include: {
+        task: true,
+        monthlyCosts: true,
+      },
+    });
+
+    return records;
+  } catch (error) {
+    throw new Error(
+      `Error fetching gains tracking records: ${(error as Error).message}`,
+    );
+  }
+}
+
+// Get available fiscal years for gains tracking data
+export async function getGainsTrackingFiscalYears() {
+  try {
+    const years = await prisma.monthlyCostRecord.findMany({
+      distinct: ["fiscalYear"],
+      select: {
+        fiscalYear: true,
+      },
+      orderBy: {
+        fiscalYear: "desc",
+      },
+    });
+
+    return years.map((y) => y.fiscalYear);
+  } catch (error) {
+    throw new Error(`Error fetching fiscal years: ${(error as Error).message}`);
+  }
+}
+
+// Update or create a monthly cost for a gains record
+export async function updateMonthlyCost(
+  recordId: string,
+  month: string,
+  cost: number,
+  count: number,
+  rate: number,
+  adjustedCost: number,
+) {
+  try {
+    // Validate inputs
+    const validRecordId = z.string().cuid().parse(recordId);
+    const validMonth = z.string().parse(month);
+    const validCost = z.number().nonnegative().parse(cost);
+    const validCount = z.number().nonnegative().parse(count);
+    const validRate = z.number().nonnegative().parse(rate);
+    const validAdjustedCost = z.number().parse(adjustedCost); // Can be negative for adjustments
+
+    // Get the current fiscal year
+    const fiscalYear = new Date().getFullYear();
+
+    // Check if the monthly cost record exists
+    const existingRecord = await prisma.monthlyCostRecord.findFirst({
+      where: {
+        gainsRecordId: validRecordId,
+        month: validMonth as any, // Cast to FiscalMonths enum
+        fiscalYear,
+      },
+    });
+
+    let record;
+
+    if (existingRecord) {
+      // Update existing record
+      record = await prisma.monthlyCostRecord.update({
+        where: {
+          id: existingRecord.id,
+        },
+        data: {
+          cost: validCost,
+          count: validCount,
+          rate: validRate,
+          adjustedCost: validAdjustedCost,
+        },
+      });
+    } else {
+      // Create new record
+      record = await prisma.monthlyCostRecord.create({
+        data: {
+          gainsRecordId: validRecordId,
+          month: validMonth as any, // Cast to FiscalMonths enum
+          fiscalYear,
+          cost: validCost,
+          count: validCount,
+          rate: validRate,
+          adjustedCost: validAdjustedCost,
+        },
+      });
+    }
+
+    // Revalidate the relevant paths
+    // revalidatePath("/rnd/tracking/gains");
+    return record;
+  } catch (error) {
+    throw new Error(`Error updating monthly cost: ${(error as Error).message}`);
+  }
+}

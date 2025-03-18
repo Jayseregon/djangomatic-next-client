@@ -19,6 +19,7 @@ import {
   MonthlyCostUpdateDetails,
 } from "@/src/interfaces/rnd";
 import { MonthlyGainsCostBoard } from "@/components/rnd/tracking/gains/MonthlyGainsCostBoard";
+import { updateMonthlyCost } from "@/src/actions/prisma/tracking/action";
 
 export const GainsTrackingBoard = ({
   data,
@@ -53,6 +54,16 @@ export const GainsTrackingBoard = ({
     setIsUpdating(true);
 
     try {
+      // Call server action to update the database
+      await updateMonthlyCost(
+        selectedItem.id,
+        month,
+        newCost,
+        details?.count || 0,
+        details?.rate || 0,
+        details?.adjustedCost || 0,
+      );
+
       // Optimistically update the local state
       const updatedData = localData.map((item) => {
         if (item.id === selectedItem.id) {
@@ -80,7 +91,7 @@ export const GainsTrackingBoard = ({
               id: `temp-${Date.now()}`,
               gainsRecordId: selectedItem.id,
               fiscalYear: new Date().getFullYear(),
-              month: month as any, // Cast to the expected type
+              month: month as any,
               cost: newCost,
               count: details?.count,
               rate: details?.rate,

@@ -24,6 +24,9 @@ export interface MonthlyCostRecordItem {
   fiscalYear: number;
   month: FiscalMonths;
   cost: number;
+  count?: number;
+  rate?: number;
+  adjustedCost?: number;
 }
 
 export interface AppUsageTracking {
@@ -94,4 +97,32 @@ export interface MonthlyDataTableProps {
     header?: string;
   };
   topContent?: ReactNode;
+  onCellClick?: (cellData: {
+    month: string;
+    value: number;
+    originalData: any;
+  }) => void;
+  isCellEditable?: boolean;
+}
+
+export interface MonthlyCostUpdateDetails {
+  count: number;
+  rate: number;
+  adjustedCost: number;
+}
+
+export interface CellEditData {
+  month: string;
+  value: number;
+  originalData: MonthlyData;
+}
+
+export interface MonthlyGainsCostBoardProps {
+  record: GainsTrackingRecordItem;
+  onUpdateMonthlyCost?: (
+    month: string,
+    newCost: number,
+    details: MonthlyCostUpdateDetails,
+  ) => void;
+  isLoading?: boolean;
 }

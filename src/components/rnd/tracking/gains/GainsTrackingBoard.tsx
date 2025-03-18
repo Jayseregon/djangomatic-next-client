@@ -14,7 +14,10 @@ import { GainTrackingStatus } from "@prisma/client";
 import { SquareCheck, SquareX } from "lucide-react";
 
 import { LoadingContent } from "@/components/ui/LoadingContent";
-import { GainsTrackingRecordItem } from "@/src/interfaces/rnd";
+import {
+  GainsTrackingRecordItem,
+  MonthlyCostUpdateDetails,
+} from "@/src/interfaces/rnd";
 import { MonthlyGainsCostBoard } from "@/components/rnd/tracking/gains/MonthlyGainsCostBoard";
 
 export const GainsTrackingBoard = ({
@@ -25,11 +28,87 @@ export const GainsTrackingBoard = ({
   const t = useTranslations("RnD.gainsTracking.boardColumns");
   const [selectedItem, setSelectedItem] =
     useState<GainsTrackingRecordItem | null>(null);
+  const [localData, setLocalData] = useState<GainsTrackingRecordItem[]>(data);
+  const [isUpdating, setIsUpdating] = useState(false);
+
+  // Update the component when data changes from props
+  React.useEffect(() => {
+    setLocalData(data);
+  }, [data]);
 
   const handleSelectionChange = (key: React.Key) => {
-    const item = data.find((item) => item.id === key);
+    const item = localData.find((item) => item.id === key);
 
     setSelectedItem(item || null);
+  };
+
+  // Handle updating monthly costs
+  const handleUpdateMonthlyCost = async (
+    month: string,
+    newCost: number,
+    details?: MonthlyCostUpdateDetails,
+  ) => {
+    if (!selectedItem) return;
+
+    setIsUpdating(true);
+
+    try {
+      // Optimistically update the local state
+      const updatedData = localData.map((item) => {
+        if (item.id === selectedItem.id) {
+          // Create a deep copy of the item
+          const updatedItem = { ...item };
+
+          // Update or create the monthly cost for this month
+          const updatedCosts = [...updatedItem.monthlyCosts];
+          const costIndex = updatedCosts.findIndex(
+            (cost) => cost.month === month,
+          );
+
+          if (costIndex >= 0) {
+            // Update existing month
+            updatedCosts[costIndex] = {
+              ...updatedCosts[costIndex],
+              cost: newCost,
+              count: details?.count,
+              rate: details?.rate,
+              adjustedCost: details?.adjustedCost,
+            };
+          } else {
+            // Add new month entry
+            updatedCosts.push({
+              id: `temp-${Date.now()}`,
+              gainsRecordId: selectedItem.id,
+              fiscalYear: new Date().getFullYear(),
+              month: month as any, // Cast to the expected type
+              cost: newCost,
+              count: details?.count,
+              rate: details?.rate,
+              adjustedCost: details?.adjustedCost,
+            });
+          }
+
+          updatedItem.monthlyCosts = updatedCosts;
+
+          return updatedItem;
+        }
+
+        return item;
+      });
+
+      setLocalData(updatedData);
+
+      // Update the selected item
+      const updatedSelectedItem = updatedData.find(
+        (item) => item.id === selectedItem.id,
+      );
+
+      setSelectedItem(updatedSelectedItem || null);
+    } catch (error) {
+      console.error("Failed to update cost:", error);
+    } finally {
+      setIsUpdating(false);
+    }
   };
 
   // Split header text into multiple lines
@@ -116,7 +195,7 @@ export const GainsTrackingBoard = ({
           </TableHeader>
           <TableBody
             emptyContent="No entries found"
-            items={data}
+            items={localData}
             loadingContent={<LoadingContent />}
           >
             {(item) => (
@@ -158,7 +237,11 @@ export const GainsTrackingBoard = ({
           <h3 className="text-lg font-medium mb-2">
             Monthly Costs for {selectedItem.name}
           </h3>
-          <MonthlyGainsCostBoard record={selectedItem} />
+          <MonthlyGainsCostBoard
+            isLoading={isUpdating}
+            record={selectedItem}
+            onUpdateMonthlyCost={handleUpdateMonthlyCost}
+          />
         </div>
       )}
     </div>

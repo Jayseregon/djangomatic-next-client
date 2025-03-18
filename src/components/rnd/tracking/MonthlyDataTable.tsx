@@ -28,6 +28,8 @@ export const MonthlyDataTable = ({
     header: "bg-primary text-background",
   },
   topContent,
+  onCellClick,
+  isCellEditable = false,
 }: MonthlyDataTableProps) => {
   // Create column and cell lists
   const columns = useMemo(() => {
@@ -54,7 +56,20 @@ export const MonthlyDataTable = ({
           : "-";
 
       return (
-        <TableCell key={month} className="text-center">
+        <TableCell
+          key={month}
+          className={`text-center ${isCellEditable ? "cursor-pointer hover:bg-primary-100 rounded-lg" : ""}`}
+          onClick={
+            isCellEditable && monthData
+              ? () =>
+                  onCellClick?.({
+                    month,
+                    value: monthData[valueField],
+                    originalData: monthData,
+                  })
+              : undefined
+          }
+        >
           {value}
         </TableCell>
       );
@@ -66,7 +81,15 @@ export const MonthlyDataTable = ({
         {totalFormat(total)}
       </TableCell>,
     ];
-  }, [data, valueField, valueFormat, total, totalFormat]);
+  }, [
+    data,
+    valueField,
+    valueFormat,
+    total,
+    totalFormat,
+    isCellEditable,
+    onCellClick,
+  ]);
 
   return (
     <div className="w-full">

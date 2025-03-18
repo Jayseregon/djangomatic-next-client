@@ -184,6 +184,9 @@ model MonthlyCostRecord {
   fiscalYear    Int
   month         FiscalMonths
   cost          Int                 @default(0)
+  count         Int?                 @default(0)
+  rate          Int?                 @default(0)
+  adjustedCost  Int?                 @default(0)
 }
 
 enum FiscalMonths {

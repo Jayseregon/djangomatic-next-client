@@ -1,21 +1,23 @@
 "use client";
 
-// import { useTranslations } from "next-intl";
 import { useState, useMemo } from "react";
 import { Tabs, Tab } from "@heroui/react";
 
 import { GainsTrackingBoard } from "@/src/components/rnd/tracking/gains/GainsTrackingBoard";
-import { mockData } from "@/src/components/rnd/tracking/MockData";
+import { mockGainsRecords } from "@/src/components/rnd/tracking/MockData";
 
 // Client component that uses session
 export const GainsTrackingDashboard = () => {
-  //   const t = useTranslations("RnD.gainsTracking");
-
-  // Get all available years from the data
+  // Get fiscal years from the data
   const availableYears = useMemo(() => {
-    const years = new Set(
-      mockData.map((item) => new Date(item.implementationDate).getFullYear()),
-    );
+    const years = new Set<number>();
+
+    // Extract unique fiscal years from all monthly costs
+    mockGainsRecords.forEach((record) => {
+      record.monthlyCosts.forEach((mc) => {
+        years.add(mc.fiscalYear);
+      });
+    });
 
     return Array.from(years).sort().reverse();
   }, []);
@@ -26,11 +28,10 @@ export const GainsTrackingDashboard = () => {
     availableYears.includes(currentYear) ? currentYear : availableYears[0],
   );
 
-  // Filter data by selected year
+  // Filter data by selected fiscal year
   const filteredData = useMemo(() => {
-    return mockData.filter(
-      (item) =>
-        new Date(item.implementationDate).getFullYear() === selectedYear,
+    return mockGainsRecords.filter((record) =>
+      record.monthlyCosts.some((mc) => mc.fiscalYear === selectedYear),
     );
   }, [selectedYear]);
 

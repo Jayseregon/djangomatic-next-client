@@ -10,21 +10,64 @@ import {
   TableCell,
   TableRow,
 } from "@heroui/react";
+import { GainTrackingStatus } from "@prisma/client";
+import { SquareCheck, SquareX } from "lucide-react";
 
 import { LoadingContent } from "@/components/ui/LoadingContent";
-import { GainTrackingItem } from "@/src/interfaces/rnd";
+import { GainsTrackingRecordItem } from "@/src/interfaces/rnd";
 import { MonthlyGainsCostBoard } from "@/components/rnd/tracking/gains/MonthlyGainsCostBoard";
 
-export const GainsTrackingBoard = ({ data }: { data: GainTrackingItem[] }) => {
+export const GainsTrackingBoard = ({
+  data,
+}: {
+  data: GainsTrackingRecordItem[];
+}) => {
   const t = useTranslations("RnD.gainsTracking.boardColumns");
-  const [selectedItem, setSelectedItem] = useState<GainTrackingItem | null>(
-    null,
-  );
+  const [selectedItem, setSelectedItem] =
+    useState<GainsTrackingRecordItem | null>(null);
 
   const handleSelectionChange = (key: React.Key) => {
     const item = data.find((item) => item.id === key);
 
     setSelectedItem(item || null);
+  };
+
+  // Split header text into multiple lines
+  const splitHeader = (lines: string[]) => {
+    return lines.map((line, index) => <div key={index}>{line}</div>);
+  };
+
+  const getStatusDisplay = (status: boolean) => {
+    if (status) {
+      return (
+        <div className="flex items-center justify-center text-success w-full">
+          <SquareCheck />
+        </div>
+      );
+    } else {
+      return (
+        <div className="flex items-center justify-center text-danger w-full">
+          <SquareX />
+        </div>
+      );
+    }
+  };
+
+  // Map GainTrackingStatus to display values and styles
+  const getGainStatusDisplay = (status: GainTrackingStatus) => {
+    switch (status) {
+      case GainTrackingStatus.CLOSED:
+        return { label: "Closed", className: "bg-green-300 text-green-800" };
+      case GainTrackingStatus.OPEN:
+        return { label: "Open", className: "bg-blue-300 text-blue-800" };
+      case GainTrackingStatus.CANCELLED:
+        return {
+          label: "Cancelled",
+          className: "bg-yellow-300 text-yellow-800",
+        };
+      default:
+        return { label: status, className: "bg-gray-100 text-gray-800" };
+    }
   };
 
   return (
@@ -36,7 +79,7 @@ export const GainsTrackingBoard = ({ data }: { data: GainTrackingItem[] }) => {
           aria-label="rnd-gain-board"
           classNames={{
             base: "text-center",
-            th: "uppercase bg-foreground text-background",
+            th: "uppercase bg-foreground text-background text-center",
           }}
           color="primary"
           selectedKeys={selectedItem ? [selectedItem.id] : []}
@@ -54,35 +97,22 @@ export const GainsTrackingBoard = ({ data }: { data: GainTrackingItem[] }) => {
           }}
         >
           <TableHeader>
-            <TableColumn key="name" allowsSorting className="text-center">
-              {t("name")}
+            <TableColumn key="name">{t("name")}</TableColumn>
+            <TableColumn key="region">Region</TableColumn>
+            <TableColumn key="hasGains">
+              {splitHeader(["Has", "Gains"])}
             </TableColumn>
-            <TableColumn key="timeSaved" allowsSorting className="text-center">
-              Time Saved (hrs/week)
+            <TableColumn key="replaceOffshore">
+              {splitHeader(["Replace", "Offshore"])}
             </TableColumn>
-            <TableColumn
-              key="costSavings"
-              allowsSorting
-              className="text-center"
-            >
-              Cost Savings ($/mo)
+            <TableColumn key="timeInitial">
+              {splitHeader(["Initial", "Time (hrs)"])}
             </TableColumn>
-            <TableColumn key="roi" allowsSorting className="text-center">
-              ROI (%)
+            <TableColumn key="timeSaved">
+              {splitHeader(["Saved", "Time (hrs)"])}
             </TableColumn>
-            <TableColumn
-              key="implementationDate"
-              allowsSorting
-              className="text-center"
-            >
-              Implementation Date
-            </TableColumn>
-            <TableColumn key="status" allowsSorting className="text-center">
-              Status
-            </TableColumn>
-            <TableColumn key="department" allowsSorting className="text-center">
-              Department
-            </TableColumn>
+            <TableColumn key="comments">Comments</TableColumn>
+            <TableColumn key="status">Status</TableColumn>
           </TableHeader>
           <TableBody
             emptyContent="No entries found"
@@ -91,29 +121,32 @@ export const GainsTrackingBoard = ({ data }: { data: GainTrackingItem[] }) => {
           >
             {(item) => (
               <TableRow key={item.id}>
-                <TableCell className="text-start text-nowrap">
+                <TableCell className="max-w-60 truncate text-start text-nowrap">
                   {item.name}
                 </TableCell>
-                <TableCell>{item.timeSaved}</TableCell>
-                <TableCell>${item.costSavings.toLocaleString()}</TableCell>
-                <TableCell>{item.roi}%</TableCell>
-                <TableCell>
-                  {new Date(item.implementationDate).toLocaleDateString()}
+                <TableCell>{item.region}</TableCell>
+                <TableCell className="text-center">
+                  {getStatusDisplay(item.hasGains)}
+                </TableCell>
+                <TableCell className="text-center">
+                  {getStatusDisplay(item.replaceOffshore)}
+                </TableCell>
+                <TableCell className="text-center">
+                  {item.timeInitial}
+                </TableCell>
+                <TableCell className="text-center">{item.timeSaved}</TableCell>
+                <TableCell className="max-w-60 truncate text-start text-nowrap">
+                  {item.comments || "-"}
                 </TableCell>
                 <TableCell>
                   <span
                     className={`px-2 py-1 rounded-full text-xs ${
-                      item.status === "Completed"
-                        ? "bg-green-100 text-green-800"
-                        : item.status === "In Progress"
-                          ? "bg-blue-100 text-blue-800"
-                          : "bg-yellow-100 text-yellow-800"
+                      getGainStatusDisplay(item.status).className
                     }`}
                   >
-                    {item.status}
+                    {getGainStatusDisplay(item.status).label}
                   </span>
                 </TableCell>
-                <TableCell>{item.department}</TableCell>
               </TableRow>
             )}
           </TableBody>
@@ -125,7 +158,7 @@ export const GainsTrackingBoard = ({ data }: { data: GainTrackingItem[] }) => {
           <h3 className="text-lg font-medium mb-2">
             Monthly Costs for {selectedItem.name}
           </h3>
-          <MonthlyGainsCostBoard item={selectedItem} />
+          <MonthlyGainsCostBoard record={selectedItem} />
         </div>
       )}
     </div>

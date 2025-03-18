@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useMemo, ReactNode } from "react";
+import React, { useMemo } from "react";
 import {
   Table,
   TableBody,
@@ -11,28 +11,7 @@ import {
 } from "@heroui/react";
 
 import { getFiscalMonths } from "@/src/components/rnd/tracking/getFiscalMonths";
-
-interface MonthlyData {
-  month: string;
-  [key: string]: any; // Could be count, cost, or any other value
-}
-
-interface MonthlyDataTableProps {
-  data: MonthlyData[];
-  valueField?: string;
-  valueFormat?: (value: number) => string;
-  total: number;
-  totalFormat?: (value: number) => string;
-  isLoading?: boolean;
-  loadingContent?: ReactNode;
-  emptyContent?: string;
-  tableAriaLabel?: string;
-  tableStyles?: {
-    base?: string;
-    header?: string;
-  };
-  topContent?: ReactNode;
-}
+import { MonthlyDataTableProps } from "@/interfaces/rnd";
 
 export const MonthlyDataTable = ({
   data,

@@ -1,25 +1,12 @@
 import { FiscalMonths, GainTrackingStatus } from "@prisma/client";
+import { ReactNode } from "react";
 
 import { TowerReport } from "@/interfaces/reports";
 
-export interface GainTrackingItem {
-  id: string;
-  name: string;
-  timeSaved: number; // hours per week
-  costSavings: number; // $ per month
-  roi: number; // percentage
-  implementationDate: string;
-  status: "Planned" | "In Progress" | "Completed";
-  department: string;
-  monthlyCosts?: {
-    month: string;
-    cost: number;
-  }[];
-}
-
 export interface GainsTrackingRecordItem {
   id: string;
-  createAt: Date;
+  createdAt: Date;
+  taskId: string;
   name: string;
   region?: string;
   hasGains: boolean;
@@ -33,6 +20,7 @@ export interface GainsTrackingRecordItem {
 
 export interface MonthlyCostRecordItem {
   id: string;
+  gainsRecordId: string;
   fiscalYear: number;
   month: FiscalMonths;
   cost: number;
@@ -84,4 +72,26 @@ export interface MonthlyReportsUsageBoardProps {
   reload: () => void;
   selectedYear?: number;
   totalCount: number;
+}
+
+export interface MonthlyData {
+  month: FiscalMonths | string;
+  [key: string]: any;
+}
+
+export interface MonthlyDataTableProps {
+  data: MonthlyData[];
+  valueField?: string;
+  valueFormat?: (value: number) => string;
+  total: number;
+  totalFormat?: (value: number) => string;
+  isLoading?: boolean;
+  loadingContent?: ReactNode;
+  emptyContent?: string;
+  tableAriaLabel?: string;
+  tableStyles?: {
+    base?: string;
+    header?: string;
+  };
+  topContent?: ReactNode;
 }

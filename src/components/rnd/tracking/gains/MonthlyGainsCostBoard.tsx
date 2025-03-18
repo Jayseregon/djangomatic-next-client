@@ -2,24 +2,35 @@
 
 import React, { useMemo } from "react";
 
-import { GainTrackingItem } from "@/src/interfaces/rnd";
+import { GainsTrackingRecordItem } from "@/src/interfaces/rnd";
 import { getFiscalMonths } from "@/src/components/rnd/tracking/getFiscalMonths";
 import { MonthlyDataTable } from "@/components/rnd/tracking/MonthlyDataTable";
 
-export const MonthlyGainsCostBoard = ({ item }: { item: GainTrackingItem }) => {
-  // Generate monthly cost data for fiscal year (Dec-Nov)
+export const MonthlyGainsCostBoard = ({
+  record,
+}: {
+  record: GainsTrackingRecordItem;
+}) => {
+  // Generate monthly cost data from the record's monthly costs
   const monthlyData = useMemo(() => {
-    // If we have actual monthly data, use it
-    if (item.monthlyCosts && item.monthlyCosts.length > 0) {
-      return item.monthlyCosts;
+    // If we have actual monthly costs data, map it to match the expected format
+    if (record.monthlyCosts && record.monthlyCosts.length > 0) {
+      return getFiscalMonths.map((month) => {
+        const monthData = record.monthlyCosts?.find((mc) => mc.month === month);
+
+        return {
+          month,
+          cost: monthData ? monthData.cost : 0,
+        };
+      });
     }
 
-    // Otherwise generate placeholder data
+    // Fallback to empty data if no monthly costs are available
     return getFiscalMonths.map((month) => ({
       month,
       cost: 0,
     }));
-  }, [item]);
+  }, [record]);
 
   const totalCost = useMemo(() => {
     return monthlyData.reduce((acc, curr) => acc + curr.cost, 0);

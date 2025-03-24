@@ -1,21 +1,12 @@
 "use client";
 
 import React, { useMemo, useState } from "react";
-import {
-  Modal,
-  ModalContent,
-  ModalHeader,
-  ModalBody,
-  ModalFooter,
-  Button,
-  Input,
-  useDisclosure,
-} from "@heroui/react";
-import { Save, CircleOff, DollarSign, Hash } from "lucide-react";
+import { useDisclosure } from "@heroui/react";
 
 import { CellEditData, MonthlyGainsCostBoardProps } from "@/src/interfaces/rnd";
 import { getFiscalMonths } from "@/src/components/rnd/tracking/getFiscalMonths";
 import { MonthlyDataTable } from "@/components/rnd/tracking/MonthlyDataTable";
+import { EditCostModal } from "@/components/rnd/tracking/gains/EditCostModal";
 
 export const MonthlyGainsCostBoard = ({
   record,
@@ -143,119 +134,20 @@ export const MonthlyGainsCostBoard = ({
         onCellClick={handleCellClick}
       />
 
-      {/* Edit Modal */}
-      <Modal
-        hideCloseButton
-        aria-labelledby="edit-cost-modal"
-        backdrop="blur"
-        classNames={{
-          base: "bg-background border border-foreground",
-        }}
+      <EditCostModal
+        adjustedCost={adjustedCost}
+        count={count}
+        editingCell={editingCell}
+        grandTotal={grandTotal}
         isOpen={isOpen}
-        size="2xl"
+        rate={rate}
+        setAdjustedCost={setAdjustedCost}
+        setCount={setCount}
+        setRate={setRate}
+        subtotal={subtotal}
         onClose={handleCloseModal}
-      >
-        <ModalContent>
-          <ModalHeader>Edit {editingCell?.month} Cost</ModalHeader>
-          <ModalBody>
-            <div className="flex flex-row gap-2">
-              <Input
-                isClearable
-                className="basis-1/2"
-                classNames={{
-                  input: "border-0 focus:ring-0",
-                  inputWrapper: "border-foreground/50 hover:!border-foreground",
-                }}
-                label="Count"
-                labelPlacement="outside"
-                placeholder="Enter count..."
-                startContent={<Hash />}
-                type="number"
-                value={count}
-                onChange={(e) => setCount(e.target.value)}
-                onClear={() => setCount("")}
-              />
-              <Input
-                isClearable
-                className="basis-1/2"
-                classNames={{
-                  input: "border-0 focus:ring-0",
-                  inputWrapper: "border-foreground/50 hover:!border-foreground",
-                }}
-                label="Rate"
-                labelPlacement="outside"
-                placeholder="Enter rate..."
-                startContent={<DollarSign />}
-                type="number"
-                value={rate}
-                onChange={(e) => setRate(e.target.value)}
-                onClear={() => setRate("")}
-              />
-              <Input
-                readOnly
-                className="basis-1/2"
-                classNames={{
-                  input: "border-0 focus:ring-0",
-                  inputWrapper: "border-foreground/50 hover:!border-foreground",
-                }}
-                label="Subtotal"
-                labelPlacement="outside"
-                startContent={<DollarSign />}
-                type="text"
-                value={subtotal > 0 ? `$${subtotal.toLocaleString()}` : ""}
-              />
-            </div>
-            <Input
-              isClearable
-              classNames={{
-                input: "border-0 focus:ring-0",
-                inputWrapper: "border-foreground/50 hover:!border-foreground",
-              }}
-              label="Adjusted Cost"
-              labelPlacement="outside"
-              placeholder="Enter adjustment..."
-              startContent={<DollarSign />}
-              type="number"
-              value={adjustedCost}
-              onChange={(e) => setAdjustedCost(e.target.value)}
-              onClear={() => setAdjustedCost("")}
-            />
-            <Input
-              readOnly
-              classNames={{
-                input: "border-0 focus:ring-0",
-                inputWrapper: "border-foreground/50 hover:!border-foreground",
-              }}
-              label="Grand Total"
-              labelPlacement="outside"
-              startContent={<DollarSign />}
-              type="text"
-              value={grandTotal > 0 ? `$${grandTotal.toLocaleString()}` : ""}
-            />
-          </ModalBody>
-          <ModalFooter>
-            <div className="flex flex-row gap-3">
-              <Button
-                isIconOnly
-                aria-label="Save Edit"
-                color="success"
-                onPress={handleSaveEdit}
-              >
-                <Save />
-              </Button>
-              <Button
-                isIconOnly
-                aria-label="Close Modal"
-                color="danger"
-                variant="bordered"
-                onPress={handleCloseModal}
-              >
-                <CircleOff />
-              </Button>
-            </div>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
+        onSave={handleSaveEdit}
+      />
     </>
   );
 };

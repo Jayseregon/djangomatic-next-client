@@ -9,12 +9,11 @@ import {
   TableColumn,
   TableCell,
   TableRow,
-  Button,
 } from "@heroui/react";
-import { RefreshCcw } from "lucide-react";
 
 import { LoadingContent } from "@/components/ui/LoadingContent";
 import { AppGroup, AppsTrackingBoardProps } from "@/interfaces/rnd";
+import { BoardTopContent } from "@/components/rnd/tracking/BoardTopContent";
 
 import { MonthlyAppsUsageBoard } from "./MonthlyAppsUsageBoard";
 
@@ -38,29 +37,6 @@ export const AppsTrackingBoard = ({
     setSelectedItem(item || null);
   };
 
-  const topContent = () => {
-    return (
-      <div className="flex justify-between items-center">
-        <div className="flex gap-2">
-          <Button
-            isIconOnly
-            color="primary"
-            onPress={() => {
-              reload();
-            }}
-          >
-            <RefreshCcw />
-          </Button>
-        </div>
-        {selectedYear && (
-          <div className="text-lg font-medium">
-            Showing data for {selectedYear}
-          </div>
-        )}
-      </div>
-    );
-  };
-
   return (
     <div className="mt-10 w-full">
       <div className="overflow-x-auto">
@@ -75,7 +51,7 @@ export const AppsTrackingBoard = ({
           color="primary"
           selectedKeys={selectedItem ? [selectedItem.id] : []}
           selectionMode="single"
-          topContent={topContent()}
+          topContent={BoardTopContent({ reload, selectedYear })}
           onSelectionChange={(keys) => {
             // The keys is a Set, we need to get the first (and only) key
             if (keys === "all") return;

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import {
   Modal,
   ModalContent,
@@ -10,22 +10,7 @@ import {
 } from "@heroui/react";
 import { Save, CircleOff, DollarSign, Hash } from "lucide-react";
 
-import { CellEditData } from "@/src/interfaces/rnd";
-
-interface EditCostModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  onSave: () => void;
-  editingCell: CellEditData | null;
-  count: string;
-  setCount: (value: string) => void;
-  rate: string;
-  setRate: (value: string) => void;
-  adjustedCost: string;
-  setAdjustedCost: (value: string) => void;
-  subtotal: number;
-  grandTotal: number;
-}
+import { EditCostModalProps } from "@/src/interfaces/rnd";
 
 export const EditCostModal = ({
   isOpen,
@@ -41,6 +26,38 @@ export const EditCostModal = ({
   subtotal,
   grandTotal,
 }: EditCostModalProps) => {
+  const countError = useMemo(() => {
+    if (!count) return null;
+    const numCount = Number(count);
+
+    if (isNaN(numCount)) return "Count must be a number";
+    if (numCount < 0) return "Count cannot be negative";
+
+    return null;
+  }, [count]);
+
+  const rateError = useMemo(() => {
+    if (!rate) return null;
+    const numRate = Number(rate);
+
+    if (isNaN(numRate)) return "Rate must be a number";
+    if (numRate < 0) return "Rate cannot be negative";
+
+    return null;
+  }, [rate]);
+
+  const adjustedCostError = useMemo(() => {
+    if (!adjustedCost) return null;
+    const numAdjustedCost = Number(adjustedCost);
+
+    if (isNaN(numAdjustedCost)) return "Adjusted cost must be a number";
+
+    return null;
+  }, [adjustedCost]);
+
+  // Determine if the form is valid for submission
+  const isFormValid = !countError && !rateError && !adjustedCostError;
+
   return (
     <Modal
       hideCloseButton
@@ -64,6 +81,8 @@ export const EditCostModal = ({
                 input: "border-0 focus:ring-0",
                 inputWrapper: "border-foreground/50 hover:!border-foreground",
               }}
+              errorMessage={countError}
+              isInvalid={!!countError}
               label="Count"
               labelPlacement="outside"
               placeholder="Enter count..."
@@ -80,6 +99,8 @@ export const EditCostModal = ({
                 input: "border-0 focus:ring-0",
                 inputWrapper: "border-foreground/50 hover:!border-foreground",
               }}
+              errorMessage={rateError}
+              isInvalid={!!rateError}
               label="Rate"
               labelPlacement="outside"
               placeholder="Enter rate..."
@@ -109,6 +130,8 @@ export const EditCostModal = ({
               input: "border-0 focus:ring-0",
               inputWrapper: "border-foreground/50 hover:!border-foreground",
             }}
+            errorMessage={adjustedCostError}
+            isInvalid={!!adjustedCostError}
             label="Adjusted Cost"
             labelPlacement="outside"
             placeholder="Enter adjustment..."
@@ -137,6 +160,7 @@ export const EditCostModal = ({
               isIconOnly
               aria-label="Save Edit"
               color="success"
+              isDisabled={!isFormValid}
               onPress={onSave}
             >
               <Save />

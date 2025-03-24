@@ -126,3 +126,29 @@ export interface MonthlyGainsCostBoardProps {
   ) => void;
   isLoading?: boolean;
 }
+
+export interface BoardTopContentProps {
+  reload: () => void;
+  selectedYear?: number;
+}
+
+export interface GainsTrackingBoardProps {
+  reload: () => void;
+  selectedYear?: number;
+  data: GainsTrackingRecordItem[];
+}
+
+export interface EditCostModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  onSave: () => void;
+  editingCell: CellEditData | null;
+  count: string;
+  setCount: (value: string) => void;
+  rate: string;
+  setRate: (value: string) => void;
+  adjustedCost: string;
+  setAdjustedCost: (value: string) => void;
+  subtotal: number;
+  grandTotal: number;
+}

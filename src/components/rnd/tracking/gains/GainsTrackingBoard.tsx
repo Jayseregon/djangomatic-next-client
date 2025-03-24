@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import { useTranslations } from "next-intl";
 import {
   Table,
@@ -15,17 +15,19 @@ import { SquareCheck, SquareX } from "lucide-react";
 
 import { LoadingContent } from "@/components/ui/LoadingContent";
 import {
+  GainsTrackingBoardProps,
   GainsTrackingRecordItem,
   MonthlyCostUpdateDetails,
 } from "@/src/interfaces/rnd";
 import { MonthlyGainsCostBoard } from "@/components/rnd/tracking/gains/MonthlyGainsCostBoard";
 import { updateMonthlyCost } from "@/src/actions/prisma/tracking/action";
+import { BoardTopContent } from "@/components/rnd/tracking/BoardTopContent";
 
 export const GainsTrackingBoard = ({
   data,
-}: {
-  data: GainsTrackingRecordItem[];
-}) => {
+  reload,
+  selectedYear,
+}: GainsTrackingBoardProps) => {
   const t = useTranslations("RnD.gainsTracking.boardColumns");
   const [selectedItem, setSelectedItem] =
     useState<GainsTrackingRecordItem | null>(null);
@@ -37,97 +39,126 @@ export const GainsTrackingBoard = ({
     setLocalData(data);
   }, [data]);
 
-  const handleSelectionChange = (key: React.Key) => {
-    const item = localData.find((item) => item.id === key);
+  const handleSelectionChange = useCallback(
+    (key: React.Key) => {
+      const item = localData.find((item) => item.id === key);
 
-    setSelectedItem(item || null);
-  };
+      setSelectedItem(item || null);
+    },
+    [localData],
+  );
+
+  // Helper function to update monthly costs
+  const createUpdatedCosts = useCallback(
+    (
+      costs: any[],
+      recordId: string,
+      month: string,
+      newCost: number,
+      details?: MonthlyCostUpdateDetails,
+    ) => {
+      const updatedCosts = [...costs];
+      const costIndex = updatedCosts.findIndex((cost) => cost.month === month);
+
+      if (costIndex >= 0) {
+        // Update existing month
+        updatedCosts[costIndex] = {
+          ...updatedCosts[costIndex],
+          cost: newCost,
+          count: details?.count,
+          rate: details?.rate,
+          adjustedCost: details?.adjustedCost,
+        };
+      } else {
+        // Add new month entry
+        updatedCosts.push({
+          id: `temp-${Date.now()}`,
+          gainsRecordId: recordId,
+          fiscalYear: new Date().getFullYear(),
+          month: month as any,
+          cost: newCost,
+          count: details?.count,
+          rate: details?.rate,
+          adjustedCost: details?.adjustedCost,
+        });
+      }
+
+      return updatedCosts;
+    },
+    [],
+  );
 
   // Handle updating monthly costs
-  const handleUpdateMonthlyCost = async (
-    month: string,
-    newCost: number,
-    details?: MonthlyCostUpdateDetails,
-  ) => {
-    if (!selectedItem) return;
+  const handleUpdateMonthlyCost = useCallback(
+    async (
+      month: string,
+      newCost: number,
+      details?: MonthlyCostUpdateDetails,
+    ) => {
+      if (!selectedItem) return;
 
-    setIsUpdating(true);
+      setIsUpdating(true);
 
-    try {
-      // Call server action to update the database
-      await updateMonthlyCost(
-        selectedItem.id,
-        month,
-        newCost,
-        details?.count || 0,
-        details?.rate || 0,
-        details?.adjustedCost || 0,
-      );
+      try {
+        // Call server action to update the database
+        await updateMonthlyCost(
+          selectedItem.id,
+          month,
+          newCost,
+          details?.count || 0,
+          details?.rate || 0,
+          details?.adjustedCost || 0,
+        );
 
-      // Optimistically update the local state
-      const updatedData = localData.map((item) => {
-        if (item.id === selectedItem.id) {
-          // Create a deep copy of the item
-          const updatedItem = { ...item };
+        // Optimistically update the local state
+        setLocalData((prevData) => {
+          return prevData.map((item) => {
+            if (item.id !== selectedItem.id) return item;
 
-          // Update or create the monthly cost for this month
-          const updatedCosts = [...updatedItem.monthlyCosts];
-          const costIndex = updatedCosts.findIndex(
-            (cost) => cost.month === month,
-          );
-
-          if (costIndex >= 0) {
-            // Update existing month
-            updatedCosts[costIndex] = {
-              ...updatedCosts[costIndex],
-              cost: newCost,
-              count: details?.count,
-              rate: details?.rate,
-              adjustedCost: details?.adjustedCost,
+            return {
+              ...item,
+              monthlyCosts: createUpdatedCosts(
+                item.monthlyCosts,
+                selectedItem.id,
+                month,
+                newCost,
+                details,
+              ),
             };
-          } else {
-            // Add new month entry
-            updatedCosts.push({
-              id: `temp-${Date.now()}`,
-              gainsRecordId: selectedItem.id,
-              fiscalYear: new Date().getFullYear(),
-              month: month as any,
-              cost: newCost,
-              count: details?.count,
-              rate: details?.rate,
-              adjustedCost: details?.adjustedCost,
-            });
-          }
+          });
+        });
 
-          updatedItem.monthlyCosts = updatedCosts;
+        // Update the selected item without a second state update
+        setSelectedItem((prevSelected) => {
+          if (!prevSelected || prevSelected.id !== selectedItem.id)
+            return prevSelected;
 
-          return updatedItem;
-        }
-
-        return item;
-      });
-
-      setLocalData(updatedData);
-
-      // Update the selected item
-      const updatedSelectedItem = updatedData.find(
-        (item) => item.id === selectedItem.id,
-      );
-
-      setSelectedItem(updatedSelectedItem || null);
-    } catch (error) {
-      console.error("Failed to update cost:", error);
-    } finally {
-      setIsUpdating(false);
-    }
-  };
+          return {
+            ...prevSelected,
+            monthlyCosts: createUpdatedCosts(
+              prevSelected.monthlyCosts,
+              selectedItem.id,
+              month,
+              newCost,
+              details,
+            ),
+          };
+        });
+      } catch (error) {
+        console.error("Failed to update cost:", error);
+      } finally {
+        setIsUpdating(false);
+      }
+    },
+    [selectedItem, createUpdatedCosts],
+  );
 
   // Split header text into multiple lines
-  const splitHeader = (lines: string[]) => {
+  const splitHeader = useCallback((lines: string[]) => {
     return lines.map((line, index) => <div key={index}>{line}</div>);
-  };
+  }, []);
 
-  const getStatusDisplay = (status: boolean) => {
+  const getStatusDisplay = useCallback((status: boolean) => {
     if (status) {
       return (
         <div className="flex items-center justify-center text-success w-full">
@@ -141,10 +172,10 @@ export const GainsTrackingBoard = ({
         </div>
       );
     }
-  };
+  }, []);
 
   // Map GainTrackingStatus to display values and styles
-  const getGainStatusDisplay = (status: GainTrackingStatus) => {
+  const getGainStatusDisplay = useCallback((status: GainTrackingStatus) => {
     switch (status) {
       case GainTrackingStatus.CLOSED:
         return { label: "Closed", className: "bg-green-300 text-green-800" };
@@ -158,7 +189,40 @@ export const GainsTrackingBoard = ({
       default:
         return { label: status, className: "bg-gray-100 text-gray-800" };
     }
-  };
+  }, []);
+
+  // Remove the tableRows memoization and instead memoize the render function
+  const renderTableRow = useCallback(
+    (item: GainsTrackingRecordItem) => (
+      <TableRow key={item.id}>
+        <TableCell className="max-w-60 truncate text-start text-nowrap">
+          {item.name}
+        </TableCell>
+        <TableCell>{item.region}</TableCell>
+        <TableCell className="text-center">
+          {getStatusDisplay(item.hasGains)}
+        </TableCell>
+        <TableCell className="text-center">
+          {getStatusDisplay(item.replaceOffshore)}
+        </TableCell>
+        <TableCell className="text-center">{item.timeInitial}</TableCell>
+        <TableCell className="text-center">{item.timeSaved}</TableCell>
+        <TableCell className="max-w-60 truncate text-start text-nowrap">
+          {item.comments || "-"}
+        </TableCell>
+        <TableCell>
+          <span
+            className={`px-2 py-1 rounded-full text-xs ${
+              getGainStatusDisplay(item.status).className
+            }`}
+          >
+            {getGainStatusDisplay(item.status).label}
+          </span>
+        </TableCell>
+      </TableRow>
+    ),
+    [getStatusDisplay, getGainStatusDisplay],
+  );
 
   return (
     <div className="mt-10 w-full">
@@ -174,6 +238,7 @@ export const GainsTrackingBoard = ({
           color="primary"
           selectedKeys={selectedItem ? [selectedItem.id] : []}
           selectionMode="single"
+          topContent={BoardTopContent({ reload, selectedYear })}
           onSelectionChange={(keys) => {
             // The keys is a Set, we need to get the first (and only) key
             if (keys === "all") return;
@@ -209,36 +274,7 @@ export const GainsTrackingBoard = ({
             items={localData}
             loadingContent={<LoadingContent />}
           >
-            {(item) => (
-              <TableRow key={item.id}>
-                <TableCell className="max-w-60 truncate text-start text-nowrap">
-                  {item.name}
-                </TableCell>
-                <TableCell>{item.region}</TableCell>
-                <TableCell className="text-center">
-                  {getStatusDisplay(item.hasGains)}
-                </TableCell>
-                <TableCell className="text-center">
-                  {getStatusDisplay(item.replaceOffshore)}
-                </TableCell>
-                <TableCell className="text-center">
-                  {item.timeInitial}
-                </TableCell>
-                <TableCell className="text-center">{item.timeSaved}</TableCell>
-                <TableCell className="max-w-60 truncate text-start text-nowrap">
-                  {item.comments || "-"}
-                </TableCell>
-                <TableCell>
-                  <span
-                    className={`px-2 py-1 rounded-full text-xs ${
-                      getGainStatusDisplay(item.status).className
-                    }`}
-                  >
-                    {getGainStatusDisplay(item.status).label}
-                  </span>
-                </TableCell>
-              </TableRow>
-            )}
+            {renderTableRow}
           </TableBody>
         </Table>
       </div>

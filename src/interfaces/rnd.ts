@@ -152,3 +152,10 @@ export interface EditCostModalProps {
   subtotal: number;
   grandTotal: number;
 }
+
+export interface EditGainsRecordModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  onSave: (updatedData: Partial<GainsTrackingRecordItem>) => void;
+  record: GainsTrackingRecordItem | null;
+}

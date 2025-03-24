@@ -9,9 +9,11 @@ import {
   TableColumn,
   TableCell,
   TableRow,
+  useDisclosure,
+  Button,
 } from "@heroui/react";
 import { GainTrackingStatus } from "@prisma/client";
-import { SquareCheck, SquareX } from "lucide-react";
+import { CircleCheckBig, CircleOff, Cog, Edit } from "lucide-react";
 
 import { LoadingContent } from "@/components/ui/LoadingContent";
 import {
@@ -20,8 +22,12 @@ import {
   MonthlyCostUpdateDetails,
 } from "@/src/interfaces/rnd";
 import { MonthlyGainsCostBoard } from "@/components/rnd/tracking/gains/MonthlyGainsCostBoard";
-import { updateMonthlyCost } from "@/src/actions/prisma/tracking/action";
+import {
+  updateGainsRecord,
+  updateMonthlyCost,
+} from "@/src/actions/prisma/tracking/action";
 import { BoardTopContent } from "@/components/rnd/tracking/BoardTopContent";
+import { EditGainsRecordModal } from "@/components/rnd/tracking/gains/EditGainsRecordModal";
 
 export const GainsTrackingBoard = ({
   data,
@@ -33,6 +39,13 @@ export const GainsTrackingBoard = ({
     useState<GainsTrackingRecordItem | null>(null);
   const [localData, setLocalData] = useState<GainsTrackingRecordItem[]>(data);
   const [isUpdating, setIsUpdating] = useState(false);
+  const [editingItem, setEditingItem] =
+    useState<GainsTrackingRecordItem | null>(null);
+  const {
+    isOpen: isEditModalOpen,
+    onOpen: openEditModal,
+    onClose: closeEditModal,
+  } = useDisclosure();
 
   // Update the component when data changes from props
   React.useEffect(() => {
@@ -153,6 +166,54 @@ export const GainsTrackingBoard = ({
     [selectedItem, createUpdatedCosts],
   );
 
+  // Add new function to handle opening the edit modal
+  const handleOpenEditModal = useCallback(
+    (item: GainsTrackingRecordItem) => {
+      setEditingItem(item);
+      openEditModal();
+    },
+    [openEditModal],
+  );
+
+  // Add new function to handle saving edited data
+  const handleSaveEdit = useCallback(
+    async (updatedData: Partial<GainsTrackingRecordItem>) => {
+      if (!updatedData.id) return;
+
+      try {
+        // Call server action to update the database
+        await updateGainsRecord(updatedData.id, {
+          region: updatedData.region,
+          hasGains: updatedData.hasGains,
+          replaceOffshore: updatedData.replaceOffshore,
+          timeInitial: updatedData.timeInitial,
+          timeSaved: updatedData.timeSaved,
+          comments: updatedData.comments,
+          status: updatedData.status,
+        });
+
+        // Optimistically update local state
+        setLocalData((prevData) =>
+          prevData.map((item) =>
+            item.id === updatedData.id ? { ...item, ...updatedData } : item,
+          ),
+        );
+
+        // Update selected item if it was the one being edited
+        if (selectedItem && selectedItem.id === updatedData.id) {
+          setSelectedItem((prev) =>
+            prev ? { ...prev, ...updatedData } : null,
+          );
+        }
+
+        closeEditModal();
+      } catch (error) {
+        console.error("Failed to update record:", error);
+      }
+    },
+    [closeEditModal, selectedItem],
+  );
+
   // Split header text into multiple lines
   const splitHeader = useCallback((lines: string[]) => {
     return lines.map((line, index) => <div key={index}>{line}</div>);
@@ -162,13 +223,13 @@ export const GainsTrackingBoard = ({
     if (status) {
       return (
         <div className="flex items-center justify-center text-success w-full">
-          <SquareCheck />
+          <CircleCheckBig />
         </div>
       );
     } else {
       return (
         <div className="flex items-center justify-center text-danger w-full">
-          <SquareX />
+          <CircleOff />
         </div>
       );
     }
@@ -191,7 +252,6 @@ export const GainsTrackingBoard = ({
     }
   }, []);
 
-  // Remove the tableRows memoization and instead memoize the render function
   const renderTableRow = useCallback(
     (item: GainsTrackingRecordItem) => (
       <TableRow key={item.id}>
@@ -207,7 +267,7 @@ export const GainsTrackingBoard = ({
         </TableCell>
         <TableCell className="text-center">{item.timeInitial}</TableCell>
         <TableCell className="text-center">{item.timeSaved}</TableCell>
-        <TableCell className="max-w-60 truncate text-start text-nowrap">
+        <TableCell className="max-w-60 min-w-60 truncate text-start text-nowrap">
           {item.comments || "-"}
         </TableCell>
         <TableCell>
@@ -219,9 +279,21 @@ export const GainsTrackingBoard = ({
             {getGainStatusDisplay(item.status).label}
           </span>
         </TableCell>
+        <TableCell className="text-center">
+          <Button
+            isIconOnly
+            aria-label="Edit record"
+            color="primary"
+            size="sm"
+            variant="light"
+            onPress={() => handleOpenEditModal(item)}
+          >
+            <Edit />
+          </Button>
+        </TableCell>
       </TableRow>
     ),
-    [getStatusDisplay, getGainStatusDisplay],
+    [getStatusDisplay, getGainStatusDisplay, handleOpenEditModal],
   );
 
   return (
@@ -268,6 +340,9 @@ export const GainsTrackingBoard = ({
             </TableColumn>
             <TableColumn key="comments">Comments</TableColumn>
             <TableColumn key="status">Status</TableColumn>
+            <TableColumn key="actions">
+              <Cog />
+            </TableColumn>
           </TableHeader>
           <TableBody
             emptyContent="No entries found"
@@ -291,6 +366,13 @@ export const GainsTrackingBoard = ({
           />
         </div>
       )}
+
+      <EditGainsRecordModal
+        isOpen={isEditModalOpen}
+        record={editingItem}
+        onClose={closeEditModal}
+        onSave={handleSaveEdit}
+      />
     </div>
   );
 };

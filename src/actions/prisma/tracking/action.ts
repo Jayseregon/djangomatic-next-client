@@ -2,6 +2,7 @@
 
 import { z } from "zod";
 import { revalidatePath } from "next/cache";
+import { GainTrackingStatus } from "@prisma/client";
 
 import { prisma } from "@/src/lib/prismaClient";
 
@@ -184,5 +185,47 @@ export async function updateMonthlyCost(
     return record;
   } catch (error) {
     throw new Error(`Error updating monthly cost: ${(error as Error).message}`);
+  }
+}
+
+// Update a gains tracking record
+export async function updateGainsRecord(
+  recordId: string,
+  data: {
+    region?: string;
+    hasGains?: boolean;
+    replaceOffshore?: boolean;
+    timeInitial?: number;
+    timeSaved?: number;
+    comments?: string;
+    status?: GainTrackingStatus;
+  },
+) {
+  try {
+    // Validate inputs
+    const validRecordId = z.string().cuid().parse(recordId);
+
+    // Construct update data with only provided fields
+    const updateData: any = {};
+
+    if (data.region !== undefined) updateData.region = data.region;
+    if (data.hasGains !== undefined) updateData.hasGains = data.hasGains;
+    if (data.replaceOffshore !== undefined)
+      updateData.replaceOffshore = data.replaceOffshore;
+    if (data.timeInitial !== undefined)
+      updateData.timeInitial = z.number().nonnegative().parse(data.timeInitial);
+    if (data.timeSaved !== undefined)
+      updateData.timeSaved = z.number().nonnegative().parse(data.timeSaved);
+    if (data.comments !== undefined) updateData.comments = data.comments;
+    if (data.status !== undefined) updateData.status = data.status;
+
+    const updatedRecord = await prisma.gainsTrackingRecord.update({
+      where: { id: validRecordId },
+      data: updateData,
+    });
+
+    return updatedRecord;
+  } catch (error) {
+    throw new Error(`Error updating gains record: ${(error as Error).message}`);
   }
 }

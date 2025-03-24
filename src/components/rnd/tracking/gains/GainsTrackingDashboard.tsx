@@ -1,84 +1,37 @@
 "use client";
 
-import { useState, useMemo, useEffect } from "react";
-import { Tabs, Tab } from "@heroui/react";
+import { Tabs, Tab, Button } from "@heroui/react";
+import { RefreshCw } from "lucide-react";
 
 import { GainsTrackingBoard } from "@/src/components/rnd/tracking/gains/GainsTrackingBoard";
-import {
-  getGainsTrackingRecords,
-  getGainsTrackingFiscalYears,
-} from "@/src/actions/prisma/tracking/action";
-import { GainsTrackingRecordItem } from "@/src/interfaces/rnd";
 import { LoadingContent } from "@/components/ui/LoadingContent";
+import { useGainsTrackingData } from "@/src/hooks/tracking/useGainsTrackingData";
 
 export const GainsTrackingDashboard = () => {
-  const [data, setData] = useState<GainsTrackingRecordItem[]>([]);
-  const [fiscalYears, setFiscalYears] = useState<number[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
-  // Fetch data on mount
-  useEffect(() => {
-    async function fetchData() {
-      try {
-        setIsLoading(true);
-        const [records, years] = await Promise.all([
-          getGainsTrackingRecords(),
-          getGainsTrackingFiscalYears(),
-        ]);
-
-        // Use current year if no years in database
-        const availableYears =
-          years.length > 0 ? years : [new Date().getFullYear()];
-
-        setData(records as GainsTrackingRecordItem[]);
-        setFiscalYears(availableYears);
-      } catch (err) {
-        setError((err as Error).message);
-        console.error("Error loading gains tracking data:", err);
-      } finally {
-        setIsLoading(false);
-      }
-    }
-
-    fetchData();
-  }, []);
-
-  // Default to current year or first available year
-  const currentYear = new Date().getFullYear();
-  const [selectedYear, setSelectedYear] = useState<number>(
-    fiscalYears.includes(currentYear)
-      ? currentYear
-      : fiscalYears[0] || currentYear,
-  );
-
-  // Update selected year when fiscal years are loaded
-  useEffect(() => {
-    if (fiscalYears.length > 0) {
-      setSelectedYear(
-        fiscalYears.includes(currentYear) ? currentYear : fiscalYears[0],
-      );
-    }
-  }, [fiscalYears, currentYear]);
-
-  // Filter data by selected fiscal year
-  const filteredData = useMemo(() => {
-    if (data.length === 0) return [];
-
-    // If the record has monthly costs for the selected year or no costs yet, include it
-    return data.filter(
-      (record) =>
-        record.monthlyCosts.length === 0 ||
-        record.monthlyCosts.some((mc) => mc.fiscalYear === selectedYear),
-    );
-  }, [data, selectedYear]);
+  const {
+    data,
+    fiscalYears,
+    selectedYear,
+    setSelectedYear,
+    isLoading,
+    error,
+    reload,
+  } = useGainsTrackingData();
 
   if (isLoading) {
     return <LoadingContent />;
   }
 
   if (error) {
-    return <div className="text-danger">Error loading data: {error}</div>;
+    return (
+      <div className="flex flex-col items-center gap-4">
+        <div className="text-danger">Error loading data: {error}</div>
+        <Button color="primary" onPress={reload}>
+          <RefreshCw className="mr-2 h-4 w-4" />
+          Try Again
+        </Button>
+      </div>
+    );
   }
 
   return (
@@ -101,7 +54,11 @@ export const GainsTrackingDashboard = () => {
           ))}
         </Tabs>
       </div>
-      <GainsTrackingBoard data={filteredData} />
+      <GainsTrackingBoard
+        data={data}
+        reload={reload}
+        selectedYear={selectedYear}
+      />
     </>
   );
 };

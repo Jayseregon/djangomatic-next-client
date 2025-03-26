@@ -357,7 +357,7 @@ export const GainsTrackingBoard = ({
       {selectedItem && (
         <div className="mt-6">
           <h3 className="text-lg font-medium mb-2">
-            Monthly Costs for {selectedItem.name}
+            Monthly Gains for {selectedItem.name}
           </h3>
           <MonthlyGainsCostBoard
             isLoading={isUpdating}

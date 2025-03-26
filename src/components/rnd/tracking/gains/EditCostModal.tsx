@@ -71,7 +71,7 @@ export const EditCostModal = ({
       onClose={onClose}
     >
       <ModalContent>
-        <ModalHeader>Edit {editingCell?.month} Cost</ModalHeader>
+        <ModalHeader>Edit {editingCell?.month} Gain</ModalHeader>
         <ModalBody>
           <div className="flex flex-row gap-2">
             <Input
@@ -132,7 +132,7 @@ export const EditCostModal = ({
             }}
             errorMessage={adjustedCostError}
             isInvalid={!!adjustedCostError}
-            label="Adjusted Cost"
+            label="Adjusted Gain"
             labelPlacement="outside"
             placeholder="Enter adjustment..."
             startContent={<DollarSign />}

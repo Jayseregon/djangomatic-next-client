@@ -171,7 +171,7 @@ describe("EditCostModal", () => {
 
     // Check if header shows correct month
     expect(screen.getByTestId("modal-header")).toHaveTextContent(
-      "Edit January Cost",
+      "Edit January Gain",
     );
 
     // Check if form fields have correct initial values - fix value type assertions
@@ -184,7 +184,7 @@ describe("EditCostModal", () => {
     expect(rateInput?.value.toString()).toBe("100");
 
     const adjustedCostInput = screen
-      .getByTestId("input-adjusted-cost")
+      .getByTestId("input-adjusted-gain")
       .querySelector("input");
 
     expect(adjustedCostInput?.value.toString()).toBe("0");
@@ -241,7 +241,7 @@ describe("EditCostModal", () => {
 
     // Find and update adjusted cost input
     const adjustedCostInput = screen
-      .getByTestId("input-adjusted-cost")
+      .getByTestId("input-adjusted-gain")
       .querySelector("input");
 
     fireEvent.change(adjustedCostInput!, { target: { value: "500" } });
@@ -269,7 +269,7 @@ describe("EditCostModal", () => {
     expect(mockSetRate).toHaveBeenCalledWith("");
 
     const adjustedCostClearButton = screen
-      .getByTestId("input-adjusted-cost")
+      .getByTestId("input-adjusted-gain")
       .querySelector('[data-testid="clear-button"]');
 
     fireEvent.click(adjustedCostClearButton!);

@@ -1,3 +1,34 @@
+import { FiscalMonths, GainTrackingStatus } from "@prisma/client";
+import { ReactNode } from "react";
+
+import { TowerReport } from "@/interfaces/reports";
+
+export interface GainsTrackingRecordItem {
+  id: string;
+  createdAt: Date;
+  taskId: string;
+  name: string;
+  region?: string;
+  hasGains: boolean;
+  replaceOffshore: boolean;
+  timeInitial: number;
+  timeSaved: number;
+  comments?: string;
+  status: GainTrackingStatus;
+  monthlyCosts: MonthlyCostRecordItem[];
+}
+
+export interface MonthlyCostRecordItem {
+  id: string;
+  gainsRecordId: string;
+  fiscalYear: number;
+  month: FiscalMonths;
+  cost: number;
+  count?: number;
+  rate?: number;
+  adjustedCost?: number;
+}
+
 export interface AppUsageTracking {
   id: string;
   task_id: string;
@@ -17,4 +48,114 @@ export interface AppGroup {
   total_time: string;
   id: string;
   endpoint: string;
+  monthlyUsage?: {
+    month: string;
+    count: number;
+  }[];
+}
+
+export interface AppsTrackingBoardProps {
+  data: AppGroup[];
+  isLoading: boolean;
+  error: string | null;
+  reload: () => void;
+  selectedYear?: number;
+}
+
+// Define a type that picks only the fields we need from TowerReport
+export type TowerReportForTracking = Pick<
+  TowerReport,
+  "id" | "createdAt" | "updatedAt"
+>;
+
+export interface MonthlyReportsUsageBoardProps {
+  data: { month: string; count: number }[];
+  isLoading: boolean;
+  error: string | null;
+  reload: () => void;
+  selectedYear?: number;
+  totalCount: number;
+}
+
+export interface MonthlyData {
+  month: FiscalMonths | string;
+  [key: string]: any;
+}
+
+export interface MonthlyDataTableProps {
+  data: MonthlyData[];
+  valueField?: string;
+  valueFormat?: (value: number) => string;
+  total: number;
+  totalFormat?: (value: number) => string;
+  isLoading?: boolean;
+  loadingContent?: ReactNode;
+  emptyContent?: string;
+  tableAriaLabel?: string;
+  tableStyles?: {
+    base?: string;
+    header?: string;
+  };
+  topContent?: ReactNode;
+  onCellClick?: (cellData: {
+    month: string;
+    value: number;
+    originalData: any;
+  }) => void;
+  isCellEditable?: boolean;
+}
+
+export interface MonthlyCostUpdateDetails {
+  count: number;
+  rate: number;
+  adjustedCost: number;
+}
+
+export interface CellEditData {
+  month: string;
+  value: number;
+  originalData: MonthlyData;
+}
+
+export interface MonthlyGainsCostBoardProps {
+  record: GainsTrackingRecordItem;
+  onUpdateMonthlyCost?: (
+    month: string,
+    newCost: number,
+    details: MonthlyCostUpdateDetails,
+  ) => void;
+  isLoading?: boolean;
+}
+
+export interface BoardTopContentProps {
+  reload: () => void;
+  selectedYear?: number;
+}
+
+export interface GainsTrackingBoardProps {
+  reload: () => void;
+  selectedYear?: number;
+  data: GainsTrackingRecordItem[];
+}
+
+export interface EditCostModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  onSave: () => void;
+  editingCell: CellEditData | null;
+  count: string;
+  setCount: (value: string) => void;
+  rate: string;
+  setRate: (value: string) => void;
+  adjustedCost: string;
+  setAdjustedCost: (value: string) => void;
+  subtotal: number;
+  grandTotal: number;
+}
+
+export interface EditGainsRecordModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  onSave: (updatedData: Partial<GainsTrackingRecordItem>) => void;
+  record: GainsTrackingRecordItem | null;
 }

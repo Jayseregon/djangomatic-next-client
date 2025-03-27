@@ -93,7 +93,8 @@
       "reportsSection": {
         "title": "Rapports",
         "bugDashboardLink": "Rapport de bug",
-        "appTrackingLink": "Suivi des applications"
+        "appTrackingLink": "Suivi des applications",
+        "gainsTrackingLink": "Suivi des gains"
       }
     },
     "appTracking": {
@@ -109,6 +110,13 @@
         "total": "Total RT"
       }
     },
+    "gainsTracking": {
+      "title": "Suivi des gains",
+      "subtitle": "Suivi des gains des outils d'automatisation",
+      "boardColumns": {
+        "name": "Nom"
+      }
+    },
     "taskExtension": "Tâches",
     "taskBoardColumns": {
       "created": "Créée",
@@ -120,7 +128,8 @@
       "comments": "Commentaires",
       "dueDate": "Échéance",
       "startedAt": "Commencée",
-      "completedAt": "Terminée"
+      "completedAt": "Terminée",
+      "trackGains": "Suivi des gains"
     },
     "taskModal": {
       "addNew": "Ajouter une nouvelle tâche",

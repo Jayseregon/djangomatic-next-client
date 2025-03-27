@@ -145,18 +145,69 @@ model ChecklistRow {
 }
 
 model RnDTeamTask {
-  id             String    @id @default(cuid())
-  createdAt      DateTime  @default(now())
+  id             String               @id @default(cuid())
+  createdAt      DateTime             @default(now())
   ownerId        String?
-  owner          User?     @relation(fields: [ownerId], references: [id])
+  owner          User?                @relation(fields: [ownerId], references: [id])
   task           String
   priority       Int
   impactedPeople String
   comment        String?
-  status         Status    @default(CREATED)
+  status         Status               @default(CREATED)
   dueDate        DateTime?
   startedAt      DateTime?
   completedAt    DateTime?
+  trackGains     Boolean              @default(true)
+  gains          GainsTrackingRecord? @relation("TaskToGains")
+}
+
+model GainsTrackingRecord {
+  id              String              @id @default(cuid())
+  createdAt       DateTime            @default(now())
+  task            RnDTeamTask         @relation("TaskToGains", fields: [taskId], references: [id])
+  taskId          String              @unique
+  name            String
+  region          String?
+  hasGains        Boolean             @default(false)
+  replaceOffshore Boolean             @default(false)
+  timeInitial     Int                 @default(0)
+  timeSaved       Int                 @default(0)
+  comments        String?
+  status          GainTrackingStatus  @default(OPEN)
+  monthlyCosts    MonthlyCostRecord[]
+}
+
+model MonthlyCostRecord {
+  id            String              @id @default(cuid())
+  gainsRecord   GainsTrackingRecord @relation(fields: [gainsRecordId], references: [id], onDelete: Cascade)
+  gainsRecordId String
+  fiscalYear    Int
+  month         FiscalMonths
+  cost          Int                 @default(0)
+  count         Int?                @default(0)
+  rate          Int?                @default(0)
+  adjustedCost  Int?                @default(0)
+}
+
+enum FiscalMonths {
+  December
+  January
+  February
+  March
+  April
+  May
+  June
+  July
+  August
+  September
+  October
+  November
+}
+
+enum GainTrackingStatus {
+  OPEN
+  CLOSED
+  CANCELLED
 }
 
 enum Status {

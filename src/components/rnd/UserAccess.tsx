@@ -5,6 +5,7 @@ import React, { useEffect, useState, type JSX } from "react";
 import { fetchUserServer } from "@/actions/generic/action";
 import { UserSchema } from "@/interfaces/lib";
 import { UnAuthorized } from "@/components/auth/unAuthorized";
+import { getRndUsers } from "@/src/actions/prisma/rndTask/action";
 
 import { TaskManager } from "./TaskManager";
 
@@ -99,8 +100,7 @@ const UsersTasksBoards = () => {
   useEffect(() => {
     async function fetchData() {
       try {
-        const response = await fetch("/api/rnd-all-users");
-        const data = await response.json();
+        const data = await getRndUsers();
 
         const sortedData = data.sort((a: UserSchema, b: UserSchema) => {
           return a.name.localeCompare(b.name);

@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 
 import { RnDTeamTask, UserSchema } from "@/interfaces/lib";
+import { createRndTask } from "@/src/actions/prisma/rndTask/action";
 
 import { TaskModal } from "./TaskModal";
 import { TriggerButton } from "./TriggerButton";
@@ -17,17 +18,7 @@ export const AddTaskButton = ({
 
   const handleSave = async (task: Partial<RnDTeamTask>) => {
     try {
-      const response = await fetch("/api/rnd-task/create", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(task),
-      });
-
-      if (!response.ok) {
-        throw new Error("Failed to save task");
-      }
+      await createRndTask(task);
       setVisible(false);
       onTaskChange();
     } catch (error) {

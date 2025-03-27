@@ -16,8 +16,7 @@ export default async function AppTrackingSidePage() {
   return <AppTrackingPageContent session={session} />;
 }
 
-// Export this component to make it directly testable
-export function AppTrackingPageContent({ session }: { session: any }) {
+function AppTrackingPageContent({ session }: { session: any }) {
   const t = useTranslations("RnD.appTracking");
 
   if (!session) return <UnAuthenticated />;

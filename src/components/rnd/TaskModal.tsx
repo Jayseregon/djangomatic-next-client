@@ -13,12 +13,18 @@ import {
   Input,
   Textarea,
   Chip,
+  Switch,
 } from "@heroui/react";
 import { CircleOff, Save, Trash2 } from "lucide-react";
+import { Status } from "@prisma/client";
 
 import { DatePicker } from "@/components/ui/DatePicker";
-import { UserSchema, RnDTeamTask, Status } from "@/interfaces/lib";
+import { UserSchema, RnDTeamTask } from "@/interfaces/lib";
 import { statusColorMap } from "@/lib/utils";
+import {
+  getRndUsers,
+  deleteRndTask,
+} from "@/src/actions/prisma/rndTask/action";
 
 interface TaskModalProps {
   visible: boolean;
@@ -50,6 +56,7 @@ export const TaskModal: React.FC<TaskModalProps> = ({
     dueDate: null,
     startedAt: null,
     completedAt: null,
+    trackGains: true,
   };
 
   const initialState = useMemo(() => {
@@ -73,8 +80,7 @@ export const TaskModal: React.FC<TaskModalProps> = ({
 
   async function fetchUsers() {
     try {
-      const response = await fetch("/api/rnd-all-users");
-      const data: UserSchema[] = await response.json();
+      const data = await getRndUsers();
 
       setUsers(data);
     } catch (error) {
@@ -90,6 +96,13 @@ export const TaskModal: React.FC<TaskModalProps> = ({
     setTask((prevTask) => ({
       ...prevTask,
       [field]: value,
+    }));
+  };
+
+  const handleTrackGainsChange = (isSelected: boolean) => {
+    setTask((prevTask) => ({
+      ...prevTask,
+      trackGains: isSelected,
     }));
   };
 
@@ -183,17 +196,7 @@ export const TaskModal: React.FC<TaskModalProps> = ({
 
   const handleDelete = async () => {
     try {
-      const response = await fetch("/api/rnd-task/delete", {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ id: task.id }),
-      });
-
-      if (!response.ok) {
-        throw new Error("Failed to delete task");
-      }
+      await deleteRndTask(task.id as string);
       onTaskChange();
       onClose();
     } catch (error) {
@@ -424,25 +427,34 @@ export const TaskModal: React.FC<TaskModalProps> = ({
           </div>
         </ModalBody>
         <ModalFooter>
-          <div className="flex flex-row gap-3">
-            <Button
-              isIconOnly
-              aria-label="Save Task"
-              color="success"
-              isDisabled={!task.task || !task.owner}
-              onPress={handleSaveClick}
+          <div className="flex flex-row justify-between w-full">
+            <Switch
+              aria-label="Track Gains"
+              isSelected={task.trackGains}
+              onValueChange={handleTrackGainsChange}
             >
-              <Save />
-            </Button>
-            <Button
-              isIconOnly
-              aria-label="Close Modal"
-              color="danger"
-              variant="bordered"
-              onPress={onClose}
-            >
-              <CircleOff />
-            </Button>
+              {t("taskBoardColumns.trackGains")}
+            </Switch>
+            <div className="flex flex-row gap-3">
+              <Button
+                isIconOnly
+                aria-label="Save Task"
+                color="success"
+                isDisabled={!task.task || !task.owner}
+                onPress={handleSaveClick}
+              >
+                <Save />
+              </Button>
+              <Button
+                isIconOnly
+                aria-label="Close Modal"
+                color="danger"
+                variant="bordered"
+                onPress={onClose}
+              >
+                <CircleOff />
+              </Button>
+            </div>
           </div>
         </ModalFooter>
       </ModalContent>

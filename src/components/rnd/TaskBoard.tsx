@@ -18,6 +18,7 @@ import { LoadingContent } from "@/components/ui/LoadingContent";
 import { UserSchema } from "@/interfaces/lib";
 import { title } from "@/components/primitives";
 import { statusColorMap, taskDueDateColor } from "@/lib/utils";
+import { getRndUserById } from "@/src/actions/prisma/rndTask/action";
 
 export const TaskBoardShort = ({
   user,
@@ -32,10 +33,8 @@ export const TaskBoardShort = ({
   handleRowAction: (taskId: string) => void;
   showCompleted?: boolean;
 }) => {
-  const tasksList = useSortTasksList(
-    `/api/rnd-task?id=${user.id}`,
-    showCompleted,
-  );
+  // Pass user.id directly to useSortTasksList instead of an API endpoint URL
+  const tasksList = useSortTasksList(user.id, showCompleted);
   const t = useTranslations("RnD");
 
   useEffect(() => {
@@ -154,8 +153,7 @@ export const TaskBoardFull = ({
   useEffect(() => {
     async function fetchData() {
       try {
-        const response = await fetch(`/api/rnd-unique-user?id=${id}`);
-        const data = await response.json();
+        const data = await getRndUserById(id);
 
         setUser(data);
       } catch (error) {
@@ -165,7 +163,8 @@ export const TaskBoardFull = ({
     fetchData();
   }, [id]);
 
-  const tasksList = useSortTasksList(`/api/rnd-task?id=${id}`, showCompleted);
+  // Pass id directly to useSortTasksList instead of an API endpoint URL
+  const tasksList = useSortTasksList(id, showCompleted);
 
   useEffect(() => {
     tasksList.reload();

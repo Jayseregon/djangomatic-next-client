@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import { useTranslations } from "next-intl";
 import {
   Table,
@@ -9,35 +9,32 @@ import {
   TableColumn,
   TableCell,
   TableRow,
-  Button,
 } from "@heroui/react";
-import { RefreshCcw } from "lucide-react";
 
 import { LoadingContent } from "@/components/ui/LoadingContent";
-import { useAppTrackingData } from "@/src/hooks/useAppTrackingData";
+import { AppGroup, AppsTrackingBoardProps } from "@/interfaces/rnd";
+import { BoardTopContent } from "@/components/rnd/tracking/BoardTopContent";
 
-export const AppTrackingBoard = () => {
+import { MonthlyAppsUsageBoard } from "./MonthlyAppsUsageBoard";
+
+export const AppsTrackingBoard = ({
+  data,
+  isLoading,
+  error,
+  reload,
+  selectedYear,
+}: AppsTrackingBoardProps) => {
   const t = useTranslations("RnD.appTracking.boardColumns");
-  const { data, isLoading, error, reload } = useAppTrackingData();
+  const [selectedItem, setSelectedItem] = useState<AppGroup | null>(null);
 
   if (error) {
     throw new Error(error);
   }
 
-  const topContent = () => {
-    return (
-      <div className="flex justify-left items-center">
-        <Button
-          isIconOnly
-          color="primary"
-          onPress={() => {
-            reload();
-          }}
-        >
-          <RefreshCcw />
-        </Button>
-      </div>
-    );
+  const handleSelectionChange = (key: React.Key) => {
+    const item = data.find((item) => item.id === key);
+
+    setSelectedItem(item || null);
   };
 
   return (
@@ -52,8 +49,20 @@ export const AppTrackingBoard = () => {
             th: "uppercase bg-foreground text-background",
           }}
           color="primary"
+          selectedKeys={selectedItem ? [selectedItem.id] : []}
           selectionMode="single"
-          topContent={topContent()}
+          topContent={BoardTopContent({ reload, selectedYear })}
+          onSelectionChange={(keys) => {
+            // The keys is a Set, we need to get the first (and only) key
+            if (keys === "all") return;
+            const keyArray = Array.from(keys);
+
+            if (keyArray.length > 0) {
+              handleSelectionChange(keyArray[0]);
+            } else {
+              setSelectedItem(null);
+            }
+          }}
         >
           <TableHeader>
             <TableColumn key="app-name" allowsSorting className="text-center">
@@ -88,7 +97,7 @@ export const AppTrackingBoard = () => {
             items={data}
             loadingContent={<LoadingContent />}
           >
-            {data.map((track) => (
+            {(track) => (
               <TableRow key={track.id}>
                 <TableCell className="text-start text-nowrap">
                   {track.app_name}
@@ -112,10 +121,20 @@ export const AppTrackingBoard = () => {
                   {track.total_time}
                 </TableCell>
               </TableRow>
-            ))}
+            )}
           </TableBody>
         </Table>
       </div>
+
+      {selectedItem && (
+        <div className="mt-6">
+          <h3 className="text-lg font-medium mb-2">
+            Monthly Usage for {selectedItem.app_name}
+            {selectedYear ? ` (${selectedYear})` : ""}
+          </h3>
+          <MonthlyAppsUsageBoard item={selectedItem} />
+        </div>
+      )}
     </div>
   );
 };

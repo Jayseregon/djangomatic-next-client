@@ -3,20 +3,20 @@ import { useTranslations } from "next-intl";
 import { title, subtitle } from "@/components/primitives";
 import { auth } from "@/auth";
 import { UnAuthenticated } from "@/components/auth/unAuthenticated";
-import { AppTrackingBoard } from "@/src/components/rnd/tracking/AppTrackingBoard";
 import { UserAccessRnDSection } from "@/src/components/rnd/UserAccess";
 import ErrorBoundary from "@/src/components/error/ErrorBoundary";
+import { GainsTrackingDashboard } from "@/src/components/rnd/tracking/gains/GainsTrackingDashboard";
 
-export default async function AppTrackingSidePage() {
+export default async function GainsTrackingSidePage() {
   const session = await auth();
 
   if (!session) return <UnAuthenticated />;
 
-  return <AppTrackkingPageContent session={session} />;
+  return <GainsTrackingPageContent session={session} />;
 }
 
-function AppTrackkingPageContent({ session }: { session: any }) {
-  const t = useTranslations("RnD.appTracking");
+function GainsTrackingPageContent({ session }: { session: any }) {
+  const t = useTranslations("RnD.gainsTracking");
 
   if (!session) return <UnAuthenticated />;
 
@@ -26,7 +26,7 @@ function AppTrackkingPageContent({ session }: { session: any }) {
         <h1 className={title()}>{t("title")}</h1>
         <h2 className={subtitle({ class: "mt-4" })}>{t("subtitle")}</h2>
         <ErrorBoundary fallback={<div>Error loading tracking data</div>}>
-          <AppTrackingBoard />
+          <GainsTrackingDashboard />
         </ErrorBoundary>
       </div>
     </UserAccessRnDSection>

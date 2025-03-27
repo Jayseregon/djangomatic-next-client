@@ -289,9 +289,13 @@ describe("UserTable Component", () => {
   it("handles fetch error", async () => {
     const consoleErrorSpy = jest.spyOn(console, "error").mockImplementation();
 
-    (global.fetch as jest.Mock).mockRejectedValueOnce(
-      new Error("Failed to fetch"),
-    );
+    // Mock a failed response instead of rejecting the promise
+    (global.fetch as jest.Mock).mockResolvedValueOnce({
+      ok: false,
+      status: 500,
+      statusText: "Internal Server Error",
+      json: () => Promise.reject(new Error("Invalid JSON")),
+    });
 
     render(<UserTable sessionEmail="admin@example.com" />);
 

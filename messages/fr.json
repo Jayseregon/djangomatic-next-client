@@ -311,7 +311,11 @@
       "update": "Implémentation de l'outil Xplore."
     },
     "hydro_one_bom_auto": {
-      "description": "This app creates a BOM [...] from a zip file [...]",
+      "description": "Cette application produit un résumé BOM à partir d'un fichier zip contenant des shapefiles.",
+      "update": "Xplore tools implementation."
+    },
+    "geopackage_customizer": {
+      "description": "Cette application personnalise un geopackage en ajoutant des nouvelles couches et formatant les couches existantes.",
       "update": "Xplore tools implementation."
     }
   },

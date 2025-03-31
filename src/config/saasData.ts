@@ -521,6 +521,21 @@ export const saasData = {
       dbClass: "",
       is_active: "Y",
     },
+    // Geopackage Customizer
+    {
+      label: "GPKG Customizer",
+      type: "hld",
+      href: "/saas/xplore/hld/geopackage_customizer",
+      endpoint: "/saas/xplore/ajax/gpkg-customize/",
+      desc: "hydro_one_bom_auto", // TO-DO
+      version: "1.0.0",
+      date_upd: "2025-03-31",
+      doc_href: "/saas/tds/empty",
+      asDownloadable: true,
+      willOverride: false,
+      dbClass: "",
+      is_active: "Y",
+    },
   ],
   telus_saas: [
     // Create Telus candidates excel files from Mergin Maps survey data

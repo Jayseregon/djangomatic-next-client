@@ -68,6 +68,7 @@ describe("UserTableBodies", () => {
     canAccessAppsVistabeamOverride: false,
     canAccessAppsVistabeamSuper: false,
     canAccessAppsXploreAdmin: false,
+    canAccessAppsXploreHLD: false,
     canAccessAppsTelusAdmin: false,
     canAccessBugReportBoard: false,
     canAccessRoadmapBoard: false,
@@ -287,7 +288,7 @@ describe("UserTableBodies", () => {
       );
 
       expect(screen.getByText(mockUser.name)).toBeInTheDocument();
-      expect(screen.getAllByRole("button")).toHaveLength(1); // Xplore view has 1 toggle button
+      expect(screen.getAllByRole("button")).toHaveLength(2); // Xplore view has 1 toggle button
     });
   });
 

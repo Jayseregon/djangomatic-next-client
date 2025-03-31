@@ -520,6 +520,14 @@ export const appsXploreBody = ({
           user={user}
         />
       </TableCell>
+      <TableCell>
+        <PermissionButton
+          disabled={disabled}
+          fieldName="canAccessAppsXploreHLD"
+          handleToggle={handleToggle}
+          user={user}
+        />
+      </TableCell>
     </TableRow>
   );
 };

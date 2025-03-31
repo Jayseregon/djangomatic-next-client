@@ -37,7 +37,7 @@ function SaasPageContent({ session }: { session: any }): JSX.Element {
   return (
     <WithPermissionOverlay
       email={session.user.email}
-      permission="canAccessAppsXploreAdmin"
+      permission="canAccessAppsXploreHLD"
     >
       <div className="space-y-5 mb-5">
         <InputDataProvider>

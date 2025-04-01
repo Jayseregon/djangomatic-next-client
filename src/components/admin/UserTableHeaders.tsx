@@ -201,6 +201,7 @@ export const appsXploreHeader = (): JSX.Element => {
         username
       </TableColumn>
       <TableColumn key="xplore1">admin</TableColumn>
+      <TableColumn key="xplore2">hld</TableColumn>
     </TableHeader>
   );
 };

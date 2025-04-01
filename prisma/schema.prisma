@@ -34,6 +34,7 @@ model User {
   canAccessAppsVistabeamOverride Boolean       @default(false)
   canAccessAppsVistabeamSuper    Boolean       @default(false)
   canAccessAppsXploreAdmin       Boolean       @default(false)
+  canAccessAppsXploreHLD         Boolean       @default(false)
   canAccessAppsTelusAdmin        Boolean       @default(false)
   canAccessBugReportBoard        Boolean       @default(true)
   canAccessRoadmapBoard          Boolean       @default(false)

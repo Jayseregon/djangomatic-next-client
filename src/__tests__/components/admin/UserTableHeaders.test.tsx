@@ -163,11 +163,11 @@ describe("UserTableHeaders", () => {
   describe("appsXploreHeader", () => {
     it("renders apps Xplore header with correct columns", () => {
       renderHeader(appsXploreHeader());
-      const expectedTexts = ["email", "username", "admin"];
+      const expectedTexts = ["email", "username", "admin", "hld"];
       const headers = getHeaderTexts();
 
       expectedTexts.forEach((text) => expect(headers).toContain(text));
-      expect(headers).toHaveLength(3);
+      expect(headers).toHaveLength(4);
     });
   });
 

@@ -22,6 +22,7 @@ export interface UserSchema {
   canAccessAppsVistabeamOverride: boolean;
   canAccessAppsVistabeamSuper: boolean;
   canAccessAppsXploreAdmin: boolean;
+  canAccessAppsXploreHLD: boolean;
   canAccessAppsTelusAdmin: boolean;
   canAccessBugReportBoard: boolean;
   canAccessRoadmapBoard: boolean;

@@ -88,7 +88,7 @@ export const SidebarSaas = (): JSX.Element => {
   // Extract Xplore apps data
   const appCategoriesXplore = getAppCategories({
     dataTarget: "xplore_saas",
-    titles: ["admin"],
+    titles: ["admin", "hld"],
   });
 
   // Extract Telus apps data

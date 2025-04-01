@@ -81,7 +81,11 @@ describe("MonthlyDataTable", () => {
     render(<MonthlyDataTable data={mockData} total={60} />);
 
     // Check if all months are rendered in the header
-    const fiscalMonths = typeof getFiscalMonths === 'function' ? getFiscalMonths() : getFiscalMonths;
+    const fiscalMonths =
+      typeof getFiscalMonths === "function"
+        ? getFiscalMonths()
+        : getFiscalMonths;
+
     fiscalMonths.forEach((month) => {
       expect(screen.getByText(month)).toBeInTheDocument();
     });

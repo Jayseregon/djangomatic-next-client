@@ -317,6 +317,10 @@
     "geopackage_customizer": {
       "description": "Cette application personnalise un geopackage en ajoutant des nouvelles couches et formatant les couches existantes.",
       "update": "Xplore tools implementation."
+    },
+    "conversion_sqlite": {
+      "description": "Cette fonction crée un fichier sqlite incluant toutes les couches requises pour l'importation Autocad.",
+      "update": "Xplore tools implementation."
     }
   },
   "telusApps": {

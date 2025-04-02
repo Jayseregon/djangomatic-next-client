@@ -536,6 +536,21 @@ export const saasData = {
       dbClass: "",
       is_active: "Y",
     },
+    // Conversion sqlite
+    {
+      label: "Conversion sqlite",
+      type: "hld",
+      href: "/saas/xplore/hld/conversion_sqlite",
+      endpoint: "/saas/xplore/ajax/ajax_conversion_sqlite/",
+      desc: "conversion_sqlite",
+      version: "1.0.0",
+      date_upd: "2025-04-02",
+      doc_href: "/saas/xplore/empty",
+      asDownloadable: true,
+      willOverride: false,
+      dbClass: "",
+      is_active: "Y",
+    },
   ],
   telus_saas: [
     // Create Telus candidates excel files from Mergin Maps survey data

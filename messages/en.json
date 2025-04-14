@@ -317,6 +317,10 @@
     "geopackage_customizer": {
       "description": "This app customizes a geopackage file by adding a new layer and formatting existing layers.",
       "update": "Xplore tools implementation."
+    },
+    "conversion_sqlite": {
+      "description": "This function creates an sqlite file including all the layers required for Autocad import.",
+      "update": "Xplore tools implementation."
     }
   },
   "telusApps": {

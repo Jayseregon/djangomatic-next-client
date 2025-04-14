@@ -541,7 +541,7 @@ export const saasData = {
       label: "Conversion sqlite",
       type: "hld",
       href: "/saas/xplore/hld/conversion_sqlite",
-      endpoint: "/saas/xplore/ajax/ajax_conversion_sqlite/",
+      endpoint: "/saas/xplore/ajax/conversion-sqlite/",
       desc: "conversion_sqlite",
       version: "1.0.0",
       date_upd: "2025-04-02",

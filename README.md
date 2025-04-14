@@ -1,6 +1,6 @@
 # Next.js & NextUI Application for Djangomatic
 
-[![Version](https://img.shields.io/badge/version-2.2.32-blue)](https://github.com/teleconapplications/djangomatic_prototype)
+[![Version](https://img.shields.io/badge/version-2.2.34-blue)](https://github.com/teleconapplications/djangomatic_prototype)
 [![Last Updated](https://img.shields.io/badge/last%20updated-2025.04.14-brightgreen)](https://github.com/teleconapplications/djangomatic_prototype)
 
 ## Table of Contents

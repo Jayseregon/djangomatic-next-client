@@ -1,7 +1,7 @@
 import { render, screen } from "@testing-library/react";
 import { NextIntlClientProvider } from "next-intl";
 
-import SaasPage from "@/app/saas/xplore/hld/conversion_sqlite/page";
+import SaasPage from "@/src/app/saas/xplore/hld/sqlite_converter/page";
 
 // Mock next-intl translations
 jest.mock("next-intl", () => ({

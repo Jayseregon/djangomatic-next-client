@@ -6,8 +6,8 @@ import {
   waitFor,
   act,
 } from "@testing-library/react";
-import { Status } from "@prisma/client";
 
+import { Status } from "@/generated/client";
 import { TaskManager } from "@/components/rnd/TaskManager";
 import {
   getRndUserById,
@@ -153,6 +153,7 @@ describe("TaskManager Component", () => {
     canAccessAppsVistabeamOverride: false,
     canAccessAppsVistabeamSuper: false,
     canAccessAppsXploreAdmin: false,
+    canAccessAppsXploreHLD: false,
     canAccessAppsTelusAdmin: false,
     canAccessBugReportBoard: false,
     canAccessRoadmapBoard: false,

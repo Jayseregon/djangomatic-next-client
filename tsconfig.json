@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "baseUrl": ".",
-    "target": "es2015",
+    "target": "ES2022",
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
@@ -41,6 +41,6 @@
     "**/*.mdx",
     "**/*.json",
     "src/__tests__/**/*"
-  ],
-  "exclude": ["node_modules"]
+, "src/__tests__/__mocks__"  ],
+  "exclude": ["node_modules", "generated"]
 }

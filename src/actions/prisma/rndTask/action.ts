@@ -102,7 +102,10 @@ export async function updateRndTask(data: any) {
       // Get the current task to check if it already has a gains record
       const currentTask = await prisma.rnDTeamTask.findUnique({
         where: { id },
-        include: { gains: true },
+        include: {
+          gains: true,
+          owner: true, // Include owner relationship
+        },
       });
 
       if (currentTask && !currentTask.gains) {
@@ -124,6 +127,7 @@ export async function updateRndTask(data: any) {
             data: {
               task: { connect: { id } },
               name: currentTask.task, // Copy task name to gains record
+              taskOwner: currentTask.owner?.name || "", // Set taskOwner to the owner's name or empty string if owner is null
               // Also create initial monthly cost record
               monthlyCosts: {
                 create: {
@@ -172,7 +176,7 @@ export async function deleteRndTask(id: string) {
     });
 
     // Use a transaction to ensure all related records are deleted
-    await prisma.$transaction(async (tx) => {
+    await prisma.$transaction(async (tx: any) => {
       // If a gains record exists, delete it first (this will cascade to MonthlyCostRecords)
       if (task?.gains) {
         await tx.gainsTrackingRecord.delete({

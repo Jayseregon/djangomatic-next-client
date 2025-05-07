@@ -1,6 +1,19 @@
 import { render, screen } from "@testing-library/react";
+import { NextIntlClientProvider } from "next-intl";
 
 import SaasPage from "@/app/saas/cogeco/hld/tqc_shp_format/page";
+
+// Mock next-intl translations
+jest.mock("next-intl", () => ({
+  useTranslations: () => (key: string) => key,
+  NextIntlClientProvider: ({
+    children,
+  }: {
+    children: React.ReactNode;
+    messages?: Record<string, any>;
+    locale?: string;
+  }) => <>{children}</>,
+}));
 
 // Mock components
 jest.mock("@/components/auth/unAuthenticated", () => ({
@@ -29,9 +42,65 @@ jest.mock("@/components/auth/withPermissionOverlay", () => ({
   ),
 }));
 
-jest.mock("@/components/_dev/path-in-dev", () => ({
-  __esModule: true,
-  default: () => <div data-testid="path-in-dev">Path in Development</div>,
+// Mock SaaS components
+jest.mock("@/components/saas/appPageTitle", () => ({
+  AppPageTitle: ({ client }: { client: string }) => (
+    <div data-client={client} data-testid="app-page-title">
+      App Page Title
+    </div>
+  ),
+}));
+
+jest.mock("@/components/saas/appPageDescription", () => ({
+  AppPageDescription: ({
+    client,
+    targetTranslation,
+  }: {
+    client: string;
+    targetTranslation: string;
+  }) => (
+    <div
+      data-client={client}
+      data-testid="app-page-description"
+      data-translation={targetTranslation}
+    >
+      App Description
+    </div>
+  ),
+}));
+
+jest.mock("@/components/saas/serverSelectors", () => ({
+  ZipFileInputButton: () => <div data-testid="zip-file-input">Upload Zip</div>,
+}));
+
+jest.mock("@/components/saas/inputDataProviders", () => ({
+  InputDataProvider: ({ children }: { children: React.ReactNode }) => (
+    <div data-testid="input-data-provider">{children}</div>
+  ),
+  useInputData: () => ({
+    inputData: {},
+    setInputData: jest.fn(),
+  }),
+  useTaskData: () => ({
+    taskData: {},
+    setTaskData: jest.fn(),
+  }),
+  useConsoleData: () => ({
+    consoleOutput: "",
+    appendToConsole: jest.fn(),
+  }),
+  useAppName: () => ({
+    appName: "",
+    setAppName: jest.fn(),
+  }),
+}));
+
+jest.mock("@/components/saas/consoleDisplay", () => ({
+  ConsoleDisplay: () => <div data-testid="console-display">Console</div>,
+}));
+
+jest.mock("@/components/saas/startTaskButton", () => ({
+  StartTaskButton: () => <div data-testid="start-task-button">Start Task</div>,
 }));
 
 // Mock auth
@@ -44,12 +113,25 @@ jest.mock(
 );
 
 describe("SaasCogecoHldTqcShpFormat Page", () => {
+  const mockMessages = {
+    ServerDropdowns: {
+      uploadZip: "Upload ZIP",
+      chooseFile: "Choose File",
+    },
+  };
+
   const renderPage = async (session: any = null) => {
     const { auth } = require("../../../../../../../auth");
 
     (auth as jest.Mock).mockImplementation(() => Promise.resolve(session));
 
-    return render(await SaasPage());
+    const page = await SaasPage();
+
+    return render(
+      <NextIntlClientProvider locale="en" messages={mockMessages}>
+        {page}
+      </NextIntlClientProvider>,
+    );
   };
 
   beforeEach(() => {
@@ -64,7 +146,6 @@ describe("SaasCogecoHldTqcShpFormat Page", () => {
       expect(
         screen.queryByTestId("permission-overlay"),
       ).not.toBeInTheDocument();
-      expect(screen.queryByTestId("path-in-dev")).not.toBeInTheDocument();
     });
 
     it("renders content when authenticated", async () => {
@@ -78,7 +159,6 @@ describe("SaasCogecoHldTqcShpFormat Page", () => {
 
       expect(screen.queryByTestId("unauthenticated")).not.toBeInTheDocument();
       expect(screen.getByTestId("permission-overlay")).toBeInTheDocument();
-      expect(screen.getByTestId("path-in-dev")).toBeInTheDocument();
     });
   });
 
@@ -100,8 +180,10 @@ describe("SaasCogecoHldTqcShpFormat Page", () => {
         "canAccessAppsCogecoHLD",
       );
     });
+  });
 
-    it("contains PathInDev component", async () => {
+  describe("Page Components", () => {
+    it("renders all required components when authenticated", async () => {
       const mockSession = {
         user: {
           email: "test@example.com",
@@ -110,12 +192,15 @@ describe("SaasCogecoHldTqcShpFormat Page", () => {
 
       await renderPage(mockSession);
 
-      expect(screen.getByTestId("path-in-dev")).toBeInTheDocument();
+      expect(screen.getByTestId("input-data-provider")).toBeInTheDocument();
+      expect(screen.getByTestId("app-page-title")).toBeInTheDocument();
+      expect(screen.getByTestId("app-page-description")).toBeInTheDocument();
+      expect(screen.getByTestId("zip-file-input")).toBeInTheDocument();
+      expect(screen.getByTestId("console-display")).toBeInTheDocument();
+      expect(screen.getByTestId("start-task-button")).toBeInTheDocument();
     });
-  });
 
-  describe("Component Structure", () => {
-    it("renders in correct hierarchy when authenticated", async () => {
+    it("passes correct props to components", async () => {
       const mockSession = {
         user: {
           email: "test@example.com",
@@ -124,26 +209,42 @@ describe("SaasCogecoHldTqcShpFormat Page", () => {
 
       await renderPage(mockSession);
 
-      const overlay = screen.getByTestId("permission-overlay");
-      const pathInDev = screen.getByTestId("path-in-dev");
+      const title = screen.getByTestId("app-page-title");
 
-      expect(overlay).toContainElement(pathInDev);
+      expect(title).toHaveAttribute("data-client", "cogeco_saas");
+
+      const description = screen.getByTestId("app-page-description");
+
+      expect(description).toHaveAttribute("data-client", "cogeco_saas");
+      expect(description).toHaveAttribute("data-translation", "cogecoApps");
     });
-  });
 
-  describe("SaasPageContent", () => {
-    it("renders content with correct session data", async () => {
+    it("maintains correct component hierarchy", async () => {
       const mockSession = {
         user: {
-          email: "test.user@example.com",
+          email: "test@example.com",
         },
       };
 
       await renderPage(mockSession);
 
-      const overlay = screen.getByTestId("permission-overlay");
+      const inputDataProvider = screen.getByTestId("input-data-provider");
 
-      expect(overlay).toHaveAttribute("data-email", "test.user@example.com");
+      expect(inputDataProvider).toContainElement(
+        screen.getByTestId("app-page-title"),
+      );
+      expect(inputDataProvider).toContainElement(
+        screen.getByTestId("app-page-description"),
+      );
+      expect(inputDataProvider).toContainElement(
+        screen.getByTestId("zip-file-input"),
+      );
+      expect(inputDataProvider).toContainElement(
+        screen.getByTestId("console-display"),
+      );
+      expect(inputDataProvider).toContainElement(
+        screen.getByTestId("start-task-button"),
+      );
     });
   });
 });

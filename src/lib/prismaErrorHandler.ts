@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
-import { Prisma } from "@prisma/client";
+
+import { Prisma } from "@/generated/client";
 
 export const handlePrismaError = (error: any): NextResponse => {
   const message = error?.message || "Unknown error";

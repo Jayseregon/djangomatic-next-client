@@ -9,14 +9,7 @@ import { UserSchema } from "@/interfaces/lib";
 
 import { UserTable } from "./UserTable";
 import { BlobStorage } from "./BlobStorage";
-// import { VideosGrid } from "./VideosGrid";
 
-/**
- * AdminTabs component renders a set of tabs for administrative tasks.
- * It includes tabs for user permissions and Azure blobs storage.
- *
- * @returns {JSX.Element} The rendered AdminTabs component.
- */
 const AdminTabs = ({ sessionEmail }: { sessionEmail: string }): JSX.Element => {
   const [usersCount, setUsersCount] = useState<number>(0);
   const [superUsersCount, setSuperUsersCount] = useState<number>(0);
@@ -86,15 +79,6 @@ const AdminTabs = ({ sessionEmail }: { sessionEmail: string }): JSX.Element => {
   );
 };
 
-/**
- * UserAccessAdmin component checks if a user has admin access and renders the appropriate content.
- * If the user is not an admin, it displays an unauthorized message.
- * If the user is an admin, it renders the AdminTabs component.
- *
- * @param {Object} props - The props for the UserAccessAdmin component.
- * @param {string} props.email - The email of the user to check permissions for.
- * @returns {JSX.Element} The rendered UserAccessAdmin component.
- */
 export const UserAccessAdmin = ({ email }: { email: string }): JSX.Element => {
   const [user, setUser] = useState<UserSchema | null>(null);
 

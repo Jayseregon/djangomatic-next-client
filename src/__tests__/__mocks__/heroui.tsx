@@ -15,8 +15,9 @@ interface ButtonProps extends BaseProps {
   size?: string;
   variant?: string;
   id?: string;
-  isDisabled?: boolean; // Add isDisabled prop
-  disabled?: boolean; // Add standard HTML disabled prop
+  isDisabled?: boolean;
+  disabled?: boolean;
+  startContent?: React.ReactNode;
 }
 
 // Add a type for event handlers
@@ -52,6 +53,7 @@ export const Button = ({
   color,
   id,
   isDisabled,
+  startContent,
   ...props
 }: ButtonProps) => {
   const handleClick = (e: React.MouseEvent) => {
@@ -66,8 +68,8 @@ export const Button = ({
       aria-label={
         ariaLabel || (typeof children === "string" ? children : undefined)
       }
-      className={className}
-      color={color} // Keep this
+      className={className || ""}
+      color={color}
       data-color={color}
       data-icon-only={isIconOnly}
       data-testid={id || ariaLabel?.toLowerCase().replace(/\s+/g, "-")}
@@ -79,6 +81,7 @@ export const Button = ({
       onClick={handleClick}
       {...props}
     >
+      {startContent && <span className="mr-2">{startContent}</span>}
       {children}
     </button>
   );

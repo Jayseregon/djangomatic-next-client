@@ -2,8 +2,8 @@
 
 import { z } from "zod";
 import { revalidatePath } from "next/cache";
-import { GainTrackingStatus } from "@prisma/client";
 
+import { GainTrackingStatus } from "@/generated/client";
 import { prisma } from "@/src/lib/prismaClient";
 
 export async function getAppTrackingEntries() {
@@ -121,7 +121,7 @@ export async function getGainsTrackingFiscalYears() {
       },
     });
 
-    return years.map((y) => y.fiscalYear);
+    return years.map((y: any) => y.fiscalYear);
   } catch (error) {
     throw new Error(`Error fetching fiscal years: ${(error as Error).message}`);
   }
@@ -147,7 +147,7 @@ export async function updateMonthlyCost(
 
     const fiscalYear = new Date().getFullYear();
 
-    const record = await prisma.$transaction(async (tx) => {
+    const record = await prisma.$transaction(async (tx: any) => {
       const existingRecord = await tx.monthlyCostRecord.findFirst({
         where: {
           gainsRecordId: validRecordId,
@@ -199,6 +199,7 @@ export async function updateGainsRecord(
     timeSaved?: number;
     comments?: string;
     status?: GainTrackingStatus;
+    taskOwner?: string;
   },
 ) {
   try {
@@ -218,6 +219,8 @@ export async function updateGainsRecord(
       updateData.timeSaved = z.number().nonnegative().parse(data.timeSaved);
     if (data.comments !== undefined) updateData.comments = data.comments;
     if (data.status !== undefined) updateData.status = data.status;
+    if (data.taskOwner !== undefined)
+      updateData.taskOwner = z.string().parse(data.taskOwner);
 
     const updatedRecord = await prisma.gainsTrackingRecord.update({
       where: { id: validRecordId },

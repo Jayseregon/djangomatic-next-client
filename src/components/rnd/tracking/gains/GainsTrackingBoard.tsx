@@ -12,9 +12,9 @@ import {
   useDisclosure,
   Button,
 } from "@heroui/react";
-import { GainTrackingStatus } from "@prisma/client";
 import { CircleCheckBig, CircleOff, Cog, Edit } from "lucide-react";
 
+import { GainTrackingStatus } from "@/generated/client";
 import { LoadingContent } from "@/components/ui/LoadingContent";
 import {
   GainsTrackingBoardProps,
@@ -190,6 +190,7 @@ export const GainsTrackingBoard = ({
           timeSaved: updatedData.timeSaved,
           comments: updatedData.comments,
           status: updatedData.status,
+          taskOwner: updatedData.taskOwner,
         });
 
         // Optimistically update local state
@@ -258,6 +259,9 @@ export const GainsTrackingBoard = ({
         <TableCell className="max-w-60 truncate text-start text-nowrap">
           {item.name}
         </TableCell>
+        <TableCell className="max-w-60 truncate text-start text-nowrap">
+          {item.taskOwner}
+        </TableCell>
         <TableCell>{item.region}</TableCell>
         <TableCell className="text-center">
           {getStatusDisplay(item.hasGains)}
@@ -325,6 +329,7 @@ export const GainsTrackingBoard = ({
         >
           <TableHeader>
             <TableColumn key="name">{t("name")}</TableColumn>
+            <TableColumn key="owner">{t("owner")}</TableColumn>
             <TableColumn key="region">Region</TableColumn>
             <TableColumn key="hasGains">
               {splitHeader(["Has", "Gains"])}
@@ -333,10 +338,10 @@ export const GainsTrackingBoard = ({
               {splitHeader(["Replace", "Offshore"])}
             </TableColumn>
             <TableColumn key="timeInitial">
-              {splitHeader(["Initial", "Time (hrs)"])}
+              {splitHeader(["Initial", "hrs"])}
             </TableColumn>
             <TableColumn key="timeSaved">
-              {splitHeader(["Saved", "Time (hrs)"])}
+              {splitHeader(["Saved", "hrs"])}
             </TableColumn>
             <TableColumn key="comments">Comments</TableColumn>
             <TableColumn key="status">Status</TableColumn>

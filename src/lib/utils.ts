@@ -1,7 +1,7 @@
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
-import { Status } from "@prisma/client";
 
+import { Status } from "@/generated/client";
 import { RnDTeamTask } from "@/interfaces/lib";
 import { BugStatus, BugReport, BugPriority } from "@/interfaces/bugs";
 import { ProjectType } from "@/interfaces/roadmap";

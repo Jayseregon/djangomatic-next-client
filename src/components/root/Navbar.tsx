@@ -76,10 +76,18 @@ export const Navbar = ({ nonce, session }: NavbarProps): JSX.Element | null => {
   const [user, setUser] = useState<UserSchema | null>(null);
 
   const navItems = useMemo(() => {
-    return user?.isAdmin
-      ? siteConfig.navItemsBase.concat(siteConfig.navItemsAdmin)
-      : siteConfig.navItemsBase;
-  }, [user?.isAdmin]);
+    let currentNavItems = [...siteConfig.navItemsBase];
+
+    if (user?.isAdmin) {
+      currentNavItems = currentNavItems.concat(siteConfig.navItemsAdmin);
+    }
+
+    if (user?.canAccessChatbot) {
+      currentNavItems = currentNavItems.concat(siteConfig.navItemsAI);
+    }
+
+    return currentNavItems;
+  }, [user?.isAdmin, user?.canAccessChatbot]);
 
   useEffect(() => {
     async function fetchData() {

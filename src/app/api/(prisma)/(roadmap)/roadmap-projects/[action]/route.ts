@@ -1,9 +1,7 @@
 import { NextResponse } from "next/server";
-import { PrismaClient } from "@prisma/client";
 
+import { prisma } from "@/src/lib/prismaClient";
 import { handlePrismaError } from "@/src/lib/prismaErrorHandler";
-
-const prisma = new PrismaClient();
 
 // TODO - Remove GET method and create server action
 export async function GET(request: Request) {

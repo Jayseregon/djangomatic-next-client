@@ -1,9 +1,8 @@
 import React from "react";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
-import { Status } from "@prisma/client";
 
-// Fix the import path - don't mock the component we're testing
-import { TaskModal } from "@/components/rnd/TaskModal"; // Correctly import the real component
+import { Status } from "@/generated/client";
+import { TaskModal } from "@/components/rnd/TaskModal";
 import { RnDTeamTask, UserSchema } from "@/interfaces/lib";
 import * as RndTaskActions from "@/src/actions/prisma/rndTask/action";
 
@@ -338,7 +337,6 @@ describe("TaskModal", () => {
     createdAt: new Date(),
     lastLogin: new Date(),
     rndTasks: [],
-    // Adding the remaining properties with default values
     canAccessChatbot: false,
     canAccessAppsTdsHLD: false,
     canAccessAppsTdsLLD: false,
@@ -351,6 +349,7 @@ describe("TaskModal", () => {
     canAccessAppsVistabeamOverride: false,
     canAccessAppsVistabeamSuper: false,
     canAccessAppsXploreAdmin: false,
+    canAccessAppsXploreHLD: false,
     canAccessAppsTelusAdmin: false,
     canAccessBugReportBoard: false,
     canAccessRoadmapBoard: false,

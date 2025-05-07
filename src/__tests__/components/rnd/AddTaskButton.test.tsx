@@ -1,11 +1,11 @@
 import React from "react";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
-import { Status } from "@prisma/client";
 
 import { AddTaskButton } from "@/components/rnd/AddTaskButton";
 import { createRndTask } from "@/src/actions/prisma/rndTask/action";
 import { TaskModal } from "@/components/rnd/TaskModal";
 import { TriggerButton } from "@/components/rnd/TriggerButton";
+import { Status } from "@/generated/client";
 
 // Mock dependencies
 jest.mock("@/src/actions/prisma/rndTask/action", () => ({
@@ -49,7 +49,6 @@ describe("AddTaskButton", () => {
     createdAt: new Date(),
     lastLogin: new Date(),
     rndTasks: [],
-    // Add all required properties with default values
     canAccessChatbot: false,
     canAccessAppsTdsHLD: false,
     canAccessAppsTdsLLD: false,
@@ -62,6 +61,7 @@ describe("AddTaskButton", () => {
     canAccessAppsVistabeamOverride: false,
     canAccessAppsVistabeamSuper: false,
     canAccessAppsXploreAdmin: false,
+    canAccessAppsXploreHLD: false,
     canAccessAppsTelusAdmin: false,
     canAccessBugReportBoard: false,
     canAccessRoadmapBoard: false,

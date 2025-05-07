@@ -13,9 +13,11 @@ import {
   Textarea,
 } from "@heroui/react";
 import { Save, CircleOff, MapPin, Timer, TimerReset } from "lucide-react";
-import { GainTrackingStatus } from "@prisma/client";
 
+import { GainTrackingStatus } from "@/generated/client";
 import { EditGainsRecordModalProps } from "@/src/interfaces/rnd";
+import { getRndUsers } from "@/src/actions/prisma/rndTask/action";
+import { UserSchema } from "@/src/interfaces/lib";
 
 export const EditGainsRecordModal = ({
   isOpen,
@@ -39,6 +41,25 @@ export const EditGainsRecordModal = ({
   const [status, setStatus] = useState<GainTrackingStatus>(
     record?.status || GainTrackingStatus.OPEN,
   );
+  const [users, setUsers] = useState<UserSchema[]>([]);
+  const [taskOwner, setTaskOwner] = useState<string>(record?.taskOwner || "");
+
+  // Fetch users when modal opens
+  React.useEffect(() => {
+    async function fetchUsers() {
+      try {
+        const data = await getRndUsers();
+
+        setUsers(data);
+      } catch (error) {
+        console.error("Failed to fetch users:", error);
+      }
+    }
+
+    if (isOpen) {
+      fetchUsers();
+    }
+  }, [isOpen]);
 
   // Reset form when record changes
   React.useEffect(() => {
@@ -50,6 +71,7 @@ export const EditGainsRecordModal = ({
       setTimeSaved(record.timeSaved.toString());
       setComments(record.comments || "");
       setStatus(record.status);
+      setTaskOwner(record.taskOwner || "");
     }
   }, [record]);
 
@@ -76,6 +98,14 @@ export const EditGainsRecordModal = ({
   // Determine if form is valid
   const isFormValid = !timeInitialError && !timeSavedError;
 
+  // Handle user selection change
+  const handleSelectChange = (keys: any) => {
+    const selectedKey = keys.currentKey as string;
+    const selectedUser = users.find((user) => user.id === selectedKey);
+
+    setTaskOwner(selectedUser?.name || "");
+  };
+
   // Handle save
   const handleSave = () => {
     if (!isFormValid || !record) return;
@@ -89,6 +119,7 @@ export const EditGainsRecordModal = ({
       timeSaved: Number(timeSaved),
       comments,
       status,
+      taskOwner,
     });
   };
 
@@ -155,21 +186,50 @@ export const EditGainsRecordModal = ({
           </div>
 
           <div className="flex flex-row gap-6 mt-2">
-            <Switch
-              aria-label="has-gains"
-              isSelected={hasGains}
-              onValueChange={setHasGains}
+            <Select
+              aria-label="task-owner"
+              className="basis-1/2"
+              classNames={{
+                trigger: "border-0",
+                label: "w-full",
+                popoverContent: "bg-background",
+              }}
+              label="Task Owner"
+              labelPlacement="outside"
+              placeholder="Owner..."
+              selectedKeys={
+                users.find((user) => user.name === taskOwner)
+                  ? new Set([
+                      users.find((user) => user.name === taskOwner)?.id || "",
+                    ])
+                  : new Set()
+              }
+              onChange={handleSelectChange}
             >
-              Has Gains
-            </Switch>
+              {users.map((user) => (
+                <SelectItem key={user.id} textValue={user.name}>
+                  {user.name}
+                </SelectItem>
+              ))}
+            </Select>
 
-            <Switch
-              aria-label="replace-offshore"
-              isSelected={replaceOffshore}
-              onValueChange={setReplaceOffshore}
-            >
-              Replace Offshore
-            </Switch>
+            <div className="flex flex-row gap-6 basis-1/2">
+              <Switch
+                aria-label="has-gains"
+                isSelected={hasGains}
+                onValueChange={setHasGains}
+              >
+                Has Gains
+              </Switch>
+
+              <Switch
+                aria-label="replace-offshore"
+                isSelected={replaceOffshore}
+                onValueChange={setReplaceOffshore}
+              >
+                Replace Offshore
+              </Switch>
+            </div>
           </div>
 
           <div className="flex flex-row gap-4">

@@ -41,7 +41,7 @@ describe("UserTableHeaders", () => {
       const headers = getHeaderTexts();
 
       expectedTexts.forEach((text) => expect(headers).toContain(text));
-      expect(headers).toHaveLength(9);
+      expect(headers).toHaveLength(10);
     });
 
     it("renders non-admin view correctly", () => {
@@ -59,7 +59,7 @@ describe("UserTableHeaders", () => {
       const headers = getHeaderTexts();
 
       expectedTexts.forEach((text) => expect(headers).toContain(text));
-      expect(headers).toHaveLength(8);
+      expect(headers).toHaveLength(9);
     });
   });
 

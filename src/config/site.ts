@@ -34,6 +34,8 @@ export const siteConfig = {
       label: "Admin",
       href: "/admin",
     },
+  ],
+  navItemsAI: [
     {
       label: "✨ Chatbot 🤖",
       href: "/chatbot",

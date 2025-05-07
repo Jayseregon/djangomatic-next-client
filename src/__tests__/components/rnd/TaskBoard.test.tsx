@@ -6,8 +6,8 @@ import {
   act,
   RenderResult,
 } from "@testing-library/react";
-import { Status } from "@prisma/client";
 
+import { Status } from "@/generated/client";
 import { useSortTasksList } from "@/hooks/useSortTasksList";
 import { TaskBoardShort, TaskBoardFull } from "@/components/rnd/TaskBoard";
 import { getRndUserById } from "@/src/actions/prisma/rndTask/action";
@@ -56,6 +56,7 @@ describe("TaskBoardShort Component", () => {
     canAccessAppsVistabeamOverride: false,
     canAccessAppsVistabeamSuper: false,
     canAccessAppsXploreAdmin: false,
+    canAccessAppsXploreHLD: false,
     canAccessAppsTelusAdmin: false,
     canAccessBugReportBoard: false,
     canAccessRoadmapBoard: false,
@@ -340,6 +341,7 @@ describe("TaskBoardFull Component", () => {
     canAccessAppsVistabeamOverride: false,
     canAccessAppsVistabeamSuper: false,
     canAccessAppsXploreAdmin: false,
+    canAccessAppsXploreHLD: false,
     canAccessAppsTelusAdmin: false,
     canAccessBugReportBoard: false,
     canAccessRoadmapBoard: false,

@@ -63,7 +63,7 @@ export const useAppsTrackingData = (filterYear?: number) => {
       // Calculate available years from the data
       const yearSet = new Set<number>();
 
-      appRecords.forEach((record) => {
+      appRecords.forEach((record: AppUsageTracking) => {
         const year = new Date(record.createdAt).getFullYear();
 
         yearSet.add(year);
@@ -86,7 +86,7 @@ export const useAppsTrackingData = (filterYear?: number) => {
 
       // Filter records by year if a filter is specified
       const filteredRecords = filterYear
-        ? appRecords.filter((record) => {
+        ? appRecords.filter((record: AppUsageTracking) => {
             const recordYear = new Date(record.createdAt).getFullYear();
 
             return recordYear === filterYear;

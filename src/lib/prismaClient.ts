@@ -1,5 +1,5 @@
 /* eslint-disable no-var */
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient } from "@/generated/client";
 
 // Declare a global variable that will be used to share the PrismaClient instance
 declare global {

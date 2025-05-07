@@ -51,7 +51,12 @@ export const SidebarRnD = ({
       <div className="flex flex-col gap-2">
         <div className="section">
           <Accordion
-            defaultExpandedKeys={["rnd-team", "rnd-home", "bug-report"]}
+            defaultExpandedKeys={[
+              "rnd-team",
+              "rnd-home",
+              "bug-report",
+              "chatbot-tools",
+            ]}
             variant="bordered"
           >
             <AccordionItem
@@ -138,6 +143,46 @@ export const SidebarRnD = ({
                 nonce={nonce}
               >
                 {t("sidebar.reportsSection.gainsTrackingLink")}
+              </Link>
+              <Link
+                className={`${linkTagStyling("/rnd/tracking/chat", "/rnd/tracking/chat")} w-full`}
+                href={"/rnd/tracking/chat"}
+                nonce={nonce}
+              >
+                {t("sidebar.reportsSection.chatbotTrackingLink")}
+              </Link>
+            </AccordionItem>
+
+            {/* AI Chatbot tools */}
+            <AccordionItem
+              key="chatbot-tools"
+              aria-label="chatbot-tools"
+              title={
+                <h2 className="text-xl font-black text-foreground indent-2 mt-3 mb-1">
+                  Chatbot Tools
+                </h2>
+              }
+            >
+              <Link
+                className={`${linkTagStyling("/rnd/chatbot-tools/health-check", "/rnd/chatbot-tools/health-check")} w-full`}
+                href={"/rnd/chatbot-tools/health-check"}
+                nonce={nonce}
+              >
+                Health Check
+              </Link>
+              <Link
+                className={`${linkTagStyling("/rnd/chatbot-tools/sources", "/rnd/chatbot-tools/sources")} w-full`}
+                href={"/rnd/chatbot-tools/sources"}
+                nonce={nonce}
+              >
+                Sources Management
+              </Link>
+              <Link
+                className={`${linkTagStyling("/rnd/chatbot-tools/uploads", "/rnd/chatbot-tools/uploads")} w-full`}
+                href={"/rnd/chatbot-tools/uploads"}
+                nonce={nonce}
+              >
+                Uploads Management
               </Link>
             </AccordionItem>
           </Accordion>

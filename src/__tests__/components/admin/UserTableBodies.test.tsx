@@ -14,22 +14,30 @@ import {
   appsTelusBody,
 } from "@/components/admin/UserTableBodies";
 import { UserSchema } from "@/interfaces/lib";
+import { PermissionSwitchProps } from "@/components/admin/PermissionButton"; // Import the actual props type
 
 // Use jest.mock instead of manual mock
 jest.mock("@/components/admin/PermissionButton", () => ({
-  PermissionButton: ({ user, fieldName, handleToggle, disabled }: any) => {
-    // Force disabled to be a boolean
+  // Use the actual props type for better type checking
+  PermissionButton: ({
+    user,
+    fieldName,
+    handleToggle,
+    disabled,
+  }: PermissionSwitchProps) => {
+    // Ensure isDisabled is strictly boolean true if disabled is true
     const isDisabled = disabled === true;
 
     return (
       <button
         aria-disabled={isDisabled}
         data-testid={`permission-button-${fieldName}`}
-        disabled={isDisabled}
+        disabled={isDisabled} // Set the native disabled attribute
         role="button"
         type="button"
         onClick={(e) => {
           e.preventDefault();
+          // Only call toggle if not disabled
           if (!isDisabled) {
             handleToggle(user.id, fieldName, !user[fieldName]);
           }
@@ -57,6 +65,7 @@ describe("UserTableBodies", () => {
     lastLogin: new Date(),
     isRnDTeam: false,
     canAccessChatbot: false,
+    canAccessSeticsCollection: false,
     canAccessAppsTdsHLD: false,
     canAccessAppsTdsLLD: false,
     canAccessAppsTdsArcGIS: false,
@@ -89,6 +98,12 @@ describe("UserTableBodies", () => {
     canAccessVideoLiDAR: false,
     canAccessVideoEng: false,
     canAccessVideoSttar: false,
+    canAccessGlobalAll: false,
+    canAccessGlobalAtlantic: false,
+    canAccessGlobalCentral: false,
+    canAccessGlobalQuebec: false,
+    canAccessGlobalWest: false,
+    canAccessGlobalUSA: false,
     rndTasks: [],
   };
 
@@ -107,7 +122,7 @@ describe("UserTableBodies", () => {
               user: mockUser,
               handleToggle: mockHandleToggle,
               isAdmin: true,
-              isSessionSuperUser: true,
+              isDisabled: false, // Pass isDisabled instead of isSessionSuperUser
             })}
           </tbody>
         </table>,
@@ -115,7 +130,7 @@ describe("UserTableBodies", () => {
 
       expect(screen.getByText(mockUser.name)).toBeInTheDocument();
       expect(screen.getByText(mockUser.email)).toBeInTheDocument();
-      expect(screen.getAllByRole("button")).toHaveLength(6); // Admin view has 5 toggle buttons
+      expect(screen.getAllByRole("button")).toHaveLength(7);
     });
 
     it("renders non-admin view correctly", () => {
@@ -126,7 +141,7 @@ describe("UserTableBodies", () => {
               user: mockUser,
               handleToggle: mockHandleToggle,
               isAdmin: false,
-              isSessionSuperUser: true,
+              isDisabled: false, // Pass isDisabled instead of isSessionSuperUser
             })}
           </tbody>
         </table>,
@@ -134,10 +149,10 @@ describe("UserTableBodies", () => {
 
       expect(screen.getByText(mockUser.name)).toBeInTheDocument();
       expect(screen.getByText(mockUser.email)).toBeInTheDocument();
-      expect(screen.getAllByRole("button")).toHaveLength(5); // Non-admin view has 4 toggle buttons
+      expect(screen.getAllByRole("button")).toHaveLength(6);
     });
 
-    it("disables buttons for non-super users", () => {
+    it("disables buttons when isDisabled is true", () => {
       render(
         <table>
           <tbody>
@@ -145,7 +160,7 @@ describe("UserTableBodies", () => {
               user: mockUser,
               handleToggle: mockHandleToggle,
               isAdmin: false,
-              isSessionSuperUser: false,
+              isDisabled: true, // Pass isDisabled as true
             })}
           </tbody>
         </table>,
@@ -167,7 +182,7 @@ describe("UserTableBodies", () => {
             {docsBody({
               user: mockUser,
               handleToggle: mockHandleToggle,
-              isSessionSuperUser: true,
+              isDisabled: false, // Pass isDisabled instead of isSessionSuperUser
             })}
           </tbody>
         </table>,
@@ -175,6 +190,26 @@ describe("UserTableBodies", () => {
 
       expect(screen.getByText(mockUser.name)).toBeInTheDocument();
       expect(screen.getAllByRole("button")).toHaveLength(8); // Docs view has 8 toggle buttons
+    });
+
+    it("disables buttons when isDisabled is true", () => {
+      render(
+        <table>
+          <tbody>
+            {docsBody({
+              user: mockUser,
+              handleToggle: mockHandleToggle,
+              isDisabled: true, // Pass isDisabled as true
+            })}
+          </tbody>
+        </table>,
+      );
+
+      const buttons = screen.getAllByRole("button");
+
+      buttons.forEach((button) => {
+        expect(button).toBeDisabled();
+      });
     });
   });
 
@@ -186,7 +221,7 @@ describe("UserTableBodies", () => {
             {videosBody({
               user: mockUser,
               handleToggle: mockHandleToggle,
-              isSessionSuperUser: true,
+              isDisabled: false, // Pass isDisabled
             })}
           </tbody>
         </table>,
@@ -194,6 +229,26 @@ describe("UserTableBodies", () => {
 
       expect(screen.getByText(mockUser.name)).toBeInTheDocument();
       expect(screen.getAllByRole("button")).toHaveLength(6); // Videos view has 6 toggle buttons
+    });
+
+    it("disables buttons when isDisabled is true", () => {
+      render(
+        <table>
+          <tbody>
+            {videosBody({
+              user: mockUser,
+              handleToggle: mockHandleToggle,
+              isDisabled: true, // Pass isDisabled as true
+            })}
+          </tbody>
+        </table>,
+      );
+
+      const buttons = screen.getAllByRole("button");
+
+      buttons.forEach((button) => {
+        expect(button).toBeDisabled();
+      });
     });
   });
 
@@ -205,7 +260,7 @@ describe("UserTableBodies", () => {
             {reportsBody({
               user: mockUser,
               handleToggle: mockHandleToggle,
-              isSessionSuperUser: true,
+              isDisabled: false, // Pass isDisabled
             })}
           </tbody>
         </table>,
@@ -213,6 +268,26 @@ describe("UserTableBodies", () => {
 
       expect(screen.getByText(mockUser.name)).toBeInTheDocument();
       expect(screen.getAllByRole("button")).toHaveLength(2); // Reports view has 2 toggle buttons
+    });
+
+    it("disables buttons when isDisabled is true", () => {
+      render(
+        <table>
+          <tbody>
+            {reportsBody({
+              user: mockUser,
+              handleToggle: mockHandleToggle,
+              isDisabled: true, // Pass isDisabled as true
+            })}
+          </tbody>
+        </table>,
+      );
+
+      const buttons = screen.getAllByRole("button");
+
+      buttons.forEach((button) => {
+        expect(button).toBeDisabled();
+      });
     });
   });
 
@@ -224,7 +299,7 @@ describe("UserTableBodies", () => {
             {appsTdsBody({
               user: mockUser,
               handleToggle: mockHandleToggle,
-              isSessionSuperUser: true,
+              isDisabled: false, // Pass isDisabled
             })}
           </tbody>
         </table>,
@@ -232,6 +307,26 @@ describe("UserTableBodies", () => {
 
       expect(screen.getByText(mockUser.name)).toBeInTheDocument();
       expect(screen.getAllByRole("button")).toHaveLength(6); // TDS view has 6 toggle buttons
+    });
+
+    it("disables buttons when isDisabled is true", () => {
+      render(
+        <table>
+          <tbody>
+            {appsTdsBody({
+              user: mockUser,
+              handleToggle: mockHandleToggle,
+              isDisabled: true, // Pass isDisabled as true
+            })}
+          </tbody>
+        </table>,
+      );
+
+      const buttons = screen.getAllByRole("button");
+
+      buttons.forEach((button) => {
+        expect(button).toBeDisabled();
+      });
     });
   });
 
@@ -243,7 +338,7 @@ describe("UserTableBodies", () => {
             {appsCogecoBody({
               user: mockUser,
               handleToggle: mockHandleToggle,
-              isSessionSuperUser: true,
+              isDisabled: false, // Pass isDisabled
             })}
           </tbody>
         </table>,
@@ -251,6 +346,26 @@ describe("UserTableBodies", () => {
 
       expect(screen.getByText(mockUser.name)).toBeInTheDocument();
       expect(screen.getAllByRole("button")).toHaveLength(1); // COGECO view has 1 toggle button
+    });
+
+    it("disables buttons when isDisabled is true", () => {
+      render(
+        <table>
+          <tbody>
+            {appsCogecoBody({
+              user: mockUser,
+              handleToggle: mockHandleToggle,
+              isDisabled: true, // Pass isDisabled as true
+            })}
+          </tbody>
+        </table>,
+      );
+
+      const buttons = screen.getAllByRole("button");
+
+      buttons.forEach((button) => {
+        expect(button).toBeDisabled();
+      });
     });
   });
 
@@ -262,7 +377,7 @@ describe("UserTableBodies", () => {
             {appsVistabeamBody({
               user: mockUser,
               handleToggle: mockHandleToggle,
-              isSessionSuperUser: true,
+              isDisabled: false, // Pass isDisabled
             })}
           </tbody>
         </table>,
@@ -270,6 +385,26 @@ describe("UserTableBodies", () => {
 
       expect(screen.getByText(mockUser.name)).toBeInTheDocument();
       expect(screen.getAllByRole("button")).toHaveLength(3); // Vistabeam view has 3 toggle buttons
+    });
+
+    it("disables buttons when isDisabled is true", () => {
+      render(
+        <table>
+          <tbody>
+            {appsVistabeamBody({
+              user: mockUser,
+              handleToggle: mockHandleToggle,
+              isDisabled: true, // Pass isDisabled as true
+            })}
+          </tbody>
+        </table>,
+      );
+
+      const buttons = screen.getAllByRole("button");
+
+      buttons.forEach((button) => {
+        expect(button).toBeDisabled();
+      });
     });
   });
 
@@ -281,7 +416,7 @@ describe("UserTableBodies", () => {
             {appsXploreBody({
               user: mockUser,
               handleToggle: mockHandleToggle,
-              isSessionSuperUser: true,
+              isDisabled: false, // Pass isDisabled
             })}
           </tbody>
         </table>,
@@ -289,6 +424,26 @@ describe("UserTableBodies", () => {
 
       expect(screen.getByText(mockUser.name)).toBeInTheDocument();
       expect(screen.getAllByRole("button")).toHaveLength(2); // Xplore view has 1 toggle button
+    });
+
+    it("disables buttons when isDisabled is true", () => {
+      render(
+        <table>
+          <tbody>
+            {appsXploreBody({
+              user: mockUser,
+              handleToggle: mockHandleToggle,
+              isDisabled: true, // Pass isDisabled as true
+            })}
+          </tbody>
+        </table>,
+      );
+
+      const buttons = screen.getAllByRole("button");
+
+      buttons.forEach((button) => {
+        expect(button).toBeDisabled();
+      });
     });
   });
 
@@ -300,7 +455,7 @@ describe("UserTableBodies", () => {
             {appsTelusBody({
               user: mockUser,
               handleToggle: mockHandleToggle,
-              isSessionSuperUser: true,
+              isDisabled: false, // Pass isDisabled
             })}
           </tbody>
         </table>,
@@ -309,10 +464,30 @@ describe("UserTableBodies", () => {
       expect(screen.getByText(mockUser.name)).toBeInTheDocument();
       expect(screen.getAllByRole("button")).toHaveLength(1); // Telus view has 1 toggle button
     });
+
+    it("disables buttons when isDisabled is true", () => {
+      render(
+        <table>
+          <tbody>
+            {appsTelusBody({
+              user: mockUser,
+              handleToggle: mockHandleToggle,
+              isDisabled: true, // Pass isDisabled as true
+            })}
+          </tbody>
+        </table>,
+      );
+
+      const buttons = screen.getAllByRole("button");
+
+      buttons.forEach((button) => {
+        expect(button).toBeDisabled();
+      });
+    });
   });
 
   describe("Permission toggling", () => {
-    it("calls handleToggle with correct arguments", async () => {
+    it("calls handleToggle with correct arguments when not disabled", async () => {
       render(
         <table>
           <tbody>
@@ -320,7 +495,7 @@ describe("UserTableBodies", () => {
               user: mockUser,
               handleToggle: mockHandleToggle,
               isAdmin: false,
-              isSessionSuperUser: true,
+              isDisabled: false, // Ensure button is not disabled
             })}
           </tbody>
         </table>,
@@ -333,8 +508,8 @@ describe("UserTableBodies", () => {
       expect(mockHandleToggle).toHaveBeenCalledTimes(1);
       expect(mockHandleToggle).toHaveBeenCalledWith(
         mockUser.id,
-        expect.any(String),
-        expect.any(Boolean),
+        "isAdmin", // Check the specific field name if needed
+        !mockUser.isAdmin, // Check the expected value
       );
     });
 
@@ -346,16 +521,23 @@ describe("UserTableBodies", () => {
               user: mockUser,
               handleToggle: mockHandleToggle,
               isAdmin: false,
-              isSessionSuperUser: false,
+              isDisabled: true, // Ensure button is disabled via prop
             })}
           </tbody>
         </table>,
       );
 
-      const buttons = screen.getAllByRole("button");
+      // Target the specific button expected to be disabled
+      const isAdminButton = screen.getByTestId("permission-button-isAdmin");
 
-      await userEvent.click(buttons[0]);
+      // First, assert that the button IS actually disabled in the DOM
+      expect(isAdminButton).toBeDisabled();
 
+      // Attempt to click the disabled button
+      // userEvent should respect the disabled attribute and not fire the handler
+      await userEvent.click(isAdminButton);
+
+      // Assert that the mock toggle function was not called
       expect(mockHandleToggle).not.toHaveBeenCalled();
     });
   });

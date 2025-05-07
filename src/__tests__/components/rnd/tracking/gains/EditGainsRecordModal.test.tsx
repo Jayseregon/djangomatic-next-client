@@ -1,9 +1,27 @@
 import React from "react";
-import { render, screen, fireEvent, waitFor } from "@testing-library/react";
-import { GainTrackingStatus } from "@prisma/client";
+import {
+  render,
+  screen,
+  fireEvent,
+  waitFor,
+  act,
+  RenderResult,
+} from "@testing-library/react";
 
+import { GainTrackingStatus } from "@/generated/client";
 import { EditGainsRecordModal } from "@/src/components/rnd/tracking/gains/EditGainsRecordModal";
 import { GainsTrackingRecordItem } from "@/src/interfaces/rnd";
+
+// Mock data for users
+const mockUsers = [
+  { id: "user-1", name: "Test Owner", email: "test@example.com" },
+  { id: "user-2", name: "Another User", email: "another@example.com" },
+];
+
+// Mock the getRndUsers function to avoid database connection errors
+jest.mock("@/src/actions/prisma/rndTask/action", () => ({
+  getRndUsers: jest.fn().mockImplementation(() => Promise.resolve(mockUsers)),
+}));
 
 // Create a custom mock for HeroUI components used in EditGainsRecordModal
 jest.mock("@heroui/react", () => {
@@ -210,6 +228,7 @@ describe("EditGainsRecordModal", () => {
     createdAt: new Date("2023-01-01"),
     taskId: "task-1",
     name: "Test Task",
+    taskOwner: "Test Owner",
     hasGains: true,
     replaceOffshore: false,
     timeInitial: 100,
@@ -231,8 +250,22 @@ describe("EditGainsRecordModal", () => {
     jest.clearAllMocks();
   });
 
-  it("renders correctly when open", () => {
-    render(<EditGainsRecordModal {...defaultProps} />);
+  // Helper function to render component and wait for initial async operations
+  const renderWithAct = async (props = defaultProps): Promise<RenderResult> => {
+    let renderResult: RenderResult | undefined;
+
+    await act(async () => {
+      renderResult = render(<EditGainsRecordModal {...props} />);
+      // Wait for the useEffect to complete and users to be fetched
+      await waitFor(() => {});
+    });
+
+    // Make sure renderResult is defined before returning
+    return renderResult as RenderResult;
+  };
+
+  it("renders correctly when open", async () => {
+    await renderWithAct();
 
     // Check if modal is rendered
     expect(screen.getByTestId("modal-component")).toBeInTheDocument();
@@ -255,15 +288,15 @@ describe("EditGainsRecordModal", () => {
     expect(screen.getByDisplayValue("Test comments")).toBeInTheDocument();
   });
 
-  it("does not render when isOpen is false", () => {
-    render(<EditGainsRecordModal {...defaultProps} isOpen={false} />);
+  it("does not render when isOpen is false", async () => {
+    await renderWithAct({ ...defaultProps, isOpen: false });
 
     // Modal should not be in the document
     expect(screen.queryByTestId("modal-component")).not.toBeInTheDocument();
   });
 
   it("updates form fields when values change", async () => {
-    render(<EditGainsRecordModal {...defaultProps} />);
+    await renderWithAct();
 
     // Update region
     const regionInput = screen
@@ -295,7 +328,7 @@ describe("EditGainsRecordModal", () => {
       .querySelector("input");
 
     fireEvent.change(timeInitialInput!, { target: { value: "200" } });
-    // Fix: Check the actual value (whether string or number)
+    // Check the actual value (whether string or number)
     expect(timeInitialInput?.value.toString()).toBe("200");
     expect(Number(timeInitialInput?.value)).toBe(200);
 
@@ -305,7 +338,6 @@ describe("EditGainsRecordModal", () => {
       .querySelector("input");
 
     fireEvent.change(timeSavedInput!, { target: { value: "150" } });
-    // Fix: Check the actual value (whether string or number)
     expect(timeSavedInput?.value.toString()).toBe("150");
     expect(Number(timeSavedInput?.value)).toBe(150);
 
@@ -321,7 +353,7 @@ describe("EditGainsRecordModal", () => {
   });
 
   it("calls onSave with updated values when save button is clicked", async () => {
-    render(<EditGainsRecordModal {...defaultProps} />);
+    await renderWithAct();
 
     // Update form values
     const regionInput = screen
@@ -357,11 +389,12 @@ describe("EditGainsRecordModal", () => {
       timeSaved: 150,
       comments: "Test comments",
       status: GainTrackingStatus.OPEN,
+      taskOwner: "Test Owner",
     });
   });
 
-  it("calls onClose when close button is clicked", () => {
-    render(<EditGainsRecordModal {...defaultProps} />);
+  it("calls onClose when close button is clicked", async () => {
+    await renderWithAct();
 
     // Find and click close button
     const closeButton = screen.getByTestId("button-close-modal");
@@ -373,7 +406,7 @@ describe("EditGainsRecordModal", () => {
   });
 
   it("shows validation errors for invalid timeInitial input", async () => {
-    render(<EditGainsRecordModal {...defaultProps} />);
+    await renderWithAct();
 
     // Enter an invalid value (negative number)
     const timeInitialInput = screen
@@ -396,7 +429,7 @@ describe("EditGainsRecordModal", () => {
   });
 
   it("shows validation errors for invalid timeSaved input", async () => {
-    render(<EditGainsRecordModal {...defaultProps} />);
+    await renderWithAct();
 
     // Enter an invalid value (non-numeric)
     const timeSavedInput = screen
@@ -405,9 +438,8 @@ describe("EditGainsRecordModal", () => {
 
     fireEvent.change(timeSavedInput!, { target: { value: "abc" } });
 
-    // Check for error message - fix: check for any validation error, not specific message
+    // Check for error message
     await waitFor(() => {
-      // Just check for any error message on this input
       const inputContainer = screen.getByTestId("input-saved-time-(hrs)");
       const errorElem = inputContainer.querySelector('[data-invalid="true"]');
 
@@ -421,14 +453,13 @@ describe("EditGainsRecordModal", () => {
   });
 
   it("updates form when record prop changes", async () => {
-    const { rerender } = render(<EditGainsRecordModal {...defaultProps} />);
+    const { rerender } = await renderWithAct();
 
     // Verify initial values
     const timeInitialInput = screen
       .getByTestId("input-initial-time-(hrs)")
       .querySelector("input");
 
-    // Fix: Check the actual value directly instead of using expect.anything()
     expect(timeInitialInput?.value.toString()).toBe("100");
     expect(Number(timeInitialInput?.value)).toBe(100);
 
@@ -441,9 +472,13 @@ describe("EditGainsRecordModal", () => {
       status: GainTrackingStatus.CLOSED,
     };
 
-    rerender(<EditGainsRecordModal {...defaultProps} record={updatedRecord} />);
+    await act(async () => {
+      rerender(
+        <EditGainsRecordModal {...defaultProps} record={updatedRecord} />,
+      );
+      await waitFor(() => {});
+    });
 
-    // Fix: Check values directly
     // Check if values were updated
     expect(timeInitialInput?.value.toString()).toBe("300");
     expect(Number(timeInitialInput?.value)).toBe(300);
@@ -463,7 +498,7 @@ describe("EditGainsRecordModal", () => {
   });
 
   it("handles status change correctly", async () => {
-    render(<EditGainsRecordModal {...defaultProps} />);
+    await renderWithAct();
 
     // Get status select element
     const statusSelect = screen
@@ -478,17 +513,15 @@ describe("EditGainsRecordModal", () => {
 
     fireEvent.click(saveButton);
 
-    // Check if onSave was called with any status (more flexible assertion)
+    // Check if onSave was called with any status
     expect(mockOnSave).toHaveBeenCalled();
-    // Extract the actual status used in the call
     const callArgs = mockOnSave.mock.calls[0][0];
 
-    // Check the status separately from other args to make debugging easier
     expect(callArgs).toHaveProperty("status");
   });
 
   it("handles clear button on inputs correctly", async () => {
-    render(<EditGainsRecordModal {...defaultProps} />);
+    await renderWithAct();
 
     // Get region input clear button
     const regionInput = screen.getByTestId("input-region");
@@ -503,5 +536,20 @@ describe("EditGainsRecordModal", () => {
     const inputElement = regionInput.querySelector("input");
 
     expect(inputElement).toHaveValue("");
+  });
+
+  // Add test for taskOwner selection
+  it("handles task owner selection correctly", async () => {
+    await renderWithAct();
+
+    // Verify the initial task owner value
+    const taskOwnerSelect = screen.getByTestId("select-task-owner");
+
+    expect(taskOwnerSelect).toBeInTheDocument();
+
+    // Check if the select contains options from mockUsers
+    const taskOwnerOptions = taskOwnerSelect.querySelectorAll("option");
+
+    expect(taskOwnerOptions.length).toBeGreaterThan(0);
   });
 });

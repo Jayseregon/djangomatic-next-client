@@ -6,6 +6,7 @@
 
 generator client {
   provider        = "prisma-client-js"
+  output          = "../generated/client"
   previewFeatures = ["relationJoins"]
 }
 
@@ -23,6 +24,7 @@ model User {
   isAdmin                        Boolean       @default(false)
   isRnDTeam                      Boolean       @default(false)
   canAccessChatbot               Boolean       @default(false)
+  canAccessSeticsCollection      Boolean       @default(false)
   canAccessAppsTdsHLD            Boolean       @default(false)
   canAccessAppsTdsLLD            Boolean       @default(false)
   canAccessAppsTdsArcGIS         Boolean       @default(false)
@@ -55,6 +57,12 @@ model User {
   canAccessVideoLiDAR            Boolean       @default(true)
   canAccessVideoEng              Boolean       @default(true)
   canAccessVideoSttar            Boolean       @default(false)
+  canAccessGlobalAll             Boolean       @default(false)
+  canAccessGlobalAtlantic        Boolean       @default(false)
+  canAccessGlobalCentral         Boolean       @default(false)
+  canAccessGlobalQuebec          Boolean       @default(false)
+  canAccessGlobalWest            Boolean       @default(false)
+  canAccessGlobalUSA             Boolean       @default(false)
   rndTasks                       RnDTeamTask[]
 }
 
@@ -168,6 +176,7 @@ model GainsTrackingRecord {
   task            RnDTeamTask         @relation("TaskToGains", fields: [taskId], references: [id])
   taskId          String              @unique
   name            String
+  taskOwner       String              @default("")
   region          String?
   hasGains        Boolean             @default(false)
   replaceOffshore Boolean             @default(false)
@@ -311,4 +320,35 @@ model AppUsageTracking {
   status       String   @default("PENDING")
   elapsed_time String   @default("0s")
   createdAt    DateTime @default(now())
+}
+
+model ChatbotUsage {
+  id                 String                 @id @default(cuid())
+  email              String                 @unique
+  username           String
+  messageCount       Int                    @default(0)
+  firstUsed          DateTime               @default(now())
+  lastUsed           DateTime               @updatedAt
+  reloadCount        Int                    @default(0)
+  stopCount          Int                    @default(0)
+  interactions       ChatInteractionLog[]   @relation("ChatbotUsageToInteractionLogs")
+}
+
+model ChatInteractionLog {
+  id                   String        @id @default(cuid())
+  chatbotUsageId       String
+  chatbotUsage         ChatbotUsage  @relation("ChatbotUsageToInteractionLogs", fields: [chatbotUsageId], references: [id], onDelete: Cascade)
+  chatId               String        // The ID of the chat session from useChat
+  timestamp            DateTime      @default(now())
+  promptTokens         Int?
+  completionTokens     Int?
+  totalTokens          Int?
+  durationMs           Int?          // Time from request to onFinish or onError
+  errorDetails         String?       @db.Text // Store error messages
+  userMessageLength    Int?
+  assistantMessageLength Int?
+  status               String?       // Status from useChat (submitted, streaming, ready, error, stopped)
+
+  @@index([chatbotUsageId])
+  @@index([chatId])
 }

@@ -1,7 +1,7 @@
 import React from "react";
 import { render } from "@testing-library/react";
-import { FiscalMonths } from "@prisma/client";
 
+import { FiscalMonths } from "@/generated/client";
 import { MonthlyAppsUsageBoard } from "@/src/components/rnd/tracking/apps/MonthlyAppsUsageBoard";
 import { MonthlyDataTable } from "@/src/components/rnd/tracking/MonthlyDataTable";
 import { AppGroup } from "@/src/interfaces/rnd";

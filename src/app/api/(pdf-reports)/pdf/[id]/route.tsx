@@ -1,13 +1,11 @@
-import { PrismaClient } from "@prisma/client";
 import React from "react";
 import { Font, renderToStream } from "@react-pdf/renderer";
 import { NextResponse } from "next/server";
 
+import { prisma } from "@/src/lib/prismaClient";
 import { titleCase } from "@/src/lib/utils";
 import { TOCSections } from "@/src/interfaces/reports";
 import ReportDocument from "@/src/components/reports/pdfBlocks/rogers/ReportDocument";
-
-const prisma = new PrismaClient();
 
 // disable hyphenation
 Font.registerHyphenationCallback((word: any) => [word]);

@@ -1,6 +1,6 @@
-import { FiscalMonths, GainTrackingStatus } from "@prisma/client";
 import { ReactNode } from "react";
 
+import { FiscalMonths, GainTrackingStatus } from "@/generated/client";
 import { TowerReport } from "@/interfaces/reports";
 
 export interface GainsTrackingRecordItem {
@@ -8,6 +8,7 @@ export interface GainsTrackingRecordItem {
   createdAt: Date;
   taskId: string;
   name: string;
+  taskOwner: string;
   region?: string;
   hasGains: boolean;
   replaceOffshore: boolean;
@@ -158,4 +159,31 @@ export interface EditGainsRecordModalProps {
   onClose: () => void;
   onSave: (updatedData: Partial<GainsTrackingRecordItem>) => void;
   record: GainsTrackingRecordItem | null;
+}
+
+export interface ChatbotUsage {
+  id: string;
+  email: string;
+  username: string;
+  messageCount: number;
+  firstUsed: Date;
+  lastUsed: Date;
+  reloadCount: number;
+  stopCount: number;
+  interactions?: ChatInteractionLog[];
+}
+
+export interface ChatInteractionLog {
+  id: string;
+  chatbotUsageId: string;
+  chatId: string;
+  timestamp: Date;
+  promptTokens?: number | null;
+  completionTokens?: number | null;
+  totalTokens?: number | null;
+  durationMs?: number | null;
+  errorDetails?: string | null;
+  userMessageLength?: number | null;
+  assistantMessageLength?: number | null;
+  status?: string | null;
 }

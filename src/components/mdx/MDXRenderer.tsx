@@ -12,6 +12,7 @@ import { BugReportNotice } from "@/components/root/BugReportNotice";
 import Callout from "@/src/components/mdx/callout";
 import Snippet from "@/src/components/mdx/snippet";
 import Quote from "@/src/components/mdx/quote";
+import DownloadLinkedFile from "@/src/components/mdx/DownloadLinkedFile";
 
 const sharedComponents: MDXComponents = {
   Callout,
@@ -20,6 +21,7 @@ const sharedComponents: MDXComponents = {
   Quote,
   TableOfContentsMdx,
   BugReportNotice,
+  DownloadLinkedFile,
 };
 
 export async function MDXRenderer({ source }: MdxRendererProps) {

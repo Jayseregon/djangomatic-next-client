@@ -31,6 +31,7 @@ export const defaultHeader = ({
         <TableColumn key="Bugs">Bugs</TableColumn>
         <TableColumn key="rnd">r&amp;d</TableColumn>
         <TableColumn key="chatbot">Chatbot</TableColumn>
+        <TableColumn key="setics">Setics</TableColumn>
       </TableHeader>
     );
   }
@@ -51,6 +52,7 @@ export const defaultHeader = ({
       <TableColumn key="Bugs">Bugs</TableColumn>
       <TableColumn key="rnd">r&amp;d</TableColumn>
       <TableColumn key="chatbot">Chatbot</TableColumn>
+      <TableColumn key="setics">Setics</TableColumn>
     </TableHeader>
   );
 };
@@ -225,6 +227,30 @@ export const appsTelusHeader = (): JSX.Element => {
   );
 };
 
+/**
+ * Renders the apps Global table header.
+ *
+ * @returns {JSX.Element} The rendered apps Global table header.
+ */
+export const appsGlobalHeader = (): JSX.Element => {
+  return (
+    <TableHeader>
+      <TableColumn key="email" className="w-56">
+        email
+      </TableColumn>
+      <TableColumn key="username" className="w-56">
+        username
+      </TableColumn>
+      <TableColumn key="global1">all</TableColumn>
+      <TableColumn key="global2">atlantic</TableColumn>
+      <TableColumn key="global3">quebec</TableColumn>
+      <TableColumn key="global4">central</TableColumn>
+      <TableColumn key="global5">west</TableColumn>
+      <TableColumn key="global6">usa</TableColumn>
+    </TableHeader>
+  );
+};
+
 export const renderTableHeader = (selectedMenu: string, isAdmin: boolean) => {
   switch (selectedMenu) {
     case "docs":
@@ -233,6 +259,8 @@ export const renderTableHeader = (selectedMenu: string, isAdmin: boolean) => {
       return videosHeader();
     case "reports":
       return reportsHeader();
+    case "apps-global":
+      return appsGlobalHeader();
     case "apps-tds":
       return appsTdsHeader();
     case "apps-cogeco":

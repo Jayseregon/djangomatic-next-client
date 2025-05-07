@@ -1,10 +1,14 @@
-// import { useTranslations } from "next-intl";
-// import { headers } from "next/headers";
-// import { title, subtitle } from "@/components/primitives";
+import type { JSX } from "react";
+
 import { UnAuthenticated } from "@/components/auth/unAuthenticated";
 import { auth } from "@/auth";
+import { ZipFileInputButton } from "@/src/components/saas/serverSelectors";
 import { WithPermissionOverlay } from "@/src/components/auth/withPermissionOverlay";
-import PathInDev from "@/src/components/_dev/path-in-dev";
+import { AppPageTitle } from "@/src/components/saas/appPageTitle";
+import { StartTaskButton } from "@/src/components/saas/startTaskButton";
+import { InputDataProvider } from "@/src/components/saas/inputDataProviders";
+import { ConsoleDisplay } from "@/src/components/saas/consoleDisplay";
+import { AppPageDescription } from "@/src/components/saas/appPageDescription";
 
 export default async function SaasPage() {
   const session = await auth();
@@ -14,16 +18,28 @@ export default async function SaasPage() {
   return <SaasPageContent session={session} />;
 }
 
-function SaasPageContent({ session }: { session: any }) {
-  // const t = useTranslations();
-  // const nonce = headers().get("x-nonce");
+function SaasPageContent({ session }: { session: any }): JSX.Element {
+  const client = "cogeco_saas";
 
   return (
     <WithPermissionOverlay
       email={session.user.email}
       permission="canAccessAppsCogecoHLD"
     >
-      <PathInDev />
+      <div className="space-y-5 mb-5">
+        <InputDataProvider>
+          {/* Automatically detects and displays the app name */}
+          <AppPageTitle client={client} />
+          {/* Automatically detects and displays the app description, version, and update date */}
+          <AppPageDescription client={client} targetTranslation="cogecoApps" />
+          {/* Allows the user to input a zip file */}
+          <ZipFileInputButton />
+          {/* Shows the console output */}
+          <ConsoleDisplay />
+          {/* Starts the task */}
+          <StartTaskButton />
+        </InputDataProvider>
+      </div>
     </WithPermissionOverlay>
   );
 }

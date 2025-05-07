@@ -3,28 +3,31 @@ import type { JSX } from "react";
 import { TableRow, TableCell } from "@heroui/react";
 
 import { UserSchema } from "@/interfaces/lib";
+import { superUserEmails } from "@/config/superUser";
 
 import { PermissionButton } from "./PermissionButton";
 
+// Define interfaces for props
+interface BaseBodyProps {
+  user: UserSchema;
+  handleToggle: (id: string, field: string, value: boolean) => void;
+  isDisabled: boolean;
+}
+
+interface DefaultBodyProps extends BaseBodyProps {
+  isAdmin: boolean;
+}
+
 /**
  * Renders the default table body.
- *
- * @param {Object} params - The parameters for the default table body.
- * @param {UserSchema} params.user - The user object.
- * @returns {JSX.Element} The rendered default table body.
  */
 export const defaultBody = ({
   user,
   handleToggle,
   isAdmin,
-  isSessionSuperUser,
-}: {
-  user: UserSchema;
-  handleToggle: (id: string, field: string, value: boolean) => void;
-  isAdmin: boolean;
-  isSessionSuperUser: boolean;
-}): JSX.Element => {
-  const disabled = !isSessionSuperUser;
+  isDisabled,
+}: DefaultBodyProps): JSX.Element => {
+  const disabled = isDisabled;
 
   if (isAdmin) {
     return (
@@ -80,6 +83,14 @@ export const defaultBody = ({
             user={user}
           />
         </TableCell>
+        <TableCell>
+          <PermissionButton
+            disabled={disabled}
+            fieldName="canAccessSeticsCollection"
+            handleToggle={handleToggle}
+            user={user}
+          />
+        </TableCell>
       </TableRow>
     );
   }
@@ -129,27 +140,27 @@ export const defaultBody = ({
           user={user}
         />
       </TableCell>
+      <TableCell>
+        <PermissionButton
+          disabled={disabled}
+          fieldName="canAccessSeticsCollection"
+          handleToggle={handleToggle}
+          user={user}
+        />
+      </TableCell>
     </TableRow>
   );
 };
 
 /**
  * Renders the docs table body.
- *
- * @param {Object} params - The parameters for the docs table body.
- * @param {UserSchema} params.user - The user object.
- * @returns {JSX.Element} The rendered docs table body.
  */
 export const docsBody = ({
   user,
   handleToggle,
-  isSessionSuperUser,
-}: {
-  user: UserSchema;
-  handleToggle: (id: string, field: string, value: boolean) => void;
-  isSessionSuperUser: boolean;
-}): JSX.Element => {
-  const disabled = !isSessionSuperUser;
+  isDisabled,
+}: BaseBodyProps): JSX.Element => {
+  const disabled = isDisabled;
 
   return (
     <TableRow key={user.email}>
@@ -225,21 +236,13 @@ export const docsBody = ({
 
 /**
  * Renders the videos table body.
- *
- * @param {Object} params - The parameters for the videos table body.
- * @param {UserSchema} params.user - The user object.
- * @returns {JSX.Element} The rendered videos table body.
  */
 export const videosBody = ({
   user,
   handleToggle,
-  isSessionSuperUser,
-}: {
-  user: UserSchema;
-  handleToggle: (id: string, field: string, value: boolean) => void;
-  isSessionSuperUser: boolean;
-}): JSX.Element => {
-  const disabled = !isSessionSuperUser;
+  isDisabled,
+}: BaseBodyProps): JSX.Element => {
+  const disabled = isDisabled;
 
   return (
     <TableRow key={user.email}>
@@ -297,16 +300,15 @@ export const videosBody = ({
   );
 };
 
+/**
+ * Renders the reports table body.
+ */
 export const reportsBody = ({
   user,
   handleToggle,
-  isSessionSuperUser,
-}: {
-  user: UserSchema;
-  handleToggle: (id: string, field: string, value: boolean) => void;
-  isSessionSuperUser: boolean;
-}): JSX.Element => {
-  const disabled = !isSessionSuperUser;
+  isDisabled,
+}: BaseBodyProps): JSX.Element => {
+  const disabled = isDisabled;
 
   return (
     <TableRow key={user.email}>
@@ -334,21 +336,13 @@ export const reportsBody = ({
 
 /**
  * Renders the apps TDS table body.
- *
- * @param {Object} params - The parameters for the apps TDS table body.
- * @param {UserSchema} params.user - The user object.
- * @returns {JSX.Element} The rendered apps TDS table body.
  */
 export const appsTdsBody = ({
   user,
   handleToggle,
-  isSessionSuperUser,
-}: {
-  user: UserSchema;
-  handleToggle: (id: string, field: string, value: boolean) => void;
-  isSessionSuperUser: boolean;
-}): JSX.Element => {
-  const disabled = !isSessionSuperUser;
+  isDisabled,
+}: BaseBodyProps): JSX.Element => {
+  const disabled = isDisabled;
 
   return (
     <TableRow key={user.email}>
@@ -408,21 +402,13 @@ export const appsTdsBody = ({
 
 /**
  * Renders the apps COGECO table body.
- *
- * @param {Object} params - The parameters for the apps COGECO table body.
- * @param {UserSchema} params.user - The user object.
- * @returns {JSX.Element} The rendered apps COGECO table body.
  */
 export const appsCogecoBody = ({
   user,
   handleToggle,
-  isSessionSuperUser,
-}: {
-  user: UserSchema;
-  handleToggle: (id: string, field: string, value: boolean) => void;
-  isSessionSuperUser: boolean;
-}): JSX.Element => {
-  const disabled = !isSessionSuperUser;
+  isDisabled,
+}: BaseBodyProps): JSX.Element => {
+  const disabled = isDisabled;
 
   return (
     <TableRow key={user.email}>
@@ -442,21 +428,13 @@ export const appsCogecoBody = ({
 
 /**
  * Renders the apps Vistabeam table body.
- *
- * @param {Object} params - The parameters for the apps Vistabeam table body.
- * @param {UserSchema} params.user - The user object.
- * @returns {JSX.Element} The rendered apps Vistabeam table body.
  */
 export const appsVistabeamBody = ({
   user,
   handleToggle,
-  isSessionSuperUser,
-}: {
-  user: UserSchema;
-  handleToggle: (id: string, field: string, value: boolean) => void;
-  isSessionSuperUser: boolean;
-}): JSX.Element => {
-  const disabled = !isSessionSuperUser;
+  isDisabled,
+}: BaseBodyProps): JSX.Element => {
+  const disabled = isDisabled;
 
   return (
     <TableRow key={user.email}>
@@ -492,21 +470,13 @@ export const appsVistabeamBody = ({
 
 /**
  * Renders the apps Xplore table body.
- *
- * @param {Object} params - The parameters for the apps Xplore table body.
- * @param {UserSchema} params.user - The user object.
- * @returns {JSX.Element} The rendered apps Xplore table body.
  */
 export const appsXploreBody = ({
   user,
   handleToggle,
-  isSessionSuperUser,
-}: {
-  user: UserSchema;
-  handleToggle: (id: string, field: string, value: boolean) => void;
-  isSessionSuperUser: boolean;
-}): JSX.Element => {
-  const disabled = !isSessionSuperUser;
+  isDisabled,
+}: BaseBodyProps): JSX.Element => {
+  const disabled = isDisabled;
 
   return (
     <TableRow key={user.email}>
@@ -534,21 +504,13 @@ export const appsXploreBody = ({
 
 /**
  * Renders the apps Telus table body.
- *
- * @param {Object} params - The parameters for the apps Xplore table body.
- * @param {UserSchema} params.user - The user object.
- * @returns {JSX.Element} The rendered apps Xplore table body.
  */
 export const appsTelusBody = ({
   user,
   handleToggle,
-  isSessionSuperUser,
-}: {
-  user: UserSchema;
-  handleToggle: (id: string, field: string, value: boolean) => void;
-  isSessionSuperUser: boolean;
-}): JSX.Element => {
-  const disabled = !isSessionSuperUser;
+  isDisabled,
+}: BaseBodyProps): JSX.Element => {
+  const disabled = isDisabled;
 
   return (
     <TableRow key={user.email}>
@@ -566,31 +528,107 @@ export const appsTelusBody = ({
   );
 };
 
+/**
+ * Renders the apps Xplore table body.
+ */
+export const appsGlobalBody = ({
+  user,
+  handleToggle,
+  isDisabled,
+}: BaseBodyProps): JSX.Element => {
+  const disabled = isDisabled;
+
+  return (
+    <TableRow key={user.email}>
+      <TableCell>{user.email}</TableCell>
+      <TableCell>{user.name}</TableCell>
+      <TableCell>
+        <PermissionButton
+          disabled={disabled}
+          fieldName="canAccessGlobalAll"
+          handleToggle={handleToggle}
+          user={user}
+        />
+      </TableCell>
+      <TableCell>
+        <PermissionButton
+          disabled={disabled}
+          fieldName="canAccessGlobalAtlantic"
+          handleToggle={handleToggle}
+          user={user}
+        />
+      </TableCell>
+      <TableCell>
+        <PermissionButton
+          disabled={disabled}
+          fieldName="canAccessGlobalQuebec"
+          handleToggle={handleToggle}
+          user={user}
+        />
+      </TableCell>
+      <TableCell>
+        <PermissionButton
+          disabled={disabled}
+          fieldName="canAccessGlobalCentral"
+          handleToggle={handleToggle}
+          user={user}
+        />
+      </TableCell>
+      <TableCell>
+        <PermissionButton
+          disabled={disabled}
+          fieldName="canAccessGlobalWest"
+          handleToggle={handleToggle}
+          user={user}
+        />
+      </TableCell>
+      <TableCell>
+        <PermissionButton
+          disabled={disabled}
+          fieldName="canAccessGlobalUSA"
+          handleToggle={handleToggle}
+          user={user}
+        />
+      </TableCell>
+    </TableRow>
+  );
+};
+
+/**
+ * Selects and renders the appropriate table body based on the selected menu.
+ */
 export const renderTableBody = (
   user: UserSchema,
   selectedMenu: string,
   isAdmin: boolean,
   isSessionSuperUser: boolean,
   handleToggle: (id: string, field: string, value: boolean) => void,
-) => {
+): JSX.Element => {
+  const isTargetUserSuperUser = superUserEmails.includes(user.email);
+  const isDisabled = !isSessionSuperUser && isTargetUserSuperUser;
+
+  const baseProps: BaseBodyProps = { user, handleToggle, isDisabled };
+
   switch (selectedMenu) {
     case "docs":
-      return docsBody({ user, handleToggle, isSessionSuperUser });
+      return docsBody(baseProps);
     case "videos":
-      return videosBody({ user, handleToggle, isSessionSuperUser });
+      return videosBody(baseProps);
     case "reports":
-      return reportsBody({ user, handleToggle, isSessionSuperUser });
+      return reportsBody(baseProps);
+    case "apps-global":
+      return appsGlobalBody(baseProps);
     case "apps-tds":
-      return appsTdsBody({ user, handleToggle, isSessionSuperUser });
+      return appsTdsBody(baseProps);
     case "apps-cogeco":
-      return appsCogecoBody({ user, handleToggle, isSessionSuperUser });
+      return appsCogecoBody(baseProps);
     case "apps-vistabeam":
-      return appsVistabeamBody({ user, handleToggle, isSessionSuperUser });
+      return appsVistabeamBody(baseProps);
     case "apps-xplore":
-      return appsXploreBody({ user, handleToggle, isSessionSuperUser });
+      return appsXploreBody(baseProps);
     case "apps-telus":
-      return appsTelusBody({ user, handleToggle, isSessionSuperUser });
+      return appsTelusBody(baseProps);
     default:
-      return defaultBody({ user, handleToggle, isAdmin, isSessionSuperUser });
+      return defaultBody({ ...baseProps, isAdmin });
   }
 };

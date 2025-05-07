@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
-import { PrismaClient } from "@prisma/client";
 
+import { prisma } from "@/src/lib/prismaClient";
 import {
   TowerReportImage,
   AntennaTransmissionLine,
@@ -8,7 +8,6 @@ import {
   Note,
 } from "@/src/interfaces/reports";
 import { handlePrismaError } from "@/src/lib/prismaErrorHandler";
-const prisma = new PrismaClient();
 
 const createNestedData = (data: any) => {
   const site_images = data.site_images || [];

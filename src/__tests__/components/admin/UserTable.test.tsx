@@ -11,6 +11,11 @@ jest.mock("@/components/ui/LoadingContent", () => ({
   LoadingContent: () => <div data-testid="loading-content">Loading...</div>,
 }));
 
+// Mock SearchIcon component
+jest.mock("@/components/icons", () => ({
+  SearchIcon: () => <div data-testid="search-icon">🔍</div>,
+}));
+
 // Mock UserTableBodies component
 jest.mock("@/components/admin/UserTableBodies", () => ({
   renderTableBody: (
@@ -111,6 +116,33 @@ jest.mock("@heroui/react", () => ({
 
     return <tbody>{items.map((item: any) => children(item))}</tbody>;
   },
+  Input: ({
+    value,
+    onValueChange,
+    placeholder,
+    startContent,
+    onClear,
+    "aria-label": ariaLabel,
+  }: any) => (
+    <div data-testid="search-input-container">
+      {startContent}
+      <input
+        aria-label={ariaLabel}
+        data-testid="search-input"
+        placeholder={placeholder}
+        value={value || ""}
+        onChange={(e) => onValueChange && onValueChange(e.target.value)}
+      />
+      {value && (
+        <button
+          data-testid="clear-search-button"
+          onClick={() => onClear && onClear()}
+        >
+          Clear
+        </button>
+      )}
+    </div>
+  ),
 }));
 
 describe("UserTable Component", () => {
@@ -133,6 +165,17 @@ describe("UserTable Component", () => {
       isAdmin: true,
       canAccessReports: true,
       canDeleteReports: true,
+      createdAt: new Date(),
+      lastLogin: new Date(),
+      isRnDTeam: false,
+    } as UserSchema,
+    {
+      id: "3",
+      email: "unique@example.com",
+      name: "Unique Name",
+      isAdmin: false,
+      canAccessReports: false,
+      canDeleteReports: false,
       createdAt: new Date(),
       lastLogin: new Date(),
       isRnDTeam: false,
@@ -273,7 +316,18 @@ describe("UserTable Component", () => {
   it("shows loading state", async () => {
     // Delay the fetch response
     (global.fetch as jest.Mock).mockImplementationOnce(
-      () => new Promise((resolve) => setTimeout(resolve, 100)),
+      // Keep "Once" here if this test expects a single, specific behavior
+      () =>
+        new Promise((resolve) =>
+          setTimeout(
+            () =>
+              resolve({
+                ok: true,
+                json: () => Promise.resolve([]), // Ensure it resolves to something valid after delay
+              }),
+            100,
+          ),
+        ),
     );
 
     render(<UserTable sessionEmail="admin@example.com" />);
@@ -288,25 +342,47 @@ describe("UserTable Component", () => {
 
   it("handles fetch error", async () => {
     const consoleErrorSpy = jest.spyOn(console, "error").mockImplementation();
+    const networkError = new Error("Network error");
 
-    // Mock a failed response instead of rejecting the promise
-    (global.fetch as jest.Mock).mockResolvedValueOnce({
-      ok: false,
-      status: 500,
-      statusText: "Internal Server Error",
-      json: () => Promise.reject(new Error("Invalid JSON")),
+    // Mock fetch to be persistent for this test case
+    (global.fetch as jest.Mock).mockImplementation(() => {
+      // Changed from mockResolvedValueOnce to mockImplementation
+      // This mock will apply to all fetch calls within this test case
+      return Promise.resolve({
+        ok: true, // Assuming response.ok would be true before json parsing fails
+        json: () => {
+          // This is where the error is intentionally thrown
+          throw networkError;
+        },
+        // Add other properties to mimic a Response object more closely if needed
+        status: 200,
+        statusText: "OK",
+        headers: new Headers(),
+        clone: function () {
+          return this;
+        },
+      });
     });
 
     render(<UserTable sessionEmail="admin@example.com" />);
 
+    // Wait for the error to be logged
     await waitFor(() => {
       expect(consoleErrorSpy).toHaveBeenCalledWith(
         "Failed to fetch users:",
-        expect.any(Error),
+        networkError,
       );
     });
 
+    // Verify that an empty users array is set (this is our recovery behavior)
+    await waitFor(() => {
+      expect(screen.getByText("No users found")).toBeInTheDocument();
+    });
+
     consoleErrorSpy.mockRestore();
+    // No need to restore global.fetch here if beforeEach handles it,
+    // but ensure jest.clearAllMocks() in beforeEach resets implementations or use jest.restoreAllMocks().
+    // Since global.fetch is reassigned in beforeEach (global.fetch = jest.fn()), this is fine.
   });
 
   it("respects super user permissions", async () => {
@@ -353,5 +429,139 @@ describe("UserTable Component", () => {
     );
 
     expect(regularUserToggle).toHaveAttribute("disabled");
+  });
+
+  it("renders search input correctly", async () => {
+    (global.fetch as jest.Mock).mockResolvedValueOnce({
+      ok: true,
+      json: () => Promise.resolve(mockUsers.filter((u) => !u.isAdmin)),
+    });
+
+    render(<UserTable sessionEmail="admin@example.com" />);
+
+    await waitFor(() => {
+      expect(screen.queryByTestId("loading-content")).not.toBeInTheDocument();
+    });
+
+    // Check that search input is rendered
+    expect(screen.getByTestId("search-input")).toBeInTheDocument();
+    expect(screen.getByTestId("search-icon")).toBeInTheDocument();
+    expect(
+      screen.getByPlaceholderText("Search by email or username..."),
+    ).toBeInTheDocument();
+  });
+
+  it("filters users based on email search", async () => {
+    const nonAdminUsers = mockUsers.filter((u) => !u.isAdmin);
+
+    (global.fetch as jest.Mock).mockResolvedValueOnce({
+      ok: true,
+      json: () => Promise.resolve(nonAdminUsers),
+    });
+
+    render(<UserTable sessionEmail="admin@example.com" />);
+
+    await waitFor(() => {
+      expect(screen.queryByTestId("loading-content")).not.toBeInTheDocument();
+    });
+
+    // Initial render should show all non-admin users
+    expect(screen.getByText("Regular User")).toBeInTheDocument();
+    expect(screen.getByText("Unique Name")).toBeInTheDocument();
+
+    // Type in search input to filter by email
+    const searchInput = screen.getByTestId("search-input");
+
+    await userEvent.type(searchInput, "unique@example");
+
+    // Only the user with matching email should be displayed
+    expect(screen.queryByText("Regular User")).not.toBeInTheDocument();
+    expect(screen.getByText("Unique Name")).toBeInTheDocument();
+  });
+
+  it("filters users based on username search", async () => {
+    const nonAdminUsers = mockUsers.filter((u) => !u.isAdmin);
+
+    (global.fetch as jest.Mock).mockResolvedValueOnce({
+      ok: true,
+      json: () => Promise.resolve(nonAdminUsers),
+    });
+
+    render(<UserTable sessionEmail="admin@example.com" />);
+
+    await waitFor(() => {
+      expect(screen.queryByTestId("loading-content")).not.toBeInTheDocument();
+    });
+
+    // Initial render should show all non-admin users
+    expect(screen.getByText("Regular User")).toBeInTheDocument();
+    expect(screen.getByText("Unique Name")).toBeInTheDocument();
+
+    // Type in search input to filter by username
+    const searchInput = screen.getByTestId("search-input");
+
+    await userEvent.type(searchInput, "regul");
+
+    // Only the user with matching username should be displayed
+    expect(screen.getByText("Regular User")).toBeInTheDocument();
+    expect(screen.queryByText("Unique Name")).not.toBeInTheDocument();
+  });
+
+  it("clears search with clear button", async () => {
+    const nonAdminUsers = mockUsers.filter((u) => !u.isAdmin);
+
+    (global.fetch as jest.Mock).mockResolvedValueOnce({
+      ok: true,
+      json: () => Promise.resolve(nonAdminUsers),
+    });
+
+    render(<UserTable sessionEmail="admin@example.com" />);
+
+    await waitFor(() => {
+      expect(screen.queryByTestId("loading-content")).not.toBeInTheDocument();
+    });
+
+    // Type in search input
+    const searchInput = screen.getByTestId("search-input");
+
+    await userEvent.type(searchInput, "unique");
+
+    // Only the filtered user should be visible
+    expect(screen.queryByText("Regular User")).not.toBeInTheDocument();
+    expect(screen.getByText("Unique Name")).toBeInTheDocument();
+
+    // Clear the search
+    const clearButton = screen.getByTestId("clear-search-button");
+
+    await userEvent.click(clearButton);
+
+    // All non-admin users should be visible again
+    expect(screen.getByText("Regular User")).toBeInTheDocument();
+    expect(screen.getByText("Unique Name")).toBeInTheDocument();
+  });
+
+  it("shows 'No users found' when search has no matches", async () => {
+    const nonAdminUsers = mockUsers.filter((u) => !u.isAdmin);
+
+    (global.fetch as jest.Mock).mockResolvedValueOnce({
+      ok: true,
+      json: () => Promise.resolve(nonAdminUsers),
+    });
+
+    render(<UserTable sessionEmail="admin@example.com" />);
+
+    await waitFor(() => {
+      expect(screen.queryByTestId("loading-content")).not.toBeInTheDocument();
+    });
+
+    // Type a search term that won't match any users
+    const searchInput = screen.getByTestId("search-input");
+
+    await userEvent.type(searchInput, "nonexistent");
+
+    // Should display the empty content message
+    expect(screen.getByText("No users found")).toBeInTheDocument();
+    expect(screen.queryByText("Regular User")).not.toBeInTheDocument();
+    expect(screen.queryByText("Unique Name")).not.toBeInTheDocument();
   });
 });

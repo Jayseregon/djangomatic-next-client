@@ -119,7 +119,7 @@ export async function updateCardPositions(
     if (!projectId) throw new Error("No project ID provided");
 
     // Begin transaction
-    const result = await prisma.$transaction(async (tx) => {
+    const result = await prisma.$transaction(async (tx: any) => {
       // First update all positions
       await Promise.all(
         updates.map(({ projectId, cardId, position }) =>

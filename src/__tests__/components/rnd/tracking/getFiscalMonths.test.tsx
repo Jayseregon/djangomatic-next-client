@@ -1,5 +1,4 @@
-import { FiscalMonths } from "@prisma/client";
-
+import { FiscalMonths } from "@/generated/client";
 import {
   getFiscalMonths,
   getFiscalMonthDisplayName,

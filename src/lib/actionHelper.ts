@@ -1,4 +1,4 @@
-import { FiscalMonths } from "@prisma/client";
+import { FiscalMonths } from "@/generated/client";
 
 /**
  * Get fiscal month from a date

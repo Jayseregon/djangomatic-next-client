@@ -1,7 +1,7 @@
 import React from "react";
 import { render } from "@testing-library/react";
-import { FiscalMonths, GainTrackingStatus } from "@prisma/client";
 
+import { FiscalMonths, GainTrackingStatus } from "@/generated/client";
 import { MonthlyGainsCostBoard } from "@/src/components/rnd/tracking/gains/MonthlyGainsCostBoard";
 import { MonthlyDataTable } from "@/src/components/rnd/tracking/MonthlyDataTable";
 import { EditCostModal } from "@/src/components/rnd/tracking/gains/EditCostModal";

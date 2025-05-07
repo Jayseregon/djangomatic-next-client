@@ -1,7 +1,7 @@
 import React from "react";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
-import { GainTrackingStatus } from "@prisma/client";
 
+import { GainTrackingStatus } from "@/generated/client";
 import { GainsTrackingBoard } from "@/src/components/rnd/tracking/gains/GainsTrackingBoard";
 import { GainsTrackingRecordItem } from "@/src/interfaces/rnd";
 import {

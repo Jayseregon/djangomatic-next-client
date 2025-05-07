@@ -97,6 +97,12 @@ export const SidebarSaas = (): JSX.Element => {
     titles: ["admin"],
   });
 
+  // Extract Global apps data
+  const appCategoriesGlobal = getAppCategories({
+    dataTarget: "global_saas",
+    titles: ["all", "atlantic", "quebec", "central", "west", "usa"],
+  });
+
   return (
     <div className="flex flex-col gap-2">
       <div className="section">
@@ -118,6 +124,19 @@ export const SidebarSaas = (): JSX.Element => {
             >
               {t("link_title")}
             </Link>
+          </AccordionItem>
+
+          {/* Global Section */}
+          <AccordionItem
+            key="Global"
+            aria-label="Global"
+            title={
+              <h2 className="text-xl font-black text-foreground indent-2 mt-3 mb-1">
+                Global
+              </h2>
+            }
+          >
+            <SidebarSection categories={appCategoriesGlobal} />
           </AccordionItem>
 
           {/* COGECO Section */}

@@ -94,7 +94,8 @@
         "title": "Rapports",
         "bugDashboardLink": "Rapport de bug",
         "appTrackingLink": "Suivi des applications",
-        "gainsTrackingLink": "Suivi des gains"
+        "gainsTrackingLink": "Suivi des gains",
+        "chatbotTrackingLink": "Suivi du Chatbot"
       }
     },
     "appTracking": {
@@ -110,11 +111,16 @@
         "total": "Total RT"
       }
     },
+    "chatbotTracking": {
+      "title": "Suivi du Chatbot",
+      "subtitle": "Suivre l'utilisation de notre chatbot"
+    },
     "gainsTracking": {
       "title": "Suivi des gains",
       "subtitle": "Suivi des gains des outils d'automatisation",
       "boardColumns": {
-        "name": "Nom"
+        "name": "Nom",
+        "owner": "Propriétaire"
       }
     },
     "taskExtension": "Tâches",
@@ -318,7 +324,7 @@
       "description": "Cette application personnalise un geopackage en ajoutant des nouvelles couches et formatant les couches existantes.",
       "update": "Xplore tools implementation."
     },
-    "conversion_sqlite": {
+    "sqlite_converter": {
       "description": "Cette fonction crée un fichier sqlite incluant toutes les couches requises pour l'importation Autocad.",
       "update": "Xplore tools implementation."
     }
@@ -327,6 +333,12 @@
     "pole_candidates": {
       "description": "Cette application génère des fichiers Excel pour les poteaux candidats Telus, à partir des données relevées via Mergin Maps.",
       "update": "Implémentation de l'outil Telus."
+    }
+  },
+  "cogecoApps": {
+    "tqc_shp": {
+      "description": "Cette application formate shapefiles en données prêtes pour TQC.",
+      "update": "Implémentation sur la nouvelle plateforme."
     }
   },
   "DocsUsageGuidelines": {

@@ -94,7 +94,8 @@
         "title": "Reports",
         "bugDashboardLink": "Bug Report",
         "appTrackingLink": "App Tracking",
-        "gainsTrackingLink": "Gains Tracking"
+        "gainsTrackingLink": "Gains Tracking",
+        "chatbotTrackingLink": "Chatbot Tracking"
       }
     },
     "appTracking": {
@@ -110,11 +111,16 @@
         "total": "Total RT"
       }
     },
+    "chatbotTracking": {
+      "title": "Chatbot Tracking",
+      "subtitle": "Track the utilisation of our chatbot"
+    },
     "gainsTracking": {
       "title": "Gains Tracking",
       "subtitle": "Track the gains from automation tools",
       "boardColumns": {
-        "name": "Name"
+        "name": "Name", 
+        "owner": "Owner"
       }
     },
     "taskExtension": "Tasks",
@@ -318,7 +324,7 @@
       "description": "This app customizes a geopackage file by adding a new layer and formatting existing layers.",
       "update": "Xplore tools implementation."
     },
-    "conversion_sqlite": {
+    "sqlite_converter": {
       "description": "This function creates an sqlite file including all the layers required for Autocad import.",
       "update": "Xplore tools implementation."
     }
@@ -327,6 +333,12 @@
     "pole_candidates": {
       "description": "This app creates Excel files for Telus poles candidates, from Mergin Maps data survey.",
       "update": "Telus tools implementation."
+    }
+  },
+  "cogecoApps": {
+    "tqc_shp": {
+      "description": "This app format shapefile into TQC ready data.",
+      "update": "Implementation within the new platform."
     }
   },
   "DocsUsageGuidelines": {

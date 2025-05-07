@@ -11,11 +11,16 @@ import DynamicDocTemplate, {
 import { WithPermissionOverlayDocs } from "@/src/components/auth/withPermissionOverlay";
 import { getDocContent } from "@/src/lib/mdxUtils";
 import { DynamicDocTemplateProps } from "@/interfaces/mdx";
+import DownloadLinkedFile from "@/src/components/mdx/DownloadLinkedFile";
 
 // Mock dependencies
 jest.mock("next-mdx-remote-client/rsc");
 jest.mock("@/src/lib/mdxUtils");
 jest.mock("@/src/components/auth/withPermissionOverlay");
+jest.mock("@/src/components/mdx/DownloadLinkedFile", () => ({
+  __esModule: true,
+  default: jest.fn(() => <div data-testid="download-file-button" />),
+}));
 jest.mock("fs");
 
 // Mock implementations
@@ -50,6 +55,35 @@ describe("DynamicDocTemplate", () => {
 
       expect(screen.getByText("Test Title")).toBeInTheDocument();
       expect(container.querySelector(".prose")).toBeInTheDocument();
+    });
+
+    it("should not render DownloadLinkedFile when linkedFile is not present", async () => {
+      (evaluate as jest.Mock).mockResolvedValueOnce({
+        content: React.createElement("div", null, "Mocked Content"),
+        frontmatter: { title: "Test Title" },
+      });
+
+      render(await DynamicDocTemplate(mockProps));
+
+      expect(DownloadLinkedFile).not.toHaveBeenCalled();
+      expect(
+        screen.queryByTestId("download-file-button"),
+      ).not.toBeInTheDocument();
+    });
+
+    it("should render DownloadLinkedFile when linkedFile is present", async () => {
+      (evaluate as jest.Mock).mockResolvedValueOnce({
+        content: React.createElement("div", null, "Mocked Content"),
+        frontmatter: { title: "Test Title", linkedFile: "test-file.zip" },
+      });
+
+      render(await DynamicDocTemplate(mockProps));
+
+      expect(DownloadLinkedFile).toHaveBeenCalled();
+      expect((DownloadLinkedFile as jest.Mock).mock.calls[0][0]).toEqual({
+        filename: "test-file.zip",
+      });
+      expect(screen.getByTestId("download-file-button")).toBeInTheDocument();
     });
 
     it("calls getDocContent with correct parameters", async () => {

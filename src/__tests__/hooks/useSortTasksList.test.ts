@@ -1,6 +1,6 @@
 import { renderHook } from "@testing-library/react";
-import { Status } from "@prisma/client";
 
+import { Status } from "@/generated/client";
 import { useSortTasksList } from "@/hooks/useSortTasksList";
 import { RnDTeamTask } from "@/interfaces/lib";
 import * as rndTaskActions from "@/src/actions/prisma/rndTask/action";

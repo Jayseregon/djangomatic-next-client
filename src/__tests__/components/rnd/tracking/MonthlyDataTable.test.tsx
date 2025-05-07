@@ -1,9 +1,8 @@
 import React from "react";
-import { render, screen } from "@testing-library/react";
-import { FiscalMonths } from "@prisma/client";
-// Import external packages before internal imports
+import { Matcher, render, screen } from "@testing-library/react";
 import * as HeroUI from "@heroui/react";
 
+import { FiscalMonths } from "@/generated/client";
 import { MonthlyDataTable } from "@/src/components/rnd/tracking/MonthlyDataTable";
 import { getFiscalMonths } from "@/src/components/rnd/tracking/getFiscalMonths";
 import { MonthlyData } from "@/interfaces/rnd";
@@ -81,12 +80,9 @@ describe("MonthlyDataTable", () => {
     render(<MonthlyDataTable data={mockData} total={60} />);
 
     // Check if all months are rendered in the header
-    const fiscalMonths =
-      typeof getFiscalMonths === "function"
-        ? getFiscalMonths()
-        : getFiscalMonths;
+    const fiscalMonths = Array.isArray(getFiscalMonths) ? getFiscalMonths : [];
 
-    fiscalMonths.forEach((month) => {
+    fiscalMonths.forEach((month: Matcher) => {
       expect(screen.getByText(month)).toBeInTheDocument();
     });
 

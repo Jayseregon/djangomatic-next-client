@@ -1,7 +1,7 @@
 import { useAsyncList } from "@react-stately/data";
 import { Key } from "@react-types/shared";
-import { Status } from "@prisma/client";
 
+import { Status } from "@/generated/client";
 import { RnDTeamTask } from "@/interfaces/lib";
 import { convertTaskDates } from "@/lib/utils";
 import { getRndTasksByOwnerId } from "@/src/actions/prisma/rndTask/action";

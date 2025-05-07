@@ -1,11 +1,9 @@
 import { NextResponse } from "next/server";
-import { PrismaClient } from "@prisma/client";
 
+import { prisma } from "@/src/lib/prismaClient";
 import { superUserEmails } from "@/config/superUser";
 import { auth } from "@/auth";
 import { handlePrismaError } from "@/src/lib/prismaErrorHandler";
-
-const prisma = new PrismaClient();
 
 export async function POST(request: Request) {
   try {

@@ -1,22 +1,22 @@
 "use client";
 
-import React, { useEffect, useState, type JSX } from "react";
-import { Table, TableBody, RadioGroup, Radio } from "@heroui/react";
+import React, {
+  useEffect,
+  useState,
+  useMemo,
+  useCallback,
+  type JSX,
+} from "react";
+import { Table, TableBody, RadioGroup, Radio, Input } from "@heroui/react";
 
 import { UserSchema } from "@/interfaces/lib";
 import { superUserEmails } from "@/config/superUser";
 import { LoadingContent } from "@/components/ui/LoadingContent";
+import { SearchIcon } from "@/components/icons";
 
 import { renderTableBody } from "./UserTableBodies";
 import { renderTableHeader } from "./UserTableHeaders";
 
-/**
- * UserTable component renders a table of users with various permission settings.
- * It allows toggling of user permissions and displays different headers and bodies
- * based on the selected menu.
- *
- * @returns {JSX.Element} The rendered UserTable component.
- */
 export const UserTable = ({
   sessionEmail,
   isAdmin = false,
@@ -26,7 +26,8 @@ export const UserTable = ({
 }): JSX.Element => {
   const [users, setUsers] = useState<UserSchema[]>([]);
   const [selectedMenu, setSelectedMenu] = useState<string>("default");
-  const [isLoading, setIsLoading] = useState<boolean>(true); // Add loading state
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [searchTerm, setSearchTerm] = useState<string>("");
 
   // Determine if the session user is a superuser
   const isSessionSuperUser = superUserEmails.includes(sessionEmail);
@@ -46,21 +47,16 @@ export const UserTable = ({
 
         setUsers(filteredData);
       } catch (error) {
+        // Log the error but don't throw it
         console.error("Failed to fetch users:", error);
+        setUsers([]);
       } finally {
-        setIsLoading(false); // Set loading to false after fetch
+        setIsLoading(false); // Always set loading to false after fetch
       }
     }
     fetchData();
   }, [isAdmin]);
 
-  /**
-   * Handles toggling of user permissions.
-   *
-   * @param {string} id - The ID of the user.
-   * @param {string} field - The permission field to toggle.
-   * @param {boolean} value - The new value of the permission field.
-   */
   const handleToggle = async (id: string, field: string, value: boolean) => {
     try {
       const response = await fetch("/api/prisma-user/update", {
@@ -88,40 +84,80 @@ export const UserTable = ({
     }
   };
 
-  /**
-   * Renders the top content with radio groups for selecting the menu.
-   *
-   * @returns {JSX.Element} The rendered top content.
-   */
+  // Handle search input change
+  const handleSearchChange = useCallback((value: string) => {
+    setSearchTerm(value);
+  }, []);
+
+  // Clear search input
+  const onClear = useCallback(() => {
+    setSearchTerm("");
+  }, []);
+
+  // Filter users based on search term
+  const filteredUsers = useMemo(() => {
+    if (!searchTerm) return users;
+
+    const lowerSearchTerm = searchTerm.toLowerCase();
+
+    return users.filter(
+      (user) =>
+        user.email.toLowerCase().includes(lowerSearchTerm) ||
+        user.name.toLowerCase().includes(lowerSearchTerm),
+    );
+  }, [users, searchTerm]);
+
   const topContent = (): JSX.Element => {
     return (
-      <div className="flex uppercase text-center gap-4 divide-x divide-zinc-300 dark:divide-zinc-700">
-        <RadioGroup
-          aria-label="default-menu"
-          label="Default permissions"
-          orientation="horizontal"
-          value={selectedMenu}
-          onValueChange={setSelectedMenu}
-        >
-          <Radio value="default">Default</Radio>
-          <Radio value="docs">Docs</Radio>
-          <Radio value="videos">Videos</Radio>
-          <Radio value="reports">Reports</Radio>
-        </RadioGroup>
-        <RadioGroup
-          aria-label="apps-menu"
-          className="ps-3.5"
-          label="Apps permissions"
-          orientation="horizontal"
-          value={selectedMenu}
-          onValueChange={setSelectedMenu}
-        >
-          <Radio value="apps-tds">TDS</Radio>
-          <Radio value="apps-cogeco">COGECO</Radio>
-          <Radio value="apps-vistabeam">Vistabeam</Radio>
-          <Radio value="apps-xplore">Xplore</Radio>
-          <Radio value="apps-telus">Telus</Radio>
-        </RadioGroup>
+      <div className="flex flex-col gap-4">
+        <Input
+          isClearable
+          aria-label="Search users"
+          className="w-full max-w-xs mb-2"
+          classNames={{
+            input:
+              "text-sm text-foreground border-none outline-none ring-0 focus:border-none focus:outline-none focus:ring-0",
+            inputWrapper: "bg-background border border-foreground",
+          }}
+          color="default"
+          placeholder="Search by email or username..."
+          radius="sm"
+          startContent={
+            <SearchIcon className="text-base text-foreground-400 pointer-events-none flex-shrink-0" />
+          }
+          value={searchTerm}
+          onClear={onClear}
+          onValueChange={handleSearchChange}
+        />
+        <div className="flex uppercase text-center gap-4 divide-x divide-zinc-300 dark:divide-zinc-700">
+          <RadioGroup
+            aria-label="default-menu"
+            label="Default permissions"
+            orientation="horizontal"
+            value={selectedMenu}
+            onValueChange={setSelectedMenu}
+          >
+            <Radio value="default">Default</Radio>
+            <Radio value="docs">Docs</Radio>
+            <Radio value="videos">Videos</Radio>
+            <Radio value="reports">Reports</Radio>
+          </RadioGroup>
+          <RadioGroup
+            aria-label="apps-menu"
+            className="ps-3.5"
+            label="Apps permissions"
+            orientation="horizontal"
+            value={selectedMenu}
+            onValueChange={setSelectedMenu}
+          >
+            <Radio value="apps-global">Global</Radio>
+            <Radio value="apps-cogeco">COGECO</Radio>
+            <Radio value="apps-tds">TDS</Radio>
+            <Radio value="apps-telus">Telus</Radio>
+            <Radio value="apps-vistabeam">Vistabeam</Radio>
+            <Radio value="apps-xplore">Xplore</Radio>
+          </RadioGroup>
+        </div>
       </div>
     );
   };
@@ -141,12 +177,11 @@ export const UserTable = ({
           selectionMode="single"
           topContent={topContent()}
         >
-          {/* Render the appropriate table header based on the selected menu */}
           {renderTableHeader(selectedMenu, isAdmin)}
           <TableBody
-            emptyContent="No entries found"
+            emptyContent="No users found"
             isLoading={isLoading}
-            items={users}
+            items={filteredUsers}
             loadingContent={<LoadingContent />}
           >
             {(user) =>

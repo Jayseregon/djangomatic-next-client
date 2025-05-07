@@ -1,4 +1,4 @@
-import { Status } from "@prisma/client";
+import { Status } from "@/generated/client";
 
 import { GainsTrackingRecordItem } from "./rnd";
 
@@ -11,6 +11,7 @@ export interface UserSchema {
   isAdmin: boolean;
   isRnDTeam: boolean;
   canAccessChatbot: boolean;
+  canAccessSeticsCollection: boolean;
   canAccessAppsTdsHLD: boolean;
   canAccessAppsTdsLLD: boolean;
   canAccessAppsTdsArcGIS: boolean;
@@ -43,6 +44,12 @@ export interface UserSchema {
   canAccessVideoLiDAR: boolean;
   canAccessVideoEng: boolean;
   canAccessVideoSttar: boolean;
+  canAccessGlobalAll: boolean;
+  canAccessGlobalAtlantic: boolean;
+  canAccessGlobalCentral: boolean;
+  canAccessGlobalQuebec: boolean;
+  canAccessGlobalWest: boolean;
+  canAccessGlobalUSA: boolean;
   rndTasks: RnDTeamTask[];
 }
 

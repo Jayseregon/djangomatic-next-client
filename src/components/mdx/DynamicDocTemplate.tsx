@@ -12,6 +12,7 @@ import {
   MetadataTemplateProps,
 } from "@/interfaces/mdx";
 import { docsDirectory, getDocContent } from "@/src/lib/mdxUtils";
+import DownloadLinkedFile from "@/src/components/mdx/DownloadLinkedFile";
 
 export default async function DynamicDocTemplate({
   slug,
@@ -21,19 +22,23 @@ export default async function DynamicDocTemplate({
 }: DynamicDocTemplateProps) {
   const source = await getDocContent(docType, slug);
   const { content, frontmatter } = await MDXRenderer({ source });
+  const filename = (frontmatter.linkedFile as string) || "";
 
   return (
     <WithPermissionOverlayDocs
       email={session.user.email}
       permission={permission}
     >
-      <div>
-        <h1 className={title()}>{frontmatter.title as string}</h1>
-        <div className="py-3" />
-        <div className="prose prose-lightTheme dark:prose-darkTheme text-justify max-w-screen-md mx-auto">
-          <Suspense fallback={<LoadingContent />}>{content}</Suspense>
+      <>
+        {filename && <DownloadLinkedFile filename={filename} />}
+        <div>
+          <h1 className={title()}>{frontmatter.title as string}</h1>
+          <div className="py-3" />
+          <div className="prose prose-lightTheme dark:prose-darkTheme text-justify max-w-screen-md mx-auto">
+            <Suspense fallback={<LoadingContent />}>{content}</Suspense>
+          </div>
         </div>
-      </div>
+      </>
     </WithPermissionOverlayDocs>
   );
 }

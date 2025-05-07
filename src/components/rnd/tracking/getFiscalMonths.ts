@@ -1,4 +1,4 @@
-import { FiscalMonths } from "@prisma/client";
+import { FiscalMonths } from "@/generated/client";
 
 // List of fiscal months in fiscal year order
 export const getFiscalMonths = Object.values(FiscalMonths);

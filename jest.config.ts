@@ -40,6 +40,7 @@ const config: Config = {
     "^@/hooks/(.*)$": "<rootDir>/src/hooks/$1",
     "^@/data/(.*)$": "<rootDir>/src/data/$1",
     "^@/src/(.*)$": "<rootDir>/src/$1",
+    "^@/generated/client$": "<rootDir>/generated/client",
     "^@/(.*)$": "<rootDir>/src/$1",
     "^#site/content$": "<rootDir>/.velite",
     "^@heroui/react$": "<rootDir>/src/__tests__/__mocks__/heroui.tsx",
@@ -62,7 +63,9 @@ const config: Config = {
     "^@/styles/(.*)$": "<rootDir>/styles/$1",
     "^@/components/admin/(.*)$": "<rootDir>/src/components/admin/$1",
     "^@/lib/prismaClient$": "<rootDir>/src/__tests__/__mocks__/prismaClientMock.ts",
-    "^next-intl$": "<rootDir>/src/__tests__/__mocks__/next-intl.tsx", 
+    "^next-intl$": "<rootDir>/src/__tests__/__mocks__/next-intl.tsx",
+    "^@azure/storage-blob$": "<rootDir>/src/__tests__/__mocks__/azure-storage-blob.ts",
+    "^@azure/core-rest-pipeline$": "<rootDir>/src/__tests__/__mocks__/azure-core-rest-pipeline.ts",
   },
   testMatch: [
     "**/__tests__/**/*.[jt]s?(x)",
@@ -80,11 +83,13 @@ const config: Config = {
     "<rootDir>/public/",
     "<rootDir>/coverage/",
   ],
-  transform: {
-    "^.+\\.(js|jsx|ts|tsx)$": "babel-jest",
-  },
+  // Remove the explicit transform to let next/jest handle it with SWC
+  // transform: {
+  //   "^.+\\.(js|jsx|ts|tsx)$": "babel-jest",
+  // },
   transformIgnorePatterns: [
-    "/node_modules/(?!(@auth/core|next-auth|@panva/hkdf|jose|oauth|openid-client|preact|uuid|next-intl|@auth/core/providers|next-auth/providers|lucide-react|next-mdx-remote-client|@react-pdf/renderer|use-intl))/",
+    // Include @azure packages in the transformation process
+    "/node_modules/(?!(@auth/core|next-auth|@panva/hkdf|jose|oauth|openid-client|preact|uuid|next-intl|@auth/core/providers|next-auth/providers|lucide-react|next-mdx-remote-client|@react-pdf/renderer|use-intl|react-markdown|remark-|rehype-|unified|unist-|vfile|@ai-sdk|@azure))/",
   ],
   // Uncomment the next line to limit workers if needed
   // maxWorkers: 2,

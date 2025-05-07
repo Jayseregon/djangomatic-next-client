@@ -16,8 +16,8 @@ import {
   Switch,
 } from "@heroui/react";
 import { CircleOff, Save, Trash2 } from "lucide-react";
-import { Status } from "@prisma/client";
 
+import { Status } from "@/generated/client";
 import { DatePicker } from "@/components/ui/DatePicker";
 import { UserSchema, RnDTeamTask } from "@/interfaces/lib";
 import { statusColorMap } from "@/lib/utils";

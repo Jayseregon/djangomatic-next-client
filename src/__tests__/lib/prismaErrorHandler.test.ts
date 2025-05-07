@@ -7,7 +7,7 @@ jest.mock("next/server", () => ({
   NextResponse: jest.requireActual("../__mocks__/next-server").NextResponse,
 }));
 
-jest.mock("@prisma/client", () => ({
+jest.mock("@/generated/client", () => ({
   Prisma: {
     PrismaClientKnownRequestError: jest.requireActual(
       "../__mocks__/prisma-errors",

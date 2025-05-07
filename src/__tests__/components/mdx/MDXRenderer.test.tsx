@@ -39,6 +39,7 @@ describe("MDXRenderer", () => {
         Quote: expect.any(Function),
         TableOfContentsMdx: expect.any(Function),
         BugReportNotice: expect.any(Function),
+        DownloadLinkedFile: expect.any(Function),
       }),
     });
   });

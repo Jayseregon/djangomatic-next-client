@@ -26,9 +26,7 @@ export default async function RnDLayout({
         <SidebarRnD email={session.user.email as string} nonce={nonce} />
       </div>
       <section className="flex-grow ml-72 flex flex-col items-center gap-4 py-8 md:py-10 overflow-y-auto">
-        <div className="inline-block max-w-fit px-5 text-center justify-center">
-          {children}
-        </div>
+        <div className="w-full px-5 text-center justify-center">{children}</div>
       </section>
     </div>
   );

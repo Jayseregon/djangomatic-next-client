@@ -1,7 +1,7 @@
 import type { NextAuthConfig } from "next-auth";
 import type { Provider } from "next-auth/providers";
 
-import { PrismaClient } from "@prisma/client";
+import { prisma } from "@/src/lib/prismaClient";
 import { type DefaultSession } from "next-auth";
 import NextAuth from "next-auth";
 import "next-auth/jwt";
@@ -35,7 +35,6 @@ const authorizedMembers = [
   { email: "sebastien.janelle@telecon.ca" },
 ];
 
-const prisma = new PrismaClient();
 const microsoftEntraIDProvider = MicrosoftEntraID({
   clientId: process.env.AUTH_MICROSOFT_ENTRA_ID_ID,
   clientSecret: process.env.AUTH_MICROSOFT_ENTRA_ID_SECRET,

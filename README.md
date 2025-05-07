@@ -1,183 +1,101 @@
-# Next.js & NextUI Application for Djangomatic
+# Djangomatic: Full-Stack Next.js Application
 
 [![Version](https://img.shields.io/badge/version-2.4.5-blue)](https://github.com/teleconapplications/djangomatic_prototype)
 [![Last Updated](https://img.shields.io/badge/last%20updated-2025.05.06-brightgreen)](https://github.com/teleconapplications/djangomatic_prototype)
 
-## Table of Contents
+## Project Overview
 
-1. [Technologies Used](#technologies-used)
-2. [How to Use](#how-to-use)
-    - [Prerequisites](#prerequisites)
-    - [Local Development](#local-development)
-    - [Database Management](#database-management)
-3. [CI/CD and Branching Strategy](#cicd-and-branching-strategy)
-4. [Developer Best Practices](#developer-best-practices)
-5. [License](#license)
-6. [Contact](#contact)
+Djangomatic is a comprehensive full-stack application built with Next.js, NextUI, and Prisma. This project demonstrates a range of modern web development practices, including a robust backend, a dynamic frontend, and database management. It serves as a showcase of skills in building scalable and maintainable web applications.
+
+The platform hosts a variety of tools, including automation applications, SaaS-like functionalities, and an advanced RAG (Retrieval Augmented Generation) chatbot. The chatbot leverages the Vercel AI SDK and interfaces with a dedicated FastAPI backend designed for specialized AI tool calling, enabling sophisticated interactions and information retrieval.
 
 ## Technologies Used
 
-- [Next.js 15](https://nextjs.org/docs/getting-started) - for web framework
-- [NextUI](https://nextui.org/) - for UI components
-- [Tailwind CSS](https://tailwindcss.com/) - for styling
-- [Tailwind Variants](https://tailwind-variants.org) - for dynamic styling
-- [TypeScript](https://www.typescriptlang.org/) - for type safety
-- [Motion](https://motion.dev/) - for animations
-- [next-themes](https://github.com/pacocoursey/next-themes) - for theme management
-- [Prisma](https://www.prisma.io/) - for db management 
-- [Jest](https://jestjs.io/) - for testing
-- [ESLint](https://eslint.org/) - for code linting
-- [Prettier](https://prettier.io/) - for code formatting
+This project leverages a modern technology stack to deliver a high-quality user experience and robust functionality:
 
-## How to Use
+- **Framework**: [Next.js 15](https://nextjs.org/docs/getting-started)
+- **UI Components**: [HeroUI](https://www.heroui.com) (previously NextUI)
+- **Styling**: [Tailwind CSS](https://tailwindcss.com/) & [Tailwind Variants](https://tailwind-variants.org)
+- **Language**: [TypeScript](https://www.typescriptlang.org/)
+- **Animations**: [Motion](https://motion.dev/) (previously framer-motion)
+- **Theme Management**: [next-themes](https://github.com/pacocoursey/next-themes)
+- **ORM**: [Prisma](https://www.prisma.io/)
+- **AI/Chatbot**: [Vercel AI SDK](https://sdk.vercel.ai), [@ai-sdk/openai](https://www.npmjs.com/package/@ai-sdk/openai)
+- **Backend Integration**: Communication with a custom [FastAPI](https://fastapi.tiangolo.com/) backend for AI tools
+- **Testing**: [Jest](https://jestjs.io/)
+- **Linting & Formatting**: [ESLint](https://eslint.org/) & [Prettier](https://prettier.io/)
+- **Authentication**: [NextAuth.js](https://next-auth.js.org/)
+- **API Communication**: [Axios](https://axios-http.com/)
+- **State Management**: React hooks, context
+- **Database**: PostgreSQL (managed via Prisma)
 
-### Prerequisites
+## Key Features
 
-- Docker (for local PostgreSQL database)
-- Node.js (v20 or higher)
-- npm (v9 or higher)
+- **Modular SaaS Architecture:**
+  - Offers a suite of specialized applications tailored for various telecom clients.
+  - Applications are categorized by function, providing granular control and access.
+- **Comprehensive Admin Dashboard:**
+  - Centralized user management: View, edit, and manage user accounts and their specific permissions.
+  - Role-based access control: Define and assign roles with fine-grained permissions for different application modules and features.
+  - Azure Blob Storage Management: Interface for uploading, listing, and deleting files stored in Azure, particularly for video tutorials and other shared resources.
+- **R&D and Performance Tracking System:**
+  - Integrated bug and task management system for R&D projects.
+  - Tracks performance metrics for both SaaS applications and the integrated chatbot.
+  - Differentiated views and functionalities for admin and non-admin users within the tracking system.
+- **Advanced Chatbot Functionality:**
+  - AI-powered chatbot for user assistance and information retrieval.
+  - Secure file upload capability directly to Azure Blob Storage via SAS tokens.
+  - Permission-gated access to specialized knowledge bases.
+- **Reporting and Documentation:**
+  - Generation of specialized reports with image upload support to Azure.
+  - Integrated documentation and video tutorial platform, with content access controlled by user permissions.
+  - Content (videos, documents) dynamically loaded and protected using `WithPermissionOverlay`.
+- **Robust Security & Permissions Model:**
+  - Extensive use of `WithPermissionOverlay` to protect routes and components based on user roles and specific permissions.
+  - Session management and authentication handled by NextAuth.js, with user roles determined at login.
+- **Azure Cloud Deployment:**
+  - Containerized application using Docker for consistent deployment environments.
+  - Deployed on Azure Web Apps, leveraging Azure Blob Storage for scalable file storage.
+  - Configured with Content Security Policy (CSP) and SSH access for secure operation on Azure.
+- **Modern Tech Stack:**
+  - Built with Next.js (React framework) for server-side rendering and static site generation.
+  - TypeScript for type safety and improved developer experience.
+  - Utilizes Prisma ORM for database interactions. 
+  - NextUI and Tailwind CSS for a modern and responsive user interface.
+  - Jest and React Testing Library for comprehensive unit and integration testing.
 
-### Local Development
+## Setup and Run Locally
 
-1. Start PostgreSQL database:
-```bash
-docker compose up -d --build
-```
+To run this project locally, ensure you have Docker, Node.js (v20+), and npm (v9+) installed.
 
-2. Install dependencies:
-```bash
-npm install
-```
+1.  **Start PostgreSQL Database:**
 
-3. Start the application:
-```bash
-npm run dev
-```
+    ```bash
+    docker compose up -d --build
+    ```
 
-4. Run linting:
-```bash
-npm run lint
-```
+2.  **Install Dependencies:**
 
-5. Run tests:
-```bash
-npm test
-```
+    ```bash
+    npm install
+    ```
 
+3.  **Apply Database Migrations:**
 
-### Database Management
+    ```bash
+    npx prisma migrate dev
+    ```
 
-New migrations (dev):
-```bash
-npx prisma migrate dev --name <migration_name>
-```
+    _(Optional: To view the database with Prisma Studio)_
 
-Apply existing migrations (dev):
-```bash
-npx prisma migrate dev
-```
+    ```bash
+    npx prisma studio
+    ```
 
-Access to Prisma Studio (local)
-```bash
-npx prisma studio
-```
+4.  **Start the Development Server:**
+    ```bash
+    npm run dev
+    ```
 
-Apply migrations (prod):
-```bash
-npx prisma migrate deploy
-```
+The application should now be running on `http://localhost:3000`.
 
-## CI/CD and Branching Strategy
-
-### Branches
-
-- `main`: Default branch from which new branches are created. PRs must be submitted to `main`.
-- `staging`: Deploys to staging/pre-production environment for testing.
-- `production`: Live production branch, updated once all checks, tests, and staging are cleared.
-
-*All branches are protected, read-only, and require PRs for any updates.*
-
-### Deployment Flow
-
-1. **PR updates to `main`**
-    - Multiple updates can be merged into `main` before a global test.
-2. **PR to `staging` for testing**
-    - Perform a comprehensive test of all updates in `staging`.
-3. **Issue Handling in `staging`**
-    - If issues are identified, create issues and PR fixes directly to `staging`.
-4. **PR `staging` to `main`**
-    - Once all checks pass, merge `staging` back into `main`.
-5. **PR `main` to `production`**
-    - Deploy to live production environment after final approval.
-
-6. GitHub Actions automatically:
-    - Builds Docker images
-    - Pushes to Azure Container Registry
-    - Deploys to respective environments
-
-## Developer Best Practices
-
-### Workflow
-
-1. Create GitHub issues
-    - Title format: `[Type] Brief Description`
-    - Types: `Feature`, `Bug`, `Enhancement`, `Tech Debt`
-    - Examples:
-      - `[Feature] Add user authentication flow`
-      - `[Bug] Fix database connection timeout`
-    - Include:
-      - Clear objective
-      - Acceptance criteria
-      - Technical requirements
-
-2. Create feature branches
-    - Manually:
-      - Branch naming: `type/issue-number/brief-description`
-      - Examples:
-        - `feature/123/add-auth-flow`
-        - `bugfix/456/fix-db-timeout`
-    - From GitHub Issues (recommended):
-      - Use GitHub's "Create a branch" feature
-      - Branch will be automatically named based on issue number and title
-      - Example: `123-add-user-authentication-flow`
-
-3. Commit best practices
-    - Format: `type(scope): description`
-    - Examples:
-      - `feat(auth): implement login form`
-      - `fix(db): resolve connection timeout`
-      - `chore(deps): update dependencies`
-    - Keep commits atomic and focused
-    - Use present tense
-4. Run linting after each commit:
-```bash
-npm run lint
-```
-5. Ensure all tests pass:
-```bash
-npm test
-```
-6. Submit PR for code review
-7. Address review comments
-
-### Code Quality
-
-- Write comprehensive tests
-- Follow TypeScript best practices
-- Document code changes
-- Participate in code reviews
-- Keep dependencies updated
-
-## License
-
-This project is licensed under the GNU Affero General Public License. See the `LICENSE` file for details.
-
-Please note that while this project uses an open-source license, it is not open to public contributions.
-
-## Contact
-
-If you have any questions or need further clarification, feel free to reach out to the head developer of this project:
-
-> `Jeremie Bitsch`
-
-Contact can be done via Teams or email. Please use the appropriate channel based on the nature of your query.
